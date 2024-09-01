@@ -1,0 +1,28 @@
+{
+  "name": "backend",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun  --watch src/index.ts",
+    "generate": "bunx drizzle-kit generate",
+    "migration:push": "bunx drizzle-kit push",
+    "migrate": "bun migration:generate && bun migration:push",
+    "lint": "bunx @biomejs/biome check src",
+    "lint:fix": "bun lint --write"
+  },
+  "dependencies": {
+    "elysia": "^1.1.5",
+    "drizzle-orm": "^0.33.0",
+    "@elysiajs/static": "^1.1.0",
+    "@elysiajs/swagger": "^1.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "@types/bun": "^1.1.6",
+    "drizzle-kit": "^0.24.0",
+    "@biomejs/biome": "^1.8.3"
+  },
+
+  "module": "src/index.js"
+}
