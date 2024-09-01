@@ -2,8 +2,6 @@
   import { invoke } from "@tauri-apps/api/core";
   import { api } from "../lib/eden";
 
-
-
   let name = "";
   let greetMsg = "";
 
@@ -11,6 +9,17 @@
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     greetMsg = await invoke("greet", { name });
   }
+
+  async function hello() {
+    const {data, error} = await api.hello.get()
+
+    if (error) {
+      greetMsg = "1"
+    } else {
+      greetMsg = data
+    }
+  }
+
 </script>
 
 <div class="container">
@@ -30,7 +39,7 @@
 
   <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
 
-  <form class="row" on:submit|preventDefault={greet}>
+  <form class="row" on:submit|preventDefault={hello}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
