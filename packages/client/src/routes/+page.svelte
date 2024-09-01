@@ -1,9 +1,8 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import { api } from "../lib/eden";
 
-  import { eden } from "shared";
 
-  const api = eden("http://localhost:3000")
 
   let name = "";
   let greetMsg = "";

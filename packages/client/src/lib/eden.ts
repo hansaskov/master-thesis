@@ -2,4 +2,4 @@ import { edenTreaty } from "@elysiajs/eden";
 import type { App } from "backend";
 
 // ignore type error
-export const eden = (url: string) => edenTreaty<App>(url);
+export const api = edenTreaty<App>("http://localhost:3000");
