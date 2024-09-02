@@ -4,7 +4,7 @@ import { Elysia, t } from "elysia";
 
 const api = new Elysia({prefix: "/api"})
 	.onBeforeHandle(({request}) => { console.log(request.url)})
-	.post("/hello", ({body}) => `"Hello, ${body.name}! You've been greeted from The server!"`, {
+	.post("/hello", ({body}) => `Hello, ${body.name}! You've been greeted from The server!`, {
 		body: t.Object({
 			name: t.String()
 		})
