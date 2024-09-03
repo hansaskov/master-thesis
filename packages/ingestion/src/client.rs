@@ -43,7 +43,6 @@ async fn main() -> Result<()> {
 
                 if batch.len() >= BATCH_SIZE {
                     send_readings(&mut client, &mut batch).await;
-                    batch.clear();
                 }
             }
             _ = shutdown_recv.recv() => {
