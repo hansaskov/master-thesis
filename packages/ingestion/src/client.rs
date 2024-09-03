@@ -18,7 +18,7 @@ const LOOP_DURATION: Duration = Duration::from_secs(1);
 async fn main() -> Result<()> {
     let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
     let mut readings = Vec::with_capacity(BATCH_SIZE);
-    let mut pc_reader = PCReader::new()?;
+    let pc_reader = PCReader::new()?;
 
     let (shutdown_send, mut shutdown_recv) = mpsc::channel(1);
     tokio::spawn(async move {
@@ -34,7 +34,7 @@ async fn main() -> Result<()> {
         tokio::select! {
             _ = interval.tick() => {
 
-                match record_temperature(&pc_reader) {
+                match pc_reader.get_cpu_usage() {
                     Ok(reading) => {
                         println!("{:?}", reading);
                         readings.push(reading);
@@ -64,17 +64,6 @@ async fn main() -> Result<()> {
         }
     }
     Ok(())
-}
-
-fn record_temperature(reader: &PCReader) -> Result<Reading> {
-    let timestamp = prost_types::Timestamp::from(SystemTime::now());
-    let sensor_reading = reader.cpu_temperature()?;
-    Ok(Reading {
-        timestamp: Some(timestamp),
-        name: sensor_reading.name,
-        value: sensor_reading.value,
-        unit: "C".to_string()
-    })
 }
 
 async fn send_readings(

@@ -63,7 +63,7 @@ pub mod pc_reader {
         }
 
 
-        pub fn cpu_temperature(&self) -> Result<Reading> {
+        pub fn get_cpu_temperature(&self) -> Result<Reading> {
 
             let query = Self::get_like_query(SensorType::Temperature, "Core");
             let sensor = self.get_sensor(query)?;
@@ -77,7 +77,7 @@ pub mod pc_reader {
             })
         }
 
-        pub fn cpu_usage(&self) -> Result<Reading> {
+        pub fn get_cpu_usage(&self) -> Result<Reading> {
             let query = Self::get_equals_query(SensorType::Load, "CPU Total");
             let sensor = self.get_sensor(query)?;
             let timestamp = prost_types::Timestamp::from(SystemTime::now());
@@ -90,7 +90,7 @@ pub mod pc_reader {
             })
         }
 
-        pub fn memory_usage(&self) -> Result<Reading> {
+        pub fn get_memory_usage(&self) -> Result<Reading> {
             let query = Self::get_equals_query(SensorType::Load, "Memory");
             let sensor = self.get_sensor(query)?;
             let timestamp = prost_types::Timestamp::from(SystemTime::now());
