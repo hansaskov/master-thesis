@@ -1,11 +1,11 @@
 *
-!../migrations
+!./migrations
 !proto
 !src
 !build.rs
 !Cargo.lock
 !Cargo.toml
-!../db
+!./db
 !db
 
 

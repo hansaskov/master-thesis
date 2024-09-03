@@ -4,6 +4,7 @@ use proto::conditions_service_server::{ConditionsService, ConditionsServiceServe
 use proto::{ConditionsRequest, Reading};
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{migrate, PgPool};
+use sqlx::migrate::Migrator;
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;
@@ -102,7 +103,9 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     println!("Connection to the DB was a success!");
 
-    sqlx::migrate!()
+    static MIGRATOR: Migrator = sqlx::migrate!("db/migrations"); 
+
+    MIGRATOR
     .run(&pool)
     .await?;
 
