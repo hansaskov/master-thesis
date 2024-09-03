@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package temperature;
+
+import "google/protobuf/timestamp.proto";
+
+service ConditionsService {
+    rpc SendConditions(ConditionsRequest) returns (Empty);
+}
+
+message Conditions {
+    float cpu_usage = 1;
+    float cpu_temperature = 2;
+    float memory_usage = 3;
+}
+
+message Reading {
+    google.protobuf.Timestamp timestamp = 1;
+    Conditions condition = 2; 
+}
+
+message ConditionsRequest {
+    repeated Reading readings = 1;
+}
+
+message Empty {
+
+}
