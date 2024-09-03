@@ -66,19 +66,19 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
         anyhow::bail!("No valid readings with timestamps found");
     }
 
-    sqlx::query(
+    sqlx::query!(
         r#"
         INSERT INTO conditions (
             time, 
             name, 
             value,
-            unit,
+            unit
         )
         SELECT * FROM UNNEST(
             $1::timestamptz[], 
             $2::text[], 
             $3::real[],
-            $4::text[], 
+            $4::text[]
         )
         "#,
     )
@@ -96,7 +96,7 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
 async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
-    println!("Starting server on {}", args.server_address);
+    println!("Starting server on {}", "postgres://username:password@localhost:5432/mydatabase");
     let pool = PgPoolOptions::new()
         .max_connections(args.max_connections)
         .connect(&args.database_url)
