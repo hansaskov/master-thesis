@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
-use std::time::Duration;
 use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
+use std::time::Duration;
 use tokio::{signal, sync::mpsc, time::interval};
 pub mod reading {
     tonic::include_proto!("reading");

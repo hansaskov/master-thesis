@@ -1,12 +1,12 @@
 #[cfg(target_os = "windows")]
 pub mod pc_reader {
+    use crate::reading;
     use anyhow::{anyhow, Result};
+    use reading::Reading;
     use serde::Deserialize;
     use std::time::{Duration, SystemTime};
-    use reading::Reading;
-    use wmi::{COMLibrary, WMIConnection};
-    use crate::reading;
     use tokio::sync::mpsc::Sender;
+    use wmi::{COMLibrary, WMIConnection};
 
     const ERROR_MSG: &str = "Found nothing, are you sure Libre Hardware Monitor is running?";
 
@@ -41,7 +41,8 @@ pub mod pc_reader {
     impl PCReader {
         pub fn new(sender: Sender<Reading>) -> Result<Self> {
             let com_con = COMLibrary::new()?;
-            let wmi_con = WMIConnection::with_namespace_path("ROOT\\LibreHardwareMonitor", com_con)?;
+            let wmi_con =
+                WMIConnection::with_namespace_path("ROOT\\LibreHardwareMonitor", com_con)?;
             Ok(Self { wmi_con, sender })
         }
 
@@ -53,10 +54,7 @@ pub mod pc_reader {
             format!("SELECT * FROM Sensor WHERE SensorType = '{sensor_type:?}' AND Name = '{name_filter}'")
         }
 
-        fn get_sensor(
-            &self,
-            query: String
-        ) -> Result<Sensor> {
+        fn get_sensor(&self, query: String) -> Result<Sensor> {
             let result: Vec<Sensor> = self.wmi_con.raw_query(query)?;
             result.first().cloned().ok_or_else(|| anyhow!(ERROR_MSG))
         }
@@ -69,7 +67,7 @@ pub mod pc_reader {
                 timestamp: Some(timestamp),
                 name: sensor.name,
                 value: sensor.value,
-                unit: "C".into()
+                unit: "C".into(),
             })
         }
 
@@ -81,7 +79,7 @@ pub mod pc_reader {
                 timestamp: Some(timestamp),
                 name: sensor.name,
                 value: sensor.value,
-                unit: "%".into()
+                unit: "%".into(),
             })
         }
 
@@ -93,7 +91,7 @@ pub mod pc_reader {
                 timestamp: Some(timestamp),
                 name: sensor.name,
                 value: sensor.value,
-                unit: "%".into()
+                unit: "%".into(),
             })
         }
 

@@ -2,9 +2,9 @@ use clap::Parser;
 use prost_types::value;
 use proto::conditions_service_server::{ConditionsService, ConditionsServiceServer};
 use proto::{ConditionsRequest, Reading};
+use sqlx::migrate::Migrator;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::{migrate, PgPool};
-use sqlx::migrate::Migrator;
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;
@@ -52,9 +52,7 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
     let mut unit = Vec::new();
 
     for reading in readings {
-        if let Some(timestamp) =
-            reading.timestamp.as_ref()
-        {
+        if let Some(timestamp) = reading.timestamp.as_ref() {
             times.push(TimeHelper::to_offset_date_time(timestamp));
             names.push(reading.name.clone());
             values.push(reading.value);
@@ -82,7 +80,7 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
         )
         "#,
     )
-    .bind(&times)   
+    .bind(&times)
     .bind(&names)
     .bind(&values)
     .bind(&unit)
@@ -103,9 +101,7 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     println!("Connection to the DB was a success!");
 
-    sqlx::migrate!("db/migrations")
-   .run(&pool)
-    .await?;
+    sqlx::migrate!("db/migrations").run(&pool).await?;
 
     println!("Server is now up an running");
     Server::builder()
