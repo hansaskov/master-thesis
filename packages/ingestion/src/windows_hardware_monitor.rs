@@ -3,7 +3,7 @@ pub mod windows_hardware_monitor {
     use crate::temperature;
     use anyhow::{anyhow, Result};
     use serde::Deserialize;
-    use temperature::Conditions;
+    use temperature::Reading;
     use wmi::{COMLibrary, WMIConnection};
 
     const ERROR_MSG: &str = "Found nothing, are you sure Libre Hardware Monitor is running?";
@@ -78,8 +78,8 @@ pub mod windows_hardware_monitor {
             self.get_sensor(SensorType::Load, "Memory", false)
         }
 
-        pub fn get_conditions(&self) -> Result<Conditions> {
-            Ok(Conditions {
+        pub fn get_conditions(&self) -> Result<Reading> {
+            Ok(Reading {
                 cpu_temperature: self.cpu_temperature()?.value,
                 cpu_usage: self.cpu_usage()?.value,
                 memory_usage: self.memory_usage()?.value,

@@ -1,8 +1,9 @@
 use clap::Parser;
+use prost_types::value;
 use proto::conditions_service_server::{ConditionsService, ConditionsServiceServer};
 use proto::{ConditionsRequest, Reading};
 use sqlx::postgres::PgPoolOptions;
-use sqlx::PgPool;
+use sqlx::{migrate, PgPool};
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;
@@ -12,7 +13,7 @@ mod time_helper;
 use time_helper::TimeHelper;
 
 pub mod proto {
-    tonic::include_proto!("temperature");
+    tonic::include_proto!("reading");
 }
 pub struct MyTemperature {
     pool: sqlx::PgPool,
@@ -45,18 +46,18 @@ impl ConditionsService for MyTemperature {
 
 pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow::Result<()> {
     let mut times = Vec::new();
-    let mut cpu_temperature = Vec::new();
-    let mut cpu_usage = Vec::new();
-    let mut memory_usage = Vec::new();
+    let mut names = Vec::new();
+    let mut values = Vec::new();
+    let mut unit = Vec::new();
 
     for reading in readings {
-        if let (Some(timestamp), Some(conditions)) =
-            (reading.timestamp.as_ref(), reading.condition.as_ref())
+        if let Some(timestamp) =
+            reading.timestamp.as_ref()
         {
             times.push(TimeHelper::to_offset_date_time(timestamp));
-            cpu_temperature.push(conditions.cpu_temperature);
-            cpu_usage.push(conditions.cpu_usage);
-            memory_usage.push(conditions.memory_usage);
+            names.push(reading.name.clone());
+            values.push(reading.value);
+            unit.push(reading.unit.clone());
         }
     }
 
@@ -68,22 +69,22 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
         r#"
         INSERT INTO conditions (
             time, 
-            cpu_temperature, 
-            cpu_usage, 
-            memory_usage
+            name, 
+            value,
+            unit,
         )
         SELECT * FROM UNNEST(
             $1::timestamptz[], 
-            $2::real[], 
-            $3::real[], 
-            $4::real[]
+            $2::text[], 
+            $3::real[],
+            $4::text[], 
         )
         "#,
     )
-    .bind(&times)
-    .bind(&cpu_temperature)
-    .bind(&cpu_usage)
-    .bind(&memory_usage)
+    .bind(&times)   
+    .bind(&names)
+    .bind(&values)
+    .bind(&unit)
     .execute(pool)
     .await?;
 
@@ -100,6 +101,10 @@ async fn main() -> anyhow::Result<()> {
         .connect(&args.database_url)
         .await?;
     println!("Connection to the DB was a success!");
+
+    sqlx::migrate!()
+    .run(&pool)
+    .await?;
 
     println!("Server is now up an running");
     Server::builder()
