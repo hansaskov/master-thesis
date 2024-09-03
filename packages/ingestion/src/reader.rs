@@ -1,14 +1,12 @@
-
-
 #[cfg(target_os = "windows")]
 pub mod pc_reader {
     use anyhow::{anyhow, Result};
     use serde::Deserialize;
     use std::time::{Duration, SystemTime};
-    use reading::{Reading};
+    use reading::Reading;
     use wmi::{COMLibrary, WMIConnection};
-
     use crate::reading;
+    use tokio::sync::mpsc::Sender;
 
     const ERROR_MSG: &str = "Found nothing, are you sure Libre Hardware Monitor is running?";
 
@@ -37,13 +35,14 @@ pub mod pc_reader {
 
     pub struct PCReader {
         pub wmi_con: WMIConnection,
+        sender: Sender<Reading>,
     }
 
     impl PCReader {
-        pub fn new() -> Result<Self> {
+        pub fn new(sender: Sender<Reading>) -> Result<Self> {
             let com_con = COMLibrary::new()?;
             let wmi_con = WMIConnection::with_namespace_path("ROOT\\LibreHardwareMonitor", com_con)?;
-            Ok(Self { wmi_con })
+            Ok(Self { wmi_con, sender })
         }
 
         fn get_like_query(sensor_type: SensorType, name_filter: &str) -> String {
@@ -62,13 +61,10 @@ pub mod pc_reader {
             result.first().cloned().ok_or_else(|| anyhow!(ERROR_MSG))
         }
 
-
         pub fn get_cpu_temperature(&self) -> Result<Reading> {
-
             let query = Self::get_like_query(SensorType::Temperature, "Core");
             let sensor = self.get_sensor(query)?;
             let timestamp = prost_types::Timestamp::from(SystemTime::now());
-
             Ok(Reading {
                 timestamp: Some(timestamp),
                 name: sensor.name,
@@ -81,7 +77,6 @@ pub mod pc_reader {
             let query = Self::get_equals_query(SensorType::Load, "CPU Total");
             let sensor = self.get_sensor(query)?;
             let timestamp = prost_types::Timestamp::from(SystemTime::now());
-
             Ok(Reading {
                 timestamp: Some(timestamp),
                 name: sensor.name,
@@ -94,7 +89,6 @@ pub mod pc_reader {
             let query = Self::get_equals_query(SensorType::Load, "Memory");
             let sensor = self.get_sensor(query)?;
             let timestamp = prost_types::Timestamp::from(SystemTime::now());
-
             Ok(Reading {
                 timestamp: Some(timestamp),
                 name: sensor.name,
@@ -102,7 +96,17 @@ pub mod pc_reader {
                 unit: "%".into()
             })
         }
+
+        pub async fn collect_and_send_readings(&self) -> Result<()> {
+            let cpu_temp = self.get_cpu_temperature()?;
+            let cpu_usage = self.get_cpu_usage()?;
+            let memory_usage = self.get_memory_usage()?;
+
+            self.sender.send(cpu_temp).await?;
+            self.sender.send(cpu_usage).await?;
+            self.sender.send(memory_usage).await?;
+
+            Ok(())
+        }
     }
 }
-
-
