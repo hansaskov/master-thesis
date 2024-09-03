@@ -5,8 +5,8 @@ use tokio::{signal, sync::mpsc, time::interval};
 pub mod temperature {
     tonic::include_proto!("reading");
 }
-mod windows_hardware_monitor;
-use windows_hardware_monitor::windows_hardware_monitor::HardwareMonitor;
+//mod windows_hardware_monitor;
+//use windows_hardware_monitor::windows_hardware_monitor::HardwareMonitor;
 
 const BATCH_SIZE: usize = 5;
 const LOOP_DURATION: Duration = Duration::from_secs(1);
@@ -14,7 +14,6 @@ const LOOP_DURATION: Duration = Duration::from_secs(1);
 #[tokio::main]
 async fn main() -> Result<()> {
     let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
-    let hw = HardwareMonitor::new().context("Failed to initialize hardware monitor")?;
     let mut readings = Vec::with_capacity(BATCH_SIZE);
 
     let (shutdown_send, mut shutdown_recv) = mpsc::channel(1);
@@ -31,9 +30,9 @@ async fn main() -> Result<()> {
         tokio::select! {
             _ = interval.tick() => {
 
-                match record_temperature(&hw) {
+                match record_temperature() {
                     Ok(reading) => {
-                        println!("{:?}, {:?}", reading.timestamp, reading.condition);
+                        println!("{:?}", reading);
                         readings.push(reading);
                         if readings.len() >= BATCH_SIZE {
                             // Handle potential error from await
@@ -63,14 +62,13 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-fn record_temperature(hw: &HardwareMonitor) -> Result<Reading> {
+fn record_temperature() -> Result<Reading> {
     let timestamp = prost_types::Timestamp::from(SystemTime::now());
-    let conditions = hw
-        .get_conditions()
-        .context("No values read, are you sure LibreHardwareMonitor is running?")?;
     Ok(Reading {
         timestamp: Some(timestamp),
-        condition: Some(conditions),
+        name: "temperature".to_string(),
+        value: 1.0,
+        unit: "C".to_string()
     })
 }
 

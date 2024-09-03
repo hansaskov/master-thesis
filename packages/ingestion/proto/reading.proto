@@ -11,11 +11,8 @@ service ConditionsService {
 message Reading {
   google.protobuf.Timestamp timestamp = 1;
   string name = 2;
-  oneof value {
-    float float = 3;
-    int64 integer = 4;
-    string string = 5;
-  }
+  float value = 3;
+  string unit = 4;
 }
 
 message ConditionsRequest {
