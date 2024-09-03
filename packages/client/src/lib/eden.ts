@@ -1,4 +1,3 @@
-import { PUBLIC_SERVER_URL } from '$env/static/public';
 import { treaty } from '@elysiajs/eden'
 import type { App } from "backend";
 import { dev } from "$app/environment"
