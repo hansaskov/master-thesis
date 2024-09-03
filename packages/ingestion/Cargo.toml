@@ -27,6 +27,7 @@ path = "src/server.rs"
 name = "client"
 path = "src/client.rs"
 
+
 [profile.release]
 opt-level = "z"     # Optimize for size.
 lto = true          # Enable Link Time Optimization

@@ -3,7 +3,7 @@ use std::time::{Duration, SystemTime};
 use temperature::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
 use tokio::{signal, sync::mpsc, time::interval};
 pub mod temperature {
-    tonic::include_proto!("temperature");
+    tonic::include_proto!("reading");
 }
 mod windows_hardware_monitor;
 use windows_hardware_monitor::windows_hardware_monitor::HardwareMonitor;
