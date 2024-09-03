@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{Result};
 use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
 use std::time::Duration;
 use tokio::{signal, sync::mpsc, time::interval};
