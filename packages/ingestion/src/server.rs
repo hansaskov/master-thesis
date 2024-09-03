@@ -3,7 +3,7 @@ use prost_types::value;
 use proto::conditions_service_server::{ConditionsService, ConditionsServiceServer};
 use proto::{ConditionsRequest, Reading};
 use sqlx::postgres::PgPoolOptions;
-use sqlx::PgPool;
+use sqlx::{migrate, PgPool};
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;
@@ -51,14 +51,13 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
     let mut unit = Vec::new();
 
     for reading in readings {
-        if let (Some(timestamp)) =
-            (reading.timestamp.as_ref())
+        if let Some(timestamp) =
+            reading.timestamp.as_ref()
         {
             times.push(TimeHelper::to_offset_date_time(timestamp));
             names.push(reading.name.clone());
             values.push(reading.value);
             unit.push(reading.unit.clone());
-
         }
     }
 
@@ -76,9 +75,9 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
         )
         SELECT * FROM UNNEST(
             $1::timestamptz[], 
-            $2::string[], 
-            $3::float[],
-            $4::string[], 
+            $2::text[], 
+            $3::real[],
+            $4::text[], 
         )
         "#,
     )
@@ -102,6 +101,10 @@ async fn main() -> anyhow::Result<()> {
         .connect(&args.database_url)
         .await?;
     println!("Connection to the DB was a success!");
+
+    sqlx::migrate!()
+    .run(&pool)
+    .await?;
 
     println!("Server is now up an running");
     Server::builder()
