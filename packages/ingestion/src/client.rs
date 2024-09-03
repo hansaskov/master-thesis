@@ -1,12 +1,15 @@
 use anyhow::{Context, Result};
 use std::time::{Duration, SystemTime};
-use temperature::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
+use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
 use tokio::{signal, sync::mpsc, time::interval};
-pub mod temperature {
+pub mod reading {
     tonic::include_proto!("reading");
 }
 //mod windows_hardware_monitor;
 //use windows_hardware_monitor::windows_hardware_monitor::HardwareMonitor;
+
+mod reader;
+use reader::pc_reader::PCReader;
 
 const BATCH_SIZE: usize = 5;
 const LOOP_DURATION: Duration = Duration::from_secs(1);
@@ -15,6 +18,7 @@ const LOOP_DURATION: Duration = Duration::from_secs(1);
 async fn main() -> Result<()> {
     let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
     let mut readings = Vec::with_capacity(BATCH_SIZE);
+    let mut pc_reader = PCReader::new()?;
 
     let (shutdown_send, mut shutdown_recv) = mpsc::channel(1);
     tokio::spawn(async move {
@@ -30,7 +34,7 @@ async fn main() -> Result<()> {
         tokio::select! {
             _ = interval.tick() => {
 
-                match record_temperature() {
+                match record_temperature(&pc_reader) {
                     Ok(reading) => {
                         println!("{:?}", reading);
                         readings.push(reading);
@@ -62,12 +66,13 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-fn record_temperature() -> Result<Reading> {
+fn record_temperature(reader: &PCReader) -> Result<Reading> {
     let timestamp = prost_types::Timestamp::from(SystemTime::now());
+    let sensor_reading = reader.cpu_temperature()?;
     Ok(Reading {
         timestamp: Some(timestamp),
-        name: "temperature".to_string(),
-        value: 1.0,
+        name: sensor_reading.name,
+        value: sensor_reading.value,
         unit: "C".to_string()
     })
 }
@@ -88,3 +93,4 @@ async fn send_readings(
         Err(e) => Err(e).context("Failed to send temperatures"),
     }
 }
+
