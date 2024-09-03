@@ -1,10 +1,8 @@
 use clap::Parser;
-use prost_types::value;
 use proto::conditions_service_server::{ConditionsService, ConditionsServiceServer};
 use proto::{ConditionsRequest, Reading};
-use sqlx::migrate::Migrator;
 use sqlx::postgres::PgPoolOptions;
-use sqlx::{migrate, PgPool};
+use sqlx::{PgPool};
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;

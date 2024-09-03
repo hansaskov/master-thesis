@@ -4,7 +4,7 @@ pub mod pc_reader {
     use anyhow::{anyhow, Result};
     use reading::Reading;
     use serde::Deserialize;
-    use std::time::{Duration, SystemTime};
+    use std::time::{SystemTime};
     use tokio::sync::mpsc::Sender;
     use wmi::{COMLibrary, WMIConnection};
 
