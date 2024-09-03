@@ -2,7 +2,7 @@ use clap::Parser;
 use proto::conditions_service_server::{ConditionsService, ConditionsServiceServer};
 use proto::{ConditionsRequest, Reading};
 use sqlx::postgres::PgPoolOptions;
-use sqlx::{PgPool};
+use sqlx::PgPool;
 use tonic::{transport::Server, Request, Response, Status};
 
 mod config;

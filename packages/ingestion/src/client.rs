@@ -42,10 +42,7 @@ async fn main() -> Result<()> {
                 println!("{:?}", reading) ;
 
                 if batch.len() >= BATCH_SIZE {
-                    match send_readings(&mut client, &mut batch).await {
-                        Ok(_) => println!("Request was a success!"),
-                        Err(e) => eprintln!("Failed to send readings: {}", e),
-                    }
+                    send_readings(&mut client, &mut batch).await;
                     batch.clear();
                 }
             }
@@ -56,10 +53,7 @@ async fn main() -> Result<()> {
                 }
 
                 if !batch.is_empty() {
-                    match send_readings(&mut client, &mut batch).await {
-                        Ok(_) => println!("Sending final readings was a success!"),
-                        Err(e) => eprintln!("Failed to send final readings: {}", e),
-                    }
+                    send_readings(&mut client, &mut batch).await;
                 }
                 println!("Shutting down gracefully.");
                 break;
@@ -72,15 +66,15 @@ async fn main() -> Result<()> {
 async fn send_readings(
     client: &mut ConditionsServiceClient<tonic::transport::Channel>,
     readings: &mut Vec<Reading>,
-) -> Result<()> {
+) {
     let request = tonic::Request::new(ConditionsRequest {
         readings: readings.to_vec(),
     });
     match client.send_conditions(request).await {
         Ok(_) => {
+            println!("Sending final readings was a success!");
             readings.clear();
-            Ok(())
         }
-        Err(e) => Err(e).context("Failed to send temperatures"),
+        Err(e) => eprintln!("Failed to send final readings: {}", e),
     }
 }
