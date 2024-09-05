@@ -1,15 +1,8 @@
 <script lang="ts">
   import { api } from "$lib/eden";
-  import { invoke } from "@tauri-apps/api/core";
- let nameRust = "";
- let nameServer = "";
- let greetMsgRust = "";
- let greetMsgServer = "";
 
- async function greet_rust() {
-   // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-   greetMsgRust = await invoke("greet", { name: nameRust });
- }
+ let nameServer = "";
+ let greetMsgServer = "";
 
  async function greet_server() {
    const {data, error} = await api.hello.post({name: nameServer})
@@ -36,11 +29,6 @@
  </div>
  <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
  
- <form class="row" on:submit|preventDefault={greet_rust}>
-   <input id="greet-input-rust" placeholder="Enter a name for Rust..." bind:value={nameRust} />
-   <button type="submit">Greet with Rust</button>
- </form>
- <p>{greetMsgRust}</p>
 
  <form class="row" on:submit|preventDefault={greet_server}>
    <input id="greet-input-server" placeholder="Enter a name for Server..." bind:value={nameServer} />

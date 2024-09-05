@@ -8,13 +8,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "tauri": "tauri"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "license": "MIT",
   "dependencies": {
-    "@tauri-apps/api": "^2.0.0-rc.4",
-    "@tauri-apps/plugin-shell": "^2.0.0-rc.1",
     "@elysiajs/eden": "^1.1.2"
   },
   "devDependencies": {
@@ -27,7 +24,6 @@
     "svelte-check": "^3.8.6",
     "tslib": "^2.7.0",
     "typescript": "^5.5.4",
-    "vite": "^5.4.2",
-    "@tauri-apps/cli": "^2.0.0-rc.10"
+    "vite": "^5.4.2"
   }
 }
