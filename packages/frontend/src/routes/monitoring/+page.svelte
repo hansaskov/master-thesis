@@ -80,6 +80,8 @@
     ];
   </script>
   
+  <div class="container mx-auto py-4 px-4">
+  <h1 class="text-3xl font-bold mb-6">System 1</h1>
   <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
     {#each metricGroups as group}
       <Card>
@@ -109,4 +111,5 @@
     </CardContent>
   </Card>
 {/each}
+</div>
 </div>

@@ -81,6 +81,7 @@
 				{#if post.content.type === "image"}
 					<img
 						src={post.content.image}
+                        alt={post.content.text}
 						class="w-full h-auto rounded-lg"
 					/>
 				{:else if post.content.type === "link"}
