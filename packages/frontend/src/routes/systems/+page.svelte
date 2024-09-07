@@ -10,14 +10,15 @@
   const statusTypes = ["Active", "Offline", "Paused"] as const;
   type StatusType = typeof statusTypes[number];
 
-  function getStatusVariant(status: StatusType) {
+  function getStatusVariant(status: StatusType): "default" | "secondary" | "destructive" | "outline" {
     switch (status) {
       case 'Active':
         return 'outline';
-      case 'Offline':
-        return 'default';
       case 'Paused':
         return 'secondary';
+      case 'Offline':
+        return 'destructive';
+
     }
   }
 
@@ -186,7 +187,7 @@
         Showing <strong>{filteredSystems.length}</strong> of <strong>{systems.length}</strong> systems
       </div>
       <Button variant="outline" size="sm">
-        <a href="/systems">
+        <a class="flex"href="/systems">
           View All Systems
           <ArrowRight class="ml-2 h-4 w-4" />
         </a>

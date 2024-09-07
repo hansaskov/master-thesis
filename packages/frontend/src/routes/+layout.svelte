@@ -22,7 +22,7 @@
 	const navItems: NavItem[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
 		{ name: 'Product Intelligence', icon: ChartLine, href: '/systems' },
-		{ name: 'Monitoring', icon: Monitor, href: '/systems/monitoring/abcd' },
+		{ name: 'Monitoring', icon: Monitor, href: '/monitoring' },
 		{ name: 'Service', icon: Wrench, href: '/service' }
 	];
 
