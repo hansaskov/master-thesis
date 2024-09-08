@@ -38,6 +38,7 @@
 		"clsx": "^2.1.1",
 		"lucide-svelte": "^0.439.0",
 		"mode-watcher": "^0.4.1",
+		"svelte-headless-table": "^0.18.2",
 		"svelte-radix": "^1.1.1",
 		"tailwind-merge": "^2.5.2",
 		"tailwind-variants": "^0.2.1"

@@ -1,197 +1,88 @@
 <script lang="ts">
-  import { ArrowRight, MoreHorizontal } from 'lucide-svelte';
-  import { Badge } from '$lib/components/ui/badge';
-  import { Button } from '$lib/components/ui/button';
+  import DataTable from "./data-table.svelte";
   import * as Card from '$lib/components/ui/card';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import * as Table from '$lib/components/ui/table';
-  import * as Tabs from '$lib/components/ui/tabs';
 
-  const statusTypes = ["Active", "Offline", "Paused"] as const;
-  type StatusType = typeof statusTypes[number];
+	type Payment = {
+		id: string;
+		amount: number;
+		status: 'pending' | 'processing' | 'success' | 'failed';
+		email: string;
+	};
 
-  function getStatusVariant(status: StatusType): "default" | "secondary" | "destructive" | "outline" {
-    switch (status) {
-      case 'Active':
-        return 'outline';
-      case 'Paused':
-        return 'secondary';
-      case 'Offline':
-        return 'destructive';
+  const data: Payment[] = [
+		{
+			id: '728ed52f',
+			amount: 100,
+			status: 'pending',
+			email: 'm@example.com'
+		},
+		{
+			id: '489e1d42',
+			amount: 125,
+			status: 'processing',
+			email: 'example@gmail.com'
+		},
+		{
+			id: '9a21d48c',
+			amount: 250,
+			status: 'success',
+			email: 'john.doe@yahoo.com'
+		},
+		{
+			id: '5b42c67a',
+			amount: 75,
+			status: 'failed',
+			email: 'susan@example.com'
+		},
+		{
+			id: '3d89a56b',
+			amount: 300,
+			status: 'pending',
+			email: 'alex.smith@hotmail.com'
+		},
+		{
+			id: '8f65e93d',
+			amount: 150,
+			status: 'success',
+			email: 'laura@example.net'
+		},
+		{
+			id: '47f3b71e',
+			amount: 200,
+			status: 'processing',
+			email: 'david.b@example.com'
+		},
+		{
+			id: 'e81c457b',
+			amount: 180,
+			status: 'pending',
+			email: 'kelly.jones@gmail.com'
+		},
+		{
+			id: '12a34bc5',
+			amount: 95,
+			status: 'failed',
+			email: 'roger@example.org'
+		},
+		{
+			id: '93b87e2c',
+			amount: 275,
+			status: 'success',
+			email: 'victoria@example.com'
+		}
+	];
 
-    }
-  }
-
-  interface SystemsType {
-    id: string;
-    name: string;
-    status: StatusType;
-    location: string;
-    image: string;
-    lastCheck: string;
-  }
-
-  const systems: SystemsType[] = [
-    {
-      id: "vp1",
-      name: "VisioPointer® 1",
-      status: "Active",
-      location: "Production Line 1",
-      image: "/placeholder.svg",
-      lastCheck: "2 minutes ago"
-    },
-    {
-      id: "vc1",
-      name: "VisioCompact® 1",
-      status: "Active",
-      location: "Assembly Area A",
-      image: "/placeholder.svg",
-      lastCheck: "5 minutes ago"
-    },
-    {
-      id: "360i1",
-      name: "360 Inspector® 1",
-      status: "Active",
-      location: "Quality Control Station",
-      image: "/placeholder.svg",
-      lastCheck: "1 minute ago"
-    },
-    {
-      id: "si1",
-      name: "SmartInspector® 1",
-      status: "Paused",
-      location: "Packaging Line 2",
-      image: "/placeholder.svg",
-      lastCheck: "10 minutes ago"
-    },
-    {
-      id: "vp2",
-      name: "VisioPointer® 2",
-      status: "Paused",
-      location: "Production Line 2",
-      image: "/placeholder.svg",
-      lastCheck: "15 minutes ago"
-    },
-    {
-      id: "vc2",
-      name: "VisioCompact® 2",
-      status: "Active",
-      location: "Assembly Area B",
-      image: "/placeholder.svg",
-      lastCheck: "8 minutes ago"
-    },
-    {
-      id: "vp3",
-      name: "VisioPointer® 3",
-      status: "Paused",
-      location: "Production Line 2",
-      image: "/placeholder.svg",
-      lastCheck: "15 minutes ago"
-    },
-    {
-      id: "vp4",
-      name: "VisioPointer® 4",
-      status: "Offline",
-      location: "Assembly Area B",
-      image: "/placeholder.svg",
-      lastCheck: "5 hours ago"
-    }
-  ];
-
-  let activeTab = "All";
-
-  $: filteredSystems = activeTab === "All" 
-    ? systems 
-    : systems.filter(system => system.status === activeTab);
-</script>
-
-<Tabs.Root bind:value={activeTab}>
-  <Tabs.List>
-    <Tabs.Trigger value="All">All</Tabs.Trigger>
-    <Tabs.Trigger value="Active">Active</Tabs.Trigger>
-    <Tabs.Trigger value="Paused">Paused</Tabs.Trigger>
-    <Tabs.Trigger value="Offline">Offline</Tabs.Trigger>
-  </Tabs.List>
-
-  <Card.Root class="w-full">
+ </script>
+  
+ <div class="container mx-auto py-4 px-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <Card.Root class="col-span-1 md:col-span-2">
     <Card.Header>
       <Card.Title>Production Systems</Card.Title>
-      <Card.Description>
-        Monitor and manage your production systems across different factory areas.
-      </Card.Description>
     </Card.Header>
     <Card.Content>
-      <Tabs.Content value={activeTab}>       
-        <div class="overflow-x-auto">
-          <Table.Root>
-            <Table.Header>
-              <Table.Row>
-                <Table.Head class="w-[100px] hidden md:table-cell">
-                  <span class="sr-only">Image</span>
-                </Table.Head>
-                <Table.Head>Name</Table.Head>
-                <Table.Head class="hidden md:table-cell">Status</Table.Head>
-                <Table.Head class="hidden md:table-cell">Location</Table.Head>
-                <Table.Head class="hidden md:table-cell">Last Check</Table.Head>
-                <Table.Head>Actions</Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {#each filteredSystems as system (system.id)}
-                <Table.Row>
-                  <Table.Cell class="hidden md:table-cell">
-                    <img
-                      alt="{system.name} icon"
-                      class="aspect-square rounded-md object-cover"
-                      height="64"
-                      src={system.image}
-                      width="64"
-                    />
-                  </Table.Cell>
-                  <Table.Cell class="font-medium">{system.name}</Table.Cell>
-                  <Table.Cell>
-                    <Badge variant={getStatusVariant(system.status)}>
-                      {system.status}
-                    </Badge>
-                  </Table.Cell>
-                  <Table.Cell class="hidden md:table-cell">{system.location}</Table.Cell>
-                  <Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
-                  <Table.Cell class="text-right">
-                    <div class="flex items-center justify-end gap-2">
-                      <DropdownMenu.Root>
-                        <DropdownMenu.Trigger asChild let:builder>
-                          <Button builders={[builder]} size="icon" variant="ghost">
-                            <MoreHorizontal class="h-4 w-4" />
-                            <span class="sr-only">Actions</span>
-                          </Button>
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Content align="end">
-                          <DropdownMenu.Label>Actions</DropdownMenu.Label>
-                          <DropdownMenu.Item>
-                            <a href="/systems/monitoring/abcd">View Details</a>
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item>Restart System</DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Root>
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              {/each}
-            </Table.Body>
-          </Table.Root>
-        </div>
-      </Tabs.Content>
+      <DataTable data={data}/>
     </Card.Content>
-    <Card.Footer class="flex justify-between">
-      <div class="text-xs text-muted-foreground">
-        Showing <strong>{filteredSystems.length}</strong> of <strong>{systems.length}</strong> systems
-      </div>
-      <Button variant="outline" size="sm">
-        <a class="flex"href="/systems">
-          View All Systems
-          <ArrowRight class="ml-2 h-4 w-4" />
-        </a>
-      </Button>
-    </Card.Footer>
   </Card.Root>
-</Tabs.Root>
+  </div>
+ </div>
