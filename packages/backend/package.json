@@ -5,6 +5,9 @@
   },
   "scripts": {
     "dev": "bun  --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --outdir ./dist",
+    "compile": "bun build src/index.ts --compile --minify --sourcemap --target bun --outfile backend",
+    "start": "NODE_ENV=production bun dist/index.js",
     "generate": "bunx drizzle-kit generate",
     "migration:push": "bunx drizzle-kit push",
     "migrate": "bun migration:generate && bun migration:push",
