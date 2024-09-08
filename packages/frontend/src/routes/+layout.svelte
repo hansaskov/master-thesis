@@ -93,7 +93,7 @@
 						{#each [...navItems, settings] as item}
 							<a
 								href={item.href}
-								class={`flex items-center gap-4 px-2.5 ${pathname.startsWith(item.href) ? "text-foreground": "text-muted-foreground hover:text-foreground" }`}}
+								class="{`flex items-center gap-4 px-2.5 ${pathname.startsWith(item.href) ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}}"
 							>
 								<svelte:component this={item.icon} class="h-5 w-5"></svelte:component>
 								{item.name}
