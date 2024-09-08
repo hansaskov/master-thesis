@@ -1,66 +1,66 @@
 <script lang="ts">
-	import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
-	import { Button } from "$lib/components/ui/button";
-	import { Card, CardContent, CardFooter, CardHeader } from "$lib/components/ui/card";
-	import { Input } from "$lib/components/ui/input";
-	import { Separator } from "$lib/components/ui/separator";
-	import { ThumbsUp, MessageCircle, Share2, Send } from "lucide-svelte";
+	import { Avatar, AvatarFallback, AvatarImage } from '$lib/components/ui/avatar';
+	import { Button } from '$lib/components/ui/button';
+	import { Card, CardContent, CardFooter, CardHeader } from '$lib/components/ui/card';
+	import { Input } from '$lib/components/ui/input';
+	import { Separator } from '$lib/components/ui/separator';
+	import { ThumbsUp, MessageCircle, Share2, Send } from 'lucide-svelte';
 
 	const posts = [
 		{
 			id: 1,
 			user: {
-				name: "Alice Johnson",
-				avatar: "",
-				title: "Senior Software Engineer at TechCorp",
+				name: 'Alice Johnson',
+				avatar: '',
+				title: 'Senior Software Engineer at TechCorp'
 			},
 			content: {
-				type: "text",
-				text: "Excited to announce that our team has just launched a new feature that will revolutionize how our users interact with our platform. It's been months of hard work, but seeing it live is incredibly rewarding. #ProductLaunch #Innovation",
+				type: 'text',
+				text: "Excited to announce that our team has just launched a new feature that will revolutionize how our users interact with our platform. It's been months of hard work, but seeing it live is incredibly rewarding. #ProductLaunch #Innovation"
 			},
-			timestamp: "2h ago",
+			timestamp: '2h ago',
 			likes: 42,
 			comments: 7,
-			shares: 3,
+			shares: 3
 		},
 		{
 			id: 2,
 			user: {
-				name: "Bob Smith",
-				avatar: "",
-				title: "Marketing Director at GrowthCo",
+				name: 'Bob Smith',
+				avatar: '',
+				title: 'Marketing Director at GrowthCo'
 			},
 			content: {
-				type: "image",
-				text: "Just wrapped up our annual marketing conference. Great insights and networking opportunities! #MarketingConf2023",
-				image: "/placeholder.svg",
+				type: 'image',
+				text: 'Just wrapped up our annual marketing conference. Great insights and networking opportunities! #MarketingConf2023',
+				image: '/placeholder.svg'
 			},
-			timestamp: "5h ago",
+			timestamp: '5h ago',
 			likes: 89,
 			comments: 13,
-			shares: 8,
+			shares: 8
 		},
 		{
 			id: 3,
 			user: {
-				name: "Carol White",
-				avatar: "",
-				title: "Startup Founder & CEO",
+				name: 'Carol White',
+				avatar: '',
+				title: 'Startup Founder & CEO'
 			},
 			content: {
-				type: "link",
-				text: "Check out my latest article on the future of AI in business. Would love to hear your thoughts!",
-				link: "https://example.com/ai-in-business",
+				type: 'link',
+				text: 'Check out my latest article on the future of AI in business. Would love to hear your thoughts!',
+				link: 'https://example.com/ai-in-business'
 			},
-			timestamp: "1d ago",
+			timestamp: '1d ago',
 			likes: 156,
 			comments: 28,
-			shares: 42,
-		},
+			shares: 42
+		}
 	];
 </script>
 
-<div class="max-w-2xl mx-auto space-y-6 py-8">
+<div class="mx-auto max-w-2xl space-y-6 py-8">
 	{#each posts as post (post.id)}
 		<Card class="w-full">
 			<CardHeader>
@@ -78,13 +78,9 @@
 			</CardHeader>
 			<CardContent class="">
 				<p class="mb-4">{post.content.text}</p>
-				{#if post.content.type === "image"}
-					<img
-						src={post.content.image}
-                        alt={post.content.text}
-						class="w-full h-auto rounded-lg"
-					/>
-				{:else if post.content.type === "link"}
+				{#if post.content.type === 'image'}
+					<img src={post.content.image} alt={post.content.text} class="h-auto w-full rounded-lg" />
+				{:else if post.content.type === 'link'}
 					<a
 						href={post.content.link}
 						target="_blank"
@@ -96,29 +92,29 @@
 				{/if}
 			</CardContent>
 			<CardFooter class="flex flex-col space-y-4">
-				<div class="flex justify-between items-center w-full">
+				<div class="flex w-full items-center justify-between">
 					<Button variant="ghost" size="sm" class="text-gray-600">
-						<ThumbsUp class="w-4 h-4 mr-2" />
+						<ThumbsUp class="mr-2 h-4 w-4" />
 						{post.likes} Likes
 					</Button>
 					<Button variant="ghost" size="sm" class="text-gray-600">
-						<MessageCircle class="w-4 h-4 mr-2" />
+						<MessageCircle class="mr-2 h-4 w-4" />
 						{post.comments} Comments
 					</Button>
 					<Button variant="ghost" size="sm" class="text-gray-600">
-						<Share2 class="w-4 h-4 mr-2" />
+						<Share2 class="mr-2 h-4 w-4" />
 						{post.shares} Shares
 					</Button>
 				</div>
 				<Separator />
-				<div class="flex items-center space-x-2 w-full">
-					<Avatar class="w-8 h-8">
+				<div class="flex w-full items-center space-x-2">
+					<Avatar class="h-8 w-8">
 						<AvatarImage src="" alt="Your avatar" />
 						<AvatarFallback class="uppercase">H</AvatarFallback>
 					</Avatar>
 					<Input placeholder="Write a comment..." class="flex-grow" />
 					<Button size="icon" variant="ghost">
-						<Send class="w-4 h-4" />
+						<Send class="h-4 w-4" />
 					</Button>
 				</div>
 			</CardFooter>

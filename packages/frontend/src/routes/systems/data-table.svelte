@@ -62,7 +62,7 @@
 				filter: { exclude: true }
 			}
 		}),
-    table.column({
+		table.column({
 			accessor: 'name',
 			header: 'Name',
 			plugins: {
@@ -158,7 +158,7 @@
 											<div class="text-right">
 												<Render of={cell.render()} />
 											</div>
-										{:else if ['name', 'location', "status"].includes(cell.id)}
+										{:else if ['name', 'location', 'status'].includes(cell.id)}
 											<Button variant="ghost" on:click={props.sort.toggle}>
 												<Render of={cell.render()} />
 												<ArrowUpDown
@@ -186,7 +186,7 @@
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell class="[&:has([role=checkbox])]:pl-3" {...attrs}>
 										{#if cell.id === 'lastCheck'}
-											<div class="text-right  whitespace-nowrap">
+											<div class="whitespace-nowrap text-right">
 												<Render of={cell.render()} />
 											</div>
 										{:else}
