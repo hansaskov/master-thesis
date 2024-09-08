@@ -2,75 +2,82 @@
   import DataTable from "./data-table.svelte";
   import * as Card from '$lib/components/ui/card';
 
-	type Payment = {
-		id: string;
-		amount: number;
-		status: 'pending' | 'processing' | 'success' | 'failed';
-		email: string;
-	};
+  type SystemsType = {
+    id: string;
+    name: string;
+    status: "Active" | "Offline" | "Paused";
+    location: string;
+    image: string;
+    lastCheck: string;
+  };
+    
 
-  const data: Payment[] = [
-		{
-			id: '728ed52f',
-			amount: 100,
-			status: 'pending',
-			email: 'm@example.com'
-		},
-		{
-			id: '489e1d42',
-			amount: 125,
-			status: 'processing',
-			email: 'example@gmail.com'
-		},
-		{
-			id: '9a21d48c',
-			amount: 250,
-			status: 'success',
-			email: 'john.doe@yahoo.com'
-		},
-		{
-			id: '5b42c67a',
-			amount: 75,
-			status: 'failed',
-			email: 'susan@example.com'
-		},
-		{
-			id: '3d89a56b',
-			amount: 300,
-			status: 'pending',
-			email: 'alex.smith@hotmail.com'
-		},
-		{
-			id: '8f65e93d',
-			amount: 150,
-			status: 'success',
-			email: 'laura@example.net'
-		},
-		{
-			id: '47f3b71e',
-			amount: 200,
-			status: 'processing',
-			email: 'david.b@example.com'
-		},
-		{
-			id: 'e81c457b',
-			amount: 180,
-			status: 'pending',
-			email: 'kelly.jones@gmail.com'
-		},
-		{
-			id: '12a34bc5',
-			amount: 95,
-			status: 'failed',
-			email: 'roger@example.org'
-		},
-		{
-			id: '93b87e2c',
-			amount: 275,
-			status: 'success',
-			email: 'victoria@example.com'
-		}
-	];
+  const data: SystemsType[] = [
+    {
+      id: "vp1",
+      name: "VisioPointer® 1",
+      status: "Active",
+      location: "Production Line 1",
+      image: "/placeholder.svg",
+      lastCheck: "2 minutes ago"
+    },
+    {
+      id: "vc1",
+      name: "VisioCompact® 1",
+      status: "Active",
+      location: "Assembly Area A",
+      image: "/placeholder.svg",
+      lastCheck: "5 minutes ago"
+    },
+    {
+      id: "360i1",
+      name: "360 Inspector® 1",
+      status: "Active",
+      location: "Quality Control Station",
+      image: "/placeholder.svg",
+      lastCheck: "1 minute ago"
+    },
+    {
+      id: "si1",
+      name: "SmartInspector® 1",
+      status: "Paused",
+      location: "Packaging Line 2",
+      image: "/placeholder.svg",
+      lastCheck: "10 minutes ago"
+    },
+    {
+      id: "vp2",
+      name: "VisioPointer® 2",
+      status: "Paused",
+      location: "Production Line 2",
+      image: "/placeholder.svg",
+      lastCheck: "15 minutes ago"
+    },
+    {
+      id: "vc2",
+      name: "VisioCompact® 2",
+      status: "Active",
+      location: "Assembly Area B",
+      image: "/placeholder.svg",
+      lastCheck: "8 minutes ago"
+    },
+    {
+      id: "vp3",
+      name: "VisioPointer® 3",
+      status: "Paused",
+      location: "Production Line 2",
+      image: "/placeholder.svg",
+      lastCheck: "15 minutes ago"
+    },
+    {
+      id: "vp4",
+      name: "VisioPointer® 4",
+      status: "Offline",
+      location: "Assembly Area B",
+      image: "/placeholder.svg",
+      lastCheck: "5 hours ago"
+    }
+  ];
 
  </script>
   
