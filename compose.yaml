@@ -6,12 +6,44 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+      - "3000:3000"
+      - "5432:5432"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./packages/frontend/build:/srv
+      - ./services/frontend/build:/srv
       - caddy_data:/data
       - caddy_config:/config
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydatabase
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+
+  ingest-server:
+    build:
+      context: services\ingestion
+      dockerfile: Dockerfile
+    ports: 
+      - "50051:50051" 
+    depends_on:
+      - timescaledb
+    environment:
+      - DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase
+
+  backend-server:
+    build:
+      context: services\backend
+      dockerfile: Dockerfile
+    depends_on:
+      - timescaledb
+    environment:
+      - DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase
 
 volumes:
   caddy_data:
   caddy_config:
+  timescaledb_data:
