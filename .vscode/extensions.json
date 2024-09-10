@@ -2,6 +2,7 @@
     "recommendations": [
         "svelte.svelte-vscode",
         "tamasfe.even-better-toml",
-        "rust-lang.rust-analyzer"
+        "rust-lang.rust-analyzer",
+        "matthewpi.caddyfile-support"
     ]
 }
