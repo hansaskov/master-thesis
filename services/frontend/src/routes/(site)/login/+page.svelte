@@ -12,7 +12,7 @@
           </p>
         </div>
         <div class="grid gap-4">
-          <Button type="button" href="/newsfeed" variant="outline" class="w-full">
+          <Button href="/newsfeed" variant="outline" class="w-full">
             Login with Microsoft
           </Button>
         </div>
