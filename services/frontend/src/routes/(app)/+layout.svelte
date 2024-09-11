@@ -105,15 +105,19 @@
 				<Breadcrumb.List>
 					<Breadcrumb.Page class="font-medium">TriVision</Breadcrumb.Page>
 					<Breadcrumb.Separator></Breadcrumb.Separator>
-					{#each breadcrumbs as crumb}{#if crumb.isLast}<Breadcrumb.Link
+					{#each breadcrumbs as crumb}
+						{#if !crumb.isLast}
+							<Breadcrumb.Link
 								class="font-medium"
 								href={crumb.href}
 							>
 								{crumb.label}
 							</Breadcrumb.Link>
-						{:else}<Breadcrumb.Page class="font-medium">{crumb.label}</Breadcrumb.Page>
+						{:else}
+							<Breadcrumb.Page class="font-medium">{crumb.label}</Breadcrumb.Page>
 						{/if}
-						{#if crumb.isLast}<Breadcrumb.Separator></Breadcrumb.Separator>
+						{#if !crumb.isLast}
+							<Breadcrumb.Separator></Breadcrumb.Separator>
 						{/if}
 					{/each}
 				</Breadcrumb.List>
