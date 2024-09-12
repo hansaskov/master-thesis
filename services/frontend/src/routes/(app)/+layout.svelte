@@ -31,7 +31,6 @@
 	const navItems: NavItem[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
 		{ name: 'Product Intelligence', icon: ChartLine, href: '/systems' },
-		{ name: 'Monitoring', icon: Monitor, href: '/monitoring' }
 	];
 
 	const settings: NavItem = { name: 'Settings', icon: Settings, href: '/settings' };
