@@ -1,27 +1,35 @@
 services:
   caddy:
-    image: caddy:2.8.4
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-      - "3000:3000"
-      - "5432:5432"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
       - ./services/frontend/build:/srv
       - caddy_data:/data
       - caddy_config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      caddy: "${INTERFACE_FQDN}"
+      caddy.encode: zstd gzip
+      caddy.handle.root: "* /srv"
+      caddy.handle.try_files: "{path} /200.html"
+      caddy.handle.file_server:
 
-  timescaledb:
-    image: timescale/timescaledb:latest-pg16
+  backend-server:
+    build:
+      context: services\backend
+      dockerfile: Dockerfile
     environment:
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=mydatabase
-    volumes:
-      - timescaledb_data:/var/lib/postgresql/data
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
+    labels:
+      caddy: "${INTERFACE_FQDN}"
+      caddy.handle: /api/*
+      caddy.handle.reverse_proxy: "{{upstreams 3000}}"
+    depends_on:
+      - timescaledb
 
   ingest-server:
     build:
@@ -29,19 +37,22 @@ services:
       dockerfile: Dockerfile
     ports: 
       - "50051:50051" 
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
+    labels:
+      caddy: "${INGEST_SERVER_FQDN}"
+      caddy.reverse_proxy: "{{upstreams 50051}}"
     depends_on:
       - timescaledb
-    environment:
-      - DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase
 
-  backend-server:
-    build:
-      context: services\backend
-      dockerfile: Dockerfile
-    depends_on:
-      - timescaledb
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
     environment:
-      - DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
 
 volumes:
   caddy_data:
