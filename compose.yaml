@@ -20,7 +20,7 @@ services:
 
   backend-server:
     build:
-      context: services\backend
+      context: services/backend
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
@@ -30,13 +30,17 @@ services:
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
     depends_on:
       - timescaledb
+    develop:
+      watch:
+        - action: rebuild
+          path: ./services/backend/src
 
   ingest-server:
     build:
-      context: services\ingestion
+      context: services/ingestion
       dockerfile: Dockerfile
-    ports: 
-      - "50051:50051" 
+    ports:
+      - "50051:50051"
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
     labels:
@@ -53,6 +57,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - timescaledb_data:/var/lib/postgresql/data
+
+## Deployment Services
 
 volumes:
   caddy_data:
