@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { Check, X, ArrowLeft } from 'lucide-svelte';
-
-	import { page } from '$app/stores';
+	import { Check, X } from 'lucide-svelte';
+    
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
-
-	$: systemId = $page.params.id;
 
 	const plans = [
 		{
