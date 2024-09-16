@@ -46,7 +46,7 @@
 		}));
 </script>
 
-<ModeWatcher />
+<ModeWatcher defaultTheme="light"/>
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -152,7 +152,7 @@
 			</nav>
 		</header>
 
-		<main class="grid flex-1 items-start gap-4 bg-background p-4 sm:px-6 sm:py-0 md:gap-8">
+		<main class="p-4">
 			<slot></slot>
 		</main>
 	</div>

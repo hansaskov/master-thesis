@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import {
 		Table,
@@ -9,6 +10,8 @@
 		TableRow
 	} from '$lib/components/ui/table';
 	import { Activity, Cpu, Truck, Camera, Thermometer, BarChart } from 'lucide-svelte';
+
+	$: systemId = $page.params.id;
 
 	interface Metric {
 		name: string;
@@ -85,7 +88,7 @@
 	];
 </script>
 
-	<h1 class="mb-6 text-3xl font-bold">System 1</h1>
+	<h1 class="mb-6 text-3xl font-bold">Monitoring {systemId}</h1>
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each metricGroups as group}
 			<Card>
@@ -106,8 +109,8 @@
 						<TableBody>
 							{#each group.metrics as metric}
 								<TableRow>
-									<TableCell class="text-left font-medium">{metric.name}</TableCell>
-									<TableCell class="text-right">{metric.value} {metric.unit}</TableCell>
+									<TableCell class="text-left text-sm">{metric.name}</TableCell>
+									<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
 								</TableRow>
 							{/each}
 						</TableBody>

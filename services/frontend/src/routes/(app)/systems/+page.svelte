@@ -190,11 +190,11 @@
 		<div class="text-xs text-muted-foreground">
 		  Showing <strong>{filteredSystems.length}</strong> of <strong>{systems.length}</strong> systems
 		</div>
-		<Button variant="outline" size="sm">
-		  <a href="/systems">
+		<Button  href="/systems" variant="outline" size="sm">
+		  
 			View All Systems
 			<ArrowRight class="ml-2 h-4 w-4" />
-		  </a>
+		  
 		</Button>
 	  </Card.Footer>
 	</Card.Root>
