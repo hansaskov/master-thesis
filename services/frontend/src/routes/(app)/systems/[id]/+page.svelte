@@ -14,13 +14,6 @@
         { label: 'Parts', href: `parts` },
     ];
 </script>
-
-<div class="container mx-auto p-4">
-    <Button variant="ghost" href="/systems" class="mb-4">
-        <ArrowLeft class="mr-2 h-4 w-4" />
-        Back to Systems
-    </Button>
-
     <Card.Root>
         <Card.Header>
             <Card.Title>System Details: {systemId}</Card.Title>
@@ -38,4 +31,3 @@
             </div>
         </Card.Content>
     </Card.Root>
-</div>
