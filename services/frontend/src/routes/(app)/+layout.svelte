@@ -45,7 +45,7 @@
 		}));
 </script>
 
-<ModeWatcher defaultTheme="light"/>
+<ModeWatcher defaultTheme="light" />
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<!-- Left navbar for big screens -->
@@ -94,10 +94,7 @@
 					<Breadcrumb.Separator></Breadcrumb.Separator>
 					{#each breadcrumbs as crumb}
 						{#if !crumb.isLast}
-							<Breadcrumb.Link
-								class="font-medium"
-								href={crumb.href}
-							>
+							<Breadcrumb.Link class="font-medium" href={crumb.href}>
 								{crumb.label}
 							</Breadcrumb.Link>
 						{:else}

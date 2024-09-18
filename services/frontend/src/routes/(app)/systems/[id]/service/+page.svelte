@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Check, X } from 'lucide-svelte';
-    
+
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
@@ -80,9 +80,9 @@
 					{#each plan.features as feature (feature.name)}
 						<li class="flex items-center">
 							{#if feature.included}
-								<Check class="text-primary mr-2 h-4 w-4" />
+								<Check class="mr-2 h-4 w-4 text-primary" />
 							{:else}
-								<X class="text-muted-foreground mr-2 h-4 w-4" />
+								<X class="mr-2 h-4 w-4 text-muted-foreground" />
 							{/if}
 							<span class={feature.included ? '' : 'text-muted-foreground'}>
 								{feature.name}

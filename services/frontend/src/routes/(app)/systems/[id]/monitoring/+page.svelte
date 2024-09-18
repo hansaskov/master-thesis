@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import {
+		Card,
+		CardContent,
+		CardHeader,
+		CardTitle,
+		CardDescription
+	} from '$lib/components/ui/card';
 	import {
 		Table,
 		TableBody,
@@ -10,6 +16,7 @@
 		TableRow
 	} from '$lib/components/ui/table';
 	import { Activity, Cpu, Truck, Camera, Thermometer, BarChart } from 'lucide-svelte';
+	import AreaChart from '$lib/components/AreaChart.svelte';
 
 	$: systemId = $page.params.id;
 
@@ -86,36 +93,52 @@
 			metrics: [{ name: 'Security Incidents', value: '0', unit: '' }]
 		}
 	];
+
+
+	let dataX = [65, 59, 80, 81, 56, 55, 40]
+	let dataY = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+	let legend = "Sales"
+
 </script>
 
-	<h1 class="mb-6 text-3xl font-bold">Monitoring {systemId}</h1>
-	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-		{#each metricGroups as group}
-			<Card>
-				<CardHeader>
-					<CardTitle class="flex items-center gap-2">
-						<svelte:component this={group.icon} class="h-4 w-4" />
-						<span>{group.title}</span>
-					</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<Table>
-						<TableHeader>
+<h1 class="mb-6 text-3xl font-bold">Monitoring {systemId}</h1>
+<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	<Card>
+		<CardHeader>
+			<CardTitle class="text-2xl font-bold">Sales Overview</CardTitle>
+			<CardDescription>Monthly sales data for the current year</CardDescription>
+		</CardHeader>
+		<CardContent>
+			<AreaChart dataY={dataX} dataX={dataY} legend ={legend} ></AreaChart>
+		</CardContent>
+	</Card>
+
+	{#each metricGroups as group}
+		<Card>
+			<CardHeader>
+				<CardTitle class="flex items-center gap-2">
+					<svelte:component this={group.icon} class="h-4 w-4" />
+					<span>{group.title}</span>
+				</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead class="text-left">Metric</TableHead>
+							<TableHead class="text-right">Value</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{#each group.metrics as metric}
 							<TableRow>
-								<TableHead class="text-left">Metric</TableHead>
-								<TableHead class="text-right">Value</TableHead>
+								<TableCell class="text-left text-sm">{metric.name}</TableCell>
+								<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
 							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{#each group.metrics as metric}
-								<TableRow>
-									<TableCell class="text-left text-sm">{metric.name}</TableCell>
-									<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
-								</TableRow>
-							{/each}
-						</TableBody>
-					</Table>
-				</CardContent>
-			</Card>
-		{/each}
-	</div>
+						{/each}
+					</TableBody>
+				</Table>
+			</CardContent>
+		</Card>
+	{/each}
+</div>

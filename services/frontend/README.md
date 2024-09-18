@@ -10,11 +10,13 @@
 1. Install Bun for you OS from [here](https://bun.sh/)
 
 2. Install dependencies
+
 ```bash
 bun install
 ```
 
 3. Start the dev server
+
 ```bash
 bun run dev
 ```
@@ -28,6 +30,7 @@ bun run build
 ```
 
 You can preview the production build with `
-``` bash
+
+```bash
 bun run preview
 ```
