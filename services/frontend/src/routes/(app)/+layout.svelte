@@ -30,7 +30,7 @@
 
 	const navItems: NavItem[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
-		{ name: 'Product Intelligence', icon: ChartLine, href: '/systems' },
+		{ name: 'Product Intelligence', icon: ChartLine, href: '/systems' }
 	];
 
 	const settings: NavItem = { name: 'Settings', icon: Settings, href: '/settings' };
@@ -46,7 +46,7 @@
 		}));
 </script>
 
-<ModeWatcher defaultTheme="light"/>
+<ModeWatcher defaultTheme="light" />
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -106,10 +106,7 @@
 					<Breadcrumb.Separator></Breadcrumb.Separator>
 					{#each breadcrumbs as crumb}
 						{#if !crumb.isLast}
-							<Breadcrumb.Link
-								class="font-medium"
-								href={crumb.href}
-							>
+							<Breadcrumb.Link class="font-medium" href={crumb.href}>
 								{crumb.label}
 							</Breadcrumb.Link>
 						{:else}

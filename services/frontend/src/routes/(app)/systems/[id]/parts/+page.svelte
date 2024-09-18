@@ -8,7 +8,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { faker } from '@faker-js/faker';
 
-	const criticalityTypes = ["Critical", "Important", "Non-Critical"] as const;
+	const criticalityTypes = ['Critical', 'Important', 'Non-Critical'] as const;
 
 	function generateSparePart() {
 		return {
@@ -25,33 +25,26 @@
 
 	let searchTerm = '';
 
-	$: filteredParts = spareParts.filter(part => 
+	$: filteredParts = spareParts.filter((part) =>
 		part.partName.toLowerCase().includes(searchTerm.toLowerCase())
 	);
-
 </script>
 
 <Card.Root class="w-full">
 	<Card.Header>
 		<Card.Title>Spare Parts Inventory</Card.Title>
-		<Card.Description>
-			Manage spare parts for your production system.
-		</Card.Description>
+		<Card.Description>Manage spare parts for your production system.</Card.Description>
 	</Card.Header>
 	<Card.Content>
-		<div class="flex items-center space-x-2 mb-4">
+		<div class="mb-4 flex items-center space-x-2">
 			<Search class="h-4 w-4 opacity-50" />
-			<Input 
-				type="search" 
-				placeholder="Search spare parts..." 
-				bind:value={searchTerm}
-			/>
+			<Input type="search" placeholder="Search spare parts..." bind:value={searchTerm} />
 		</div>
 		<div class="overflow-x-auto">
 			<Table.Root class="text-xs">
 				<Table.Header>
 					<Table.Row>
-						<Table.Head class="hidden md:table-cell w-[64px]">Image</Table.Head>
+						<Table.Head class="hidden w-[64px] md:table-cell">Image</Table.Head>
 						<Table.Head class="">Part Number</Table.Head>
 						<Table.Head class="">Part Name</Table.Head>
 						<Table.Head class="">Quantity</Table.Head>
@@ -92,9 +85,7 @@
 										</DropdownMenu.Trigger>
 										<DropdownMenu.Content align="end">
 											<DropdownMenu.Label>Actions</DropdownMenu.Label>
-											<DropdownMenu.Item>
-												View Details
-											</DropdownMenu.Item>
+											<DropdownMenu.Item>View Details</DropdownMenu.Item>
 											<DropdownMenu.Item>Update Stock</DropdownMenu.Item>
 											<DropdownMenu.Item>Order More</DropdownMenu.Item>
 										</DropdownMenu.Content>
@@ -109,7 +100,10 @@
 	</Card.Content>
 	<Card.Footer>
 		<div class="text-sm text-muted-foreground">
-			Showing <strong>{filteredParts.length}</strong> of <strong>{spareParts.length}</strong> spare parts
+			Showing <strong>{filteredParts.length}</strong>
+			of
+			<strong>{spareParts.length}</strong>
+			 spare parts
 		</div>
 	</Card.Footer>
 </Card.Root>
