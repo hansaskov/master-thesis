@@ -89,89 +89,85 @@
 		}
 	];
 
+	const getHoursAgo = (hours: number) => {
+		const date = new Date(Date.now() - hours * 60 * 60 * 1000);
+		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	};
 
-	let dataY = [65, 59, 80, 81, 56, 55, 40]
-	let dataX = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-	let legend = "Sales"
+	const createTimeRange = (count: number) =>
+		[...Array(count)].map((_, i) => getHoursAgo(count - 1 - i));
 
-	// Sample data for the new charts
-	let barDataY = [12, 19, 3, 5, 2, 3];
-	let barDataX = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
-	let barLegend = "Color Distribution";
-
-	let lineDataY = [1, 2, 3, 4, 5, 6, 7];
-	let lineDataX = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-	let lineLegend = "Weekly Trend";
-
+	const chartsData = [
+		{
+			dataY: [65, 59, 80, 81, 56, 55, 40, 42, 45, 47, 35, 35],
+			dataX: createTimeRange(12),
+			legend: 'CPU temperature',
+			description: 'CPU temperature in degrees Celsius over the last 7 hours'
+		},
+		{
+			dataY: [85, 90, 95, 80, 75, 88, 92, 85, 78, 80, 70, 65],
+			dataX: createTimeRange(12),
+			legend: 'Memory usage',
+			description: 'Memory usage percentage over the last 12 hours'
+		},
+		{
+			dataY: [43, 43, 44, 45, 45, 46, 47, 47, 48, 48, 48, 49],
+			dataX: createTimeRange(12),
+			legend: 'Disk space',
+			description: 'Available disk space percentage over the last 12 hours'
+		}
+	];
 </script>
 
 <!-- Charts Section -->
 <div class="mb-8">
-	<h2 class="text-2xl font-bold mb-4">Charts</h2>
+	<h2 class="mb-4 text-2xl font-bold">Charts</h2>
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{#each chartsData as { dataX, dataY, legend }}
 			<Card>
-					<CardHeader>
-							<CardTitle class="text-xl font-bold">Sales Overview</CardTitle>
-							<CardDescription>Monthly sales data for the current year</CardDescription>
-					</CardHeader>
-					<CardContent>
-							<AreaChart dataY={dataY} dataX={dataX} legend={legend} />
-					</CardContent>
+				<CardHeader>
+					<CardTitle class="text-xl font-bold">{legend}</CardTitle>
+					<CardDescription>Monthly sales data for the current year</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<AreaChart {dataY} {dataX} {legend} />
+				</CardContent>
 			</Card>
-
-			<Card>
-					<CardHeader>
-							<CardTitle class="text-xl font-bold">Color Distribution</CardTitle>
-							<CardDescription>Distribution of colors in inventory</CardDescription>
-					</CardHeader>
-					<CardContent>
-							<AreaChart dataY={barDataY} dataX={barDataX} legend={barLegend} />
-					</CardContent>
-			</Card>
-
-			<Card>
-					<CardHeader>
-							<CardTitle class="text-xl font-bold">Weekly Trend</CardTitle>
-							<CardDescription>Performance trend over the past week</CardDescription>
-					</CardHeader>
-					<CardContent>
-							<AreaChart dataY={lineDataY} dataX={lineDataX} legend={lineLegend} />
-					</CardContent>
-			</Card>
+		{/each}
 	</div>
 </div>
 
 <!-- Metrics Section -->
 <div>
-	<h2 class="text-2xl font-bold mb-4">Metrics</h2>
+	<h2 class="mb-4 text-2xl font-bold">Metrics</h2>
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-			{#each metricGroups as group}
-					<Card>
-							<CardHeader>
-									<CardTitle class="flex items-center gap-2">
-											<svelte:component this={group.icon} class="h-4 w-4" />
-											<span>{group.title}</span>
-									</CardTitle>
-							</CardHeader>
-							<CardContent>
-									<Table>
-											<TableHeader>
-													<TableRow>
-															<TableHead class="text-left">Metric</TableHead>
-															<TableHead class="text-right">Value</TableHead>
-													</TableRow>
-											</TableHeader>
-											<TableBody>
-													{#each group.metrics as metric}
-															<TableRow>
-																	<TableCell class="text-left text-sm">{metric.name}</TableCell>
-																	<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
-															</TableRow>
-													{/each}
-											</TableBody>
-									</Table>
-							</CardContent>
-					</Card>
-			{/each}
+		{#each metricGroups as group}
+			<Card>
+				<CardHeader>
+					<CardTitle class="flex items-center gap-2">
+						<svelte:component this={group.icon} class="h-4 w-4" />
+						<span>{group.title}</span>
+					</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<Table>
+						<TableHeader>
+							<TableRow>
+								<TableHead class="text-left">Metric</TableHead>
+								<TableHead class="text-right">Value</TableHead>
+							</TableRow>
+						</TableHeader>
+						<TableBody>
+							{#each group.metrics as metric}
+								<TableRow>
+									<TableCell class="text-left text-sm">{metric.name}</TableCell>
+									<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
+								</TableRow>
+							{/each}
+						</TableBody>
+					</Table>
+				</CardContent>
+			</Card>
+		{/each}
 	</div>
 </div>

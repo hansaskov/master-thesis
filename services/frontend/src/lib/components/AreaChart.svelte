@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Chart, { type ChartConfiguration } from 'chart.js/auto';
+	import Chart, { type ChartConfiguration, type ChartData } from 'chart.js/auto';
 
 	let chartCanvas: HTMLCanvasElement;
 	export let dataY: number[];
@@ -16,6 +16,7 @@
 
 			const config: ChartConfiguration = {
 				type: 'line',
+
 				data: {
 					labels: dataX,
 					datasets: [
@@ -25,13 +26,44 @@
 							fill: true,
 							backgroundColor: `hsl(${primaryColor} / 0.2)`,
 							borderColor: `hsl(${primaryColor})`,
-							tension: 0.1
+							tension: 0.4
+							
 						}
-
 					]
 				},
 				options: {
-					responsive: true
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						}
+					},
+					scales: {
+						x: {
+							grid: {
+								display: true
+							},
+							ticks: {
+								display: true
+							},
+							border: {
+								display: true // Hide x-axis border
+							},
+                                                        
+						},
+						y: {
+							grid: {
+								display: true
+							},
+							ticks: {
+								display: true
+							},
+							border: {
+								display: true // Hide y-axis border
+							}
+						}
+					}
 				}
 			};
 
@@ -40,6 +72,6 @@
 	});
 </script>
 
-<div {...$$restProps}>
+<div {...$$restProps} style="position: relative;">
 	<canvas bind:this={chartCanvas}></canvas>
 </div>
