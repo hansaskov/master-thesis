@@ -19,13 +19,13 @@
 			Our customers worldwide can rely on remote assistance from TriVision's support team to keep downtime at a minimum.
         <p class="mt-4">
             The support team keeps TriVision systems updated, performs checks regularly, and provides fast response remote support if incidents occur.
-		<p class="mt-8 text-lg font-semibold">
+		<p class="mt-4 text-lg font-semibold">
 			For remote assistance within office hours:
 		</p>
 
 		<div class="mt-4">
-			<p class="text-xl font-bold text-red-600">{supportDetails.phone}</p>
-			<p class="text-xl font-bold text-red-600">
+			<p class="font-bold text-red-600">{supportDetails.phone}</p>
+			<p class="font-bold text-red-600">
                 <a href={`mailto:${supportDetails.email}`}>
 					{supportDetails.email}
 				</a>
