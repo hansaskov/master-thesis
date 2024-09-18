@@ -36,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"bits-ui": "^0.21.13",
+		"chart.js": "^4.4.4",
 		"clsx": "^2.1.1",
 		"cmdk-sv": "^0.0.18",
 		"lucide-svelte": "^0.439.0",
