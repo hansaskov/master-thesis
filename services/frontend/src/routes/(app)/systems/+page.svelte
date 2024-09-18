@@ -10,21 +10,36 @@
   
 	const statusTypes = ["Active", "Offline", "Paused"] as const;
 	type StatusType = typeof statusTypes[number];
+
+	const healthTypes = ["Healthy", "At Risk", "Critical"] as const;
+	type HealthType = typeof healthTypes[number];
   
 	function getStatusVariant(status: StatusType) {
 	  switch (status) {
 		case 'Active':
 		  return 'outline';
 		case 'Offline':
-		  return 'default';
+		  return 'outline';
 		case 'Paused':
 		  return 'secondary';
 	  }
+	}
+
+	function getHealthVariant(health: HealthType) {
+		switch (health) {
+			case 'Healthy':
+				return 'healthy';
+			case 'At Risk':
+				return 'warning';
+			case 'Critical':
+				return 'critical';
+		}
 	}
   
 	interface SystemsType {
 	  id: string;
 	  name: string;
+	  health: HealthType;
 	  status: StatusType;
 	  location: string;
 	  image: string;
@@ -35,6 +50,7 @@
 	  {
 		id: "vp1",
 		name: "VisioPointer® 1",
+		health: "Healthy",
 		status: "Active",
 		location: "Production Line 1",
 		image: "/placeholder.svg",
@@ -43,6 +59,7 @@
 	  {
 		id: "vc1",
 		name: "VisioCompact® 1",
+		health: "At Risk",
 		status: "Active",
 		location: "Assembly Area A",
 		image: "/placeholder.svg",
@@ -51,6 +68,7 @@
 	  {
 		id: "360i1",
 		name: "360 Inspector® 1",
+		health: "Healthy",
 		status: "Active",
 		location: "Quality Control Station",
 		image: "/placeholder.svg",
@@ -59,6 +77,7 @@
 	  {
 		id: "si1",
 		name: "SmartInspector® 1",
+		health: "Critical",
 		status: "Paused",
 		location: "Packaging Line 2",
 		image: "/placeholder.svg",
@@ -67,6 +86,7 @@
 	  {
 		id: "vp2",
 		name: "VisioPointer® 2",
+		health: "Healthy",
 		status: "Paused",
 		location: "Production Line 2",
 		image: "/placeholder.svg",
@@ -75,6 +95,7 @@
 	  {
 		id: "vc2",
 		name: "VisioCompact® 2",
+		health: "Healthy",
 		status: "Active",
 		location: "Assembly Area B",
 		image: "/placeholder.svg",
@@ -83,6 +104,7 @@
 	  {
 		id: "vp3",
 		name: "VisioPointer® 3",
+		health: "Healthy",
 		status: "Paused",
 		location: "Production Line 2",
 		image: "/placeholder.svg",
@@ -91,6 +113,7 @@
 	  {
 		id: "vp4",
 		name: "VisioPointer® 4",
+		health: "Healthy",
 		status: "Offline",
 		location: "Assembly Area B",
 		image: "/placeholder.svg",
@@ -108,6 +131,23 @@
 		goto(`/systems/${id}`);
 	}
 </script>
+
+<!-- <style>
+	:global(.badge-healthy) {
+		background-color: #10b981;
+		color: black;
+	}
+
+	:global(.badge-risk) {
+		background-color: #f59e0b;
+		color: black;
+	}
+
+	:global(.badge-critical) {
+		background-color: #ef4444;
+		color: black;
+	}
+</style> -->
   
 <Tabs.Root bind:value={activeTab}>
 	<Tabs.List>
@@ -134,10 +174,10 @@
 					<span class="sr-only">Image</span>
 				  </Table.Head>
 				  <Table.Head>Name</Table.Head>
-				  <Table.Head class="hidden md:table-cell">Status</Table.Head>
+				  <Table.Head>Health</Table.Head>
+				  <Table.Head>Status</Table.Head>
 				  <Table.Head class="hidden md:table-cell">Location</Table.Head>
 				  <Table.Head class="hidden md:table-cell">Last Check</Table.Head>
-				  <Table.Head>Actions</Table.Head>
 				</Table.Row>
 			  </Table.Header>
 			  <Table.Body>
@@ -152,7 +192,12 @@
 						width="64"
 					  />
 					</Table.Cell>
-					<Table.Cell class="font-medium">{system.name}</Table.Cell>
+					<Table.Cell class="font-medium bg-wa">{system.name}</Table.Cell>
+					<Table.Cell>
+						<Badge variant={getHealthVariant(system.health)}>
+							{system.health}
+						</Badge>
+					</Table.Cell>
 					<Table.Cell>
 					  <Badge variant={getStatusVariant(system.status)}>
 						{system.status}
@@ -160,25 +205,6 @@
 					</Table.Cell>
 					<Table.Cell class="hidden md:table-cell">{system.location}</Table.Cell>
 					<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
-					<Table.Cell class="text-right">
-					  <div class="flex items-center justify-end gap-2">
-						<DropdownMenu.Root>
-						  <DropdownMenu.Trigger asChild let:builder>
-							<Button builders={[builder]} size="icon" variant="ghost">
-							  <MoreHorizontal class="h-4 w-4" />
-							  <span class="sr-only">Actions</span>
-							</Button>
-						  </DropdownMenu.Trigger>
-						  <DropdownMenu.Content align="end">
-							<DropdownMenu.Label>Actions</DropdownMenu.Label>
-							<DropdownMenu.Item>
-							  <a href="/systems/{system.id}">View Details</a>
-							</DropdownMenu.Item>
-							<DropdownMenu.Item>Restart System</DropdownMenu.Item>
-						  </DropdownMenu.Content>
-						</DropdownMenu.Root>
-					  </div>
-					</Table.Cell>
 				  </Table.Row>
 				{/each}
 			  </Table.Body>

@@ -9,7 +9,7 @@
 		Search,
 		Package2,
 		User,
-		PanelLeft
+		PanelLeft,
 	} from 'lucide-svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as Sheet from '$lib/components/ui/sheet';
@@ -30,10 +30,9 @@
 
 	const navItems: NavItem[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
-		{ name: 'Product Intelligence', icon: ChartLine, href: '/systems' },
 	];
 
-	const settings: NavItem = { name: 'Settings', icon: Settings, href: '/settings' };
+	const settings: NavItem = { name: 'Support', icon: Wrench, href: '/support' };
 
 	$: pathname = $page.url.pathname;
 	$: breadcrumbs = pathname
@@ -49,6 +48,7 @@
 <ModeWatcher defaultTheme="light"/>
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
+	<!-- Left navbar for big screens -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
 			<a
@@ -67,39 +67,27 @@
 		</nav>
 	</aside>
 
+	<!-- Bottom navbar for small screens -->
+	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
+		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-4">
+			<a
+				href="/systems"
+				class="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
+			>
+				<Package2 class="h-4 w-4 transition-all group-hover:scale-110" />
+				<span class="sr-only">Dashboard</span>
+			</a>
+			{#each navItems as item}
+				<NavItem props={item} />
+			{/each}
+			<NavItem props={settings} />
+		</nav>
+	</aside>
+
 	<div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
 		<header
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
-			<Sheet.Root>
-				<Sheet.Trigger>
-					<Button size="icon" variant="outline" class="sm:hidden">
-						<PanelLeft class="h-5 w-5" />
-						<span class="sr-only">Toggle Menu</span>
-					</Button>
-				</Sheet.Trigger>
-				<Sheet.Content side="left" class="bg-card sm:max-w-xs">
-					<nav class="grid gap-6 text-lg font-medium">
-						<a
-							href="/"
-							class="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-						>
-							<Package2 class="h-4 w-4 transition-all group-hover:scale-110" />
-							<span class="sr-only">Dashboard</span>
-						</a>
-						{#each [...navItems, settings] as item}
-							<a
-								href={item.href}
-								class="{`flex items-center gap-4 px-2.5 ${pathname.startsWith(item.href) ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}}"
-							>
-								<svelte:component this={item.icon} class="h-5 w-5"></svelte:component>
-								{item.name}
-							</a>
-						{/each}
-					</nav>
-				</Sheet.Content>
-			</Sheet.Root>
-
 			<Breadcrumb.Root class="hidden md:flex">
 				<Breadcrumb.List>
 					<Breadcrumb.Page class="font-medium">TriVision</Breadcrumb.Page>
