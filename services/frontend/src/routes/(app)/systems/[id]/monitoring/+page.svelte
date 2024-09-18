@@ -123,11 +123,11 @@
 <div class="mb-8">
 	<h2 class="mb-4 text-2xl font-bold">Charts</h2>
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-		{#each chartsData as { dataX, dataY, legend }}
+		{#each chartsData as { dataX, dataY, legend, description}}
 			<Card>
 				<CardHeader>
 					<CardTitle class="text-xl font-bold">{legend}</CardTitle>
-					<CardDescription>Monthly sales data for the current year</CardDescription>
+					<CardDescription>{description}</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<AreaChart {dataY} {dataX} {legend} />
