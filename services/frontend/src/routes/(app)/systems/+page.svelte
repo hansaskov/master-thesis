@@ -131,23 +131,6 @@
 		goto(`/systems/${id}`);
 	}
 </script>
-
-<!-- <style>
-	:global(.badge-healthy) {
-		background-color: #10b981;
-		color: black;
-	}
-
-	:global(.badge-risk) {
-		background-color: #f59e0b;
-		color: black;
-	}
-
-	:global(.badge-critical) {
-		background-color: #ef4444;
-		color: black;
-	}
-</style> -->
   
 <Tabs.Root bind:value={activeTab}>
 	<Tabs.List>
