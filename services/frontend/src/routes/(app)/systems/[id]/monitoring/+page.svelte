@@ -15,7 +15,7 @@
 		TableHeader,
 		TableRow
 	} from '$lib/components/ui/table';
-	import { Activity, Cpu, Truck, Camera, Thermometer, BarChart } from 'lucide-svelte';
+	import { Activity, Cpu, Truck, Camera, Thermometer } from 'lucide-svelte';
 	import AreaChart from '$lib/components/AreaChart.svelte';
 
 	$: systemId = $page.params.id;
@@ -86,59 +86,92 @@
 				{ name: 'Humidity Level', value: '45', unit: '%' },
 				{ name: 'Ambient Temperature', value: '22', unit: '°C' }
 			]
-		},
-		{
-			title: 'Security Metrics',
-			icon: BarChart,
-			metrics: [{ name: 'Security Incidents', value: '0', unit: '' }]
 		}
 	];
 
 
-	let dataX = [65, 59, 80, 81, 56, 55, 40]
-	let dataY = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+	let dataY = [65, 59, 80, 81, 56, 55, 40]
+	let dataX = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
 	let legend = "Sales"
+
+	// Sample data for the new charts
+	let barDataY = [12, 19, 3, 5, 2, 3];
+	let barDataX = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+	let barLegend = "Color Distribution";
+
+	let lineDataY = [1, 2, 3, 4, 5, 6, 7];
+	let lineDataX = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+	let lineLegend = "Weekly Trend";
 
 </script>
 
-<h1 class="mb-6 text-3xl font-bold">Monitoring {systemId}</h1>
-<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-	<Card>
-		<CardHeader>
-			<CardTitle class="text-2xl font-bold">Sales Overview</CardTitle>
-			<CardDescription>Monthly sales data for the current year</CardDescription>
-		</CardHeader>
-		<CardContent>
-			<AreaChart dataY={dataX} dataX={dataY} legend ={legend} ></AreaChart>
-		</CardContent>
-	</Card>
+<!-- Charts Section -->
+<div class="mb-8">
+	<h2 class="text-2xl font-bold mb-4">Charts</h2>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+			<Card>
+					<CardHeader>
+							<CardTitle class="text-xl font-bold">Sales Overview</CardTitle>
+							<CardDescription>Monthly sales data for the current year</CardDescription>
+					</CardHeader>
+					<CardContent>
+							<AreaChart dataY={dataY} dataX={dataX} legend={legend} />
+					</CardContent>
+			</Card>
 
-	{#each metricGroups as group}
-		<Card>
-			<CardHeader>
-				<CardTitle class="flex items-center gap-2">
-					<svelte:component this={group.icon} class="h-4 w-4" />
-					<span>{group.title}</span>
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead class="text-left">Metric</TableHead>
-							<TableHead class="text-right">Value</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{#each group.metrics as metric}
-							<TableRow>
-								<TableCell class="text-left text-sm">{metric.name}</TableCell>
-								<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
-							</TableRow>
-						{/each}
-					</TableBody>
-				</Table>
-			</CardContent>
-		</Card>
-	{/each}
+			<Card>
+					<CardHeader>
+							<CardTitle class="text-xl font-bold">Color Distribution</CardTitle>
+							<CardDescription>Distribution of colors in inventory</CardDescription>
+					</CardHeader>
+					<CardContent>
+							<AreaChart dataY={barDataY} dataX={barDataX} legend={barLegend} />
+					</CardContent>
+			</Card>
+
+			<Card>
+					<CardHeader>
+							<CardTitle class="text-xl font-bold">Weekly Trend</CardTitle>
+							<CardDescription>Performance trend over the past week</CardDescription>
+					</CardHeader>
+					<CardContent>
+							<AreaChart dataY={lineDataY} dataX={lineDataX} legend={lineLegend} />
+					</CardContent>
+			</Card>
+	</div>
+</div>
+
+<!-- Metrics Section -->
+<div>
+	<h2 class="text-2xl font-bold mb-4">Metrics</h2>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+			{#each metricGroups as group}
+					<Card>
+							<CardHeader>
+									<CardTitle class="flex items-center gap-2">
+											<svelte:component this={group.icon} class="h-4 w-4" />
+											<span>{group.title}</span>
+									</CardTitle>
+							</CardHeader>
+							<CardContent>
+									<Table>
+											<TableHeader>
+													<TableRow>
+															<TableHead class="text-left">Metric</TableHead>
+															<TableHead class="text-right">Value</TableHead>
+													</TableRow>
+											</TableHeader>
+											<TableBody>
+													{#each group.metrics as metric}
+															<TableRow>
+																	<TableCell class="text-left text-sm">{metric.name}</TableCell>
+																	<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
+															</TableRow>
+													{/each}
+											</TableBody>
+									</Table>
+							</CardContent>
+					</Card>
+			{/each}
+	</div>
 </div>
