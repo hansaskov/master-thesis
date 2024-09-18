@@ -92,32 +92,32 @@
 				{/if}
 			</CardContent>
 			<CardFooter class="flex flex-col space-y-4">
-				<div class="flex w-full gap-1 items-center justify-between">
-						<Button variant="ghost" size="sm" class="text-gray-600 flex-1 min-w-0 px-2">
-								<ThumbsUp class="mr-1 h-4 w-4 flex-shrink-0" />
-								<span class="truncate text-sm">{post.likes} Likes</span>
-						</Button>
-						<Button variant="ghost" size="sm" class="text-gray-600 flex-1 min-w-0 px-2">
-								<MessageCircle class="mr-1 h-4 w-4 flex-shrink-0" />
-								<span class="truncate text-sm">{post.comments} Comments</span>
-						</Button>
-						<Button variant="ghost" size="sm" class="text-gray-600 flex-1 min-w-0 px-2">
-								<Share2 class="mr-1 h-4 w-4 flex-shrink-0" />
-								<span class="truncate text-sm">{post.shares} Shares</span>
-						</Button>
+				<div class="flex w-full items-center justify-between gap-1">
+					<Button variant="ghost" size="sm" class="min-w-0 flex-1 px-2 text-gray-600">
+						<ThumbsUp class="mr-1 h-4 w-4 flex-shrink-0" />
+						<span class="truncate text-sm">{post.likes} Likes</span>
+					</Button>
+					<Button variant="ghost" size="sm" class="min-w-0 flex-1 px-2 text-gray-600">
+						<MessageCircle class="mr-1 h-4 w-4 flex-shrink-0" />
+						<span class="truncate text-sm">{post.comments} Comments</span>
+					</Button>
+					<Button variant="ghost" size="sm" class="min-w-0 flex-1 px-2 text-gray-600">
+						<Share2 class="mr-1 h-4 w-4 flex-shrink-0" />
+						<span class="truncate text-sm">{post.shares} Shares</span>
+					</Button>
 				</div>
 				<Separator />
 				<div class="flex w-full items-center space-x-2">
-						<Avatar class="h-8 w-8">
-								<AvatarImage src="" alt="Your avatar" />
-								<AvatarFallback class="uppercase">H</AvatarFallback>
-						</Avatar>
-						<Input placeholder="Write a comment..." class="flex-grow" />
-						<Button size="icon" variant="ghost">
-								<Send class="h-4 w-4" />
-						</Button>
+					<Avatar class="h-8 w-8">
+						<AvatarImage src="" alt="Your avatar" />
+						<AvatarFallback class="uppercase">H</AvatarFallback>
+					</Avatar>
+					<Input placeholder="Write a comment..." class="flex-grow" />
+					<Button size="icon" variant="ghost">
+						<Send class="h-4 w-4" />
+					</Button>
 				</div>
-		</CardFooter>
+			</CardFooter>
 		</Card>
 	{/each}
 </div>
