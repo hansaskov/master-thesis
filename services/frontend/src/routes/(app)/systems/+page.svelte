@@ -8,7 +8,6 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { goto } from '$app/navigation';
 
-	import { tick } from 'svelte';
 	import OrgCombobox from './OrgCombobox.svelte';
 
 	const statusTypes = ['Active', 'Offline', 'Paused'] as const;
