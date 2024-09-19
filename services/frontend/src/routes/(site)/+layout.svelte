@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Package2 } from 'lucide-svelte';
+	import Package2 from 'lucide-svelte/icons/package-2';
 	import { Button } from '$lib/components/ui/button';
 </script>
 

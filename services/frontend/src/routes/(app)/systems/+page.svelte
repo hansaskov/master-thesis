@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { ArrowRight } from 'lucide-svelte';
+	import ArrowRight from 'lucide-svelte/icons/arrow-right';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-
-	import * as Tabs from '$lib/components/ui/tabs';
 	import { goto } from '$app/navigation';
 
 	import OrgCombobox from './OrgCombobox.svelte';
@@ -123,25 +121,12 @@
 		}
 	];
 
-	let activeTab = 'All';
-
-	$: filteredSystems =
-		activeTab === 'All' ? systems : systems.filter((system) => system.status === activeTab);
-
 	function handleRowClick(id: string) {
 		goto(`/systems/${id}`);
 	}
 
 </script>
 <div class="md:container">
-<Tabs.Root bind:value={activeTab}>
-	<Tabs.List>
-		<Tabs.Trigger value="All">All</Tabs.Trigger>
-		<Tabs.Trigger value="Active">Active</Tabs.Trigger>
-		<Tabs.Trigger value="Paused">Paused</Tabs.Trigger>
-		<Tabs.Trigger value="Offline">Offline</Tabs.Trigger>
-	</Tabs.List>
-
 	<Card.Root class="w-full">
 		<Card.Header class="flex gap-4 md:flex-row justify-between items-end">
 			<div>
@@ -154,7 +139,6 @@
 			
 		</Card.Header>
 		<Card.Content>
-			<Tabs.Content value={activeTab}>
 				<div class="overflow-x-auto">
 					<Table.Root>
 						<Table.Header>
@@ -170,7 +154,7 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each filteredSystems as system (system.id)}
+							{#each systems as system (system.id)}
 								<Table.Row
 									on:click={() => handleRowClick(system.id)}
 									class="hover:bg-muted cursor-pointer"
@@ -202,11 +186,10 @@
 						</Table.Body>
 					</Table.Root>
 				</div>
-			</Tabs.Content>
 		</Card.Content>
 		<Card.Footer class="flex justify-between">
 			<div class="text-muted-foreground text-xs">
-				Showing <strong>{filteredSystems.length}</strong>
+				Showing <strong>{systems.length}</strong>
 				of
 				<strong>{systems.length}</strong>
 				systems
@@ -217,5 +200,4 @@
 			</Button>
 		</Card.Footer>
 	</Card.Root>
-</Tabs.Root>
 </div>

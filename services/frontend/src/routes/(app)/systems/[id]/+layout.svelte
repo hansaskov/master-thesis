@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowLeft } from 'lucide-svelte';
+	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 

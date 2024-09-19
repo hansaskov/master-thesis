@@ -15,7 +15,12 @@
 		TableHeader,
 		TableRow
 	} from '$lib/components/ui/table';
-	import { Activity, Cpu, Truck, Camera, Thermometer } from 'lucide-svelte';
+	import Activity from 'lucide-svelte/icons/activity';
+
+	import Cpu from 'lucide-svelte/icons/cpu';
+	import Truck from 'lucide-svelte/icons/truck';
+	import Camera from 'lucide-svelte/icons/camera';
+	import Thermometer from 'lucide-svelte/icons/thermometer';
 	import AreaChart from '$lib/components/AreaChart.svelte';
 
 	$: systemId = $page.params.id;

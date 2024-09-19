@@ -5,7 +5,7 @@
 	import { Check } from 'svelte-radix';
 	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
-	import { ChevronsUpDown } from 'lucide-svelte';
+	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import { tick } from 'svelte';
 
 	const organizations = [

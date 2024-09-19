@@ -5,11 +5,14 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { MoreVertical, Copy, AlertCircle } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Switch from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { writable } from 'svelte/store';
+
+	import Ellipsis from 'lucide-svelte/icons/ellipsis';
+	import Copy from 'lucide-svelte/icons/copy';
+	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 
 	let organizationName = 'My Organization';
 	let organizationSettings = {
@@ -168,7 +171,7 @@
 									<DropdownMenu.Root>
 										<DropdownMenu.Trigger>
 											<Button variant="ghost" size="icon">
-												<MoreVertical class="h-4 w-4" />
+												<Ellipsis class="h-4 w-4" />
 												<span class="sr-only">Open menu</span>
 											</Button>
 										</DropdownMenu.Trigger>

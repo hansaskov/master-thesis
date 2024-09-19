@@ -1,18 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import {
-		Newspaper,
-		ChartLine,
-		Monitor,
-		Wrench,
-		Settings,
-		Search,
-		Package2,
-		User,
-		PanelLeft,
-	} from 'lucide-svelte';
+
+	import Newspaper from 'lucide-svelte/icons/newspaper';
+	import Wrench from 'lucide-svelte/icons/wrench';
+	import Search from 'lucide-svelte/icons/search';
+	import Package2 from 'lucide-svelte/icons/package-2';
+	import User from 'lucide-svelte/icons/user';
+
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
-	import * as Sheet from '$lib/components/ui/sheet';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
