@@ -36,7 +36,7 @@
 			variant="outline"
 			role="combobox"
 			aria-expanded={openCombobox}
-			class="w-[200px] justify-between"
+			class="w-full md:w-[200px] justify-between"
 		>
 			{selectedOrgLabel}
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowRight, ChevronsUpDown, MoreHorizontal } from 'lucide-svelte';
+	import { ArrowRight } from 'lucide-svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -133,7 +133,7 @@
 	}
 
 </script>
-
+<div class="md:container">
 <Tabs.Root bind:value={activeTab}>
 	<Tabs.List>
 		<Tabs.Trigger value="All">All</Tabs.Trigger>
@@ -143,7 +143,7 @@
 	</Tabs.List>
 
 	<Card.Root class="w-full">
-		<Card.Header class="flex flex-row justify-between">
+		<Card.Header class="flex gap-4 md:flex-row justify-between items-end">
 			<div>
 				<Card.Title>Production Systems</Card.Title>
 				<Card.Description>
@@ -218,3 +218,4 @@
 		</Card.Footer>
 	</Card.Root>
 </Tabs.Root>
+</div>
