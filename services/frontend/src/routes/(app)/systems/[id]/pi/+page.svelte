@@ -12,6 +12,7 @@
     import { DateFormatter, type DateValue, getLocalTimeZone, today, now } from "@internationalized/date";
     import { cn } from "$lib/utils";
 	import type { Selected } from "bits-ui";
+	import GaugeChart from "$lib/components/GaugeChart.svelte";
 
     const df = new DateFormatter("en-US", { dateStyle: "medium" });
 
@@ -21,16 +22,23 @@
 
     // Mock data (replace with actual data in a real application)
     const mockData = {
-        oee: 85,
-        performance: 92,
-        availability: 88,
-        quality: 96,
+        "oee": 85,
+        "performance": 92,
+        "availability": 88,
+        "quality": 96,
         "good parts": 9750,
         "bad parts": 250,
-        uptime: 95,
-        downtime: 5,
+        "uptime": 95,
+        "downtime": 5,
         "production speed": 420,
     };
+
+    const gauges = [
+        { label: 'Performance', value: 50 },
+        { label: 'Quality', value: 90 },
+        { label: 'Availability', value: 85 }
+    ];
+
 </script>
 
 <div class="flex flex-col sm:flex-row sm:justify-end mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
@@ -50,6 +58,8 @@
             <Select.Input hidden bind:value={selectedTimeRange} />
         </Select.Root>
     </div>
+
+    
 
     {#if selectedTimeRange.value === "custom"}
         <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
@@ -85,7 +95,21 @@
 
 <Separator class="my-4" />
 
+
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <Card.Root>
+        <Card.Header class="flex flex-row items-center justify-between pb-2">
+            <Card.Title class="text-lg font-medium">OEE</Card.Title>
+            <Gauge class="text-muted-foreground h-4 w-4" />
+        </Card.Header>
+        <Card.Content>
+            <GaugeChart gauges={gauges} />         
+        </Card.Content>
+        <Card.Footer>
+            
+        </Card.Footer>
+    </Card.Root>
+
     {#each Object.entries(mockData) as [key, value]}
         <Card.Root>
             <Card.Header class="flex flex-row items-center justify-between pb-2">
