@@ -31,6 +31,18 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
 					foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)'
 				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning) / <alpha-value>)',
+					foreground: 'hsl(var(--warning-foreground) / <alpha-value>)'
+				},
+				// healthy: {
+				// 	DEFAULT: 'hsl(var(--healthy) / <alpha-value>)',
+				// 	foreground: 'hsl(var(--healthy-foreground) / <alpha-value>)'
+				// },
+				// critical: {
+				// 	DEFAULT: 'hsl(var(--critical) / <alpha-value>)',
+				// 	foreground: 'hsl(var(--critical-foreground) / <alpha-value>)'
+				// },
 				muted: {
 					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',
 					foreground: 'hsl(var(--muted-foreground) / <alpha-value>)'

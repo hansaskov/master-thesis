@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Chart, { type ChartConfiguration } from 'chart.js/auto';
+	import Chart, { type ChartConfiguration, type ChartData } from 'chart.js/auto';
+
 	let chartCanvas: HTMLCanvasElement;
-    export let dataY : number[]
-    export let dataX : string[]
-    export let legend : string
+	export let dataY: number[];
+	export let dataX: string[];
+	export let legend: string;
 
 	onMount(() => {
 		const ctx = chartCanvas.getContext('2d');
@@ -12,15 +13,10 @@
 			const primaryColor = getComputedStyle(document.documentElement)
 				.getPropertyValue('--primary')
 				.trim();
-			const backgroundColor = getComputedStyle(document.documentElement)
-				.getPropertyValue('--background')
-				.trim();
-			const foregroundColor = getComputedStyle(document.documentElement)
-				.getPropertyValue('--foreground')
-				.trim();
 
 			const config: ChartConfiguration = {
 				type: 'line',
+
 				data: {
 					labels: dataX,
 					datasets: [
@@ -30,12 +26,44 @@
 							fill: true,
 							backgroundColor: `hsl(${primaryColor} / 0.2)`,
 							borderColor: `hsl(${primaryColor})`,
-							tension: 0.1
+							tension: 0.4
+							
 						}
 					]
 				},
 				options: {
-					responsive: true
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						}
+					},
+					scales: {
+						x: {
+							grid: {
+								display: true
+							},
+							ticks: {
+								display: true
+							},
+							border: {
+								display: true // Hide x-axis border
+							},
+                                                        
+						},
+						y: {
+							grid: {
+								display: true
+							},
+							ticks: {
+								display: true
+							},
+							border: {
+								display: true // Hide y-axis border
+							}
+						}
+					}
 				}
 			};
 
@@ -44,6 +72,6 @@
 	});
 </script>
 
-<div>
+<div {...$$restProps} style="position: relative;">
 	<canvas bind:this={chartCanvas}></canvas>
 </div>

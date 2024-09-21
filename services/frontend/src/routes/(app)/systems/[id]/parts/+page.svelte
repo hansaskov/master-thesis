@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { MoreHorizontal, Search } from 'lucide-svelte';
+	import Ellipsis from 'lucide-svelte/icons/ellipsis';
+	import Search from 'lucide-svelte/icons/search';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
@@ -79,7 +80,7 @@
 									<DropdownMenu.Root>
 										<DropdownMenu.Trigger asChild let:builder>
 											<Button builders={[builder]} size="icon" variant="ghost">
-												<MoreHorizontal class="h-4 w-4" />
+												<Ellipsis class="h-4 w-4" />
 												<span class="sr-only">Actions</span>
 											</Button>
 										</DropdownMenu.Trigger>

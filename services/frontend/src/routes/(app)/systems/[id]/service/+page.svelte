@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { Check, X } from 'lucide-svelte';
+	import Check from 'lucide-svelte/icons/check';
+
+	import X from 'lucide-svelte/icons/x';
 
 	import * as Card from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';

@@ -15,7 +15,12 @@
 		TableHeader,
 		TableRow
 	} from '$lib/components/ui/table';
-	import { Activity, Cpu, Truck, Camera, Thermometer, BarChart } from 'lucide-svelte';
+	import Activity from 'lucide-svelte/icons/activity';
+
+	import Cpu from 'lucide-svelte/icons/cpu';
+	import Truck from 'lucide-svelte/icons/truck';
+	import Camera from 'lucide-svelte/icons/camera';
+	import Thermometer from 'lucide-svelte/icons/thermometer';
 	import AreaChart from '$lib/components/AreaChart.svelte';
 
 	$: systemId = $page.params.id;
@@ -86,59 +91,88 @@
 				{ name: 'Humidity Level', value: '45', unit: '%' },
 				{ name: 'Ambient Temperature', value: '22', unit: '°C' }
 			]
-		},
-		{
-			title: 'Security Metrics',
-			icon: BarChart,
-			metrics: [{ name: 'Security Incidents', value: '0', unit: '' }]
 		}
 	];
 
+	const getHoursAgo = (hours: number) => {
+		const date = new Date(Date.now() - hours * 60 * 60 * 1000);
+		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+	};
 
-	let dataX = [65, 59, 80, 81, 56, 55, 40]
-	let dataY = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-	let legend = "Sales"
+	const createTimeRange = (count: number) =>
+		[...Array(count)].map((_, i) => getHoursAgo(count - 1 - i));
 
+	const chartsData = [
+		{
+			dataY: [65, 59, 80, 81, 56, 55, 40, 42, 45, 47, 35, 35],
+			dataX: createTimeRange(12),
+			legend: 'CPU temperature',
+			description: 'CPU temperature in degrees Celsius over the last 7 hours'
+		},
+		{
+			dataY: [85, 90, 95, 80, 75, 88, 92, 85, 78, 80, 70, 65],
+			dataX: createTimeRange(12),
+			legend: 'Memory usage',
+			description: 'Memory usage percentage over the last 12 hours'
+		},
+		{
+			dataY: [43, 43, 44, 45, 45, 46, 47, 47, 48, 48, 48, 49],
+			dataX: createTimeRange(12),
+			legend: 'Disk space',
+			description: 'Available disk space percentage over the last 12 hours'
+		}
+	];
 </script>
 
-<h1 class="mb-6 text-3xl font-bold">Monitoring {systemId}</h1>
-<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-	<Card>
-		<CardHeader>
-			<CardTitle class="text-2xl font-bold">Sales Overview</CardTitle>
-			<CardDescription>Monthly sales data for the current year</CardDescription>
-		</CardHeader>
-		<CardContent>
-			<AreaChart dataY={dataX} dataX={dataY} legend ={legend} ></AreaChart>
-		</CardContent>
-	</Card>
+<!-- Charts Section -->
+<div class="mb-8">
+	<h2 class="mb-4 text-2xl font-bold">Charts</h2>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{#each chartsData as { dataX, dataY, legend, description}}
+			<Card>
+				<CardHeader>
+					<CardTitle class="text-xl font-bold">{legend}</CardTitle>
+					<CardDescription>{description}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<AreaChart {dataY} {dataX} {legend} />
+				</CardContent>
+			</Card>
+		{/each}
+	</div>
+</div>
 
-	{#each metricGroups as group}
-		<Card>
-			<CardHeader>
-				<CardTitle class="flex items-center gap-2">
-					<svelte:component this={group.icon} class="h-4 w-4" />
-					<span>{group.title}</span>
-				</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead class="text-left">Metric</TableHead>
-							<TableHead class="text-right">Value</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{#each group.metrics as metric}
+<!-- Metrics Section -->
+<div>
+	<h2 class="mb-4 text-2xl font-bold">Metrics</h2>
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+		{#each metricGroups as group}
+			<Card>
+				<CardHeader>
+					<CardTitle class="flex items-center gap-2">
+						<svelte:component this={group.icon} class="h-4 w-4" />
+						<span>{group.title}</span>
+					</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<Table>
+						<TableHeader>
 							<TableRow>
-								<TableCell class="text-left text-sm">{metric.name}</TableCell>
-								<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
+								<TableHead class="text-left">Metric</TableHead>
+								<TableHead class="text-right">Value</TableHead>
 							</TableRow>
-						{/each}
-					</TableBody>
-				</Table>
-			</CardContent>
-		</Card>
-	{/each}
+						</TableHeader>
+						<TableBody>
+							{#each group.metrics as metric}
+								<TableRow>
+									<TableCell class="text-left text-sm">{metric.name}</TableCell>
+									<TableCell class="text-right text-sm">{metric.value} {metric.unit}</TableCell>
+								</TableRow>
+							{/each}
+						</TableBody>
+					</Table>
+				</CardContent>
+			</Card>
+		{/each}
+	</div>
 </div>

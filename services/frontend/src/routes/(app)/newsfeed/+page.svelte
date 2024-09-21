@@ -4,7 +4,11 @@
 	import { Card, CardContent, CardFooter, CardHeader } from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/separator';
-	import { ThumbsUp, MessageCircle, Share2, Send } from 'lucide-svelte';
+	
+	import ThumbsUp from 'lucide-svelte/icons/thumbs-up';
+	import MessageCircle from 'lucide-svelte/icons/message-circle';
+	import Share2 from 'lucide-svelte/icons/share-2';
+	import Send from 'lucide-svelte/icons/send';
 
 	const posts = [
 		{

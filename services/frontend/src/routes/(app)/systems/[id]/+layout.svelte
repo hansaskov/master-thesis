@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowLeft } from 'lucide-svelte';
+	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 
@@ -9,7 +9,7 @@
 </script>
 
 {#if lowerPathname.length > 1}
-	<a href={backUrl} class="inline-block">
+	<a href={backUrl} class="inline-block md:hidden">
 		<Button variant="ghost">
 			<ArrowLeft class="mr-2 h-4 w-4" />
 			Back to
