@@ -23,9 +23,6 @@
     // Mock data (replace with actual data in a real application)
     const mockData = {
         "oee": 85,
-        "performance": 92,
-        "availability": 88,
-        "quality": 96,
         "good parts": 9750,
         "bad parts": 250,
         "uptime": 95,
@@ -93,25 +90,23 @@
     {/if}
 </div>
 
-<Separator class="my-4" />
-
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <Card.Root>
+    <Card.Root class="row-span-3">
         <Card.Header class="flex flex-row items-center justify-between pb-2">
-            <Card.Title class="text-lg font-medium">OEE</Card.Title>
+            <Card.Title class="text-lg font-medium">Radial Bar Chart</Card.Title>
             <Gauge class="text-muted-foreground h-4 w-4" />
         </Card.Header>
-        <Card.Content>
-            <GaugeChart gauges={gauges} />         
+        <Separator class="mb-4" />
+        <Card.Content >
+            <GaugeChart gauges={gauges} />   
         </Card.Content>
-        <Card.Footer>
-            
-        </Card.Footer>
+
+
     </Card.Root>
 
     {#each Object.entries(mockData) as [key, value]}
-        <Card.Root>
+        <Card.Root class="col-span-1">
             <Card.Header class="flex flex-row items-center justify-between pb-2">
                 <Card.Title class="text-lg font-medium">{key.charAt(0).toUpperCase() + key.slice(1)}</Card.Title>
                 {#if key === 'oee'}
@@ -126,11 +121,12 @@
                     <Zap class="text-muted-foreground h-4 w-4" />
                 {/if}
             </Card.Header>
+            <Separator class="mb-4" />
             <Card.Content>
                 <div class="text-3xl font-bold">
                     {#if key === 'production speed'}
                         {value}
-                    {:else if ['goodParts', 'badParts'].includes(key)}
+                    {:else if ['good parts', 'bad parts'].includes(key)}
                         <div class="flex justify-between items-center">
                             <div>
                                 <p class="text-sm text-muted-foreground">Good Parts</p>

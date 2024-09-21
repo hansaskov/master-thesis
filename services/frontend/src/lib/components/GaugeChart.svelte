@@ -46,21 +46,22 @@
                 options: {
                     responsive: true,
                     cutout: '33%',
+                    layout: {
+                        padding: {
+                            left: 25,
+                            top: 0,
+                            bottom: 0
+                        }
+                    }
                 }
             });
         }
     });
 
-    function getColor(i: number): number {
-        const result = Math.round(100 * (1 - i / gauges.length));
-        console.log(result);
-        return result;
-}
 </script>
 
 <div {...$$restProps}>
-    <canvas bind:this={chartCanvas}></canvas>
-    <div class="mt-4 flex flex-wrap justify-center gap-2">
+    <div class="my-4 flex flex-wrap justify-center gap-2">
         {#each gauges as gauge, i}
             <div class="flex items-center">
                 {#if i === 0}
@@ -77,9 +78,9 @@
                     </Badge>
                 {/if}
 
-
                 <Label class="ml-2">{gauge.label}</Label>
             </div>
         {/each}
     </div>
+    <canvas bind:this={chartCanvas}></canvas>
 </div>
