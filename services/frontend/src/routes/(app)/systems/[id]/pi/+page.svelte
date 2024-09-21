@@ -7,7 +7,13 @@
     import { Separator } from "$lib/components/ui/separator/index.js";
     import { Calendar } from "$lib/components/ui/calendar/index.js";
 
-    import { Activity, Clock, Gauge, BoxSelect, Zap } from "lucide-svelte";
+    import Activity from "lucide-svelte/icons/activity";
+    import Clock from "lucide-svelte/icons/clock";
+    import Gauge from "lucide-svelte/icons/gauge";
+    import BoxSelect from "lucide-svelte/icons/box-select";
+    import Zap from "lucide-svelte/icons/zap";
+
+
     import CalendarIcon from "svelte-radix/Calendar.svelte";
     import { DateFormatter, type DateValue, getLocalTimeZone, today, now } from "@internationalized/date";
     import { cn } from "$lib/utils";
