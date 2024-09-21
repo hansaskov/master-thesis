@@ -143,7 +143,7 @@
 						<DropdownMenu.Item>Settings</DropdownMenu.Item>
 						<DropdownMenu.Item>Support</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item>Logout</DropdownMenu.Item>
+						<DropdownMenu.Item href="/">Logout</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			</nav>

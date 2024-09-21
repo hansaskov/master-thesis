@@ -14,7 +14,7 @@
 			</a>
 		</div>
 		<nav>
-			<Button href="/login" variant="outline">Login</Button>
+			<Button href="/" variant="outline">Login</Button>
 		</nav>
 	</header>
 
