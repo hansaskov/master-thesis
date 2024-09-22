@@ -10,6 +10,7 @@
         label: string;
         min?: number;
         max?: number;
+        unit?: string;
         value: number;
     }
 
@@ -21,6 +22,10 @@
         if (ctx) {
             primaryColor = getComputedStyle(document.documentElement)
                 .getPropertyValue('--primary')
+                .trim();
+
+            const backgroundColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--card')
                 .trim();
 
             new Chart(ctx, {
@@ -45,7 +50,14 @@
                 },
                 options: {
                     responsive: true,
+                    borderColor: `hsl(${backgroundColor} / 0.95 )`,
                     cutout: '33%',
+                    animation: {
+                    animateScale: true,
+                    easing: 'easeOutExpo',
+           
+                        
+                    },
                     layout: {
                         padding: {
                             left: 25,
@@ -66,15 +78,15 @@
             <div class="flex items-center">
                 {#if i === 0}
                     <Badge class="bg-primary">
-                        {gauge.value}
+                        {gauge.value}{gauge.unit ?? ''}
                     </Badge>
                 {:else if i === 1}
                     <Badge class="bg-primary/[67%]">
-                        {gauge.value}
+                        {gauge.value}{gauge.unit ?? ''}
                     </Badge>
                 {:else if i === 2}
                     <Badge class="bg-primary/[33%] text-foreground">
-                        {gauge.value}
+                        {gauge.value}{gauge.unit ?? ''}
                     </Badge>
                 {/if}
 
