@@ -21,7 +21,7 @@ bunx playwright install
 
 ## Running the Tests
 
-To run the tests you must first start the project. This can be done using docker and docker compose. 
+To run the tests you must first start the project. This can be done using docker and docker compose in the root of the project.
 
 1. (optional) If you haven't already, start the project using docker compose:
 ``` bash
