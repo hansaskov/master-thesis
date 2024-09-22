@@ -5,6 +5,7 @@ const pages = [
   '/newsfeed',
   '/systems',
   '/settings',
+  '/support',
   '/systems/vp1',
   '/systems/vp1/monitoring',
   '/systems/vp1/pi',
