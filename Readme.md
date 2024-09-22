@@ -34,5 +34,3 @@ To run the project using Docker Compose, follow these steps:
 5. Once the services are up and running, you can access the frontend application through your web browser. at [http://caddy.localhost](http://caddy.localhost).
 
 This setup will launch all necessary services, including the backend server, frontend application, database, and reverse proxy. The system will be ready for data collection and visualization.
-
-For detailed information on configuring and customizing the system, please refer to the documentation in the `docs` directory.
