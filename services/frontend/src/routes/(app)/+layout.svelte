@@ -124,7 +124,7 @@
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item>Settings</DropdownMenu.Item>
-						<DropdownMenu.Item>Support</DropdownMenu.Item>
+						<DropdownMenu.Item href="/settings">Support</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item href="/">Logout</DropdownMenu.Item>
 					</DropdownMenu.Content>
