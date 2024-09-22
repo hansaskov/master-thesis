@@ -18,6 +18,7 @@ for (const path of pages) {
   test(`Screenshot - ${path}`, async ({ page, browserName, isMobile }) => {
     await page.goto(path);
     await page.waitForTimeout(500);
-    await page.screenshot({ path: `${imageFolder}/${browserName}${isMobile ? "-mobile" : ""}${path}-page.png` });
+    const fileName = `${imageFolder}/${browserName}${isMobile ? "-mobile" : ""}${path}-page.png` 
+    await page.screenshot({ path: fileName });
   });
 }
