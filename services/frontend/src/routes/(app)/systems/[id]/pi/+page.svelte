@@ -37,14 +37,15 @@
     };
 
     const gauges = [
-        { label: 'Performance', value: 50 },
-        { label: 'Quality', value: 90 },
-        { label: 'Availability', value: 85 }
+        { label: 'Performance', value: 50, unit: '%' },
+        { label: 'Quality', value: 90, unit: '%' },
+        { label: 'Availability', value: 85, unit: '%' }
     ];
 
 </script>
 
-<div class="flex flex-col sm:flex-row sm:justify-end mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
+<div class="flex flex-col sm:flex-row-reverse sm:justify-start mb-4 items-end gap-4 ">
+   
     <div class="flex flex-col w-full sm:w-[200px]">
         <label for="time-range-select" class="text-sm font-medium mb-1">Select Time Range</label>
         <Select.Root bind:selected={selectedTimeRange}>
@@ -62,12 +63,9 @@
         </Select.Root>
     </div>
 
-    
-
     {#if selectedTimeRange.value === "custom"}
-        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
             {#each [{ label: "From", date: startDate }, { label: "To", date: endDate }] as { label, date }}
-                <div class="flex flex-col">
+                <div class="flex flex-col w-full sm:w-[200px]">
                     <label for="{label.toLowerCase()}-date" class="text-sm font-medium mb-1">{label}</label>
                     <Popover.Root>
                         <Popover.Trigger asChild let:builder>
@@ -75,7 +73,7 @@
                                 id="{label.toLowerCase()}-date"
                                 variant="outline"
                                 class={cn(
-                                    "w-full sm:w-[200px] justify-start text-left font-normal",
+                                    "justify-start text-left font-normal",
                                     !date && "text-muted-foreground"
                                 )}
                                 builders={[builder]}
@@ -92,8 +90,10 @@
                     </Popover.Root>
                 </div>
             {/each}
-        </div>
     {/if}
+
+
+
 </div>
 
 

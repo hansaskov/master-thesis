@@ -9,13 +9,13 @@
 </script>
 
 {#if lowerPathname.length > 1}
-	<a href={backUrl} class="inline-block md:hidden">
-		<Button variant="ghost">
-			<ArrowLeft class="mr-2 h-4 w-4" />
-			Back to
-			<span class="ml-1 capitalize">{previousSection}</span>
-		</Button>
-	</a>
+	
+	<Button href={backUrl} variant="ghost" class="inline-flex md:hidden -ml-4">
+		<ArrowLeft class="mr-2 h-4 w-4" />
+		Back to
+		<span class="ml-1 capitalize">{previousSection}</span>
+	</Button>
+	
 {/if}
 <div class="py-4 md:container">
 	<slot />
