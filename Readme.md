@@ -28,7 +28,7 @@ To run the project using Docker Compose, follow these steps:
 4. Run the following command to start all services:
 
    ```
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
 5. Once the services are up and running, you can access the frontend application through your web browser. at [http://caddy.localhost](http://caddy.localhost).
