@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
+	import { Monitor, Wrench, ChartLine, Package2 } from 'lucide-svelte';
 
 	// Get the system ID from the route parameters
 	$: systemId = $page.params.id;
@@ -23,11 +24,22 @@
 	</Card.Header>
 	<Card.Content>
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-			{#each navigationButtons as button}
-				<Button variant="outline" href="{systemId}/{button.href}" class="w-full">
-					{button.label}
+				<Button variant="outline" href="{systemId}/monitoring" class="w-full">
+					<ChartLine class="h-5 w-5" />
+					Monitor
 				</Button>
-			{/each}
+				<Button variant="outline" href="{systemId}/service" class="w-full">
+					<Wrench class="h-5 w-5" />
+					Service
+				</Button>
+				<Button variant="outline" href="{systemId}/pi" class="w-full">
+					<Monitor class="h-5 w-5" />
+					PI
+				</Button>
+				<Button variant="outline" href="{systemId}/parts" class="w-full">
+					<Package2 class="h-5 w-5" />
+					Parts
+				</Button>
 		</div>
 	</Card.Content>
 </Card.Root>

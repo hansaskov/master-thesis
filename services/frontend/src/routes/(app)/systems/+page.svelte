@@ -121,8 +121,10 @@
 		}
 	];
 
-	function handleRowClick(id: string) {
-		goto(`/systems/${id}`);
+	function handleRowClick(name: string) {
+		//SEB: Mellemrum er repræsenteret som %20 i URL'en uden dette
+		let cleanedName = name.split(" ").join("")
+		goto(`/systems/${cleanedName}`);
 	}
 
 </script>
@@ -156,7 +158,7 @@
 						<Table.Body>
 							{#each systems as system (system.id)}
 								<Table.Row
-									on:click={() => handleRowClick(system.id)}
+									on:click={() => handleRowClick(system.name)}
 									class="hover:bg-muted cursor-pointer"
 								>
 									<Table.Cell class="hidden md:table-cell">
