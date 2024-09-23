@@ -107,7 +107,7 @@
             dataSets: [
                 {
                     dataY: [65, 59, 80, 81, 56, 55, 40, 42, 45, 47, 35, 35],
-                    legend: 'CPU temperature'
+                    label: 'CPU temperature'
                 }
             ],
             dataX: createTimeRange(12),
@@ -118,7 +118,7 @@
             dataSets: [
                 {
                     dataY: [85, 90, 95, 80, 75, 88, 92, 85, 78, 80, 70, 65],
-                    legend: 'Memory usage'
+                    label: 'Memory usage'
                 }
             ],
             dataX: createTimeRange(12),
@@ -129,11 +129,11 @@
             dataSets: [
                 {
                     dataY: [43, 43, 44, 45, 45, 46, 47, 47, 48, 48, 48, 49],
-                    legend: 'Available space'
+                    label: 'Available space'
                 },
                 {
                     dataY: [57, 57, 56, 55, 55, 54, 53, 53, 52, 52, 52, 51],
-                    legend: 'Used space'
+                    label: 'Used space'
                 }
             ],
             dataX: createTimeRange(12),
