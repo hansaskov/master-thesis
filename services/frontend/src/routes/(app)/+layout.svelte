@@ -4,7 +4,6 @@
 	import Newspaper from 'lucide-svelte/icons/newspaper';
 	import Wrench from 'lucide-svelte/icons/wrench';
 	import Search from 'lucide-svelte/icons/search';
-	import Package2 from 'lucide-svelte/icons/package-2';
 	import { House } from 'lucide-svelte';
 	import User from 'lucide-svelte/icons/user';
 
@@ -47,9 +46,7 @@
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a
-				href="/systems"
-			>
+			<a href="/systems">
 				<House />
 				<span class="sr-only">Dashboard</span>
 			</a>
@@ -121,16 +118,16 @@
 		</header>
 
 		<!--Bottom Padding-->
-		<main class="p-4 pb-16">
+		<main class="p-4 pb-17">
 			<slot></slot>
 		</main>
 	</div>
 
 	<!-- Bottom navbar (only visible on small screens) -->
 	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
-		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-4">
+		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
 			<a href="/systems" class="flex flex-col items-center justify-center">
-				<House class="mb-1" />
+				<House />
 				Home
 				<span class="sr-only">Dashboard</span>
 			</a>
