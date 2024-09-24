@@ -1,10 +1,14 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion';
+	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
 	import Check from 'lucide-svelte/icons/check';
 	import X from 'lucide-svelte/icons/x';
-  
+	import { onMount } from 'svelte';
+
+	$: systemId = $page.params.id;
+
 	const plans = [
 	  {
 		name: 'Basic',
@@ -60,16 +64,39 @@
 	  }
 	];
 
-	// Find the current plan
-	const currentPlan = plans.find(plan => plan.isCurrent);
-	const defaultOpenValue = currentPlan ? currentPlan.name : "";
+	// Array to hold the names of the open accordions
+	let openAccordions: string[] = [];
+
+	// Function to progressively open accordions, starting the first one immediately
+	function openAccordionsSequentially() {
+		let index = 0;
+
+		// Open the first accordion immediately
+		openAccordions = [plans[index].name];
+		index++;
+
+		// Sequentially open the rest with a delay
+		const intervalId = setInterval(() => {
+			if (index < plans.length) {
+				openAccordions = [...openAccordions, plans[index].name];
+				index++;
+			} else {
+				clearInterval(intervalId);
+			}
+		}, 450); // 500ms delay between each accordion opening
+	}
+
+	// onMount to trigger the sequential accordion opening immediately
+	onMount(() => {
+		openAccordionsSequentially();
+	});
 </script>
-  
+
 <div class="container mx-auto px-4 py-8">
-	<h1 class="mb-8 text-center text-3xl font-bold">Production Line Service Agreement Plans</h1>
+	<h1 class="mb-8 text-center text-3xl font-bold">Service Agreement Plans for {systemId}</h1>
 	
 	<div class="space-y-6 md:hidden">
-	  <Accordion.Root value={[defaultOpenValue]}>
+	  <Accordion.Root value={openAccordions}>
 		{#each plans as plan (plan.name)}
 		  <Accordion.Item value={plan.name}>
 			<Accordion.Trigger>
@@ -78,7 +105,7 @@
 				<span class="text-lg font-semibold">{plan.price}</span>
 			  </div>
 			</Accordion.Trigger>
-			<Accordion.Content>
+			<Accordion.Content transitionConfig={{duration: 500}}>
 			  <div class="mt-4 space-y-4">
 				<p class="text-sm text-muted-foreground">{plan.description}</p>
 				<ul class="space-y-2">
@@ -108,7 +135,7 @@
 		{/each}
 	  </Accordion.Root>
 	</div>
-  
+
 	<div class="hidden md:grid md:grid-cols-2 xl:grid-cols-4 gap-6">
 	  {#each plans as plan (plan.name)}
 		<div class={`flex flex-col rounded-lg border p-6 ${plan.isCurrent ? 'border-primary' : 'border-border'}`}>
