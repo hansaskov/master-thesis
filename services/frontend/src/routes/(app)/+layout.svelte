@@ -123,8 +123,8 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item>Settings</DropdownMenu.Item>
-						<DropdownMenu.Item href="/settings">Support</DropdownMenu.Item>
+						<DropdownMenu.Item href="/settings">Settings</DropdownMenu.Item>
+						<DropdownMenu.Item href="/support">Support</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item href="/">Logout</DropdownMenu.Item>
 					</DropdownMenu.Content>
