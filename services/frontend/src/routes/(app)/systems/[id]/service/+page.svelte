@@ -2,7 +2,8 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Check, X } from 'lucide-svelte';
+	import Check from 'lucide-svelte/icons/check';
+	import X from 'lucide-svelte/icons/x';
   
 	const plans = [
 	  {
