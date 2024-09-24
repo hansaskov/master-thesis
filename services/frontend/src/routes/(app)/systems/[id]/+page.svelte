@@ -6,7 +6,11 @@
 	import BarChart from "lucide-svelte/icons/chart-bar";
 	import Package2 from "lucide-svelte/icons/package-2";
   
-	export let systemId = "vp1";
+	import { page } from '$app/stores';
+
+
+	// Get the system ID from the route parameters
+	$: systemId = $page.params.id;
   
 	const navigationOptions = [
 	  {
