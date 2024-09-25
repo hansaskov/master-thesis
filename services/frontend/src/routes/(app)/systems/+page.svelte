@@ -125,6 +125,26 @@
 		goto(`/systems/${id}`);
 	}
 
+	function parseTime(timeStr: string) {
+		const timeParts = timeStr.split(' ');
+		const value = parseInt(timeParts[0], 10);
+		const unit = timeParts[1];
+
+		switch (unit) {
+			case 'minute':
+			case 'minutes':
+				return value;
+			case 'hour':
+			case 'hours':
+				return value * 60;
+			case 'day':
+			case 'days':
+				return value * 60 * 24;
+			default:
+				return 0; 
+		}
+	}
+
 	enum sortingOrder {
 		ascending = 1,
 		descending = -1
@@ -136,24 +156,71 @@
 		switch (sort) {
 			case 'name':
 				systems.sort((a, b) => {
-				if (a.name > b.name) {
-					return 1 * currentOrder;
-				}
-				if (a.name < b.name) {
-					return -1 * currentOrder;
-				} 
-				return 0;
-				})
+					if (a.name > b.name) {
+						return 1 * currentOrder;
+					}
+					if (a.name < b.name) {
+						return -1 * currentOrder;
+					} 
+						return 0;
+					})
+					break;
+			case 'health':
+				systems.sort((a, b) => {
+					if (a.health > b.health) {
+						return 1 * currentOrder;
+					}
+					if (a.health < b.health) {
+						return -1 * currentOrder;
+					} 
+						return 0;
+					})
+					break;
+			case 'status':
+				systems.sort((a, b) => {
+					if (a.status > b.status) {
+						return 1 * currentOrder;
+					}
+					if (a.status < b.health) {
+						return -1 * currentOrder;
+					} 
+						return 0;
+					})
+					break;
+			
+			case 'location':
+				systems.sort((a, b) => {
+					if (a.location > b.location) {
+						return 1 * currentOrder;
+					}
+					if (a.location < b.location) {
+						return -1 * currentOrder;
+					} 
+						return 0;
+					})
+					break;
+			case 'check':
+				systems.sort((a, b) => {
+					let first = parseTime(a.lastCheck);
+					let second = parseTime(b.lastCheck);
 
-				if (currentOrder === sortingOrder.descending) {
+					if (first> second) {
+						return 1 * currentOrder;
+					}
+					if (first < second) {
+						return -1 * currentOrder;
+					} 
+						return 0;
+					})
+					break;
+		}
+			if (currentOrder === sortingOrder.descending) {
 					currentOrder = sortingOrder.ascending;
 				} else {
 					currentOrder = sortingOrder.descending;
 				}
 				
 				systems = systems;
-				break;
-		}
 	}
 
 </script>
@@ -182,10 +249,26 @@
 										Name
 									</button>
 								</Table.Head>
-								<Table.Head>Health</Table.Head>
-								<Table.Head>Status</Table.Head>
-								<Table.Head class="hidden md:table-cell">Location</Table.Head>
-								<Table.Head class="hidden md:table-cell">Last Check</Table.Head>
+								<Table.Head>
+									<button on:click={() => {sortSystems('health')}}>
+										Health
+									</button>
+								</Table.Head>
+								<Table.Head>
+									<button on:click={() => {sortSystems('status')}}>
+										Status
+									</button>
+								</Table.Head>
+								<Table.Head class="hidden md:table-cell">
+									<button on:click={() => {sortSystems('location')}}>
+										Location
+									</button>
+								</Table.Head>
+								<Table.Head class="hidden md:table-cell">
+									<button on:click={() => {sortSystems('check')}}>
+										Last Check
+									</button>
+								</Table.Head>
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
