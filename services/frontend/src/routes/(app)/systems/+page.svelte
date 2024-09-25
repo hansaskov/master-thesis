@@ -46,7 +46,7 @@
 		lastCheck: string;
 	}
 
-	const systems: SystemsType[] = [
+	let systems: SystemsType[] = [
 		{
 			id: 'vp1',
 			name: 'VisioPointer® 1',
@@ -121,10 +121,39 @@
 		}
 	];
 
-	function handleRowClick(name: string) {
-		//SEB: Mellemrum er repræsenteret som %20 i URL'en uden dette
-		let cleanedName = name.split(" ").join("")
-		goto(`/systems/${cleanedName}`);
+	function handleRowClick(id: string) {
+		goto(`/systems/${id}`);
+	}
+
+	enum sortingOrder {
+		ascending = 1,
+		descending = -1
+	}
+
+	let currentOrder: sortingOrder = sortingOrder.ascending;
+
+	function sortSystems(sort: string) {
+		switch (sort) {
+			case 'name':
+				systems.sort((a, b) => {
+				if (a.name > b.name) {
+					return 1 * currentOrder;
+				}
+				if (a.name < b.name) {
+					return -1 * currentOrder;
+				} 
+				return 0;
+				})
+
+				if (currentOrder === sortingOrder.descending) {
+					currentOrder = sortingOrder.ascending;
+				} else {
+					currentOrder = sortingOrder.descending;
+				}
+				
+				systems = systems;
+				break;
+		}
 	}
 
 </script>
@@ -148,7 +177,11 @@
 								<Table.Head class="hidden w-[100px] md:table-cell">
 									<span class="sr-only">Image</span>
 								</Table.Head>
-								<Table.Head>Name</Table.Head>
+								<Table.Head>
+									<button on:click={() => {sortSystems('name')}}>
+										Name
+									</button>
+								</Table.Head>
 								<Table.Head>Health</Table.Head>
 								<Table.Head>Status</Table.Head>
 								<Table.Head class="hidden md:table-cell">Location</Table.Head>
@@ -158,7 +191,7 @@
 						<Table.Body>
 							{#each systems as system (system.id)}
 								<Table.Row
-									on:click={() => handleRowClick(system.name)}
+									on:click={() => handleRowClick(system.id)}
 									class="hover:bg-muted cursor-pointer"
 								>
 									<Table.Cell class="hidden md:table-cell">

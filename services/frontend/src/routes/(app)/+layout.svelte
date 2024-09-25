@@ -118,7 +118,7 @@
 		</header>
 
 		<!--Bottom Padding-->
-		<main class="p-4 pb-17">
+		<main class="p-4 pb-[5rem]">
 			<slot></slot>
 		</main>
 	</div>
