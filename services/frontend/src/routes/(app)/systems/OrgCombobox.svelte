@@ -33,16 +33,16 @@
 	<Popover.Trigger asChild let:builder>
 		<Button
 			builders={[builder]}
-			variant="outline"
+			variant="ghost"
 			role="combobox"
 			aria-expanded={openCombobox}
-			class="w-full md:w-[200px] justify-between"
+			class="md:w-[90px]"
 		>
 			{selectedOrgLabel}
-			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+			<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
 		</Button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[200px] p-0">
+	<Popover.Content class="w-[170px] p-0">
 		<Command.Root>
 			<!-- <Command.Input placeholder="Search organization..." /> -->
 			<Command.Empty>No organization found.</Command.Empty>

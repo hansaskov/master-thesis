@@ -5,9 +5,10 @@
 	import Wrench from "lucide-svelte/icons/wrench";
 	import BarChart from "lucide-svelte/icons/chart-bar";
 	import Package2 from "lucide-svelte/icons/package-2";
-  
 	import { page } from '$app/stores';
-
+	
+	//placeholder data
+	import { systems } from "$lib/stores/index";
 	
 	// Get the system ID from the route parameters
 	$: systemId = $page.params.id;
@@ -26,7 +27,7 @@
 		description: "Manage and view service contracts"
 	  },
 	  {
-		label: "Product Intelligence",
+		label: "Production Intelligence",
 		href: "pi",
 		icon: BarChart,
 		description: "Analytics and insights for system performance"
@@ -39,10 +40,12 @@
 	  }
 	];
   </script>
-  
+
   <Card class="w-full max-w-4xl mx-auto border-0 shadow-none md:border md:shadow">
 	<CardHeader>
-	  <CardTitle class="text-2xl">Production System: {systemId}</CardTitle>
+	  <CardTitle class="text-2xl">
+		Vision System: {systems.find(system => system.id === systemId)?.name || ''}
+	  </CardTitle>
 	  <CardDescription>
 		Select an option to view or manage different aspects of this system.
 	  </CardDescription>

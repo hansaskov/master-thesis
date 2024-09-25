@@ -3,9 +3,9 @@
 
 	import Newspaper from 'lucide-svelte/icons/newspaper';
 	import Wrench from 'lucide-svelte/icons/wrench';
-	import Search from 'lucide-svelte/icons/search';
 	import House from 'lucide-svelte/icons/house';
 	import User from 'lucide-svelte/icons/user';
+	import Search from 'lucide-svelte/icons/search';
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -18,6 +18,7 @@
 	import type { ComponentType } from 'svelte';
 	import OrgCombobox from './systems/OrgCombobox.svelte';
 	import SystemsComboBox from './systems/[id]/SystemsComboBox.svelte';
+	import Label from '$lib/components/ui/label/label.svelte';
 
 	type NavItem = {
 		name: string;
@@ -27,6 +28,7 @@
 
 	const navItems: NavItem[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
+		{ name: 'Search', icon: Search, href: '/newsfeed' },
 	];
 
 	const settings: NavItem = { name: 'Support', icon: Wrench, href: '/support' };
@@ -38,7 +40,7 @@
 		.map((segment, index, array) => ({
 			href: `/${array.slice(0, index + 1).join('/')}`,
 			label: segment.charAt(0).toUpperCase() + segment.slice(1),
-			isLast: index === array.length - 1
+			isLast: index === array.length - 1,
 		}));
 </script>
 
@@ -67,7 +69,7 @@
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
 			<!-- Breadcrumb and other header elements -->
-			<Breadcrumb.Root class="hidden md:flex">
+			<Breadcrumb.Root class="hidden md:flex pl-8">
 				<Breadcrumb.List>
 					<Breadcrumb.Page class="font-medium">
 						<OrgCombobox></OrgCombobox>
@@ -81,7 +83,6 @@
 							>
 								{crumb.label}
 							</Breadcrumb.Link>
-							
 						{:else}
 							<Breadcrumb.Page class="font-medium">{crumb.label}</Breadcrumb.Page>
 						{/if}
@@ -141,6 +142,12 @@
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Newspaper />
 				News
+				<span class="sr-only">Dashboard</span>
+			</a>
+
+			<a href="/newsfeed" class="flex flex-col items-center justify-center">
+				<Search />
+				Search
 				<span class="sr-only">Dashboard</span>
 			</a>
 
