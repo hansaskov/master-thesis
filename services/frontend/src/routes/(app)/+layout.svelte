@@ -4,7 +4,7 @@
 	import Newspaper from 'lucide-svelte/icons/newspaper';
 	import Wrench from 'lucide-svelte/icons/wrench';
 	import Search from 'lucide-svelte/icons/search';
-	import Package2 from 'lucide-svelte/icons/package-2';
+	import { House } from 'lucide-svelte';
 	import User from 'lucide-svelte/icons/user';
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
@@ -43,14 +43,11 @@
 <ModeWatcher defaultTheme="light" />
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
-	<!-- Left navbar for big screens -->
+	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a
-				href="/systems"
-				class="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-			>
-				<Package2 class="h-4 w-4 transition-all group-hover:scale-110" />
+			<a href="/systems">
+				<House />
 				<span class="sr-only">Dashboard</span>
 			</a>
 			{#each navItems as item}
@@ -62,34 +59,22 @@
 		</nav>
 	</aside>
 
-	<!-- Bottom navbar for small screens -->
-	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
-		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-4">
-			<a
-				href="/systems"
-				class="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-			>
-				<Package2 class="h-4 w-4 transition-all group-hover:scale-110" />
-				<span class="sr-only">Dashboard</span>
-			</a>
-			{#each navItems as item}
-				<NavItem props={item} />
-			{/each}
-			<NavItem props={settings} />
-		</nav>
-	</aside>
-
-	<div class="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+	<!-- Main content with padding at the bottom -->
+	<div class="flex flex-col flex-1 sm:gap-4 sm:py-4 sm:pl-14">
 		<header
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
+			<!-- Breadcrumb and other header elements -->
 			<Breadcrumb.Root class="hidden md:flex">
 				<Breadcrumb.List>
 					<Breadcrumb.Page class="font-medium">TriVision</Breadcrumb.Page>
 					<Breadcrumb.Separator></Breadcrumb.Separator>
 					{#each breadcrumbs as crumb}
 						{#if !crumb.isLast}
-							<Breadcrumb.Link class="font-medium" href={crumb.href}>
+							<Breadcrumb.Link
+								class="font-medium"
+								href={crumb.href}
+							>
 								{crumb.label}
 							</Breadcrumb.Link>
 						{:else}
@@ -132,8 +117,32 @@
 			</nav>
 		</header>
 
-		<main class="p-4">
+		<!--Bottom Padding-->
+		<main class="p-4 pb-[5rem]">
 			<slot></slot>
 		</main>
 	</div>
+
+	<!-- Bottom navbar (only visible on small screens) -->
+	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
+		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
+			<a href="/systems" class="flex flex-col items-center justify-center">
+				<House />
+				Home
+				<span class="sr-only">Dashboard</span>
+			</a>
+
+			<a href="/newsfeed" class="flex flex-col items-center justify-center">
+				<Newspaper />
+				News
+				<span class="sr-only">Dashboard</span>
+			</a>
+
+			<a href="/support" class="flex flex-col items-center justify-center">
+				<Wrench />
+				Support
+				<span class="sr-only">Dashboard</span>
+			</a>
+		</nav>
+	</aside>
 </div>
