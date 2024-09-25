@@ -8,7 +8,7 @@
   
 	import { page } from '$app/stores';
 
-
+	
 	// Get the system ID from the route parameters
 	$: systemId = $page.params.id;
   

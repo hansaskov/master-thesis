@@ -214,27 +214,27 @@
 					})
 					break;
 		}
-			if (currentOrder === sortingOrder.descending) {
-					currentOrder = sortingOrder.ascending;
-				} else {
-					currentOrder = sortingOrder.descending;
-				}
-				
-				systems = systems;
+		if (currentOrder === sortingOrder.descending) {
+				currentOrder = sortingOrder.ascending;
+			} else {
+				currentOrder = sortingOrder.descending;
+			}
+			
+			systems = systems;
 	}
 
 </script>
 <div class="md:container">
 	<Card.Root class="w-full">
-		<Card.Header class="flex gap-4 md:flex-row justify-between items-end">
+		<Card.Header class="flex gap-4 md:flex-row justify-between">
 			<div>
-				<Card.Title>Production Systems</Card.Title>
+				<Card.Title> 
+					Hi *Name*
+				</Card.Title>
 				<Card.Description>
 					Monitor and manage your production systems across different factory areas.
 				</Card.Description>
 			</div>
-			<OrgCombobox></OrgCombobox>
-			
 		</Card.Header>
 		<Card.Content>
 				<div class="overflow-x-auto">

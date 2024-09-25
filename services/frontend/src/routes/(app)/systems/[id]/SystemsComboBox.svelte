@@ -9,10 +9,10 @@
 	import { tick } from 'svelte';
 
 	const organizations = [
-		{ value: 'org1', label: 'TriVision' },
-		{ value: 'org2', label: 'Organization 2' },
-		{ value: 'org3', label: 'Organization 3' },
-		{ value: 'org4', label: 'Organization 4' }
+		{ value: 'sys1', label: 'VisioPointer® 1' },
+		{ value: 'sys2', label: 'VisioCompact® 1' },
+		{ value: 'sys3', label: '360 Inspector® 1' },
+		{ value: 'sys4', label: 'SmartInspector® 1' }
 	];
 
 	let openCombobox = false;
@@ -47,20 +47,20 @@
 			<!-- <Command.Input placeholder="Search organization..." /> -->
 			<Command.Empty>No organization found.</Command.Empty>
 			<a href="/systems">
-			<Command.Group>
-				{#each organizations as org}
-					<Command.Item
-						value={org.value}
-						onSelect={(currentValue) => {
-							selectedOrg = currentValue;
-							closeAndFocusTrigger(ids.trigger);
-						}}
-					>
-						<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
-						{org.label}
-					</Command.Item>
-				{/each}
-			</Command.Group>
+				<Command.Group>
+					{#each organizations as org}
+						<Command.Item
+							value={org.value}
+							onSelect={(currentValue) => {
+								selectedOrg = currentValue;
+								closeAndFocusTrigger(ids.trigger);
+							}}
+						>
+							<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
+							{org.label}
+						</Command.Item>
+					{/each}
+				</Command.Group>
 			</a>
 		</Command.Root>
 	</Popover.Content>

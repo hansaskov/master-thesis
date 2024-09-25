@@ -16,6 +16,8 @@
 	import LightSwitch from '$lib/components/LightSwitch.svelte';
 	import NavItem from '$lib/components/NavItem.svelte';
 	import type { ComponentType } from 'svelte';
+	import OrgCombobox from './systems/OrgCombobox.svelte';
+	import SystemsComboBox from './systems/[id]/SystemsComboBox.svelte';
 
 	type NavItem = {
 		name: string;
@@ -47,7 +49,7 @@
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
 			<a href="/systems">
-				<House class="w-4 h-4"/>
+				<House class="w-5 h-5"/>
 				<span class="sr-only">Dashboard</span>
 			</a>
 			{#each navItems as item}
@@ -67,7 +69,9 @@
 			<!-- Breadcrumb and other header elements -->
 			<Breadcrumb.Root class="hidden md:flex">
 				<Breadcrumb.List>
-					<Breadcrumb.Page class="font-medium">TriVision</Breadcrumb.Page>
+					<Breadcrumb.Page class="font-medium">
+						<OrgCombobox></OrgCombobox>
+					</Breadcrumb.Page>
 					<Breadcrumb.Separator></Breadcrumb.Separator>
 					{#each breadcrumbs as crumb}
 						{#if !crumb.isLast}
@@ -77,9 +81,11 @@
 							>
 								{crumb.label}
 							</Breadcrumb.Link>
+							
 						{:else}
 							<Breadcrumb.Page class="font-medium">{crumb.label}</Breadcrumb.Page>
 						{/if}
+							
 						{#if !crumb.isLast}
 							<Breadcrumb.Separator></Breadcrumb.Separator>
 						{/if}
@@ -127,7 +133,7 @@
 	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
 		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
 			<a href="/systems" class="flex flex-col items-center justify-center">
-				<House />
+				<House class="w-6 h-6"/>
 				Home
 				<span class="sr-only">Dashboard</span>
 			</a>
