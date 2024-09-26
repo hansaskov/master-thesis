@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This project aims to develop a comprehensive web-based system for TriVision to enhance their ability to monitor, maintain, and service production systems in the food industry. The solution addresses the lack of insight into production systems and enables scheduled maintenance based on actual system usage and performance metrics. By collecting data metrics from production systems, visualizing them through a web interface, and facilitating service appointment bookings, this system provides a complete solution for TriVision's needs.
+This project aims to develop a comprehensive web-based system for TriVision to enhance their ability to monitor, maintain, and service production systems in the food industry. The solution addresses the lack of insight into production systems and enables scheduled maintenance based on actual system usage and performance metrics. By collecting data metrics from production systems, visualizing them through a web interface, the system provides a complete solution for TriVision's needs.
 
 ## Technologies Used
 
-The backend of this project is built using Bun, ElysiaJS, Drizzle, SQLite, and Swagger. These technologies provide a robust and efficient foundation for handling data processing and API interactions. The frontend is developed with Bun, SvelteKit, Tailwind CSS, and Shadcn-svelte, offering a modern and responsive user interface.
+The backend of this project is built using Rust, Bun, Drizzle, TimescaleDB. These technologies provide a robust and efficient foundation for handling data processing and API interactions. The frontend is developed with Bun, SvelteKit, Tailwind CSS, and Shadcn-svelte, offering a modern and responsive user interface.
 
 For infrastructure, the project utilizes Docker for containerization, Caddy as a reverse proxy, and TimescaleDB for efficient time-series data storage. Data collection from production systems is facilitated through gRPC, ensuring fast and reliable communication.
 
