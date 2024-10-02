@@ -7,7 +7,7 @@
 	import Package2 from "lucide-svelte/icons/package-2";
 	import { page } from '$app/stores';
 	
-	//placeholder data
+	// Placeholder data
 	import { systems } from "$lib/stores/index";
 	
 	// Get the system ID from the route parameters

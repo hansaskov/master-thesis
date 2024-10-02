@@ -6,6 +6,7 @@
 	import House from 'lucide-svelte/icons/house';
 	import User from 'lucide-svelte/icons/user';
 	import Search from 'lucide-svelte/icons/search';
+	import Target  from 'lucide-svelte/icons/target';
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
@@ -14,11 +15,15 @@
 	import { ModeWatcher } from 'mode-watcher';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
 	import LightSwitch from '$lib/components/LightSwitch.svelte';
+	import Settings from '$lib/components/Settings.svelte'
 	import NavItem from '$lib/components/NavItem.svelte';
 	import type { ComponentType } from 'svelte';
 	import OrgCombobox from './systems/OrgCombobox.svelte';
 	import SystemsComboBox from './systems/[id]/SystemsComboBox.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
+	import Sun from 'svelte-radix/Sun.svelte';
+	import Moon from 'svelte-radix/Moon.svelte';
+	import { toggleMode } from 'mode-watcher';
 
 	type NavItem = {
 		name: string;
@@ -64,47 +69,39 @@
 	</aside>
 
 	<!-- Main content with padding at the bottom -->
-	<div class="flex flex-col flex-1 sm:gap-4 sm:py-4 sm:pl-14">
+	<div class="flex flex-col flex-1 sm:gap-4 sm:py-4 sm:pl-14 font-medium">
 		<header
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
 			<!-- Breadcrumb and other header elements -->
-			<Breadcrumb.Root class="hidden md:flex pl-8">
+			<Breadcrumb.Root>
 				<Breadcrumb.List>
-					<Breadcrumb.Page class="font-medium">
+					<Breadcrumb.Page>
 						<OrgCombobox></OrgCombobox>
 					</Breadcrumb.Page>
-					<Breadcrumb.Separator></Breadcrumb.Separator>
-					{#each breadcrumbs as crumb}
-						{#if !crumb.isLast}
-							<Breadcrumb.Link
-								class="font-medium"
-								href={crumb.href}
-							>
-								{crumb.label}
-							</Breadcrumb.Link>
-						{:else}
-							<Breadcrumb.Page class="font-medium">{crumb.label}</Breadcrumb.Page>
-						{/if}
-							
-						{#if !crumb.isLast}
-							<Breadcrumb.Separator></Breadcrumb.Separator>
-						{/if}
-					{/each}
+						<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
+						{#each breadcrumbs as crumb}
+							{#if !crumb.isLast}
+								<Breadcrumb.Link
+									class="hidden sm:flex"
+									href={crumb.href}
+								>
+									{crumb.label}
+								</Breadcrumb.Link>
+							{:else}
+								<Breadcrumb.Page class="hidden sm:flex">{crumb.label}</Breadcrumb.Page>
+							{/if}
+								
+							{#if !crumb.isLast}
+								<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
+							{/if}
+						{/each}
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
 
-			<div class="relative ml-auto flex-1 md:grow-0">
-				<Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"></Search>
-				<Input
-					type="search"
-					placeholder="Search..."
-					class="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-				></Input>
-			</div>
-
-			<nav class="flex items-center space-x-2">
-				<LightSwitch></LightSwitch>
+			<nav class="flex items-center space-x-2 ml-auto">
+				<!-- TODO: Hide settings for user without permissions to change settings of the page-->
+				<Settings></Settings>
 				<NotificationBell></NotificationBell>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
@@ -115,7 +112,16 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/settings">Settings</DropdownMenu.Item>
+						<DropdownMenu.Item href="/settings">User Settings</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={toggleMode}>
+							<Sun
+								class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 mr-2"
+							/>
+							<Moon
+								class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 mr-2"
+							/>
+							<span>Toggle theme</span>
+						</DropdownMenu.Item>
 						<DropdownMenu.Item href="/support">Support</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item href="/">Logout</DropdownMenu.Item>

@@ -31,20 +31,21 @@
 
 <Popover.Root bind:open={openCombobox} let:ids>
 	<Popover.Trigger asChild let:builder>
-		<Button
+		<Button 
 			builders={[builder]}
 			variant="ghost"
 			role="combobox"
 			aria-expanded={openCombobox}
-			class="md:w-[90px]"
+			class="pr-0 pl-2 font-bold sans-serif tracking-wide text-xl sm:font-medium sm:text-sm"
 		>
 			{selectedOrgLabel}
-			<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
+			{#if organizations.length > 1}
+				<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
+			{/if}
 		</Button>
 	</Popover.Trigger>
 	<Popover.Content class="w-[170px] p-0">
 		<Command.Root>
-			<!-- <Command.Input placeholder="Search organization..." /> -->
 			<Command.Empty>No organization found.</Command.Empty>
 			<a href="/systems">
 			<Command.Group>
