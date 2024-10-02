@@ -26,7 +26,7 @@ services:
     volumes:
       - frontend_build:/app/build
 
-  ## The Backend-server will host our REST JSON api. Our spa will use this
+  ## The Backend-server will host our REST JSON api. Our spa will use this for data communication
   backend-server:
     build:
       context: services/backend
@@ -40,6 +40,7 @@ services:
     depends_on:
       - timescaledb
 
+  ## The ingestion server will allow vision systems to send their telemetry data to us. 
   ingest-server:
     build:
       context: services/ingestion
@@ -54,6 +55,7 @@ services:
     depends_on:
       - timescaledb
 
+  ## A postgres database optimised for timeseries data
   timescaledb:
     image: timescale/timescaledb:latest-pg16
     environment:
@@ -62,8 +64,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - timescaledb_data:/var/lib/postgresql/data
-
-## Deployment Services
 
 volumes:
   caddy_data:
