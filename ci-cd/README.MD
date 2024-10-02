@@ -36,4 +36,14 @@ In the next step you will update the default configuration.nix file to one that 
 3. create admin user with password credentials instead of root
 4. Use a minimal amount of external packages (docker & git)
 
+First go into the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) document and insert your ssh keys. These will be used to authenticate yourself with the server. 
+
+IMPORTANT: double check that the ssh keys have been set correctly. An incorrect insertion will lock you out of your server. 
+
+Then run `./nixos/remote-update-ssh.ps1` the script will copy the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) into `/etc/nixos` on your server. 
+
+Then run `ci-cd\nixos\remote-rebuild.ps1` it will copy over the configuration.nix file and rebuild the configuration. 
+
+When the build has finished you should be able to login to the admin user via ssh. 
+
 
