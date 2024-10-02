@@ -39,7 +39,7 @@ in
   # Users can only be defined in the config file
   users.mutableUsers = false;
 
-  # Root user configuration
+  # Root user configuration WARNING. Remove this to harden the security but make it more difficult to update the config. 
   users.users.root.openssh.authorizedKeys.keys = sshKeysFile.sshKeys;
 
   # Admin user Configuration
