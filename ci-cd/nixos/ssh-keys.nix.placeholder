@@ -1,0 +1,7 @@
+{
+  ## Replace these with your own ssh keys. 
+  sshKeys = [
+    ''ssh-rsa AAAA1...'' 
+    ''ssh-rsa AAAA2...'' 
+  ];
+}
