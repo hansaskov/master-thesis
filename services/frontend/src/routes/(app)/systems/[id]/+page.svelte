@@ -59,8 +59,8 @@
 			  class="w-full h-auto py-4 px-6 flex flex-col items-center justify-center text-center hover:bg-primary/5"
 			>
 			  <svelte:component this={option.icon} class="w-6 h-6 mb-2" />
-			  <span class="text-lg font-semibold mb-1">{option.label}</span>
-			  <span class="text-sm text-muted-foreground">{option.description}</span>
+			  <span class="text-base sm:text-lg font-semibold mb-1 leading-tight">{option.label}</span>
+			  <span class="text-xs sm:text-sm text-muted-foreground leading-snug">{option.description}</span>
 			</Button>
 		  </a>
 		{/each}
