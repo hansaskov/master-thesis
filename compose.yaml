@@ -24,7 +24,7 @@ services:
       context: services/frontend
       dockerfile: Dockerfile
     volumes:
-      - frontend_build:/app/build # 
+      - frontend_build:/app/build
 
   ## The Backend-server will host our REST JSON api. Our spa will use this
   backend-server:
