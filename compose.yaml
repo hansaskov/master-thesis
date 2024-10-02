@@ -7,7 +7,7 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - ./services/frontend/build:/srv
+      - frontend_build:/srv
       - caddy_data:/data
       - caddy_config:/config
       - /var/run/docker.sock:/var/run/docker.sock
@@ -17,6 +17,14 @@ services:
       caddy.handle.root: "* /srv"
       caddy.handle.try_files: "{path} /200.html"
       caddy.handle.file_server:
+
+  frontend: 
+    build:
+      context: services/frontend
+      dockerfile: Dockerfile
+    volumes:
+      - frontend_build:/app/build
+    
 
   backend-server:
     build:
@@ -30,10 +38,6 @@ services:
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
     depends_on:
       - timescaledb
-    develop:
-      watch:
-        - action: rebuild
-          path: ./services/backend/src
 
   ingest-server:
     build:
@@ -63,4 +67,5 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  frontend_build:
   timescaledb_data:
