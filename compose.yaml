@@ -7,25 +7,26 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - frontend_build:/srv
+      - frontend_build:/build
       - caddy_data:/data
       - caddy_config:/config
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
-      caddy.handle.root: "* /srv"
+      caddy.handle.root: "* /build"
       caddy.handle.try_files: "{path} /200.html"
       caddy.handle.file_server:
 
+  ## The frontend service will build the frontend and then store the build output in volume bind
   frontend: 
     build:
       context: services/frontend
       dockerfile: Dockerfile
     volumes:
-      - frontend_build:/app/build
-    
+      - frontend_build:/app/build # 
 
+  ## The Backend-server will host our REST JSON api. Our spa will use this
   backend-server:
     build:
       context: services/backend
