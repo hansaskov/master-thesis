@@ -1,3 +1,13 @@
 {
-  "svelte.enable-ts-plugin": true
+  "svelte.enable-ts-plugin": true,
+  "workbench.editor.customLabels.patterns": {
+    "**/src/routes/**/+layout.svelte": "${dirname} - Layout",
+    "**/src/routes/**/+layout.server.ts": "${dirname} - Layout Server",
+    "**/src/routes/**/+page.svelte": "${dirname} - Page",
+    "**/src/routes/**/+page.server.ts": "${dirname} - Page Server",
+    "**/src/routes/**/+page.ts": "${dirname} - Page Script",
+    "**/src/routes/**/+error.svelte": "${dirname} - Error",
+    "**/src/routes/**/+layout.ts": "${dirname} - Layout Script"
+  }
 }
+
