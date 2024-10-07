@@ -1,251 +1,131 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import * as Card from '$lib/components/ui/card';
-	import * as Table from '$lib/components/ui/table';
-	import * as Avatar from '$lib/components/ui/avatar';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Switch from '$lib/components/ui/switch';
-	import * as Alert from '$lib/components/ui/alert';
-	import { writable } from 'svelte/store';
+	import * as Select from '$lib/components/ui/select';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import { ExternalLink } from 'lucide-svelte';
 
-	import Ellipsis from 'lucide-svelte/icons/ellipsis';
-	import Copy from 'lucide-svelte/icons/copy';
-	import AlertCircle from 'lucide-svelte/icons/circle-alert';
-
-	let organizationName = 'My Organization';
-	let organizationSettings = {
-		notificationEmails: true,
-		publicProfile: false
+	// Mock user data (in a real app, this would come from an API or store)
+	let user = {
+		name: 'Jane Doe',
+		email: 'jane.doe@example.com',
+		avatar: 'https://i.pravatar.cc/150?u=jane',
+		role: 'Software Engineer',
+		company: 'TechCorp Inc.'
 	};
-	let users = [
-		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
-		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
+
+	// User preferences
+	let preferences = {
+		emailNotifications: {
+			updates: true,
+			newsletters: false,
+			promotions: false
+		},
+		theme: 'system'
+	};
+
+	// Available themes
+	const themes = [
+		{ value: 'light', label: 'Light' },
+		{ value: 'dark', label: 'Dark' },
+		{ value: 'system', label: 'System' }
 	];
-	let newUserEmail = '';
-	let newSystemName = '';
-	let productionSystems = writable<string[]>(['System A', 'System B']);
-	let generatedOnboardingUrl = '';
-	let showOnboardingUrl = false;
 
-	let onboardingInvitations = [
-		{ email: 'pendinguser@example.com', status: 'pending' },
-		{ email: 'completeduser@example.com', status: 'completed' }
-	];
-
-	$: usersAndInvites = users.map((user) => ({
-		...user,
-		onboardingStatus:
-			onboardingInvitations.find((invite) => invite.email === user.email)?.status || 'Not Invited'
-	}));
-
-	function updateOrganizationName() {
-		console.log('Organization name updated:', organizationName);
-	}
-
-	function toggleSetting(settingKey: keyof typeof organizationSettings) {
-		organizationSettings[settingKey] = !organizationSettings[settingKey];
-		console.log(`Setting ${settingKey} updated to`, organizationSettings[settingKey]);
-	}
-
-	function addUser() {
-		if (newUserEmail) {
-			users = [
-				...users,
-				{ id: users.length + 1, name: '', email: newUserEmail, role: 'User', avatarUrl: '' }
-			];
-			onboardingInvitations = [
-				...onboardingInvitations,
-				{ email: newUserEmail, status: 'pending' }
-			];
-			console.log('New user invited:', newUserEmail);
-			newUserEmail = '';
-		}
-	}
-
-	function updateUserRole(userId: number, newRole: string) {
-		users = users.map((user) => (user.id === userId ? { ...user, role: newRole } : user));
-		console.log('User role updated:', userId, newRole);
-	}
-
-	function removeUser(userId: number) {
-		users = users.filter((user) => user.id !== userId);
-		console.log('User removed:', userId);
-	}
-
-	function addProductionSystem() {
-		if (newSystemName) {
-			productionSystems.update((systems) => [...systems, newSystemName]);
-			console.log('New production system added:', newSystemName);
-			newSystemName = '';
-		}
-	}
-
-	function removeProductionSystem(systemName: string) {
-		productionSystems.update((systems) => systems.filter((system) => system !== systemName));
-		console.log('Production system removed:', systemName);
-	}
-	function generateOnboardingUrl() {
-		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;
-		showOnboardingUrl = true;
-		console.log('Onboarding URL generated:', generatedOnboardingUrl);
-	}
-
-	function resendOnboardingEmail(email: string) {
-		console.log('Resend onboarding email to:', email);
-		// TODO: Implement email resend functionality
-	}
-
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text).then(() => {
-			console.log('Copied to clipboard');
-			// You could add a toast notification here
-		});
+	function updatePreferences() {
+		// In a real app, this would send the updated preferences to an API
+		console.log('Preferences updated:', preferences);
+		alert('Preferences updated successfully!');
 	}
 </script>
 
-<div class="container mx-auto px-4 py-4">
-	<h1 class="mb-6 text-3xl font-bold">Settings</h1>
+<div class="container mx-auto px-4 py-8">
+	<h1 class="mb-6 text-3xl font-bold">User Settings</h1>
 
-	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-		<Card.Root class="col-span-1 md:col-span-2">
+	<div class="grid gap-6">
+		<Card.Root class="md:col-span-1">
 			<Card.Header>
-				<Card.Title>User Management</Card.Title>
+				<Card.Title>Personal Information</Card.Title>
+				<Card.Description>
+					Your personal information is managed by {user.company}. Contact your administrator for
+					changes.
+				</Card.Description>
 			</Card.Header>
 			<Card.Content>
-				<div class="mb-6">
-					<Label for="new-user">Invite New User</Label>
-					<div class="flex gap-2">
-						<Input id="new-user" type="email" placeholder="Enter email" bind:value={newUserEmail} />
-						<Button on:click={addUser}>Invite & Onboard</Button>
+				<div class="flex gap-4 flex-col md:flex-row md:items-center md:space-x-8">
+					<div class="flex items-center space-x-4">
+						<Avatar.Root class="h-16 w-16 md:h-24 md:w-24">
+							<Avatar.Image src={user.avatar} alt={user.name} />
+							<Avatar.Fallback class="text-2xl">
+								{user.name.slice(0, 2).toUpperCase()}
+							</Avatar.Fallback>
+						</Avatar.Root>
+						<div>
+							<p class="text-xl font-semibold">{user.name}</p>
+							<p class="text-muted-foreground text-lg">{user.role}</p>
+						</div>
 					</div>
+						<div>
+							<Label for="email" class="text-base font-medium">Email Address</Label>
+							<p id="email" class="mt-1 text-sm">{user.email}</p>
+						</div>
+						<div>
+							<Label for="company" class="text-base font-medium">Company</Label>
+							<p id="company" class="mt-1 text-sm ">{user.company}</p>
+						</div>
+
 				</div>
-
-				{#if showOnboardingUrl}
-					<Alert.Root class="mb-4">
-						<AlertCircle class="h-4 w-4" />
-						<Alert.Title>Onboarding URL Generated</Alert.Title>
-						<Alert.Description>
-							<div class="flex items-center gap-2">
-								<Input value={generatedOnboardingUrl} readonly />
-								<Button size="sm" on:click={() => copyToClipboard(generatedOnboardingUrl)}>
-									<Copy class="mr-2 h-4 w-4" />
-									Copy
-								</Button>
-							</div>
-						</Alert.Description>
-					</Alert.Root>
-				{/if}
-
-				<Table.Root>
-					<Table.Caption>Users and Onboarding Status</Table.Caption>
-					<Table.Header>
-						<Table.Row>
-							<Table.Head class="w-[300px]">User</Table.Head>
-							<Table.Head>Role</Table.Head>
-							<Table.Head>Onboarding Status</Table.Head>
-							<Table.Head class="text-right">Actions</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{#each usersAndInvites as person}
-							<Table.Row>
-								<Table.Cell>
-									<div class="flex items-center space-x-4">
-										<Avatar.Root>
-											<Avatar.Image src={person.avatarUrl} alt={person.name} />
-											<Avatar.Fallback class="font-semibold uppercase">
-												{person.name.slice(0, 2)}
-											</Avatar.Fallback>
-										</Avatar.Root>
-										<div>
-											<div class="font-bold">{person.name}</div>
-											<div class="text-sm text-muted-foreground">{person.email}</div>
-										</div>
-									</div>
-								</Table.Cell>
-								<Table.Cell>{person.role}</Table.Cell>
-								<Table.Cell>{person.onboardingStatus}</Table.Cell>
-								<Table.Cell class="text-right">
-									<DropdownMenu.Root>
-										<DropdownMenu.Trigger>
-											<Button variant="ghost" size="icon">
-												<Ellipsis class="h-4 w-4" />
-												<span class="sr-only">Open menu</span>
-											</Button>
-										</DropdownMenu.Trigger>
-										<DropdownMenu.Content align="end">
-											<DropdownMenu.Label>Actions</DropdownMenu.Label>
-											<DropdownMenu.Separator />
-											<DropdownMenu.Item
-												on:click={() =>
-													updateUserRole(person.id, person.role === 'Admin' ? 'User' : 'Admin')}
-											>
-												{person.role === 'Admin' ? 'Demote to User' : 'Promote to Admin'}
-											</DropdownMenu.Item>
-											{#if person.onboardingStatus === 'pending'}
-												<DropdownMenu.Item on:click={() => resendOnboardingEmail(person.email)}>
-													Resend Onboarding Email
-												</DropdownMenu.Item>
-											{:else if person.onboardingStatus === 'Not Invited'}
-												<DropdownMenu.Item on:click={generateOnboardingUrl}>
-													Generate Onboarding URL
-												</DropdownMenu.Item>
-											{/if}
-											<DropdownMenu.Separator />
-											<DropdownMenu.Item
-												on:click={() => removeUser(person.id)}
-												class="text-red-600"
-											>
-												Remove User
-											</DropdownMenu.Item>
-										</DropdownMenu.Content>
-									</DropdownMenu.Root>
-								</Table.Cell>
-							</Table.Row>
-						{/each}
-					</Table.Body>
-				</Table.Root>
 			</Card.Content>
 		</Card.Root>
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Organization Settings</Card.Title>
+				<Card.Title>Account Preferences</Card.Title>
+				<Card.Description>Customize your account settings and notifications.</Card.Description>
 			</Card.Header>
 			<Card.Content>
-				<form on:submit|preventDefault={updateOrganizationName}>
-					<Label for="org-name">Organization Name</Label>
-					<div class="mt-2 flex gap-2">
-						<Input id="org-name" bind:value={organizationName} class="mb-4" />
-						<Button type="submit">Update</Button>
+				<div class="space-y-4">
+					<div>
+						<Label for="theme" class="text-sm font-medium">Theme</Label>
+						<Select.Root>
+							<Select.Trigger id="theme" class="w-full">
+								<Select.Value placeholder="Select a theme" />
+							</Select.Trigger>
+							<Select.Content>
+								{#each themes as theme}
+									<Select.Item value={theme.value}>{theme.label}</Select.Item>
+								{/each}
+							</Select.Content>
+						</Select.Root>
 					</div>
-				</form>
-				<div class="mt-6 space-y-4">
-					<div class="flex items-center justify-between">
-						<div>
-							<Label>Notification Emails</Label>
-							<p class="text-sm text-muted-foreground">
-								Receive email notifications for activity in your organization
-							</p>
+					<div class="space-y-4">
+						<h3 class="text-base font-semibold">Email Notifications</h3>
+						<div class="flex items-center justify-between">
+							<Label for="updates" class="text-sm">Product Updates</Label>
+							<Switch.Root
+								id="updates"
+								checked={preferences.emailNotifications.updates}
+								onCheckedChange={(checked) => (preferences.emailNotifications.updates = checked)}
+							/>
 						</div>
-						<Switch.Root
-							checked={organizationSettings.notificationEmails}
-							on:click={() => toggleSetting('notificationEmails')}
-						/>
-					</div>
-					<div class="flex items-center justify-between">
-						<div>
-							<Label>Public Profile</Label>
-							<p class="text-sm text-muted-foreground">
-								Allow your organization profile to be publicly visible
-							</p>
+						<div class="flex items-center justify-between">
+							<Label for="newsletters" class="text-sm">Newsletters</Label>
+							<Switch.Root
+								id="newsletters"
+								checked={preferences.emailNotifications.newsletters}
+								onCheckedChange={(checked) =>
+									(preferences.emailNotifications.newsletters = checked)}
+							/>
 						</div>
-						<Switch.Root
-							checked={organizationSettings.publicProfile}
-							on:click={() => toggleSetting('publicProfile')}
-						/>
+						<div class="flex items-center justify-between">
+							<Label for="promotions" class="text-sm">Promotions and Offers</Label>
+							<Switch.Root
+								id="promotions"
+								checked={preferences.emailNotifications.promotions}
+								onCheckedChange={(checked) => (preferences.emailNotifications.promotions = checked)}
+							/>
+						</div>
 					</div>
 				</div>
 			</Card.Content>
@@ -253,46 +133,37 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title>Production Systems</Card.Title>
+				<Card.Title>Legal Documents</Card.Title>
+				<Card.Description>Access our Privacy Policy and Terms of Service.</Card.Description>
 			</Card.Header>
 			<Card.Content>
-				<form on:submit|preventDefault={addProductionSystem} class="mb-4">
-					<Label for="system-name">New Production System</Label>
-					<div class="mt-2 flex gap-2">
-						<Input id="system-name" placeholder="Enter system name" bind:value={newSystemName} />
-						<Button type="submit">Add System</Button>
+				<div class="space-y-4">
+					<div>
+						<Button
+							variant="outline"
+							class="flex w-full items-center justify-between"
+							on:click={() => window.open('/privacy-policy', '_blank')}
+						>
+							Privacy Policy
+							<ExternalLink class="h-4 w-4" />
+						</Button>
 					</div>
-				</form>
-				{#if $productionSystems.length > 0}
-					<Table.Root>
-						<Table.Caption>Existing Production Systems</Table.Caption>
-						<Table.Header>
-							<Table.Row>
-								<Table.Head>System Name</Table.Head>
-								<Table.Head class="text-right">Actions</Table.Head>
-							</Table.Row>
-						</Table.Header>
-						<Table.Body>
-							{#each $productionSystems as system}
-								<Table.Row>
-									<Table.Cell>{system}</Table.Cell>
-									<Table.Cell class="text-right">
-										<Button
-											variant="destructive"
-											size="sm"
-											on:click={() => removeProductionSystem(system)}
-										>
-											Remove
-										</Button>
-									</Table.Cell>
-								</Table.Row>
-							{/each}
-						</Table.Body>
-					</Table.Root>
-				{:else}
-					<p class="mt-4 text-center text-muted-foreground">No production systems added yet.</p>
-				{/if}
+					<div>
+						<Button
+							variant="outline"
+							class="flex w-full items-center justify-between"
+							on:click={() => window.open('/terms-of-service', '_blank')}
+						>
+							Terms of Service
+							<ExternalLink class="h-4 w-4" />
+						</Button>
+					</div>
+				</div>
 			</Card.Content>
 		</Card.Root>
+	</div>
+
+	<div class="mt-8 flex justify-end">
+		<Button on:click={updatePreferences}>Save Changes</Button>
 	</div>
 </div>
