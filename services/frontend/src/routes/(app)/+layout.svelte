@@ -24,6 +24,7 @@
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
+	import { LogOut, UserRoundCog } from 'lucide-svelte';
 
 	type NavItem = {
 		name: string;
@@ -112,19 +113,28 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/settings">User Settings</DropdownMenu.Item>
+						<DropdownMenu.Item href="/settings">
+							<UserRoundCog class="h-4 w-4 mr-2" />
+							User Settings
+						</DropdownMenu.Item>
 						<DropdownMenu.Item on:click={toggleMode}>
 							<Sun
-								class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 mr-2"
+								class="h-4 w-4 rotate-0 scale-100 dark:scale-0 mr-2"
 							/>
 							<Moon
-								class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 mr-2"
+								class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 mr-2"
 							/>
 							<span>Toggle theme</span>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item href="/support">Support</DropdownMenu.Item>
+						<DropdownMenu.Item href="/support">
+							<Wrench class="h-4 w-4 mr-2" />
+							Support
+						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/">Logout</DropdownMenu.Item>
+						<DropdownMenu.Item href="/">
+							<LogOut class="h-4 w-4 mr-2" />
+							Logout
+						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			</nav>
