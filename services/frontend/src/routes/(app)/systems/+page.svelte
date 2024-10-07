@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { ArrowRight, ArrowDownUp } from 'lucide-svelte';
+	import ArrowRight from 'lucide-svelte/icons/arrow-right';
+	import ArrowDownUp from 'lucide-svelte/icons/arrow-down-up';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';

@@ -5,7 +5,7 @@
 	import * as Switch from '$lib/components/ui/switch';
 	import * as Select from '$lib/components/ui/select';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { ExternalLink } from 'lucide-svelte';
+	import ExternalLink from 'lucide-svelte/icons/external-link';
 
 	// Mock user data (in a real app, this would come from an API or store)
 	let user = {

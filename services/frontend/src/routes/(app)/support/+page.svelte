@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
-	import { Phone, Mail, Clock } from 'lucide-svelte';
+	import Phone from 'lucide-svelte/icons/phone';
+	import Mail from 'lucide-svelte/icons/mail';
+	import Clock from 'lucide-svelte/icons/clock';
 
 	const supportDetails = {
 		phone: "+45 63 15 47 00",

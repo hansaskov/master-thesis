@@ -24,7 +24,8 @@
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
-	import { LogOut, UserRoundCog } from 'lucide-svelte';
+	import LogOut from 'lucide-svelte/icons/log-out';
+	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 
 	type NavItem = {
 		name: string;
