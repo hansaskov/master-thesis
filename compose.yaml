@@ -1,4 +1,6 @@
 services:
+
+  ## The entrypoint of our app. This service will proxy requests to all other services. 
   caddy:
     image: lucaslorentz/caddy-docker-proxy:ci-alpine
     restart: unless-stopped
@@ -7,27 +9,24 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - frontend_build:/build
       - caddy_data:/data
       - caddy_config:/config
       - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      caddy: "${INTERFACE_FQDN}"
-      caddy.encode: zstd gzip
-      caddy.handle.root: "* /build"
-      caddy.handle.try_files: "{path} /200.html"
-      caddy.handle.file_server:
 
-  ## The frontend service will build the frontend and then store the build output in volume bind
+  ## The frontend service will build the frontend and then store the build output in volume bind.
   frontend: 
     build:
       context: services/frontend
       dockerfile: Dockerfile
+    labels:
+      caddy: "${INTERFACE_FQDN}"
+      caddy.encode: zstd gzip
+      caddy.reverse_proxy: "{{upstreams 8080}}"
     volumes:
-      - frontend_build:/app/build
+      - ./services/frontend/build:/app/build
 
-  ## The Backend-server will host our REST JSON api. Our spa will use this for data communication
-  backend-server:
+  ## The Backend will host our REST JSON api. Our spa will use this for data communication.
+  backend: 
     build:
       context: services/backend
       dockerfile: Dockerfile
@@ -40,10 +39,10 @@ services:
     depends_on:
       - timescaledb
 
-  ## The ingestion server will allow vision systems to send their telemetry data to us. 
-  ingest-server:
+  ## The ingestion server will allow vision systems to send data to the db. 
+  ingest:
     build:
-      context: services/ingestion
+      context: services/ingest
       dockerfile: Dockerfile
     ports:
       - "50051:50051"

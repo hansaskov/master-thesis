@@ -1,0 +1,12 @@
+{
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+
+:8080  {
+    root * /usr/share/caddy
+    file_server
+    try_files {path} /200.html
+}
