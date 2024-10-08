@@ -123,7 +123,7 @@
                             </Button>
                         </Popover.Trigger>
                         <Popover.Content class="w-auto p-0" align="start">
-                            <Calendar bind:value={date} />
+                            <Calendar />
                         </Popover.Content>
                     </Popover.Root>
                 </div>

@@ -8,7 +8,7 @@
 	import { page } from '$app/stores';
 	
 	// Placeholder data
-	import { systems } from "$lib/stores/index";
+	import { systems } from "$lib/stores/systems";
 	
 	// Get the system ID from the route parameters
 	$: systemId = $page.params.id;
