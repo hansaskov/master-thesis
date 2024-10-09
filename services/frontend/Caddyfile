@@ -4,7 +4,8 @@
 	}
 }
 
-http://localhost:8080  {
+
+:8080  {
     root * /srv
     file_server
     try_files {path} /200.html
