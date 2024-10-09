@@ -26,7 +26,7 @@
 	];
 	let newUserEmail = '';
 	let newSystemName = '';
-	let productionSystems = writable<string[]>(['System A', 'System B']);
+	let visionSystems = writable<string[]>(['System A', 'System B']);
 	let generatedOnboardingUrl = '';
 	let showOnboardingUrl = false;
 
@@ -75,17 +75,17 @@
 		console.log('User removed:', userId);
 	}
 
-	function addProductionSystem() {
+	function addVisionSystem() {
 		if (newSystemName) {
-			productionSystems.update((systems) => [...systems, newSystemName]);
-			console.log('New production system added:', newSystemName);
+			visionSystems.update((systems) => [...systems, newSystemName]);
+			console.log('New vision system added:', newSystemName);
 			newSystemName = '';
 		}
 	}
 
-	function removeProductionSystem(systemName: string) {
-		productionSystems.update((systems) => systems.filter((system) => system !== systemName));
-		console.log('Production system removed:', systemName);
+	function removeVisionSystem(systemName: string) {
+		visionSystems.update((systems) => systems.filter((system) => system !== systemName));
+		console.log('vision system removed:', systemName);
 	}
 	function generateOnboardingUrl() {
 		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;
@@ -257,16 +257,16 @@
 				<Card.Title>Production Systems</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<form on:submit|preventDefault={addProductionSystem} class="mb-4">
-					<Label for="system-name">New Production System</Label>
+				<form on:submit|preventDefault={addVisionSystem} class="mb-4">
+					<Label for="system-name">New Vision System</Label>
 					<div class="mt-2 flex gap-2">
 						<Input id="system-name" placeholder="Enter system name" bind:value={newSystemName} />
 						<Button type="submit">Add System</Button>
 					</div>
 				</form>
-				{#if $productionSystems.length > 0}
+				{#if $visionSystems.length > 0}
 					<Table.Root>
-						<Table.Caption>Existing Production Systems</Table.Caption>
+						<Table.Caption>Existing Vision Systems</Table.Caption>
 						<Table.Header>
 							<Table.Row>
 								<Table.Head>System Name</Table.Head>
@@ -274,14 +274,14 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each $productionSystems as system}
+							{#each $visionSystems as system}
 								<Table.Row>
 									<Table.Cell>{system}</Table.Cell>
 									<Table.Cell class="text-right">
 										<Button
 											variant="destructive"
 											size="sm"
-											on:click={() => removeProductionSystem(system)}
+											on:click={() => removeVisionSystem(system)}
 										>
 											Remove
 										</Button>
@@ -291,7 +291,7 @@
 						</Table.Body>
 					</Table.Root>
 				{:else}
-					<p class="mt-4 text-center text-muted-foreground">No production systems added yet.</p>
+					<p class="mt-4 text-center text-muted-foreground">No vision systems added yet.</p>
 				{/if}
 			</Card.Content>
 		</Card.Root>

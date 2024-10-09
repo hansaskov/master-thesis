@@ -135,13 +135,13 @@
 	</Card.Content>
 
 	<div class="flex justify-center md:justify-end md:pr-20">
-		<a href="mailto:support@trivision.dk?subject=Sparepart%20Order&body=Order%20Spareparts:%20{mailBody}">
+		<a href="mailto:spareparts@trivision.dk?subject=Sparepart%20Order&body=Order%20Spareparts:%20{mailBody}">
 			<Button
 			variant="default"
 			class="text-xl font-bold"
 			on:click={() => populateMail()}
 			>
-			Checkout Now
+			Order Now
 			</Button>
 		</a>
 	</div>

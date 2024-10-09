@@ -5,6 +5,7 @@
 	import Wrench from "lucide-svelte/icons/wrench";
 	import BarChart from "lucide-svelte/icons/chart-bar";
 	import Package2 from "lucide-svelte/icons/package-2";
+	import Cog from "lucide-svelte/icons/cog";
 	import { page } from '$app/stores';
 	
 	// Placeholder data
@@ -37,7 +38,14 @@
 		href: "parts",
 		icon: Package2,
 		description: "Inventory and ordering of spare components"
+	  },
+	  {
+		label: "System Settings",
+		href: "settings",
+		icon: Cog,
+		description: "Alter settings such as OEE information, KPIs and more"
 	  }
+
 	];
   </script>
 
@@ -60,7 +68,7 @@
 			>
 			  <svelte:component this={option.icon} class="w-6 h-6 mb-2" />
 			  <span class="text-base sm:text-lg font-semibold mb-1 leading-tight">{option.label}</span>
-			  <span class="text-xs sm:text-sm text-muted-foreground leading-snug">{option.description}</span>
+			  <span class="text-xs text-muted-foreground sm:text-sm leading-snug break-words whitespace-normal overflow-hidden text-ellipsis">{option.description}</span>
 			</Button>
 		  </a>
 		{/each}

@@ -83,7 +83,7 @@
 		<div>
 		  <Card.Title>Hi {name}</Card.Title>
 		  <Card.Description>
-			Monitor and manage your production systems across different factory areas.
+			Monitor and manage your vision systems across different factory areas.
 		  </Card.Description>
 		</div>
 	  </Card.Header>
@@ -99,7 +99,7 @@
 				  <Table.Head class={i > 2 ? 'hidden md:table-cell' : ''}>
 					<button on:click={() => sortSystems(key)}>
 					  {label}
-					  <ArrowDownUp class="w-4 h-4 inline-block ml-1" />
+					  <ArrowDownUp class="w-3 h-3 inline-block ml-1" />
 					</button>
 				  </Table.Head>
 				{/each}
