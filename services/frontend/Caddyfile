@@ -1,14 +1,14 @@
 {
-	servers {
-		trusted_proxies static private_ranges
-	}
+    auto_https off
 }
 
-http://localhost:8080  {
-    root * /usr/share/caddy
+:8080 {
+    root * /srv
+    encode gzip
     file_server
-
-	handle {
-		try_files {path} /200.html
-	}
+    try_files {path} /200.html
+    log {
+        output stdout
+        format console
+    }
 }
