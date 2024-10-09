@@ -4,9 +4,11 @@
 	}
 }
 
-
-:8080  {
+http://localhost:8080  {
     root * /usr/share/caddy
     file_server
-    try_files {path} /200.html
+
+	handle {
+		try_files {path} /200.html
+	}
 }
