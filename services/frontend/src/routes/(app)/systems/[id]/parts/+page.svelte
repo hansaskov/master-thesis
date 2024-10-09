@@ -40,16 +40,31 @@
 	$: filteredParts = spareParts.filter((part) =>
 		part.partName.toLowerCase().includes(searchTerm.toLowerCase())
 	);
-
-    function increment(part: SparePart) {
-        part.quantity += 1;
+	
+	
+	const orders = new Map<string, number>();
+    
+	function increment(part: SparePart) {
+		part.quantity += 1;
 		spareParts = [...spareParts];
+		orders.set(part.partName, part.quantity);
     }
-
+	
     function decrement(part: SparePart) {
-        if (part.quantity > 0) part.quantity -= 1;
+		if (part.quantity > 0) part.quantity -= 1;
 		spareParts = [...spareParts];
+		orders.set(part.partName, part.quantity);
     }
+	
+	let mailBody: string = "";
+	
+	function populateMail() {
+		mailBody = "";
+		orders.forEach((value, key) => {
+			mailBody = mailBody.concat(`%0D%0A${key} with quantity ${value}`);
+		})
+	}
+
 </script>
 
 <Card.Root class="w-full">
@@ -120,12 +135,15 @@
 	</Card.Content>
 
 	<div class="flex justify-center md:justify-end md:pr-20">
-		<Button
+		<a href="mailto:support@trivision.dk?subject=Sparepart%20Order&body=Order%20Spareparts:%20{mailBody}">
+			<Button
 			variant="default"
 			class="text-xl font-bold"
-		>
+			on:click={() => populateMail()}
+			>
 			Checkout Now
-		</Button>
+			</Button>
+		</a>
 	</div>
 
 	<main class="p-4 pb-[8px]">
