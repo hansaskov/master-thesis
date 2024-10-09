@@ -23,6 +23,8 @@
 
 runcmd:
   - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-23.05 bash 2>&1 | tee /tmp/infect.log
+  - nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
+  - nix-channel --update
 ```
 
 This will run [nixos infect](https://github.com/elitak/nixos-infect?tab=readme-ov-file#hetzner-cloud). It will change the distrobution from ubuntu to nixos. Please be patient for the transition as it can take up to 5 minutes depending on the hardware. 
