@@ -6,7 +6,7 @@
 
 
 :8080  {
-    root * /srv
+    root * /usr/share/caddy
     file_server
     try_files {path} /200.html
 }
