@@ -24,6 +24,10 @@ services:
       caddy.reverse_proxy: "{{upstreams 8080}}"
     volumes:
       - ./services/frontend/build:/app/build
+    develop:
+      watch:
+        - action: rebuild
+          path: ./services/frontend
 
   ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
@@ -38,6 +42,10 @@ services:
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
     depends_on:
       - timescaledb
+    develop:
+      watch:
+        - action: rebuild
+          path: ./services/backend
 
   ## The ingestion server will allow vision systems to send data to the db. 
   ingest:
