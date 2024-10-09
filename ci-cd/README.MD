@@ -44,7 +44,7 @@ Before staring off you should open `./nixos/remote-update-ssh.ps1` and `ci-cd\ni
 
 You next 
 
-Then run `./nixos/remote-update-ssh.ps1` the script will copy the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) into `/etc/nixos` on your server. 
+Then run `./nixos/remote-update-ssh.ps1` the script will copy the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) and [admin-password-hash](ci-cd\nixos\admin-password-hash)  into `/etc/nixos` on your server. Then it will set the permissions of the admin-password-hash file to only allow the root to read and write.  
 
 Then run `ci-cd\nixos\remote-rebuild.ps1` it will copy over the configuration.nix file and rebuild the configuration. 
 
