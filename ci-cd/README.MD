@@ -40,6 +40,10 @@ First go into the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) document and insert y
 
 IMPORTANT: double check that the ssh keys have been set correctly. An incorrect insertion will lock you out of your server. 
 
+Before staring off you should open `./nixos/remote-update-ssh.ps1` and `ci-cd\nixos\remote-rebuild.ps1`, then change the ip address to the ip address of your server. 
+
+You next 
+
 Then run `./nixos/remote-update-ssh.ps1` the script will copy the [ssh-keys.nix](ci-cd\nixos\ssh-keys.nix) into `/etc/nixos` on your server. 
 
 Then run `ci-cd\nixos\remote-rebuild.ps1` it will copy over the configuration.nix file and rebuild the configuration. 

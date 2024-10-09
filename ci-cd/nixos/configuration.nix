@@ -1,17 +1,16 @@
 { pkgs, ... }:
 let
   sshKeysFile = import ./ssh-keys.nix;
+  adminPasswordFile = "/etc/nixos/admin-password-hash";
 in
 {
   imports = [
     ./hardware-configuration.nix
     ./networking.nix # generated at runtime by nixos-infect
   ];
-
   # Boot Configuration
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
-
   # Networking
   networking = {
     hostName = "nixos";
@@ -21,7 +20,6 @@ in
       allowedTCPPorts = [ 22 80 443 ]; # SSH, HTTP, HTTPS
     };
   };
-
   # SSH Configuration
   services.openssh = {
     enable = true;
@@ -34,33 +32,26 @@ in
     };
     extraConfig = "AllowUsers root admin";
   };
-
-  
+ 
   # Users can only be defined in the config file
   users.mutableUsers = false;
-
-  # Root user configuration WARNING. Remove this to harden the security but make it more difficult to update the config. 
+  # Root user configuration WARNING. Remove this to harden the security but make it more difficult to update the config.
   users.users.root.openssh.authorizedKeys.keys = sshKeysFile.sshKeys;
-
   # Admin user Configuration
   users.users.admin = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" ];
     openssh.authorizedKeys.keys = sshKeysFile.sshKeys;
-    hashedPassword = "$6$woNDbMfEzmgv75Hw$x5G8Rdy70TYT/HL5KGsO0OO/Xc/tbuOsphVk3fceBN1NJz4LXUuzFJezKXGgKF7lB.J4HKaGh5jcI6lgog2v./";
+    hashedPassword = builtins.readFile adminPasswordFile;
   };
-
-   security.sudo.wheelNeedsPassword = true;
-
+  security.sudo.wheelNeedsPassword = true;
   # Software Packages
   environment.systemPackages = with pkgs; [
     git
     docker
   ];
-
   # Docker Configuration
   virtualisation.docker.enable = true;
-
   # System Configuration
   system = {
     stateVersion = "24.05";
