@@ -12,6 +12,7 @@ pub trait LocalQueue {
     async fn push(&self, reading: Reading) -> Result<()>; // push() will add a new reading to the local queue
     async fn peek(&self, limit: usize) -> Result<Vec<Reading>>; // peek() will return the next n readings from the local queue
     async fn pop(&self, limit: usize) -> Result<()>; // pop() will remove the next n readings from the local queue.
+    async fn len(&self) -> Result<usize>; // len() will return the number of readings in the local queue
 }
 
 pub struct SqliteQueue {
@@ -41,14 +42,7 @@ impl LocalQueue for SqliteQueue {
     }
 
     async fn push(&self, reading: Reading) -> Result<()> {
-        let timestamp = reading.timestamp.map(|ts| ts.seconds).unwrap_or_else(|| {
-            SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .expect("Time went backwards")
-                .as_secs()
-                .try_into()
-                .expect("Timestamp overflow")
-        });
+        let timestamp = reading.timestamp.map(|ts| ts.seconds * 1_000_000_000 + ts.nanos as i64);
 
         sqlx::query("INSERT INTO readings (timestamp, name, value, unit) VALUES (?, ?, ?, ?)")
             .bind(timestamp)
@@ -74,12 +68,13 @@ impl LocalQueue for SqliteQueue {
         let readings: Result<Vec<Reading>> = rows
             .into_iter()
             .map(|row| {
+
+                let nanos: i64 = row.try_get("timestamp").context("Failed to get timestamp")?;
+
                 Ok(Reading {
                     timestamp: Some(Timestamp {
-                        seconds: row
-                            .try_get("timestamp")
-                            .context("Failed to get timestamp")?,
-                        nanos: 0,
+                        seconds: nanos / 1_000_000_000,
+                        nanos: (nanos % 1_000_000_000) as i32,
                     }),
                     name: row.try_get("name").context("Failed to get name")?,
                     value: row.try_get("value").context("Failed to get value")?,
@@ -104,11 +99,26 @@ impl LocalQueue for SqliteQueue {
 
         Ok(())
     }
+
+    async fn len(&self) -> Result<usize> {
+        let row = sqlx::query("SELECT COUNT(*) as count FROM readings")
+            .fetch_one(&self.pool)
+            .await
+            .context("Failed to get count of readings from database")
+            .unwrap();
+
+        let count: i64 = row
+            .try_get("count")
+            .context("Failed to get count from row")
+            .unwrap();
+
+        count.try_into().context("Failed to convert count from i64 to usize") // Safely convert i64 to usize, defaulting to 0 if it fails
+    }
+
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::reading;
 
     use super::*;
     use prost_types::Timestamp;
@@ -121,7 +131,7 @@ mod tests {
                     .duration_since(UNIX_EPOCH)
                     .unwrap()
                     .as_secs() as i64,
-                nanos: 0,
+                nanos: 245113,
             }),
             name: name.to_string(),
             value,
@@ -199,6 +209,25 @@ mod tests {
 
         let peeked = queue.peek(3).await?;
         assert_eq!(peeked.len(), 3);
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_len_empty() -> Result<()> {
+        let queue = SqliteQueue::new("sqlite::memory:").await?;
+        assert_eq!(queue.len().await?, 0);
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_len_non_empty() -> Result<()> {
+        let queue = SqliteQueue::new("sqlite::memory:").await?;
+        for i in 0..5 {
+            queue
+                .push(create_reading(&format!("test{}", i), i as f32, "units"))
+                .await?;
+        }
+        assert_eq!(queue.len().await?, 5);
         Ok(())
     }
 }
