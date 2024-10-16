@@ -2,12 +2,17 @@ use anyhow::Result;
 use reader::Reader;
 use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
 use std::time::Duration;
-use tokio::{signal, sync::{mpsc, oneshot}, time::interval};
+use tokio::{
+    signal,
+    sync::{mpsc, oneshot},
+    time::interval,
+};
 pub mod reading {
     tonic::include_proto!("reading");
 }
+mod local_queue;
 mod reader;
-
+use local_queue::{LocalQueue, SqliteQueue};
 mod hardware_monitor_reader;
 use hardware_monitor_reader::pc_reader;
 
@@ -17,10 +22,9 @@ const LOOP_DURATION: Duration = Duration::from_secs(1);
 #[tokio::main]
 async fn main() -> Result<()> {
     let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
+    let mut pc_reader = pc_reader::PCReader::new()?;
     let (sender, mut receiver) = mpsc::channel::<Reading>(100);
     let (shutdown_send, mut shutdown_recv) = oneshot::channel();
-    let mut pc_reader = pc_reader::PCReader::new()?;
-    
 
     tokio::spawn(async move {
         signal::ctrl_c().await.expect("Failed to listen for Ctrl+C");
@@ -48,6 +52,7 @@ async fn main() -> Result<()> {
                     send_readings(&mut client, &mut batch).await;
                 }
             }
+
             _ = &mut shutdown_recv => {
                 // Drain any remaining readings from the channel
                 while let Ok(reading) = receiver.try_recv() {
@@ -80,4 +85,3 @@ async fn send_readings(
         Err(e) => eprintln!("Failed to send final readings: {}", e),
     }
 }
-
