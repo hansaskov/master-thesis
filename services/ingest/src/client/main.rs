@@ -54,10 +54,6 @@ async fn main() -> Result<()> {
             }
 
             _ = &mut shutdown_recv => {
-                // Drain any remaining readings from the channel
-                while let Ok(reading) = receiver.try_recv() {
-                    batch.push(reading);
-                }
 
                 if !batch.is_empty() {
                     send_readings(&mut client, &mut batch).await;
