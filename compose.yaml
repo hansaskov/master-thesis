@@ -9,8 +9,8 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - caddy_data:/data
-      - caddy_config:/config
+      - caddy-data:/data
+      - caddy-config:/config
       - /var/run/docker.sock:/var/run/docker.sock
 
   ## The frontend service will build the frontend and then store the build output in volume bind.
@@ -59,18 +59,22 @@ services:
       caddy.reverse_proxy: "{{upstreams 50051}}"
     depends_on:
       - timescaledb
+    develop:
+      watch:
+        - action: rebuild
+          path: ./services/ingest
 
   ## A postgres database optimised for timeseries data
   timescaledb:
-    image: timescale/timescaledb:latest-pg16
+    image: timescale/timescaledb:latest-pg17
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - timescaledb_data:/var/lib/postgresql/data
+      - timescaledb-data:/var/lib/postgresql/data
 
 volumes:
-  caddy_data:
-  caddy_config:
-  timescaledb_data:
+  caddy-data:
+  caddy-config:
+  timescaledb-data:

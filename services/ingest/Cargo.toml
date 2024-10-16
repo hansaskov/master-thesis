@@ -21,11 +21,11 @@ tonic-build = "0.12"
 
 [[bin]] # Bin to run the HelloWorld gRPC server
 name = "server"
-path = "src/server.rs"
+path = "src/server/main.rs"
 
 [[bin]] # Bin to run the HelloWorld gRPC client
 name = "client"
-path = "src/client.rs"
+path = "src/client/main.rs"
 
 
 [profile.release]

@@ -9,7 +9,6 @@ mod config;
 use config::Args;
 
 mod time_helper;
-use time_helper::TimeHelper;
 
 pub mod proto {
     tonic::include_proto!("reading");
@@ -51,7 +50,7 @@ pub async fn insert_many_readings(readings: &[Reading], pool: &PgPool) -> anyhow
 
     for reading in readings {
         if let Some(timestamp) = reading.timestamp.as_ref() {
-            times.push(TimeHelper::to_offset_date_time(timestamp));
+            times.push(time_helper::to_offset_date_time(timestamp));
             names.push(reading.name.clone());
             values.push(reading.value);
             unit.push(reading.unit.clone());
