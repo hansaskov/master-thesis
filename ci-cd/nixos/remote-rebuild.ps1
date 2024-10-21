@@ -3,7 +3,7 @@ $SOURCE_DIR = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 # Set the destination IP and user to use with ssh and scp
 $DEST_USER = "root"
-$DEST_IP = "49.12.68.190"
+$DEST_IP = "188.245.145.180"
 
 # Set the destination directory
 $DEST_DIR = "/etc/nixos"
