@@ -39,7 +39,8 @@ in
   # Users can only be defined in the config file
   users.mutableUsers = false;
 
-  # Root user configuration
+  # Root user configuration 
+  # WARING: REMOVE THIS CODE TO HARDEN SECURITY
   users.users.root.openssh.authorizedKeys.keyFiles = [ sshKeysPath ];  # Use the external file for root's SSH keys
   
   # Admin user configuration

@@ -16,4 +16,4 @@ $FILE_2 = "ssh-keys"
 & scp "$SOURCE_DIR\$FILE_2" "${DEST_USER}@${DEST_IP}:$DEST_DIR/$FILE_2"
 
 # Will set the permissions such that only the root user can read and write the file
-& ssh "${DEST_USER}@${DEST_IP}" "chmod 600 $DEST_DIR/$FILE_2"
+& ssh "${DEST_USER}@${DEST_IP}" "chmod 600 $DEST_DIR/$FILE_1"

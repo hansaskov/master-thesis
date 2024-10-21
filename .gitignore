@@ -1,8 +1,8 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
 
-*ssh-keys
-*admin-password-hash
+/ci-cd/nixos/ssh-keys
+/ci-cd/nixos/admin-password-hash
 
 # Logs
 
