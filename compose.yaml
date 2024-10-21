@@ -2,6 +2,7 @@ services:
 
   ## The entrypoint of our app. This service will proxy requests to all other services. 
   caddy:
+    profiles: [proxy]
     image: lucaslorentz/caddy-docker-proxy:ci-alpine
     restart: unless-stopped
     ports:
@@ -12,9 +13,11 @@ services:
       - caddy-data:/data
       - caddy-config:/config
       - /var/run/docker.sock:/var/run/docker.sock
+    
 
   ## The frontend service will build the frontend and then store the build output in volume bind.
   frontend: 
+    profiles: [stateless]
     build:
       context: services/frontend
       dockerfile: Dockerfile
@@ -29,6 +32,7 @@ services:
 
   ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
+    profiles: [stateless]
     build:
       context: services/backend
       dockerfile: Dockerfile
@@ -39,7 +43,9 @@ services:
       caddy.handle: /api/*
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
     depends_on:
-      - timescaledb
+      timescaledb:
+        condition: service_healthy
+        required: false
     develop:
       watch:
         - action: rebuild
@@ -47,6 +53,7 @@ services:
 
   ## The ingestion server will allow vision systems to send data to the db. 
   ingest:
+    profiles: [stateless]
     build:
       context: services/ingest
       dockerfile: Dockerfile
@@ -58,7 +65,11 @@ services:
       caddy: "${INGEST_SERVER_FQDN}"
       caddy.reverse_proxy: "{{upstreams 50051}}"
     depends_on:
-      - timescaledb
+      timescaledb:
+        condition: service_healthy
+        required: false
+      
+    
     develop:
       watch:
         - action: rebuild
@@ -66,6 +77,7 @@ services:
 
   ## A postgres database optimised for timeseries data
   timescaledb:
+    profiles: [stateful]    
     image: timescale/timescaledb:latest-pg17
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
@@ -73,6 +85,13 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - timescaledb-data:/var/lib/postgresql/data
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
 
 volumes:
   caddy-data:
