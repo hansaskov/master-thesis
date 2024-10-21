@@ -78,4 +78,12 @@ When you are ready to harden down the security of the server even more, then you
   users.users.root.openssh.authorizedKeys.keyFiles = [ sshKeysPath ];  # Use the external file for root's SSH keys
 ```
 
+## Start docker on server
+
+The following command will set the docker host to the server ip address and start the docker service on the remote server.
+Powershell:
+``` powershell
+$env:DOCKER_HOST = "ssh://admin@188.245.145.180"                                                  
+docker compose --env-file  .\.env.production up -d --build
+```
 
