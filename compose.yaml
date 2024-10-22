@@ -68,8 +68,6 @@ services:
       timescaledb:
         condition: service_healthy
         required: false
-      
-    
     develop:
       watch:
         - action: rebuild
@@ -79,6 +77,7 @@ services:
   timescaledb:
     profiles: [stateful]    
     image: timescale/timescaledb:latest-pg17
+    restart: always
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -93,7 +92,19 @@ services:
       start_period: 30s
       timeout: 10s
 
+  ## Production insights
+  dozzle:
+    profiles: [prod]   
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      caddy: "${DOZZLE_FQDN}"
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
 volumes:
   caddy-data:
   caddy-config:
   timescaledb-data:
+
+
