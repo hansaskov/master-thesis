@@ -2,6 +2,8 @@ use anyhow::{Context, Result};
 use prost_types::Timestamp;
 use sqlx::{sqlite::SqlitePool, Row};
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::path::Path;
+use std::fs::File;
 
 use crate::reading::Reading;
 
@@ -21,6 +23,12 @@ pub struct SqliteQueue {
 
 impl LocalQueue for SqliteQueue {
     async fn new(db_url: &str) -> Result<Self> {
+        let file_path = db_url.trim_start_matches("sqlite:");
+
+        if !Path::new(file_path).exists() {
+            File::create(file_path).context("Failed to create SQLite database file")?;
+        }
+
         let pool = SqlitePool::connect(db_url)
             .await
             .context("Failed to connect to SQLite database")?;
