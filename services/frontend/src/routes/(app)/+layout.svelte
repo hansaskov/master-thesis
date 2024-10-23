@@ -6,21 +6,15 @@
 	import House from 'lucide-svelte/icons/house';
 	import User from 'lucide-svelte/icons/user';
 	import Search from 'lucide-svelte/icons/search';
-	import Target  from 'lucide-svelte/icons/target';
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { ModeWatcher } from 'mode-watcher';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
-	import LightSwitch from '$lib/components/LightSwitch.svelte';
 	import Settings from '$lib/components/Settings.svelte'
 	import NavItem from '$lib/components/NavItem.svelte';
 	import type { ComponentType } from 'svelte';
 	import OrgCombobox from './systems/OrgCombobox.svelte';
-	import SystemsComboBox from './systems/[id]/SystemsComboBox.svelte';
-	import Label from '$lib/components/ui/label/label.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
@@ -51,7 +45,7 @@
 		}));
 </script>
 
-<ModeWatcher defaultTheme="light" />
+
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<!-- Left sidebar (hidden on small screens) -->
