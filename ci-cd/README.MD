@@ -103,7 +103,7 @@ To update the server configuration with these new settings, follow these steps:
 ```
 3. Run `remote-rebuild.ps1` to upload the `configuration.nix` file and rebuild the system configuration.
 ``` bash
-ci-cd/nixos/remote-rebuild.ps1
+./ci-cd/nixos/remote-rebuild.ps1
 ```
 
 Once the rebuild is complete, you can log in to the server as the admin user:
