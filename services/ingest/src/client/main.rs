@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{ Result};
 use reader::Reader;
 use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
 use std::time::Duration;
@@ -7,6 +7,7 @@ use tokio::{
     sync::{mpsc, oneshot},
     time::interval,
 };
+use std::result::Result::Ok;
 pub mod reading {
     tonic::include_proto!("reading");
 }
@@ -23,8 +24,10 @@ const LOOP_DURATION: Duration = Duration::from_secs(1);
 async fn main() -> Result<()> {
     let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
     let mut pc_reader = pc_reader::PCReader::new()?;
+    let local_queue = SqliteQueue::new("sqlite:local_readings.db").await?;
     let (sender, mut receiver) = mpsc::channel::<Reading>(100);
     let (shutdown_send, mut shutdown_recv) = oneshot::channel();
+    let mut interval = interval(LOOP_DURATION);
 
     tokio::spawn(async move {
         signal::ctrl_c().await.expect("Failed to listen for Ctrl+C");
@@ -33,8 +36,6 @@ async fn main() -> Result<()> {
             .expect("Failed to send shutdown signal");
     });
 
-    let mut interval = interval(LOOP_DURATION);
-    let mut batch = Vec::with_capacity(BATCH_SIZE);
 
     loop {
         tokio::select! {
@@ -45,19 +46,19 @@ async fn main() -> Result<()> {
             }
 
             Some(reading) = receiver.recv() => {
-                batch.push(reading.clone());
-                println!("{:?}", reading) ;
+                let _ = local_queue.push(reading.clone()).await.map_err(|e| eprintln!("{e:?}"));
 
-                if batch.len() >= BATCH_SIZE {
-                    send_readings(&mut client, &mut batch).await;
+                match local_queue.len().await {
+                    Ok(length) if length >= BATCH_SIZE => {
+                        let _ = send_readings(&mut client, &local_queue, BATCH_SIZE).await.map_err(|e| eprintln!("{e:?}"));                      
+                    }
+                    Ok(length) => println!("Added reading to queue: {reading:?}. Size {length:?}"),
+                    Err(e) => eprint!("{e:?}")
                 }
             }
 
             _ = &mut shutdown_recv => {
 
-                if !batch.is_empty() {
-                    send_readings(&mut client, &mut batch).await;
-                }
                 println!("Shutting down gracefully.");
                 break;
             }
@@ -68,16 +69,20 @@ async fn main() -> Result<()> {
 
 async fn send_readings(
     client: &mut ConditionsServiceClient<tonic::transport::Channel>,
-    readings: &mut Vec<Reading>,
-) {
+    queue: &SqliteQueue,
+    length: usize
+) -> Result<()> {
+    let readings = queue.peek(length).await?;
+
     let request = tonic::Request::new(ConditionsRequest {
         readings: readings.to_vec(),
     });
-    match client.send_conditions(request).await {
-        Ok(_) => {
-            println!("Sending final readings was a success!");
-            readings.clear();
-        }
-        Err(e) => eprintln!("Failed to send final readings: {}", e),
-    }
+
+    client.send_conditions(request).await?;
+    println!("Successfully sent values");
+
+    queue.pop(length).await?;
+    println!("Popped values from queue");
+
+    Ok(())
 }
