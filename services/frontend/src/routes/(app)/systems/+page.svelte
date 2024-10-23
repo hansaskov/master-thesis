@@ -81,7 +81,7 @@
 	<Card.Root class="w-full">
 	  <Card.Header class="flex gap-4 md:flex-row justify-between">
 		<div>
-		  <Card.Title>Hi {name}</Card.Title>
+		  <Card.Title>Hello {name}</Card.Title>
 		  <Card.Description>
 			Monitor and manage your vision systems across different factory areas.
 		  </Card.Description>
