@@ -5,7 +5,6 @@
     import { Progress } from "$lib/components/ui/progress/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { Separator } from "$lib/components/ui/separator/index.js";
-    import { Calendar } from "$lib/components/ui/calendar/index.js";
     import AreaChart from '$lib/components/AreaChart.svelte';
 
     import AvailabilityCard from "./AvailabilityCard.svelte";
@@ -123,7 +122,7 @@
                             </Button>
                         </Popover.Trigger>
                         <Popover.Content class="w-auto p-0" align="start">
-                            <Calendar />
+                            Calendar....
                         </Popover.Content>
                     </Popover.Root>
                 </div>

@@ -21,18 +21,18 @@
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 
-	type NavItem = {
+	type NavItemType = {
 		name: string;
 		href: string;
 		icon: ComponentType;
 	};
 
-	const navItems: NavItem[] = [
+	const navItems: NavItemType[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
 		{ name: 'Search', icon: Search, href: '/newsfeed' },
 	];
 
-	const settings: NavItem = { name: 'Support', icon: Wrench, href: '/support' };
+	const settings: NavItemType = { name: 'Support', icon: Wrench, href: '/support' };
 
 	$: pathname = $page.url.pathname;
 	$: breadcrumbs = pathname
