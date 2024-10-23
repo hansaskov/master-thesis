@@ -6,11 +6,14 @@ const pages = [
   '/systems',
   '/settings',
   '/support',
+  "/systems/settings",
   '/systems/vp1',
   '/systems/vp1/monitoring',
   '/systems/vp1/pi',
   '/systems/vp1/service',
-  '/systems/vp1/parts'
+  '/systems/vp1/parts',
+  '/systems/vp1/settings'
+
 ];
 
 const imageFolder = './screenshots';
