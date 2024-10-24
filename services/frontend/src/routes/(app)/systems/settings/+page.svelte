@@ -13,6 +13,7 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Copy from 'lucide-svelte/icons/copy';
 	import AlertCircle from 'lucide-svelte/icons/circle-alert';
+	import { faker } from '@faker-js/faker';
 
 	let organizationName = 'My Organization';
 	let organizationSettings = {
@@ -104,6 +105,97 @@
 			// You could add a toast notification here
 		});
 	}
+
+	let newOrganization = '';
+	let organizations = [
+		{ id: 1, name: 'TriVision A/S' },
+		{ id: 2, name: 'Vestkraft' }
+	];
+
+	function addOrganization() {
+		if (newOrganization) {
+			organizations = [
+				...organizations,
+				{ id: organizations.length + 1, name: newOrganization, }
+			];
+			console.log('New organization added:', newOrganization);
+			newOrganization = '';
+		}
+	}
+
+	function editOrganization(organizationName: string) {
+
+	}
+
+	function removeOrganization(organizationName: string) {
+		organizations = organizations.filter((organization) => organization.name !== organizationName);
+		console.log('organization removed:', organizationName);
+	}
+
+	let models = [
+		{
+			name: "Model A",
+			parts: ["Part 1", "Part 2", "Part 3"],
+		},
+		{
+			name: "Model B",
+			parts: ["Parts 4", "Parts 1"],
+		}
+	]
+
+	let newModelName = '';
+	let selectedModel: any = null;
+
+	let parts = [
+    	{ number: "001", name: "Part 1", image: "https://via.placeholder.com/50" },
+    	{ number: "002", name: "Part 2", image: "https://via.placeholder.com/50" },
+    	{ number: "003", name: "Part 3", image: "https://via.placeholder.com/50" },
+    	{ number: "004", name: "Part 4", image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) }
+  	];
+	let newPartNumber = '';
+	let newPartName = '';
+	let newPartImage = '';
+
+	function addPart() {
+		if (newPartNumber && newPartName &&  newPartImage) {
+			parts = [...parts, { number: newPartNumber, name: newPartName, image: newPartImage }];
+		}
+		newPartNumber = '';
+		newPartName = '';
+		newPartImage = '';
+	}
+
+	function removePart(partIndex: number) {
+		parts = parts.filter((_, i) => i !== partIndex);
+	}
+
+	function addModel() {
+		if (newModelName) {
+		models = [...models, { name: newModelName, parts: [] }];
+		newModelName = "";
+		}
+  	}
+
+	function removeModel(index: any) {
+    	models = models.filter((_, i) => i !== index);
+  	}
+
+	function addPartToModel(modelIndex: any) {
+		if (newPartName && selectedModel === modelIndex) {
+			models[modelIndex].parts = [...models[modelIndex].parts, newPartName];
+			newPartName = "";
+		}
+  	}
+
+	function removePartFromModel(modelIndex: number, partIndex: number) {
+		models[modelIndex].parts = models[modelIndex].parts.filter((_, i) => i !== partIndex)
+	}
+
+	function toggleModel(index: any) {
+    	selectedModel = selectedModel === index ? null : index;
+  	}
+
+	
 </script>
 
 <div class="container mx-auto px-4 py-4">
@@ -293,6 +385,211 @@
 				{:else}
 					<p class="mt-4 text-center text-muted-foreground">No vision systems added yet.</p>
 				{/if}
+			</Card.Content>
+		</Card.Root>
+		<!--Bottom Padding-->
+		<main class="p-2">
+			<slot></slot>
+		</main>
+	</div>
+
+	<!-- Superadmin settings -->
+	<h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
+
+	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+		<Card.Root class="col-span-1 md:col-span-2">
+			<Card.Header>
+				<Card.Title>Organization Management</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div class="mb-6">
+					<Label for="new-organization">Add New Organization</Label>
+					<div class="flex gap-2">
+						<Input placeholder="Enter organization name" bind:value={newOrganization} />
+						<Button type="submit" on:click={addOrganization}>Add Organization</Button>
+					</div>
+				</div>
+
+				<Table.Root>
+					<Table.Caption>List of Organizations</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="w-[300px]">ID</Table.Head>
+							<Table.Head>Name</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each organizations as organization}
+							<Table.Row>
+								<Table.Cell>{organization.id}</Table.Cell>
+								<Table.Cell>{organization.name}</Table.Cell>
+								<Table.Cell class="text-right">
+									<Button
+										variant="outline"
+										size="sm"
+										on:click={() => editOrganization(organization.name)}
+									>
+										Edit
+									</Button>
+								</Table.Cell>
+								<Table.Cell class="text-right w-[80px]">
+									<Button
+										variant="destructive"
+										size="sm"
+										on:click={() => removeOrganization(organization.name)}
+									>
+										Remove
+									</Button>
+								</Table.Cell>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root class="col-span-1 md:col-span-2">
+			<Card.Header>
+				<Card.Title>Vision System Spare Parts</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div class="mb-6">
+					<Label for="new-organization">Add New Spare Part</Label>
+					<div class="flex gap-2">
+						<Input placeholder="Enter organization name" bind:value={newOrganization} />
+						<Button type="submit" on:click={addOrganization}>Add Organization</Button>
+					</div>
+				</div>
+
+				<Table.Root>
+					<Table.Caption>List of Spare Parts</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="w-[300px]">Number</Table.Head>
+							<Table.Head>Name</Table.Head>
+							<Table.Head>Image</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each parts as part, partIndex}
+							<!-- <Table.Row>
+								<Table.Cell>{part.number}</Table.Cell>
+								<Table.Cell>{part.name}</Table.Cell>
+								<Table.Cell>{part.image}</Table.Cell>
+								<Table.Cell class="text-right">
+									<Button
+										variant="outline"
+										size="sm"
+										on:click={() => editOrganization(organization.name)}
+									>
+										Edit
+									</Button>
+								</Table.Cell>
+								<Table.Cell class="text-right w-[80px]">
+									<Button
+										variant="destructive"
+										size="sm"
+										on:click={() => removeOrganization(organization.name)}
+									>
+										Remove
+									</Button>
+								</Table.Cell>
+							</Table.Row> -->
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			</Card.Content>
+		</Card.Root>
+
+		<Card.Root class="col-span-1 md:col-span-2">
+			<Card.Header>
+				<Card.Title>Model Management</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div class="mb-6">
+					<Label for="new-model">Add New Model</Label>
+					<div class="flex gap-2">
+						<Input placeholder="Enter model name" bind:value={newModelName} />
+						<Button type="submit" on:click={addModel}>Add Model</Button>
+					</div>
+				</div>
+
+				<Table.Root>
+					<Table.Caption>List of Models</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="w-[300px]">Name</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each models as model, modelIndex}
+							<Table.Row>
+								<Table.Cell>{model.name}</Table.Cell>
+								<Table.Cell class="text-right">
+									<Button
+										variant="outline"
+										size="sm"
+										on:click={() => toggleModel(modelIndex)}
+									>
+										{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
+									</Button>
+								</Table.Cell>
+								<Table.Cell class="text-right w-[80px]">
+									<Button
+										variant="destructive"
+										size="sm"
+										on:click={() => removeModel(modelIndex)}
+									>
+										Remove
+									</Button>
+								</Table.Cell>
+							</Table.Row>
+
+							<!-- Parts List (Visible when model is selected) -->
+							{#if selectedModel === modelIndex}
+								<Table.Row>
+									<Table.Cell>
+										<div class="pl-6">
+										<!-- Parts List -->
+											<Table.Head>
+												<Table.Row>
+													<Table.Cell>Part Name</Table.Cell>
+												</Table.Row>
+											</Table.Head>
+											<Table.Body>
+												{#each model.parts as part, partIndex}
+													<Table.Row>
+													<Table.Cell>{part}</Table.Cell>
+													<Table.Cell class="text-right w-[80px]">
+														<Button
+														variant="destructive"
+														size="sm"
+														on:click={() => removePartFromModel(modelIndex, partIndex)}
+														>
+														Remove
+														</Button>
+													</Table.Cell>
+													</Table.Row>
+												{/each}
+											</Table.Body>
+
+										<div class="mt-4 flex items-center space-x-4">
+											<input
+												type="text"
+												placeholder="New part name"
+												bind:value={newPartName}
+												class="input"
+											/>
+											<Button on:click={() => addPartToModel(modelIndex)}>
+												Add Part
+											</Button>
+										</div>
+									</Table.Cell>
+								</Table.Row>
+							{/if}
+						{/each}
+					</Table.Body>
+				</Table.Root>
 			</Card.Content>
 		</Card.Root>
 	</div>
