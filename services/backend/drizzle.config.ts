@@ -1,10 +1,14 @@
-import type { Config } from "drizzle-kit"
+import { defineConfig } from 'drizzle-kit';
 
-export default {
-  schema: "./src/db/schema.ts",
-  out: "./drizzle",
-  database: "sqlite",
+if(!process.env.DATABASE_URL) {
+  throw Error("No Database url found in enviroment")
+}
+ 
+export default defineConfig({
+  out: './drizzle',
+  schema: './src/db/schemas/index.ts',
+  dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL as string
-  }
-} satisfies Config
+    url: process.env.DATABASE_URL,
+  },
+});
