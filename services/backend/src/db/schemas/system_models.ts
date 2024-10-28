@@ -7,7 +7,7 @@ export const systemModels = pgTable("system_models", {
 	id: text()
 		.primaryKey()
 		.notNull()
-		.$default(() => generateRandomString(8)),
+		.$default(() => generateRandomString(12)),
 	name: text().notNull(),
 });
 
