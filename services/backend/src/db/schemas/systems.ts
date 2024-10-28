@@ -1,5 +1,7 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { generateRandomString } from ".";
+import { pgTable, text } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-typebox";
+import { t } from "elysia";
+import { generateRandomString } from "../utils";
 import { organizations } from "./organizations";
 import { systemModels } from "./system_models";
 
@@ -13,4 +15,11 @@ export const systems = pgTable("systems", {
 		.notNull()
 		.references(() => organizations.id, { onDelete: "cascade" }),
 	system_model_id: text().references(() => systemModels.id, { onDelete: "set null" }),
+});
+
+export const insertSystemsSchema = createInsertSchema(systems, {
+	id: t.String({ minLength: 12 }),
+	name: t.String({ minLength: 1 }),
+	organization_id: t.String({ minLength: 1 }),
+	system_model_id: t.String({ minLength: 1 }),
 });

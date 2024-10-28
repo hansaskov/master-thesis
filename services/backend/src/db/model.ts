@@ -1,0 +1,58 @@
+import {
+	factoryAreas,
+	insertFactoryAreaSchema,
+	insertKeysSchema,
+	insertOrganizationsSchema,
+	insertPartsSchema,
+	insertSessionsSchema,
+	insertSystemModelsSchema,
+	insertSystemsSchema,
+	insertUserSchema,
+	insertUserSettingsSchema,
+	keys,
+	organizations,
+	parts,
+	partsToSystemModels,
+	readings,
+	sessions,
+	systemModels,
+	systems,
+	systemsToFactoryAreas,
+	userSettings,
+	users,
+	usersToFactoryAreas,
+	usersToOrganizations,
+} from "./schemas";
+import { spreads } from "./utils";
+
+export const Table = {
+	organizations,
+	systems,
+	keys,
+	readings,
+	systemsToFactoryAreas,
+	factoryAreas,
+	systemModels,
+	partsToSystemModels,
+	parts,
+	users,
+	userSettings,
+	sessions,
+	usersToOrganizations,
+	usersToFactoryAreas,
+} as const;
+
+export const Schema = spreads(
+	{
+		users: insertUserSchema,
+		user_settings: insertUserSettingsSchema,
+		sessions: insertSessionsSchema,
+		organizations: insertOrganizationsSchema,
+		factoryAreas: insertFactoryAreaSchema,
+		systems: insertSystemsSchema,
+		systemModels: insertSystemModelsSchema,
+		parts: insertPartsSchema,
+		keys: insertKeysSchema,
+	},
+	"insert",
+);
