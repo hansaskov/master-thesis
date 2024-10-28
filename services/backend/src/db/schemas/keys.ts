@@ -1,10 +1,12 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { systems } from "./";
+import { pgTable, text } from "drizzle-orm/pg-core";
+import { generateRandomString, systems } from "./";
 
 export const keys = pgTable("keys", {
-	id: uuid().primaryKey().notNull().defaultRandom(),
-	public_key: uuid().notNull(),
-	system_id: uuid()
+	public_id: text()
+		.primaryKey()
+		.notNull()
+		.$default(() => generateRandomString(22)),
+	private_id: text()
 		.notNull()
 		.references(() => systems.id, { onDelete: "cascade" }),
 });

@@ -1,11 +1,13 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { uuidv7 } from "uuidv7";
-import { organizations } from "./";
+import { generateRandomString, organizations } from "./";
 
 export const factoryAreas = pgTable("factory_areas", {
-	id: uuid().primaryKey().notNull().$default(uuidv7),
+	id: text()
+		.primaryKey()
+		.notNull()
+		.$default(() => generateRandomString(12)),
 	name: text().notNull(),
-	organization_id: uuid()
+	organization_id: text()
 		.notNull()
 		.references(() => organizations.id, { onDelete: "cascade" }),
 });

@@ -1,8 +1,11 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { uuidv7 } from "uuidv7";
+import { generateRandomString } from ".";
 
 export const users = pgTable("users", {
-	id: uuid().primaryKey().notNull().$default(uuidv7),
+	id: text()
+		.primaryKey()
+		.notNull()
+		.$default(() => generateRandomString(12)),
 	is_superadmin: boolean().notNull().default(false),
 	microsoft_id: text(),
 });

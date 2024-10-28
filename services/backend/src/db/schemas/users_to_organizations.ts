@@ -1,13 +1,13 @@
-import { pgTable, primaryKey, text, uuid } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { organizations, users } from "./";
 
 export const usersToOrganizations = pgTable(
 	"users_to_organizations",
 	{
-		organization_id: uuid()
+		organization_id: text()
 			.notNull()
 			.references(() => organizations.id, { onDelete: "cascade" }),
-		user_id: uuid()
+		user_id: text()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
 		role: text().notNull(),

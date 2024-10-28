@@ -1,3 +1,4 @@
+import { customAlphabet } from "nanoid";
 import {
 	factoryAreas,
 	keys,
@@ -53,7 +54,9 @@ export const Table = {
 } as const;
 
 export const Schema = {
-    systemModels: {
-        insert: insertSystemModelsSchema
-    }
-}
+	systemModels: {
+		insert: insertSystemModelsSchema,
+	},
+};
+
+export const generateRandomString = customAlphabet("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");

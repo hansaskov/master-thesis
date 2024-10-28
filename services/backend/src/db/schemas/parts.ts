@@ -1,7 +1,10 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { uuidv7 } from "uuidv7";
+import { generateRandomString } from ".";
 
 export const parts = pgTable("parts", {
-	id: uuid().primaryKey().notNull().$default(uuidv7),
+	id: text()
+		.primaryKey()
+		.notNull()
+		.$default(() => generateRandomString(12)),
 	name: text().notNull(),
 });

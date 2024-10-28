@@ -5,10 +5,10 @@ import { systems } from "./systems";
 export const systemsToFactoryAreas = pgTable(
 	"systems_to_factory_areas",
 	{
-		system_id: uuid()
+		system_id: text()
 			.notNull()
 			.references(() => systems.id, { onDelete: "cascade" }),
-		factory_area_id: uuid()
+		factory_area_id: text()
 			.notNull()
 			.references(() => factoryAreas.id, { onDelete: "cascade" }),
 	},

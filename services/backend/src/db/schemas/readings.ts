@@ -5,7 +5,7 @@ export const readings = pgTable(
 	"readings",
 	{
 		time: timestamp({ withTimezone: true, mode: "string" }).notNull(),
-		systems_id: uuid()
+		systems_id: text()
 			.notNull()
 			.references(() => systems.id, { onDelete: "cascade" }),
 		name: text().notNull(),
