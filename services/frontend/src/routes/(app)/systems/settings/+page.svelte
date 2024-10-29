@@ -147,32 +147,53 @@
 	let selectedModel: any = null;
 
 	let parts = [
-    	{ number: "001", name: "Part 1", image: "https://via.placeholder.com/50" },
-    	{ number: "002", name: "Part 2", image: "https://via.placeholder.com/50" },
-    	{ number: "003", name: "Part 3", image: "https://via.placeholder.com/50" },
-    	{ number: "004", name: "Part 4", image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) }
+    	{ id: 1, name: faker.commerce.productName(), image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) },
+    	{ id: 2, name: faker.commerce.productName(), image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) },
+    	{ id: 3, name: faker.commerce.productName(), image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) },
+    	{ id: 4, name: faker.commerce.productName(), image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }) }
   	];
-	let newPartNumber = '';
-	let newPartName = '';
-	let newPartImage = '';
 
+	let newPartName = '';
+	let newPartImage: any = null;
+	let fileName = "";
+	
 	function addPart() {
-		if (newPartNumber && newPartName &&  newPartImage) {
-			parts = [...parts, { number: newPartNumber, name: newPartName, image: newPartImage }];
+		if (newPartName && newPartImage) {
+			parts = [
+				...parts, 
+				{ id: parts.length+1, name: newPartName, image: newPartImage }];
 		}
-		newPartNumber = '';
+		console.log('New part added:', newPartName);
+		console.log(parts)
 		newPartName = '';
 		newPartImage = '';
 	}
-
+	
 	function removePart(partIndex: number) {
 		parts = parts.filter((_, i) => i !== partIndex);
+		console.log('Removed part with index: ', partIndex);
+	}
+	
+	function editPart(partName: string) {
+		// TODO: Implement editing parts
+	}
+	
+	function handleImageUpload(event: any) {
+		const file = event.target.files[0];
+		if (file) {
+			fileName = file.name; 
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				newPartImage = e.target?.result;
+			};
+			reader.readAsDataURL(file);
+		}
 	}
 
 	function addModel() {
 		if (newModelName) {
-		models = [...models, { name: newModelName, parts: [] }];
-		newModelName = "";
+			models = [...models, { name: newModelName, parts: [] }];
+			newModelName = "";
 		}
   	}
 
@@ -456,8 +477,25 @@
 				<div class="mb-6">
 					<Label for="new-organization">Add New Spare Part</Label>
 					<div class="flex gap-2">
-						<Input placeholder="Enter organization name" bind:value={newOrganization} />
-						<Button type="submit" on:click={addOrganization}>Add Organization</Button>
+						<Input placeholder="Enter spare part name" bind:value={newPartName} />
+						<div class="file-input-wrapper relative">
+							<label for="file-upload" class="file-input-label block">
+							  <span class="bg-gray-100 px-4 py-4 rounded cursor-pointer border border-gray-300 hover:bg-gray-200 h-9 flex items-center justify-center w-32">
+								Image
+							  </span>
+							</label>
+							<Input
+							  id="file-upload"
+							  type="file"
+							  accept=".jpg, .jpeg, .png, .webp"
+							  on:change={handleImageUpload}
+							  class="hidden"
+							/>
+							{#if fileName}
+								<p class="text-gray-600 mt-2 text-sm truncate">{fileName}</p>
+							{/if}
+						</div>
+						<Button type="submit" on:click={addPart}>Add Part</Button>
 					</div>
 				</div>
 
@@ -465,22 +503,30 @@
 					<Table.Caption>List of Spare Parts</Table.Caption>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[300px]">Number</Table.Head>
+							<Table.Head class="w-[300px]">ID</Table.Head>
 							<Table.Head>Name</Table.Head>
 							<Table.Head>Image</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each parts as part, partIndex}
-							<!-- <Table.Row>
-								<Table.Cell>{part.number}</Table.Cell>
+							<Table.Row>
+								<Table.Cell>{part.id}</Table.Cell>
 								<Table.Cell>{part.name}</Table.Cell>
-								<Table.Cell>{part.image}</Table.Cell>
+								<Table.Cell>
+									<img
+									alt="{part.name} image"
+									class="aspect-square rounded-md object-cover"
+									height="64"
+									width="64"
+									src={part.image}
+								/>
+								</Table.Cell>
 								<Table.Cell class="text-right">
 									<Button
 										variant="outline"
 										size="sm"
-										on:click={() => editOrganization(organization.name)}
+										on:click={() => editPart(part.name)}
 									>
 										Edit
 									</Button>
@@ -489,12 +535,12 @@
 									<Button
 										variant="destructive"
 										size="sm"
-										on:click={() => removeOrganization(organization.name)}
+										on:click={() => removePart(partIndex)}
 									>
 										Remove
 									</Button>
 								</Table.Cell>
-							</Table.Row> -->
+							</Table.Row>
 						{/each}
 					</Table.Body>
 				</Table.Root>
