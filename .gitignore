@@ -4,8 +4,12 @@
 /ci-cd/nixos/ssh-keys
 /ci-cd/nixos/admin-password-hash
 
-# Logs
 
+/services/ingest/local_readings.db
+
+
+
+# Logs
 package.json
 bun.lockb
 
