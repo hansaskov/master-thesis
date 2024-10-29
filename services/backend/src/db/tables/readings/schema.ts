@@ -1,4 +1,4 @@
-import { doublePrecision, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { real, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { systems } from "..";
 
 export const readings = pgTable(
@@ -9,7 +9,7 @@ export const readings = pgTable(
 			.notNull()
 			.references(() => systems.id, { onDelete: "cascade" }),
 		name: text().notNull(),
-		value: doublePrecision().notNull(),
+		value: real().notNull(),
 		unit: text().notNull(),
 	},
 	(table) => ({

@@ -1,6 +1,6 @@
 {
-  "id": "2bff4005-7d60-4dec-85d5-2a7876f1ea08",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "621c9e0a-273f-4141-a133-d199659f6586",
+  "prevId": "b672f621-61ca-4f08-99dd-0606cfa71686",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -61,28 +61,28 @@
         "systems_organization_id_organizations_id_fk": {
           "name": "systems_organization_id_organizations_id_fk",
           "tableFrom": "systems",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organization_id"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "systems_system_model_id_system_models_id_fk": {
           "name": "systems_system_model_id_system_models_id_fk",
           "tableFrom": "systems",
-          "tableTo": "system_models",
           "columnsFrom": [
             "system_model_id"
           ],
+          "tableTo": "system_models",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},
@@ -111,15 +111,15 @@
         "keys_private_id_systems_id_fk": {
           "name": "keys_private_id_systems_id_fk",
           "tableFrom": "keys",
-          "tableTo": "systems",
           "columnsFrom": [
             "private_id"
           ],
+          "tableTo": "systems",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -150,7 +150,7 @@
         },
         "value": {
           "name": "value",
-          "type": "double precision",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         },
@@ -166,15 +166,15 @@
         "readings_systems_id_systems_id_fk": {
           "name": "readings_systems_id_systems_id_fk",
           "tableFrom": "readings",
-          "tableTo": "systems",
           "columnsFrom": [
             "systems_id"
           ],
+          "tableTo": "systems",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -212,28 +212,28 @@
         "systems_to_factory_areas_system_id_systems_id_fk": {
           "name": "systems_to_factory_areas_system_id_systems_id_fk",
           "tableFrom": "systems_to_factory_areas",
-          "tableTo": "systems",
           "columnsFrom": [
             "system_id"
           ],
+          "tableTo": "systems",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "systems_to_factory_areas_factory_area_id_factory_areas_id_fk": {
           "name": "systems_to_factory_areas_factory_area_id_factory_areas_id_fk",
           "tableFrom": "systems_to_factory_areas",
-          "tableTo": "factory_areas",
           "columnsFrom": [
             "factory_area_id"
           ],
+          "tableTo": "factory_areas",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -276,15 +276,15 @@
         "factory_areas_organization_id_organizations_id_fk": {
           "name": "factory_areas_organization_id_organizations_id_fk",
           "tableFrom": "factory_areas",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organization_id"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -336,28 +336,28 @@
         "parts_to_system_models_part_id_parts_id_fk": {
           "name": "parts_to_system_models_part_id_parts_id_fk",
           "tableFrom": "parts_to_system_models",
-          "tableTo": "parts",
           "columnsFrom": [
             "part_id"
           ],
+          "tableTo": "parts",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "parts_to_system_models_system_model_id_system_models_id_fk": {
           "name": "parts_to_system_models_system_model_id_system_models_id_fk",
           "tableFrom": "parts_to_system_models",
-          "tableTo": "system_models",
           "columnsFrom": [
             "system_model_id"
           ],
+          "tableTo": "system_models",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -459,15 +459,15 @@
         "user_settings_user_id_users_id_fk": {
           "name": "user_settings_user_id_users_id_fk",
           "tableFrom": "user_settings",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -502,15 +502,15 @@
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -539,28 +539,28 @@
         "users_to_factory_areas_user_id_users_id_fk": {
           "name": "users_to_factory_areas_user_id_users_id_fk",
           "tableFrom": "users_to_factory_areas",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "users_to_factory_areas_factory_area_id_factory_areas_id_fk": {
           "name": "users_to_factory_areas_factory_area_id_factory_areas_id_fk",
           "tableFrom": "users_to_factory_areas",
-          "tableTo": "factory_areas",
           "columnsFrom": [
             "factory_area_id"
           ],
+          "tableTo": "factory_areas",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -603,28 +603,28 @@
         "users_to_organizations_organization_id_organizations_id_fk": {
           "name": "users_to_organizations_organization_id_organizations_id_fk",
           "tableFrom": "users_to_organizations",
-          "tableTo": "organizations",
           "columnsFrom": [
             "organization_id"
           ],
+          "tableTo": "organizations",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "users_to_organizations_user_id_users_id_fk": {
           "name": "users_to_organizations_user_id_users_id_fk",
           "tableFrom": "users_to_organizations",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -642,8 +642,8 @@
   },
   "enums": {},
   "schemas": {},
-  "sequences": {},
   "views": {},
+  "sequences": {},
   "_meta": {
     "columns": {},
     "schemas": {},

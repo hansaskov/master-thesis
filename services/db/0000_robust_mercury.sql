@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS "readings" (
 	"time" timestamp with time zone NOT NULL,
 	"systems_id" text NOT NULL,
 	"name" text NOT NULL,
-	"value" double precision NOT NULL,
+	"value" real NOT NULL,
 	"unit" text NOT NULL,
 	CONSTRAINT "readings_time_systems_id_name_pk" PRIMARY KEY("time","systems_id","name")
 );
