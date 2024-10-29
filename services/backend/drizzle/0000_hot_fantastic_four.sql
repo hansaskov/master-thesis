@@ -1,24 +1,23 @@
 CREATE TABLE IF NOT EXISTS "organizations" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "systems" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"organization_id" uuid NOT NULL,
-	"system_model_id" uuid
+	"organization_id" text NOT NULL,
+	"system_model_id" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "keys" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"public_key" uuid NOT NULL,
-	"system_id" uuid NOT NULL
+	"public_id" text PRIMARY KEY NOT NULL,
+	"private_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "readings" (
 	"time" timestamp with time zone NOT NULL,
-	"systems_id" uuid NOT NULL,
+	"systems_id" text NOT NULL,
 	"name" text NOT NULL,
 	"value" double precision NOT NULL,
 	"unit" text NOT NULL,
@@ -26,61 +25,61 @@ CREATE TABLE IF NOT EXISTS "readings" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "systems_to_factory_areas" (
-	"system_id" uuid NOT NULL,
-	"factory_area_id" uuid NOT NULL,
+	"system_id" text NOT NULL,
+	"factory_area_id" text NOT NULL,
 	CONSTRAINT "systems_to_factory_areas_system_id_factory_area_id_pk" PRIMARY KEY("system_id","factory_area_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "factory_areas" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
-	"organization_id" uuid NOT NULL
+	"organization_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "system_models" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "parts_to_system_models" (
-	"part_id" uuid NOT NULL,
-	"system_model_id" uuid NOT NULL,
+	"part_id" text NOT NULL,
+	"system_model_id" text NOT NULL,
 	CONSTRAINT "parts_to_system_models_part_id_system_model_id_pk" PRIMARY KEY("part_id","system_model_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "parts" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"is_superadmin" boolean DEFAULT false NOT NULL,
 	"microsoft_id" text
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_settings" (
-	"id" uuid PRIMARY KEY NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"theme" text NOT NULL,
 	"product_updates" boolean NOT NULL,
-	"user_id" uuid NOT NULL
+	"user_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "sessions" (
 	"id" text PRIMARY KEY NOT NULL,
-	"user_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
 	"expires_at" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users_to_factory_areas" (
-	"user_id" uuid NOT NULL,
-	"factory_area_id" uuid NOT NULL,
+	"user_id" text NOT NULL,
+	"factory_area_id" text NOT NULL,
 	CONSTRAINT "users_to_factory_areas_user_id_factory_area_id_pk" PRIMARY KEY("user_id","factory_area_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users_to_organizations" (
-	"organization_id" uuid NOT NULL,
-	"user_id" uuid NOT NULL,
+	"organization_id" text NOT NULL,
+	"user_id" text NOT NULL,
 	"role" text NOT NULL,
 	CONSTRAINT "users_to_organizations_organization_id_user_id_pk" PRIMARY KEY("organization_id","user_id")
 );
@@ -98,7 +97,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "keys" ADD CONSTRAINT "keys_system_id_systems_id_fk" FOREIGN KEY ("system_id") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "keys" ADD CONSTRAINT "keys_private_id_systems_id_fk" FOREIGN KEY ("private_id") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

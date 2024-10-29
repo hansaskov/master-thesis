@@ -1,7 +1,7 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { generateRandomString } from "../utils";
+import { generateRandomString } from "../../utils";
 
 export const parts = pgTable("parts", {
 	id: text()

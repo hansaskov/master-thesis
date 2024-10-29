@@ -1,5 +1,5 @@
 import { doublePrecision, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { systems } from "./";
+import { systems } from "..";
 
 export const readings = pgTable(
 	"readings",

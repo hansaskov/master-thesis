@@ -1,5 +1,5 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
-import { organizations, users } from "./";
+import { organizations, users } from "..";
 
 export const usersToOrganizations = pgTable(
 	"users_to_organizations",

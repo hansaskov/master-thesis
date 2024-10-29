@@ -1,6 +1,6 @@
 import { pgTable, primaryKey, text, uuid } from "drizzle-orm/pg-core";
-import { factoryAreas } from "./factory_areas";
-import { systems } from "./systems";
+import { factoryAreas } from "../factory_areas/schema";
+import { systems } from "../systems/schema";
 
 export const systemsToFactoryAreas = pgTable(
 	"systems_to_factory_areas",

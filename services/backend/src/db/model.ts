@@ -22,7 +22,7 @@ import {
 	users,
 	usersToFactoryAreas,
 	usersToOrganizations,
-} from "./schemas";
+} from "./tables";
 import { spreads } from "./utils";
 
 export const Table = {

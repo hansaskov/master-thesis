@@ -1,8 +1,8 @@
+import { Table } from "./model";
 import { db } from "./postgres";
-import { systemModels } from "./schemas/system_models";
 
 await db
-	.insert(systemModels)
+	.insert(Table.organizations)
 	.values([{ name: "VisioPointer" }, { name: "VisioCompact" }, { name: "VisioLine" }, { name: "SmartInspector" }])
 	.then(({ count }) => `Inserted ${count} into system models`);
 

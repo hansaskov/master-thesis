@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { users } from "./";
+import { users } from "..";
 
 export const sessions = pgTable("sessions", {
 	id: text().primaryKey().notNull(),

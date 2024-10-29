@@ -1,5 +1,5 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
-import { factoryAreas, users } from "./";
+import { factoryAreas, users } from "..";
 
 export const usersToFactoryAreas = pgTable(
 	"users_to_factory_areas",

@@ -1,8 +1,8 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { generateRandomString } from "../utils";
-import { systems } from "./";
+import { generateRandomString } from "../../utils";
+import { systems } from "..";
 
 export const keys = pgTable("keys", {
 	public_id: text()
