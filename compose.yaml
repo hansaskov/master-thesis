@@ -62,8 +62,8 @@ services:
     environment:
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
     labels:
-      caddy: "${INGEST_SERVER_FQDN}"
-      caddy.reverse_proxy: "{{upstreams 50051}}"
+      caddy: "${INGEST_FQDN}"
+      caddy.reverse_proxy: "{{upstreams h2c 50051}}"
     depends_on:
       timescaledb:
         condition: service_healthy
