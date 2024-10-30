@@ -32,6 +32,7 @@
 		{ name: 'Search', icon: Search, href: '/newsfeed' },
 	];
 
+	const superAdmin: NavItemType = { name: 'Super Admin', icon: UserRoundCog, href: '/superadmin'}
 	const settings: NavItemType = { name: 'Support', icon: Wrench, href: '/support' };
 
 	$: pathname = $page.url.pathname;
@@ -59,9 +60,14 @@
 				<NavItem props={item} />
 			{/each}
 		</nav>
-		<nav class="mt-auto flex flex-col items-center gap-4 px-2 py-4">
-			<NavItem props={settings} />
-		</nav>
+		<div class="mt-auto flex flex-col items-center">
+			<nav class="flex flex-col items-center gap-4 px-2 py-4">
+					<NavItem props={superAdmin} />
+			</nav>
+			<nav class="flex flex-col items-center gap-4 px-2 py-4">
+					<NavItem props={settings} />
+			</nav>
+		</div>
 	</aside>
 
 	<!-- Main content with padding at the bottom -->
