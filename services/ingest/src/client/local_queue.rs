@@ -23,10 +23,12 @@ pub struct SqliteQueue {
 
 impl LocalQueue for SqliteQueue {
     async fn new(db_url: &str) -> Result<Self> {
-        let file_path = db_url.trim_start_matches("sqlite:");
-
-        if !Path::new(file_path).exists() {
-            File::create(file_path).context("Failed to create SQLite database file")?;
+        if db_url != "sqlite::memory:" {
+            let file_path = db_url.trim_start_matches("sqlite:");
+    
+            if !Path::new(file_path).exists() {
+                File::create(file_path).context("Failed to create SQLite database file")?;
+            }
         }
 
         let pool = SqlitePool::connect(db_url)
