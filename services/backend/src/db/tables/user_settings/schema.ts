@@ -1,8 +1,8 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { generateRandomString } from "../../utils";
 import { users } from "..";
+import { generateRandomString } from "../../utils";
 
 export const userSettings = pgTable("user_settings", {
 	id: text()

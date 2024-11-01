@@ -1,8 +1,8 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { generateRandomString } from "../../utils";
 import { organizations } from "..";
+import { generateRandomString } from "../../utils";
 
 const LENGTH = 12;
 

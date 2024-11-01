@@ -1,19 +1,24 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-typebox";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { generateRandomString } from "../../utils";
 import { systems } from "..";
+import { generateRandomString } from "../../utils";
 
 export const keys = pgTable("keys", {
-	public_id: text()
+	public_key: text()
 		.primaryKey()
-		.notNull()
-		.$default(() => generateRandomString(22)),
-	private_id: text()
+		.$default(() => generateRandomString(22))
+		.notNull(),
+	private_key: text()
 		.notNull()
 		.references(() => systems.id, { onDelete: "cascade" }),
 });
 
+keys.public_key;
+
 export const insertKeysSchema = createInsertSchema(keys, {
-	private_id: t.String({ minLength: 1 }),
+	public_key: t.String({ minLength: 1 }),
+	private_key: t.String({ minLength: 1 }),
 });
+
+export const selectKeysSchema = createSelectSchema(keys, {});

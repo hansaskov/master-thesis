@@ -1,9 +1,9 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
+import { systemModels } from "..";
 import { generateRandomString } from "../../utils";
 import { organizations } from "../organizations/schema";
-import { systemModels } from "..";
 
 export const systems = pgTable("systems", {
 	id: text()

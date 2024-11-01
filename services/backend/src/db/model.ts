@@ -4,6 +4,7 @@ import {
 	insertKeysSchema,
 	insertOrganizationsSchema,
 	insertPartsSchema,
+	insertReadingsSchema,
 	insertSessionsSchema,
 	insertSystemModelsSchema,
 	insertSystemsSchema,
@@ -14,6 +15,7 @@ import {
 	parts,
 	partsToSystemModels,
 	readings,
+	selectKeysSchema,
 	sessions,
 	systemModels,
 	systems,
@@ -23,6 +25,7 @@ import {
 	usersToFactoryAreas,
 	usersToOrganizations,
 } from "./tables";
+import { keysQueries } from "./tables/keys/queries";
 import { spreads } from "./utils";
 
 export const Table = {
@@ -42,17 +45,30 @@ export const Table = {
 	usersToFactoryAreas,
 } as const;
 
-export const Schema = spreads(
-	{
-		users: insertUserSchema,
-		user_settings: insertUserSettingsSchema,
-		sessions: insertSessionsSchema,
-		organizations: insertOrganizationsSchema,
-		factoryAreas: insertFactoryAreaSchema,
-		systems: insertSystemsSchema,
-		systemModels: insertSystemModelsSchema,
-		parts: insertPartsSchema,
-		keys: insertKeysSchema,
-	},
-	"insert",
-);
+export const Schema = {
+	insert: spreads(
+		{
+			users: insertUserSchema,
+			user_settings: insertUserSettingsSchema,
+			sessions: insertSessionsSchema,
+			organizations: insertOrganizationsSchema,
+			factoryAreas: insertFactoryAreaSchema,
+			systems: insertSystemsSchema,
+			systemModels: insertSystemModelsSchema,
+			readings: insertReadingsSchema,
+			parts: insertPartsSchema,
+			keys: insertKeysSchema,
+		},
+		"insert",
+	),
+	select: spreads(
+		{
+			keys: selectKeysSchema,
+		},
+		"insert",
+	),
+};
+
+export const Queries = {
+	keys: keysQueries,
+};
