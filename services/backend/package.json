@@ -17,10 +17,11 @@
     "lint:fix": "bun lint --write"
   },
   "dependencies": {
+    "@elysiajs/eden": "^1.1.3",
     "@elysiajs/swagger": "^1.1.5",
-    "elysia": "^1.1.23",
     "drizzle-orm": "^0.35.3",
     "drizzle-typebox": "^0.1.1",
+    "elysia": "^1.1.23",
     "nanoid": "^5.0.8",
     "postgres": "^3.4.5"
   },
