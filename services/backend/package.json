@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@testcontainers/postgresql": "^10.13.2",
     "@types/bun": "^1.1.12",
     "@types/node": "^22.8.4",
     "drizzle-kit": "^0.26.2",

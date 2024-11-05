@@ -1,20 +1,58 @@
-import { beforeAll, describe, expect, it } from "bun:test";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { treaty } from "@elysiajs/eden";
 import { Elysia } from "elysia";
 import { seedDatabase } from "../../seed";
 import { readings } from "./api";
 
-describe("Reading Endpoint", () => {
-	// Store our test data
-	let testData: Awaited<ReturnType<typeof seedDatabase>>;
+import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
+import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { runMigrations } from "../../../migrations";
 
-	// Create the API client
-	const app = new Elysia().use(readings);
+function createTestDatabase(postgresContainer: StartedPostgreSqlContainer) {
+	const postgresClient = postgres({
+		host: postgresContainer.getHost(),
+		port: postgresContainer.getPort(),
+		database: postgresContainer.getDatabase(),
+		user: postgresContainer.getUsername(),
+		password: postgresContainer.getPassword(),
+	});
+
+	const db = drizzle(postgresClient);
+
+	return db;
+}
+
+function createTestApi({ db }: { db: PostgresJsDatabase }) {
+	const app = new Elysia().use(readings({ db: db }));
 	const api = treaty(app);
+
+	return api;
+}
+
+describe("Reading Endpoint", async () => {
+	let postgresContainer: StartedPostgreSqlContainer;
+	let db: PostgresJsDatabase;
+	let api: Awaited<ReturnType<typeof createTestApi>>
+	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
 
 	// Set up test data before running tests
 	beforeAll(async () => {
-		testData = await seedDatabase();
+		console.log("Setting up test data...");
+		postgresContainer = await new PostgreSqlContainer().start();
+		console.log("Starting database...");
+		db = createTestDatabase(postgresContainer);
+		api = createTestApi({db});
+
+		// Create database migration
+		await runMigrations({db});
+
+		// Seed database
+		seedData = await seedDatabase({db})
+	});
+
+	afterAll(async () => {
+		await postgresContainer.stop();
 	});
 
 	it("valid credentials", async () => {
@@ -35,13 +73,13 @@ describe("Reading Endpoint", () => {
 
 		const { status, error } = await api.reading.post(testReadings, {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); 
+		expect(error).toBeNull();
 	});
 
 	it("invalid credentials", async () => {
@@ -61,7 +99,7 @@ describe("Reading Endpoint", () => {
 			},
 		});
 
-		expect(status).toBe(401); 
+		expect(status).toBe(401);
 		expect(error?.value).toBe("The provided key does not exists");
 	});
 
@@ -80,8 +118,8 @@ describe("Reading Endpoint", () => {
 			invalidReading,
 			{
 				headers: {
-					public_key: testData.key.public_key,
-					private_key: testData.key.private_key,
+					public_key: seedData.key.public_key,
+					private_key: seedData.key.private_key,
 				},
 			},
 		);
@@ -93,13 +131,13 @@ describe("Reading Endpoint", () => {
 	it("empty data", async () => {
 		const { status, error } = await api.reading.post([], {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
-		expect(status).toBe(422); 
-		expect(error).toBeDefined(); 
+		expect(status).toBe(422);
+		expect(error).toBeDefined();
 	});
 
 	it("multiple readings in a single request", async () => {
@@ -112,12 +150,12 @@ describe("Reading Endpoint", () => {
 
 		const { status, error } = await api.reading.post(manyReadings, {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); 
+		expect(error).toBeNull();
 	});
 });
