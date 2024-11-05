@@ -1,8 +1,9 @@
 import { exit } from "node:process";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { Table } from "./model";
+import { db } from "./postgres";
 
-export async function seedDatabase({ db }: { db: PostgresJsDatabase }) {
+export async function seedDatabase() {
 	// Start a transaction
 	const result = await db.transaction(async (tx) => {
 		// Insert organization

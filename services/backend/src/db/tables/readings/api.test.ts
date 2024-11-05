@@ -1,70 +1,22 @@
-import { afterAll, beforeAll, describe, expect, it } from "bun:test";
+import { beforeAll, describe, expect, it } from "bun:test";
 import { treaty } from "@elysiajs/eden";
 import { Elysia } from "elysia";
 import { seedDatabase } from "../../seed";
 import { readings } from "./api";
 
-import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import { runMigrations } from "../../../migrations";
-import { GenericContainer, StartedTestContainer } from "testcontainers";
-
-
-const SETTINGS = {
-	POSTGRES_DB: "database",
-	POSTGRES_USER: "username",
-	POSTGRES_PASSWORD: "password",
-	PORT: "5432"
-}
-
-function createTestDatabase(container: StartedTestContainer) {
-	const postgresClient = postgres({
-		host: container.getHost(),
-		port: +SETTINGS.PORT,
-		database: SETTINGS.POSTGRES_DB,
-		user: SETTINGS.POSTGRES_USER,
-		password: SETTINGS.POSTGRES_PASSWORD
-
-	});
-
-	const db = drizzle(postgresClient);
-
-	return db;
-}
-
-function createTestApi({ db }: { db: PostgresJsDatabase }) {
-	const app = new Elysia().use(readings({ db }));
+function createTestApi() {
+	const app = new Elysia().use(readings);
 	const api = treaty(app);
 
 	return api;
 }
 
 describe("Reading Endpoint", async () => {
-	let container: StartedTestContainer
-	let db: PostgresJsDatabase;
-	let api: Awaited<ReturnType<typeof createTestApi>>;
 	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
+	const api = createTestApi();
 
-	// Set up test data before running tests
 	beforeAll(async () => {
-
-		container = await new GenericContainer("timescale/timescaledb:latest-pg17")
-		.withExposedPorts(5432)
-		.withEnvironment(SETTINGS)
-		.start();
-
-		db = createTestDatabase(container);
-		api = createTestApi({ db });
-
-		// Create database migration
-		await runMigrations({ db });
-
-		// Seed database
-		seedData = await seedDatabase({ db });
-	});
-
-	afterAll(async () => {
-		await container.stop();
+		seedData = await seedDatabase();
 	});
 
 	it("valid credentials", async () => {

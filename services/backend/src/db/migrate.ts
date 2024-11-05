@@ -1,6 +1,7 @@
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
+import { db } from "./postgres";
 
-export async function runMigrations({ db }: { db: PostgresJsDatabase }) {
-	return migrate(db, { migrationsFolder: "./drizzle"});
+export async function runMigrations() {
+	return migrate(db, { migrationsFolder: "./drizzle" });
 }
