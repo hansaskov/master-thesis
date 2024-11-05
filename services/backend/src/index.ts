@@ -1,7 +1,6 @@
 import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
 import { Queries, Schema, Table } from "./db/model";
-import { db } from "./db/postgres";
 
 const api = new Elysia().onBeforeHandle(({ request }) => console.log(request.url));
 

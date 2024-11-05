@@ -6,7 +6,7 @@ export function readings({ db }: { db: PostgresJsDatabase }) {
 	return new Elysia().post(
 		"/reading",
 		async ({ headers, body }) => {
-			const key = await Queries.keys.selectUnique(headers);
+			const key = await Queries.keys.selectUnique(db, headers);
 
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");

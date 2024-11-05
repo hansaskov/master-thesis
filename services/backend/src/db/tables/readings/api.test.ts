@@ -4,18 +4,27 @@ import { Elysia } from "elysia";
 import { seedDatabase } from "../../seed";
 import { readings } from "./api";
 
-import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { runMigrations } from "../../../migrations";
+import { GenericContainer, StartedTestContainer } from "testcontainers";
 
-function createTestDatabase(postgresContainer: StartedPostgreSqlContainer) {
+
+const SETTINGS = {
+	POSTGRES_DB: "database",
+	POSTGRES_USER: "username",
+	POSTGRES_PASSWORD: "password",
+	PORT: "5432"
+}
+
+function createTestDatabase(container: StartedTestContainer) {
 	const postgresClient = postgres({
-		host: postgresContainer.getHost(),
-		port: postgresContainer.getPort(),
-		database: postgresContainer.getDatabase(),
-		user: postgresContainer.getUsername(),
-		password: postgresContainer.getPassword(),
+		host: container.getHost(),
+		port: +SETTINGS.PORT,
+		database: SETTINGS.POSTGRES_DB,
+		user: SETTINGS.POSTGRES_USER,
+		password: SETTINGS.POSTGRES_PASSWORD
+
 	});
 
 	const db = drizzle(postgresClient);
@@ -24,35 +33,38 @@ function createTestDatabase(postgresContainer: StartedPostgreSqlContainer) {
 }
 
 function createTestApi({ db }: { db: PostgresJsDatabase }) {
-	const app = new Elysia().use(readings({ db: db }));
+	const app = new Elysia().use(readings({ db }));
 	const api = treaty(app);
 
 	return api;
 }
 
 describe("Reading Endpoint", async () => {
-	let postgresContainer: StartedPostgreSqlContainer;
+	let container: StartedTestContainer
 	let db: PostgresJsDatabase;
-	let api: Awaited<ReturnType<typeof createTestApi>>
+	let api: Awaited<ReturnType<typeof createTestApi>>;
 	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
 
 	// Set up test data before running tests
 	beforeAll(async () => {
-		console.log("Setting up test data...");
-		postgresContainer = await new PostgreSqlContainer().start();
-		console.log("Starting database...");
-		db = createTestDatabase(postgresContainer);
-		api = createTestApi({db});
+
+		container = await new GenericContainer("timescale/timescaledb:latest-pg17")
+		.withExposedPorts(5432)
+		.withEnvironment(SETTINGS)
+		.start();
+
+		db = createTestDatabase(container);
+		api = createTestApi({ db });
 
 		// Create database migration
-		await runMigrations({db});
+		await runMigrations({ db });
 
 		// Seed database
-		seedData = await seedDatabase({db})
+		seedData = await seedDatabase({ db });
 	});
 
 	afterAll(async () => {
-		await postgresContainer.stop();
+		await container.stop();
 	});
 
 	it("valid credentials", async () => {
