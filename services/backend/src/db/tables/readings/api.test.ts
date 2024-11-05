@@ -7,6 +7,7 @@ import { readings } from "./api";
 describe("Reading Endpoint", () => {
 	// Store our test data
 	let testData: Awaited<ReturnType<typeof seedDatabase>>;
+
 	// Create the API client
 	const app = new Elysia().use(readings);
 	const api = treaty(app);
@@ -40,7 +41,7 @@ describe("Reading Endpoint", () => {
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); // Changed from toBeUndefined() to toBeNull()
+		expect(error).toBeNull(); 
 	});
 
 	it("invalid credentials", async () => {
@@ -60,7 +61,7 @@ describe("Reading Endpoint", () => {
 			},
 		});
 
-		expect(status).toBe(401); // Changed from 400 to 422 to match actual response
+		expect(status).toBe(401); 
 		expect(error?.value).toBe("The provided key does not exists");
 	});
 
@@ -85,7 +86,7 @@ describe("Reading Endpoint", () => {
 			},
 		);
 
-		expect(status).toBe(422); // Changed from 400 to 422 to match validation error response
+		expect(status).toBe(422);
 		expect(error).toBeDefined();
 	});
 
@@ -97,8 +98,8 @@ describe("Reading Endpoint", () => {
 			},
 		});
 
-		expect(status).toBe(422); // Changed from 200 to 500 to match actual response
-		expect(error).toBeDefined(); // Changed expectation since error is present
+		expect(status).toBe(422); 
+		expect(error).toBeDefined(); 
 	});
 
 	it("multiple readings in a single request", async () => {
@@ -117,6 +118,6 @@ describe("Reading Endpoint", () => {
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); // Changed from toBeUndefined() to toBeNull()
+		expect(error).toBeNull(); 
 	});
 });
