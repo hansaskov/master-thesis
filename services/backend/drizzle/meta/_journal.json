@@ -5,14 +5,14 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1730197522381,
-      "tag": "0000_robust_mercury",
+      "when": 1730801517377,
+      "tag": "0000_legal_the_fury",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1730197541118,
+      "when": 1730801858101,
       "tag": "0001_readings_hypertable",
       "breakpoints": true
     }

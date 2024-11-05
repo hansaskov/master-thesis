@@ -1,6 +1,6 @@
 {
-  "id": "621c9e0a-273f-4141-a133-d199659f6586",
-  "prevId": "b672f621-61ca-4f08-99dd-0606cfa71686",
+  "id": "4a91ac93-2700-4ef6-921a-a4390a3e328b",
+  "prevId": "b38be80d-55a4-42ad-a9b0-067873b2684e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -93,14 +93,14 @@
       "name": "keys",
       "schema": "",
       "columns": {
-        "public_id": {
-          "name": "public_id",
+        "public_key": {
+          "name": "public_key",
           "type": "text",
           "primaryKey": true,
           "notNull": true
         },
-        "private_id": {
-          "name": "private_id",
+        "private_key": {
+          "name": "private_key",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -108,11 +108,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "keys_private_id_systems_id_fk": {
-          "name": "keys_private_id_systems_id_fk",
+        "keys_private_key_systems_id_fk": {
+          "name": "keys_private_key_systems_id_fk",
           "tableFrom": "keys",
           "columnsFrom": [
-            "private_id"
+            "private_key"
           ],
           "tableTo": "systems",
           "columnsTo": [

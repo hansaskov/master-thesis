@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS "systems" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "keys" (
-	"public_id" text PRIMARY KEY NOT NULL,
-	"private_id" text NOT NULL
+	"public_key" text PRIMARY KEY NOT NULL,
+	"private_key" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "readings" (
@@ -97,7 +97,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "keys" ADD CONSTRAINT "keys_private_id_systems_id_fk" FOREIGN KEY ("private_id") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "keys" ADD CONSTRAINT "keys_private_key_systems_id_fk" FOREIGN KEY ("private_key") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
