@@ -12,7 +12,7 @@ RUN bun install
 # Copy the rest of your app's source code
 COPY ./src ./src
 COPY ./static ./static
-COPY svelte.config.js postcss.config.js tailwind.config.ts vite.config.ts ./
+COPY svelte.config.js postcss.config.js tailwind.config.ts vite.config.ts tsconfig.json ./
 
 # Build your app
 RUN bun run build
