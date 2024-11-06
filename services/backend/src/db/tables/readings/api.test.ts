@@ -4,17 +4,19 @@ import { Elysia } from "elysia";
 import { seedDatabase } from "../../seed";
 import { readings } from "./api";
 
-describe("Reading Endpoint", () => {
-	// Store our test data
-	let testData: Awaited<ReturnType<typeof seedDatabase>>;
-
-	// Create the API client
+function createTestApi() {
 	const app = new Elysia().use(readings);
 	const api = treaty(app);
 
-	// Set up test data before running tests
+	return api;
+}
+
+describe("Reading Endpoint", async () => {
+	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
+	const api = createTestApi();
+
 	beforeAll(async () => {
-		testData = await seedDatabase();
+		seedData = await seedDatabase();
 	});
 
 	it("valid credentials", async () => {
@@ -35,13 +37,13 @@ describe("Reading Endpoint", () => {
 
 		const { status, error } = await api.reading.post(testReadings, {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); 
+		expect(error).toBeNull();
 	});
 
 	it("invalid credentials", async () => {
@@ -61,7 +63,7 @@ describe("Reading Endpoint", () => {
 			},
 		});
 
-		expect(status).toBe(401); 
+		expect(status).toBe(401);
 		expect(error?.value).toBe("The provided key does not exists");
 	});
 
@@ -80,8 +82,8 @@ describe("Reading Endpoint", () => {
 			invalidReading,
 			{
 				headers: {
-					public_key: testData.key.public_key,
-					private_key: testData.key.private_key,
+					public_key: seedData.key.public_key,
+					private_key: seedData.key.private_key,
 				},
 			},
 		);
@@ -93,13 +95,13 @@ describe("Reading Endpoint", () => {
 	it("empty data", async () => {
 		const { status, error } = await api.reading.post([], {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
-		expect(status).toBe(422); 
-		expect(error).toBeDefined(); 
+		expect(status).toBe(422);
+		expect(error).toBeDefined();
 	});
 
 	it("multiple readings in a single request", async () => {
@@ -112,12 +114,12 @@ describe("Reading Endpoint", () => {
 
 		const { status, error } = await api.reading.post(manyReadings, {
 			headers: {
-				public_key: testData.key.public_key,
-				private_key: testData.key.private_key,
+				public_key: seedData.key.public_key,
+				private_key: seedData.key.private_key,
 			},
 		});
 
 		expect(status).toBe(200);
-		expect(error).toBeNull(); 
+		expect(error).toBeNull();
 	});
 });

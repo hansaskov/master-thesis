@@ -6,17 +6,14 @@ export const readings = new Elysia().post(
 	"/reading",
 	async ({ headers, body }) => {
 		const key = await Queries.keys.selectUnique(headers);
-
 		if (!key) {
 			return error("Unauthorized", "The provided key does not exists");
 		}
-
 		// Give a the relation to each reading
 		const values = body.map((reading) => ({
 			systems_id: key.private_key,
 			...reading,
 		}));
-
 		await db.insert(Table.readings).values(values);
 	},
 	{
