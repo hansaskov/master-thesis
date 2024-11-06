@@ -1,11 +1,14 @@
 #[cfg(target_os = "windows")]
 pub mod pc_reader {
-    use crate::{reader::Reader, reading::Reading};
     use anyhow::{anyhow, Result};
     use serde::Deserialize;
     use std::time::SystemTime;
     use tokio::sync::mpsc::Sender;
     use wmi::{COMLibrary, WMIConnection};
+    use crate::reading;
+    use crate::Reader;
+    use reading::Reading;
+
 
     pub struct PCReader {
         wmi_con: WMIConnection,
@@ -104,10 +107,10 @@ pub mod pc_reader {
                 definition.exact_match,
             );
             let sensor = self.get_sensor(&query)?;
-            let timestamp = prost_types::Timestamp::from(SystemTime::now());
+            let timestamp = SystemTime::now();
 
             Ok(Reading {
-                timestamp: Some(timestamp),
+                timestamp: timestamp,
                 name: definition.name.to_string(),
                 value: sensor.value,
                 unit: definition.unit.to_string(),

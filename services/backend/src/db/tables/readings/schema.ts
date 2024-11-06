@@ -20,9 +20,8 @@ export const readings = pgTable(
 );
 
 export const insertReadingsSchema = createInsertSchema(readings, {
-	time: t.String({ format: "date" }),
+	time: t.String({ format: "date-time" }),
 	systems_id: t.String({ minLength: 1 }),
 	name: t.String({ minLength: 1 }),
-
 	unit: t.String({ minLength: 1 }),
 });

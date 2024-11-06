@@ -9,24 +9,20 @@ pub struct Args {
 
     #[arg(short, long = "db-url", env, default_value = "sqlite:local_readings.db")]
     pub database_url: String,
+
+    #[clap(long, env = "API_ENDPOINT")]
+    pub api_endpoint: String,
+
+    #[clap(long, env = "PUBLIC_KEY")]
+    pub public_key: String,
+    
+    #[clap(long, env = "PRIVATE_KEY")]
+    pub private_key: String,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(clap::ValueEnum, Debug, Clone, PartialEq)]
 pub enum Mode {
     Full,
     Read,
     Send,
-}
-
-impl FromStr for Mode {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "full" => Ok(Mode::Full),
-            "read" => Ok(Mode::Read),
-            "send" => Ok(Mode::Send),
-            _ => Err(format!("Invalid mode: {}", s)),
-        }
-    }
 }

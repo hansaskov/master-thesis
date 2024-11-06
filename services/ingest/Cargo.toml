@@ -12,6 +12,7 @@ wmi = "0.13.3"
 
 sqlx = { version = "0.7", features = [ "runtime-tokio", "sqlite" ] }
 clap = {version = "4.5.9", features = ["derive", "env"]}
+chrono = "0.4.38"
 
 
 

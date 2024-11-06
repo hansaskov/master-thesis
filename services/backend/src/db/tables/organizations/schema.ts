@@ -12,5 +12,5 @@ export const organizations = pgTable("organizations", {
 });
 
 export const insertOrganizationsSchema = createInsertSchema(organizations, {
-	name: t.String({ minLength: 1 }),
+	name: t.String({ minLength: 4 }),
 });

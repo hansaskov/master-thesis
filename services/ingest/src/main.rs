@@ -1,34 +1,115 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use clap::Parser;
 use reader::Reader;
-use reading::{conditions_service_client::ConditionsServiceClient, ConditionsRequest, Reading};
-use std::time::Duration;
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Utc};
+
+use std::time::{Duration};
 use tokio::{
     signal,
     sync::{mpsc, oneshot},
-    time::{interval, sleep}
+    time::{interval, sleep},
 };
-use std::result::Result::Ok;
-pub mod reading {
-    tonic::include_proto!("reading");
-}
+
 mod local_queue;
 mod reader;
 use local_queue::{LocalQueue, SqliteQueue};
 mod hardware_monitor_reader;
 use hardware_monitor_reader::pc_reader;
-
+mod reading;
+use reading::Reading;
 mod config;
 use config::{Args, Mode};
 
 const BATCH_SIZE: usize = 10;
 const LOOP_DURATION: Duration = Duration::from_secs(1);
 
+#[derive(Debug, Serialize, Deserialize)]
+struct APIReading {
+    time: String,
+    name: String,
+    value: f32,
+    unit: String,
+}
+
+impl From<Reading> for APIReading {
+    fn from(reading: Reading) -> Self {
+        let timestamp = reading.timestamp;
+        
+        // Convert to DateTime<Utc> for easier formatting
+        let datetime = DateTime::<Utc>::from(timestamp);
+        
+        // Format according to ISO 8601 with milliseconds
+        let date_str = datetime.format("%Y-%m-%dT%H:%M:%S.%3fZ").to_string();
+    
+        Self {
+            time: date_str,
+            name: reading.name,
+            value: reading.value,
+            unit: reading.unit,
+        }
+    }
+}
+
+struct APIClient {
+    client: Client,
+    endpoint: String,
+    public_key: String,
+    private_key: String,
+}
+
+impl APIClient {
+    fn new(endpoint: String, public_key: String, private_key: String) -> Self {
+        let client = Client::builder()
+            .timeout(Duration::from_secs(30))
+            .build()
+            .expect("Failed to create HTTP client");
+
+        Self {
+            client,
+            endpoint,
+            public_key,
+            private_key,
+        }
+    }
+
+    async fn send_readings(&self, readings: Vec<Reading>) -> Result<()> {
+        let api_readings: Vec<APIReading> = readings.into_iter()
+            .map(APIReading::from)
+            .collect();
+
+        let response = self.client
+            .post(&self.endpoint)
+            .header("public_key", &self.public_key)
+            .header("private_key", &self.private_key)
+            .json(&api_readings)
+            .send()
+            .await
+            .context("Failed to send readings to API")?;
+
+        if !response.status().is_success() {
+            let error_text = response.text().await
+                .context("Failed to get error response text")?;
+            anyhow::bail!("API request failed: {}", error_text);
+        }
+
+        Ok(())
+    }
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
     println!("Running in {:?} mode", args.mode);
-    let mut client = ConditionsServiceClient::connect("http://[::1]:50051").await?;
+
+    // Initialize API client
+    let api_client = APIClient::new(
+        args.api_endpoint.clone(),
+        args.public_key.clone(),
+        args.private_key.clone(),
+    );
+
     let mut pc_reader = pc_reader::PCReader::new()?;
     let local_queue = SqliteQueue::new(&args.database_url).await?;
     let (sender, mut receiver) = mpsc::channel::<Reading>(100);
@@ -46,10 +127,12 @@ async fn main() -> Result<()> {
         Mode::Send => {
             while let Ok(length) = local_queue.len().await {
                 if length == 0 {
+                    println!("No files to send, closing");
                     break;
                 }
-                sleep(Duration::from_secs_f32(0.1)).await;
-                let _ = send_readings(&mut client, &local_queue, BATCH_SIZE).await;
+                sleep(Duration::from_millis(100)).await;
+                let _ = send_readings(&api_client, &local_queue, BATCH_SIZE).await
+                    .map_err(|e| eprintln!("Failed to send readings: {}", e));
             }
         },
         _ => {
@@ -62,14 +145,16 @@ async fn main() -> Result<()> {
                     }
             
                     Some(reading) = receiver.recv() => {
-                        let _ = local_queue.push(reading.clone()).await.map_err(|e| eprintln!("{e:?}"));
+                        let _ = local_queue.push(reading.clone()).await
+                            .map_err(|e| eprintln!("Failed to push to queue: {:?}", e));
         
                         match local_queue.len().await {
                             Ok(length) if args.mode == Mode::Full && length >= BATCH_SIZE => {
-                                let _ = send_readings(&mut client, &local_queue, BATCH_SIZE).await.map_err(|e| eprintln!("{e:?}"));                      
+                                let _ = send_readings(&api_client, &local_queue, BATCH_SIZE).await
+                                    .map_err(|e| eprintln!("Failed to send readings: {}", e));                      
                             } 
                             Ok(length) => println!("Added reading to queue: {reading:?}. Size {length:?}"),
-                            Err(e) => eprint!("{e:?}")
+                            Err(e) => eprintln!("Failed to get queue length: {:?}", e)
                         }
                     }
         
@@ -86,17 +171,13 @@ async fn main() -> Result<()> {
 }
 
 async fn send_readings(
-    client: &mut ConditionsServiceClient<tonic::transport::Channel>,
+    api_client: &APIClient,
     queue: &SqliteQueue,
-    length: usize
+    length: usize,
 ) -> Result<()> {
     let readings = queue.peek(length).await?;
-
-    let request = tonic::Request::new(ConditionsRequest {
-        readings: readings.to_vec(),
-    });
-
-    client.send_conditions(request).await?;
+    
+    api_client.send_readings(readings).await?;
     println!("Successfully sent values");
 
     queue.pop(length).await?;

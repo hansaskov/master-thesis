@@ -8,5 +8,5 @@ The second argument is the database URL for SQLite. The program will attempt to 
 
 Example:
 ```bash
-    cargo run --bin client -- -m full --db-url my_db
+    cargo run -- -m full --db-url my_db
 ```
