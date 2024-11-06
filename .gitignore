@@ -7,7 +7,7 @@
 
 /services/ingest/local_readings.db
 
-
+*backend.exe
 
 # Logs
 package.json
