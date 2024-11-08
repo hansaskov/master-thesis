@@ -104,23 +104,7 @@ describe("Reading Post", async () => {
 		expect(error).toBeDefined();
 	});
 
-	it("test", async () => {
-		const { readings, system } = seedData;
 
-		const { status, error, data } = await api.readings.get({
-			query: {
-				system_id: system.id,
-				startDate: readings[0].time.toISOString(),
-			},
-		});
-
-		console.log(error);
-
-		expect(status).toBe(200);
-		expect(error?.value).toBeUndefined();
-		expect(data).toBeDefined();
-		console.log(data);
-	});
 
 	it("100 readings", async () => {
 		const manyReadings = Array.from({ length: 100 }, (_, i) => ({
@@ -141,3 +125,35 @@ describe("Reading Post", async () => {
 		expect(error).toBeNull();
 	});
 });
+
+
+
+describe("Readings", async () => {
+	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
+	const api = createTestApi();
+
+	beforeAll(async () => {
+		seedData = await seedDatabase();
+	});
+
+	it("test", async () => {
+		const { readings, system } = seedData;
+
+		const { status, error, data } = await api.readings.get({
+			query: {
+				system_id: system.id,
+				startDate: readings[0].time.toISOString(),
+			},
+		});
+
+		expect(status).toBe(200);
+		expect(error?.value).toBeUndefined();
+		expect(data).toBeDefined();
+	});
+})
+
+
+
+
+
+
