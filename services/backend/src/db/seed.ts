@@ -44,7 +44,35 @@ export async function seedDatabase() {
 			throw new Error("Failed to insert key");
 		}
 
-		return { organization, system, key };
+		// Insert readings.
+		const readings = await tx
+			.insert(Table.readings)
+			.values([
+				{
+					name: "cpu temperature",
+					time: new Date().toISOString(),
+					unit: "C",
+					value: 40,
+					system_id: system.id,
+				},
+				{
+					name: "cpu usage",
+					time: new Date().toISOString(),
+					unit: "%",
+					value: 20,
+					system_id: system.id,
+				},
+				{
+					name: "disk usage",
+					time: new Date().toISOString(),
+					unit: "%",
+					value: 95,
+					system_id: system.id,
+				},
+			])
+			.returning();
+
+		return { organization, system, key, readings };
 	});
 
 	return result;

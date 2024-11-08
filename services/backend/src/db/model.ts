@@ -26,6 +26,7 @@ import {
 	usersToOrganizations,
 } from "./tables";
 import { keysQueries } from "./tables/keys/queries";
+import { readingsQueries } from "./tables/readings/queries";
 import { spreads } from "./utils";
 
 export const Table = {
@@ -71,4 +72,5 @@ export const Schema = {
 
 export const Queries = {
 	keys: keysQueries,
+	readings: readingsQueries,
 };

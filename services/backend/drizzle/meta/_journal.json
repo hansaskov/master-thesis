@@ -15,6 +15,13 @@
       "when": 1730801858101,
       "tag": "0001_readings_hypertable",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731069745244,
+      "tag": "0002_long_invaders",
+      "breakpoints": true
     }
   ]
 }

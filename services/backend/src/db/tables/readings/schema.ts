@@ -7,7 +7,7 @@ export const readings = pgTable(
 	"readings",
 	{
 		time: timestamp({ withTimezone: true, mode: "string" }).notNull(),
-		systems_id: text()
+		system_id: text()
 			.notNull()
 			.references(() => systems.id, { onDelete: "cascade" }),
 		name: text().notNull(),
@@ -15,13 +15,13 @@ export const readings = pgTable(
 		unit: text().notNull(),
 	},
 	(table) => ({
-		pk: primaryKey({ columns: [table.time, table.systems_id, table.name] }),
+		pk: primaryKey({ columns: [table.time, table.system_id, table.name] }),
 	}),
 );
 
 export const insertReadingsSchema = createInsertSchema(readings, {
 	time: t.String({ format: "date-time" }),
-	systems_id: t.String({ minLength: 1 }),
+	system_id: t.String({ minLength: 1 }),
 	name: t.String({ minLength: 1 }),
 	unit: t.String({ minLength: 1 }),
 });

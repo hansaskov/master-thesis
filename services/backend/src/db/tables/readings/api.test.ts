@@ -11,7 +11,7 @@ function createTestApi() {
 	return api;
 }
 
-describe("Reading Endpoint", async () => {
+describe("Reading Post", async () => {
 	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
 	const api = createTestApi();
 
@@ -104,7 +104,7 @@ describe("Reading Endpoint", async () => {
 		expect(error).toBeDefined();
 	});
 
-	it("multiple readings in a single request", async () => {
+	it("100 readings", async () => {
 		const manyReadings = Array.from({ length: 100 }, (_, i) => ({
 			time: new Date().toISOString(),
 			name: `sensor${i}`,
@@ -121,5 +121,20 @@ describe("Reading Endpoint", async () => {
 
 		expect(status).toBe(200);
 		expect(error).toBeNull();
+	});
+});
+
+describe("readings/:system_id GET", async () => {
+	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
+	const api = createTestApi();
+
+	beforeAll(async () => {
+		seedData = await seedDatabase();
+	});
+
+	it("get all", async () => {
+		const { data } = await api.readings({ system_id: seedData.system.id }).get();
+
+		expect(data).toEqual(seedData.readings);
 	});
 });
