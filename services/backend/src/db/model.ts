@@ -16,6 +16,7 @@ import {
 	partsToSystemModels,
 	readings,
 	selectKeysSchema,
+	selectReadingsSchema,
 	sessions,
 	systemModels,
 	systems,
@@ -65,6 +66,7 @@ export const Schema = {
 	select: spreads(
 		{
 			keys: selectKeysSchema,
+			readings: selectReadingsSchema,
 		},
 		"insert",
 	),

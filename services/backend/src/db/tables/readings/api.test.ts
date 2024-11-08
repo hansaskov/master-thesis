@@ -133,7 +133,7 @@ describe("readings/:system_id GET", async () => {
 	});
 
 	it("get all", async () => {
-		const { data } = await api.readings({ system_id: seedData.system.id }).get();
+		const { data } = await api.readings({ system_id: seedData.system.id }).get({});
 
 		expect(data).toEqual(seedData.readings);
 	});

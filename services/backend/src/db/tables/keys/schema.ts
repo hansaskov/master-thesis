@@ -21,4 +21,4 @@ export const insertKeysSchema = createInsertSchema(keys, {
 	private_key: t.String({ minLength: 1 }),
 });
 
-export const selectKeysSchema = createSelectSchema(keys, {});
+export const selectKeysSchema = createSelectSchema(keys);

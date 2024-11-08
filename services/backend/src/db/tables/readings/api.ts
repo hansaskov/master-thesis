@@ -37,18 +37,31 @@ export const readings = new Elysia()
 	)
 	// This endpoint will return a list of readings for a production system
 	// You can either provice a start and end date
-	// It is possible to filter for readings by name
-	//
+	// Or just the start date and no end date. The end date is then set to the current date
+	// It is also possible to filter for readings by name
+	// It should only be allowed to query 1000 items and the min is 1.
 	// TODO! Needs authentication and authorization.
 	.get(
 		"/readings/:system_id",
-		({ params: { system_id } }) => {
+		({ params: { system_id }, body: { limit, endDate } }) => {
 			// Authenticate user
 			// Authorize user.
-
 			const readings = Queries.readings.selectAll({ system_id });
 
 			return readings;
 		},
-		{},
+		{
+			body: t.Union([
+				t.Object({
+					startDate: Schema.insert.readings.time,
+					endDate: Schema.insert.readings.time,
+					name: t.Optional(Schema.insert.readings.name),
+					limit: t.Number({ minimum: 1, maximum: 1000, default: 100 }),
+				}),
+				t.Object({
+					name: t.Optional(Schema.insert.readings.name),
+					limit: t.Number({ minimum: 1, maximum: 1000, default: 100 }),
+				})
+			]),
+		},
 	);

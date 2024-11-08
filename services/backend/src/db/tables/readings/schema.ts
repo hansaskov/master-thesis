@@ -1,5 +1,5 @@
 import { pgTable, primaryKey, real, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-typebox";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systems } from "..";
 
@@ -25,3 +25,5 @@ export const insertReadingsSchema = createInsertSchema(readings, {
 	name: t.String({ minLength: 1 }),
 	unit: t.String({ minLength: 1 }),
 });
+
+export const selectReadingsSchema = createSelectSchema(readings);

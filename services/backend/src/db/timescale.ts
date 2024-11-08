@@ -1,5 +1,8 @@
 import { type SQL, type SQLWrapper, sql } from "drizzle-orm";
 
+const validUnits = []
+
+
 type ValidUnits =
 	| "microseconds"
 	| "milliseconds"
