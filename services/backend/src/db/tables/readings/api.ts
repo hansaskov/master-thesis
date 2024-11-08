@@ -39,14 +39,14 @@ export const readings = new Elysia()
 			),
 		},
 	)
-	.post(
+	.get(
 		"/readings",
-		async ({ body }) => {
-			const readings = await Queries.readings.selectAll({ system_id: body.system_id });
+		async ({ query }) => {
+			const readings = await Queries.readings.selectAll({ system_id: query.system_id });
 			return readings;
 		},
 		{
-			body: t.Object({
+			query: t.Object({
 				system_id: Schema.insert.readings.system_id,
 				startDate: Schema.insert.readings.time,
 				endDate: t.Optional(Schema.insert.readings.time),

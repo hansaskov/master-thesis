@@ -107,9 +107,11 @@ describe("Reading Post", async () => {
 	it("test", async () => {
 		const { readings, system } = seedData;
 
-		const { status, error, data } = await api.readings.post({
-			system_id: system.id,
-			startDate: readings[0].time.toISOString(),
+		const { status, error, data } = await api.readings.get({
+			query: {
+				system_id: system.id,
+				startDate: readings[0].time.toISOString(),
+			},
 		});
 
 		console.log(error);
