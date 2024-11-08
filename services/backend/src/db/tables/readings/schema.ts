@@ -2,11 +2,12 @@ import { pgTable, primaryKey, real, text, timestamp, uuid } from "drizzle-orm/pg
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systems } from "..";
+import { IsoDate } from "../../utils";
 
 export const readings = pgTable(
 	"readings",
 	{
-		time: timestamp({ withTimezone: true, mode: "string" }).notNull(),
+		time: timestamp({ withTimezone: true, mode: "date" }).notNull(),
 		system_id: text()
 			.notNull()
 			.references(() => systems.id, { onDelete: "cascade" }),
@@ -20,7 +21,7 @@ export const readings = pgTable(
 );
 
 export const insertReadingsSchema = createInsertSchema(readings, {
-	time: t.String({ format: "date-time" }),
+	time: t.String({ format: "iso-date-time" }),
 	system_id: t.String({ minLength: 1 }),
 	name: t.String({ minLength: 1 }),
 	unit: t.String({ minLength: 1 }),

@@ -1,27 +1,27 @@
 import { type SQL, type SQLWrapper, sql } from "drizzle-orm";
 
-const validUnits = []
+export const validUnits = [
+	"microseconds",
+	"milliseconds",
+	"second",
+	"seconds",
+	"minute",
+	"minutes",
+	"hour",
+	"hours",
+	"day",
+	"days",
+	"week",
+	"weeks",
+	"month",
+	"months",
+	"year",
+	"years",
+] as const;
 
+export type ValidUnits = (typeof validUnits)[number];
 
-type ValidUnits =
-	| "microseconds"
-	| "milliseconds"
-	| "second"
-	| "seconds"
-	| "minute"
-	| "minutes"
-	| "hour"
-	| "hours"
-	| "day"
-	| "days"
-	| "week"
-	| "weeks"
-	| "month"
-	| "months"
-	| "year"
-	| "years";
-
-type IntervalString = `${number} ${ValidUnits}`;
+export type IntervalString = `${number} ${ValidUnits}`;
 
 // Define the time_bucket function with type-safe interval argument
 export function time_bucket<T extends SQLWrapper & { _: { data: Date } }>(

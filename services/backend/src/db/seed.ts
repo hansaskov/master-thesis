@@ -50,21 +50,21 @@ export async function seedDatabase() {
 			.values([
 				{
 					name: "cpu temperature",
-					time: new Date().toISOString(),
+					time: new Date(),
 					unit: "C",
 					value: 40,
 					system_id: system.id,
 				},
 				{
 					name: "cpu usage",
-					time: new Date().toISOString(),
+					time: new Date(),
 					unit: "%",
 					value: 20,
 					system_id: system.id,
 				},
 				{
 					name: "disk usage",
-					time: new Date().toISOString(),
+					time: new Date(),
 					unit: "%",
 					value: 95,
 					system_id: system.id,

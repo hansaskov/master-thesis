@@ -1,6 +1,7 @@
 import Elysia, { error, t } from "elysia";
 import { Queries, Schema, Table } from "../../model";
 import { db } from "../../postgres";
+import { IsoDate } from "../../utils";
 
 export const readings = new Elysia()
 	.post(
@@ -10,12 +11,15 @@ export const readings = new Elysia()
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");
 			}
-			// Give a the relation to each reading
+
 			const values = body.map((reading) => ({
-				system_id: key.private_key,
-				...reading,
+				time: new Date(reading.time),
+				name: reading.name,
+				value: reading.value,
+				unit: reading.unit,
 			}));
-			await db.insert(Table.readings).values(values);
+
+			await Queries.readings.insertWithSystemId(values, key.private_key);
 		},
 		{
 			headers: t.Object({
@@ -35,33 +39,19 @@ export const readings = new Elysia()
 			),
 		},
 	)
-	// This endpoint will return a list of readings for a production system
-	// You can either provice a start and end date
-	// Or just the start date and no end date. The end date is then set to the current date
-	// It is also possible to filter for readings by name
-	// It should only be allowed to query 1000 items and the min is 1.
-	// TODO! Needs authentication and authorization.
-	.get(
-		"/readings/:system_id",
-		({ params: { system_id }, body: { limit, endDate } }) => {
-			// Authenticate user
-			// Authorize user.
-			const readings = Queries.readings.selectAll({ system_id });
-
+	.post(
+		"/readings",
+		async ({ body }) => {
+			const readings = await Queries.readings.selectAll({ system_id: body.system_id });
 			return readings;
 		},
 		{
-			body: t.Union([
-				t.Object({
-					startDate: Schema.insert.readings.time,
-					endDate: Schema.insert.readings.time,
-					name: t.Optional(Schema.insert.readings.name),
-					limit: t.Number({ minimum: 1, maximum: 1000, default: 100 }),
-				}),
-				t.Object({
-					name: t.Optional(Schema.insert.readings.name),
-					limit: t.Number({ minimum: 1, maximum: 1000, default: 100 }),
-				})
-			]),
+			body: t.Object({
+				system_id: Schema.insert.readings.system_id,
+				startDate: Schema.insert.readings.time,
+				endDate: t.Optional(Schema.insert.readings.time),
+				name: t.Optional(Schema.insert.readings.name),
+				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
+			}),
 		},
 	);

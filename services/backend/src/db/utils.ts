@@ -12,7 +12,7 @@ import {
 
 import type { Table } from "drizzle-orm";
 import { customAlphabet } from "nanoid";
-import { error } from "elysia";
+import { error, t } from "elysia";
 
 
 type Spread<T extends TObject | Table, Mode extends "select" | "insert" | undefined> = T extends TObject<infer Fields>
@@ -89,4 +89,9 @@ export const spreads = <T extends Record<string, TObject | Table>, Mode extends 
 
 // Used for generating random ids for primary keys
 export const generateRandomString = customAlphabet("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+
+
+export const IsoDate = t.Transform(t.String({format: "iso-date-time"}))
+	.Decode((v) => new Date(v))
+	.Encode((v) => v.toISOString());
 
