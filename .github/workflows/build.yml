@@ -2,6 +2,10 @@ name: Build images
 
 on: [push]
 
+permissions:
+  packages: write
+  contents: read
+
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
