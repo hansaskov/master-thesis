@@ -1,37 +1,14 @@
 name: Build images
 
-on: 
-  push:
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 env:
+  # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  POSTGRES_DB: app
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-  INTERFACE_FQDN: ${{ secrets.INTERFACE_FQDN }}
-  DOZZLE_FQDN: ${{ secrets.DOZZLE_FQDN }}
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    services:
-      timescaledb:
-        image: timescale/timescaledb:latest-pg17
-        env:
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
   build_frontend_docker_image:
     runs-on: ubuntu-latest
     steps: 
@@ -45,7 +22,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
