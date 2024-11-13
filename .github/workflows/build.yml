@@ -64,10 +64,14 @@ jobs:
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
-          # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           COSIGN_PASSWORD: ""
-          COSIGN_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: echo "${TAGS}" | xargs -I {} cosign sign --key $COSIGN_KEY --yes {}@${DIGEST}
+        run: |
+          # Write the private key to a file
+          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
+          # Sign using the key file
+          echo "${TAGS}" | xargs -I {} cosign sign --key cosign.key {}@${DIGEST}
+          # Clean up
+          rm cosign.key
 
