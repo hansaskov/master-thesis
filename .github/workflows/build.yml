@@ -5,6 +5,7 @@ on: [push]
 permissions:
   packages: write
   contents: read
+  id-token: write
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -66,15 +67,6 @@ jobs:
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
         env:
-          COSIGN_PASSWORD: ""
           TAGS: ${{ steps.meta.outputs.tags }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
-        run: |
-          # Write the private key to a file
-          echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-          # Verify the key file content
-          cat cosign.key
-          # Sign using the key file
-          echo "${TAGS}" | xargs -I {} cosign sign --key cosign.key {}@${DIGEST}
-          # Clean up
-          rm cosign.key
+        run: cosign sign --yes ${TAGS}@${DIGEST}
