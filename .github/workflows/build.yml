@@ -10,7 +10,8 @@ permissions:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  IMAGE_NAME: hansaskov/master-thesis-frontend
+  FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
+  BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
   IMAGE_TAG: 1.0
 
 jobs:
@@ -50,7 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}
           tags: ${{ env.IMAGE_TAG }}
 
       - name: Build and push Docker image
@@ -106,7 +107,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}
           tags: ${{ env.IMAGE_TAG }}
 
       - name: Build and push Docker image
