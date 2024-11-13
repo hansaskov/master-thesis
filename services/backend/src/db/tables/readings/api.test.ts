@@ -104,8 +104,6 @@ describe("Reading Post", async () => {
 		expect(error).toBeDefined();
 	});
 
-
-
 	it("100 readings", async () => {
 		const manyReadings = Array.from({ length: 100 }, (_, i) => ({
 			time: new Date().toISOString(),
@@ -125,8 +123,6 @@ describe("Reading Post", async () => {
 		expect(error).toBeNull();
 	});
 });
-
-
 
 describe("Readings", async () => {
 	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
@@ -150,10 +146,4 @@ describe("Readings", async () => {
 		expect(error?.value).toBeUndefined();
 		expect(data).toBeDefined();
 	});
-})
-
-
-
-
-
-
+});

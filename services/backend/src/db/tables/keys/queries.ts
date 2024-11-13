@@ -15,4 +15,4 @@ async function selectUnique({ private_key, public_key }: typeof keys.$inferSelec
 
 export const keysQueries = {
 	selectUnique,
-};
+} as const;

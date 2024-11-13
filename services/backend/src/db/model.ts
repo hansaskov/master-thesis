@@ -28,6 +28,8 @@ import {
 } from "./tables";
 import { keysQueries } from "./tables/keys/queries";
 import { readingsQueries } from "./tables/readings/queries";
+import { sessionQueries } from "./tables/sessions/queries";
+import { usersQueries } from "./tables/users/queries";
 import { spreads } from "./utils";
 
 export const Table = {
@@ -75,4 +77,6 @@ export const Schema = {
 export const Queries = {
 	keys: keysQueries,
 	readings: readingsQueries,
+	sessions: sessionQueries,
+	users: usersQueries,
 };
