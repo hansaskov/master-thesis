@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  POSTGRES_DB: app
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  INTERFACE_FQDN: ${{ secrets.INTERFACE_FQDN }}
+  DOZZLE_FQDN: ${{ secrets.DOZZLE_FQDN }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      timescaledb:
+        image: timescale/timescaledb:latest-pg17
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
