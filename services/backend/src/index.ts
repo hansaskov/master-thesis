@@ -1,10 +1,9 @@
 import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
-import { Queries, Schema, Table } from "./db/model";
+import { authRoutes } from "./auth/routes";
 import { readings } from "./db/tables/readings/api";
-import { githubRoute } from "./github";
 
-const api = new Elysia({ prefix: "/api" }).use(githubRoute).use(readings);
+const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
 
 const app = new Elysia()
 	.use(swagger({ path: "/api/swagger" }))

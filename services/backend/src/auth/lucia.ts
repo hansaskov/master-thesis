@@ -1,7 +1,13 @@
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import { Queries } from "./db/model";
-import type { Session, User } from "./db/tables";
+import type { Cookie } from "elysia/cookies";
+import { Queries } from "../db/model";
+import type { Session, User } from "../db/tables";
+
+if (!process.env.PROD) {
+	throw new Error("PROD environment variable is required but not set");
+}
+const IS_PROD = process.env.PROD.toLowerCase() === "true";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -46,3 +52,15 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 }
 
 export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
+
+export function setSessionTokenCookie(cookie: Cookie<string>, sessionToken: string, expiresAt: Date) {
+	cookie.cookie = {
+		value: sessionToken,
+		httpOnly: true,
+		sameSite: "lax",
+		secure: IS_PROD,
+		expires: expiresAt,
+		maxAge: 60 * 10,
+		path: "/",
+	};
+}
