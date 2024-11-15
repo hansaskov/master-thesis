@@ -9,10 +9,8 @@ const PreparedselectUnique = db
 	.limit(1)
 	.prepare("select_unique_Key");
 
-async function selectUnique({ private_key, public_key }: typeof keys.$inferSelect) {
-	return await PreparedselectUnique.execute({ private_key, public_key }).then((v) => v.at(0));
-}
-
 export const keysQueries = {
-	selectUnique,
+	selectUnique: async function selectUnique({ private_key, public_key }: typeof keys.$inferSelect) {
+		return await PreparedselectUnique.execute({ private_key, public_key }).then((v) => v.at(0));
+	},
 } as const;
