@@ -64,3 +64,7 @@ export function setSessionTokenCookie(cookie: Cookie<string>, sessionToken: stri
 		path: "/",
 	};
 }
+
+export function deleteSessionTokenCookie(cookie: Cookie<string>) {
+	cookie.remove()
+}
