@@ -1,3 +1,5 @@
+import { t } from "elysia";
+import { github } from "../auth/login/github";
 import {
 	factoryAreas,
 	insertFactoryAreaSchema,
@@ -70,9 +72,19 @@ export const Schema = {
 			keys: selectKeysSchema,
 			readings: selectReadingsSchema,
 		},
-		"insert",
+		"select",
 	),
+	cookie: {
+		session: t.Cookie({
+			sessionId: t.String(),
+		}),
+		github: t.Cookie({
+			githubState: t.String(),
+		}),
+	},
 };
+
+const testCookie = t.Required(Schema.cookie.github, {});
 
 export const Queries = {
 	keys: keysQueries,

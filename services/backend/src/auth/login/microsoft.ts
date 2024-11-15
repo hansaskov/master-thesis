@@ -12,7 +12,7 @@ if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
 export const github = new GitHub(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET, null);
 
 export const githubRoute = new Elysia()
-	.get("/github", ({ cookie: { github_oauth_state } }) => {
+	.get("/microsoft", ({ cookie: { github_oauth_state } }) => {
 		const state = generateState();
 		const url = github.createAuthorizationURL(state, []);
 
@@ -27,7 +27,7 @@ export const githubRoute = new Elysia()
 		return redirect(url.toString(), 302);
 	})
 	.get(
-		"/github/callback",
+		"/microsoft/callback",
 		async ({ query: { code, state }, cookie: { github_oauth_state } }) => {
 			if (state !== github_oauth_state.value) {
 				return error(400);

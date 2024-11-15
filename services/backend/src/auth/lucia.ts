@@ -1,5 +1,6 @@
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
+import { t } from "elysia";
 import type { Cookie } from "elysia/cookies";
 import { Queries } from "../db/model";
 import type { Session, User } from "../db/tables";
@@ -27,6 +28,7 @@ export async function createSession(token: string, user_id: string): Promise<Ses
 	return session;
 }
 
+export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
 export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const result = await Queries.sessions.selectWithUser(sessionId);
@@ -51,9 +53,7 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 	await Queries.sessions.delete(sessionId);
 }
 
-export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
-
-export function setSessionTokenCookie(cookie: Cookie<string>, sessionToken: string, expiresAt: Date) {
+export function setSessionTokenCookie(cookie: Cookie<string | undefined>, sessionToken: string, expiresAt?: Date) {
 	cookie.cookie = {
 		value: sessionToken,
 		httpOnly: true,
@@ -66,5 +66,18 @@ export function setSessionTokenCookie(cookie: Cookie<string>, sessionToken: stri
 }
 
 export function deleteSessionTokenCookie(cookie: Cookie<string>) {
-	cookie.remove()
+	cookie.remove();
+}
+
+export async function Authenticate(cookie: Cookie<string>) {
+	const token = cookie.value;
+
+	const { session, user } = await validateSessionToken(token);
+	if (session !== null) {
+		setSessionTokenCookie(cookie, token, session.expires_at);
+	} else {
+		deleteSessionTokenCookie(cookie);
+	}
+
+	return { session, user };
 }

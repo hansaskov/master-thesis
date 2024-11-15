@@ -1,26 +1,24 @@
 import Elysia, { Cookie, t } from "elysia";
+import { Schema } from "../db/model";
 import { githubRoute } from "./login/github";
-import { Queries } from "../db/model";
-import { deleteSessionTokenCookie, setSessionTokenCookie, validateSessionToken } from "./lucia";
+import { logoutRoutes } from "./logout";
+import { Authenticate } from "./lucia";
 
 const loginRoutes = new Elysia({ prefix: "/login" }).use(githubRoute);
 
-export const authRoutes = new Elysia().use(loginRoutes);
+export const authRoutes = new Elysia()
+	.use(loginRoutes)
+	.use(logoutRoutes)
+	.get(
+		"/status",
+		async ({ cookie: { sessionId } }) => {
+			const { session, user } = await Authenticate(sessionId);
 
+			if (session) return `You are authenticated as github user: ${user}`;
 
-
-export async function Authenticate(cookie: Cookie<string>) {
-
-    const token = cookie.value;
-
-	const { session, user } = await validateSessionToken(token);
-	if (session !== null) {
-		setSessionTokenCookie(cookie, token, session.expires_at);
-	} else {
-		deleteSessionTokenCookie(cookie);
-	}
-
-	return { session, user};
-
-
-}
+			return "You are not authenticated";
+		},
+		{
+			cookie: Schema.cookie.session,
+		},
+	);
