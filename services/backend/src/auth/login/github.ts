@@ -18,18 +18,12 @@ export const githubRoute = new Elysia()
 			const state = generateState();
 			const url = github.createAuthorizationURL(state, []);
 
-			githubState.cookie = {
-				value: state,
-				path: "",
-				httpOnly: true,
-				maxAge: 60 * 10,
-				sameSite: "lax",
-			};
+			githubState.value = state;
 
 			return redirect(url.toString(), 302);
 		},
 		{
-			cookie: t.Optional(Schema.cookie.github),
+			cookie: t.Partial(Schema.cookie.github),
 		},
 	)
 	.get(

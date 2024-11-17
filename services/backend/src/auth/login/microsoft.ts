@@ -1,83 +1,107 @@
-import { generateState } from "arctic";
-import { GitHub } from "arctic";
-import { type Cookie, Elysia, error, redirect, t } from "elysia";
-import { Queries } from "../../db/model";
+import { decodeIdToken, generateCodeVerifier, generateState } from "arctic";
+import { MicrosoftEntraId} from "arctic";
+import { type Cookie, Elysia, error, redirect, Static, t } from "elysia";
+import { Queries, Schema } from "../../db/model";
 import { catchError } from "../../types/errors";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "../lucia";
+import { env } from "process";
+import { TypeCompiler } from "elysia/type-system";
 
-if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
+
+if (!env.MICROSOFT_TENANT_ID || !env.MICROSOFT_CLIENT_ID || !env.MICROSOFT_CLIENT_SECRET || !env.REDIRECT_URI) {
 	throw new Error("Missing Github client id and secred from environment variables");
 }
 
-export const github = new GitHub(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET, null);
+export const entraId = new MicrosoftEntraId(
+	env.MICROSOFT_TENANT_ID, 
+	env.MICROSOFT_CLIENT_ID,
+	env.MICROSOFT_CLIENT_SECRET,
+	env.REDIRECT_URI
+);
 
-export const githubRoute = new Elysia()
-	.get("/microsoft", ({ cookie: { github_oauth_state } }) => {
-		const state = generateState();
-		const url = github.createAuthorizationURL(state, []);
+export const microsoftRoute = new Elysia()
+	.get(
+		"/microsoft",
+		({ cookie }) => {
+			const state = generateState();
+			const codeVerifier = generateCodeVerifier();
+			const scopes = ["openid", "profile"];
 
-		github_oauth_state.cookie = {
-			value: state,
-			path: "",
-			httpOnly: true,
-			maxAge: 60 * 10,
-			sameSite: "lax",
-		};
+			const url = entraId.createAuthorizationURL(state, codeVerifier, scopes);
 
-		return redirect(url.toString(), 302);
-	})
+			cookie.microsoftState.value = state;
+			cookie.microsoftCode.value = codeVerifier;
+
+			return redirect(url.toString(), 302);
+		},
+		{
+			cookie: t.Partial(Schema.cookie.microsoft),
+		},
+	)
 	.get(
 		"/microsoft/callback",
-		async ({ query: { code, state }, cookie: { github_oauth_state } }) => {
-			if (state !== github_oauth_state.value) {
+		async ({ query: { code, state }, cookie }) => {
+
+			// Verify that the state is the same as the one we set in the cookie
+			if (state !== cookie.microsoftState.value) {
 				return error(400);
 			}
 
-			const [err, tokens] = await catchError(github.validateAuthorizationCode(code));
+
+			// Call the microsoft API to get validate authorization code
+			const codeVerifier = cookie.microsoftCode.value
+
+			const [err, tokens] = await catchError(entraId.validateAuthorizationCode(code, codeVerifier));
 			if (err) {
-				return error(400);
+				return error(400, err);
 			}
 
-			const githubUserResponse = await fetch("https://api.github.com/user", {
+			// Call the microsoft API to get user info
+			const userResponse = await fetch("https://graph.microsoft.com/oidc/userinfo", {
 				headers: {
 					Authorization: `Bearer ${tokens.accessToken()}`,
 				},
-			});
+			}).then(r => r.json())
 
-			const { id: githubId, login: githubUsername } = (await githubUserResponse.json()) as {
-				id?: string;
-				login?: string;
-			};
+			const userParsed = validateUser.Decode(userResponse)
 
-			if (!githubId || !githubUsername) {
-				return error(500, "Not able to parse github id and login");
-			}
-
-			const existingUser = await Queries.users.selectUniqueWithMicrosoftId(githubId);
+			const existingUser = await Queries.users.selectUniqueWithMicrosoftId(userParsed.sub);
 
 			if (existingUser) {
 				const sessionToken = generateSessionToken();
 				const session = await createSession(sessionToken, existingUser.id);
-				setSessionTokenCookie(github_oauth_state, sessionToken, session.expires_at);
 
-				return redirect("/api/swagger", 302);
+				setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
+
+				return redirect("/api/status", 302);
 			}
 
-			const user = await Queries.users.create({ microsoft_id: githubId });
+
+			const user = await Queries.users.create({ microsoft_id: userParsed.sub });
 
 			const sessionToken = generateSessionToken();
 			const session = await createSession(sessionToken, user.id);
-			setSessionTokenCookie(github_oauth_state, sessionToken, session.expires_at);
+			setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
 
-			return redirect("/api/swagger", 302);
+			return redirect("/api/status", 302);
 		},
 		{
 			query: t.Object({
 				code: t.String(),
 				state: t.String(),
 			}),
-			cookie: t.Cookie({
-				github_oauth_state: t.String(),
-			}),
+			cookie: Schema.cookie.microsoft,
 		},
 	);
+
+const UserSchema = t.Object({
+	sub: t.String(),
+	name: t.String(),
+	family_name: t.String(),
+	given_name: t.String(),
+	picture: t.String(),
+})
+
+
+	const validateUser = TypeCompiler.Compile(UserSchema);
+  

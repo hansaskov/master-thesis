@@ -80,7 +80,21 @@ export const Schema = {
 		}),
 		github: t.Cookie({
 			githubState: t.String(),
+		}, {
+			path: "/",
+			httpOnly: true,
+			maxAge: 60 * 10,
+			sameSite: "lax",
 		}),
+		microsoft: t.Cookie({
+			microsoftState: t.String(),
+			microsoftCode: t.String(),
+		}, {
+			path: "/",
+			httpOnly: true,
+			maxAge: 60 * 10,
+			sameSite: "lax",
+		})
 	},
 };
 
