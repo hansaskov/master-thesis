@@ -8,7 +8,7 @@ import { env } from "process";
 import { TypeCompiler } from "elysia/type-system";
 
 
-if (!env.MICROSOFT_TENANT_ID || !env.MICROSOFT_CLIENT_ID || !env.MICROSOFT_CLIENT_SECRET || !env.REDIRECT_URI) {
+if (!env.MICROSOFT_TENANT_ID || !env.MICROSOFT_CLIENT_ID || !env.MICROSOFT_CLIENT_SECRET || !env.MICROSOFT_REDIRECT_URI) {
 	throw new Error("Missing Github client id and secred from environment variables");
 }
 
@@ -16,7 +16,7 @@ export const entraId = new MicrosoftEntraId(
 	env.MICROSOFT_TENANT_ID, 
 	env.MICROSOFT_CLIENT_ID,
 	env.MICROSOFT_CLIENT_SECRET,
-	env.REDIRECT_URI
+	env.MICROSOFT_REDIRECT_URI
 );
 
 export const microsoftRoute = new Elysia()
