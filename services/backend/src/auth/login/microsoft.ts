@@ -47,7 +47,6 @@ export const microsoftRoute = new Elysia()
 				return error(400);
 			}
 
-
 			// Call the microsoft API to get validate authorization code
 			const codeVerifier = cookie.microsoftCode.value
 
@@ -103,5 +102,5 @@ const UserSchema = t.Object({
 })
 
 
-	const validateUser = TypeCompiler.Compile(UserSchema);
+const validateUser = TypeCompiler.Compile(UserSchema);
   
