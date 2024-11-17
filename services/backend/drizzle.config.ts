@@ -1,14 +1,11 @@
 import { defineConfig } from 'drizzle-kit';
-
-if(!process.env.DATABASE_URL) {
-  throw Error("No Database url found in enviroment")
-}
+import { enviroment } from './src/enviroment';
  
 export default defineConfig({
   out: './drizzle',
   schema: './src/db/tables/index.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL,
+    url: enviroment.DATABASE_URL,
   },
 });

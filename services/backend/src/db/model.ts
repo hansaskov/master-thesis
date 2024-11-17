@@ -78,23 +78,29 @@ export const Schema = {
 		session: t.Cookie({
 			sessionId: t.String(),
 		}),
-		github: t.Cookie({
-			githubState: t.String(),
-		}, {
-			path: "/",
-			httpOnly: true,
-			maxAge: 60 * 10,
-			sameSite: "lax",
-		}),
-		microsoft: t.Cookie({
-			microsoftState: t.String(),
-			microsoftCode: t.String(),
-		}, {
-			path: "/",
-			httpOnly: true,
-			maxAge: 60 * 10,
-			sameSite: "lax",
-		})
+		github: t.Cookie(
+			{
+				githubState: t.String(),
+			},
+			{
+				path: "/",
+				httpOnly: true,
+				maxAge: 60 * 10,
+				sameSite: "lax",
+			},
+		),
+		microsoft: t.Cookie(
+			{
+				microsoftState: t.String(),
+				microsoftCode: t.String(),
+			},
+			{
+				path: "/",
+				httpOnly: true,
+				maxAge: 60 * 10,
+				sameSite: "lax",
+			},
+		),
 	},
 };
 

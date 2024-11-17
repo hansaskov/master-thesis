@@ -1,5 +1,3 @@
-import { exit } from "node:process";
-import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { Table } from "./model";
 import { db } from "./postgres";
 

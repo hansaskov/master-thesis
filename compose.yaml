@@ -23,29 +23,24 @@ services:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
       caddy.reverse_proxy: "{{upstreams 8080}}"
-    develop:
-      watch:
-        - action: rebuild
-          path: ./services/frontend
 
   ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
     profiles: [stateless]
     build: services/backend
     environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@timescaledb:5432/${POSTGRES_DB}
+      - DATABASE_URL=${DATABASE_URL}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
+      - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID}
+      - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET}
+      - MICROSOFT_REDIRECT_URI=${MICROSOFT_REDIRECT_URI}
+      - PROD=${PROD}
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.handle: /api/*
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
-    depends_on:
-      timescaledb:
-        condition: service_healthy
-        required: false
-    develop:
-      watch:
-        - action: rebuild
-          path: ./services/backend
 
   ## A postgres database optimised for timeseries data
   timescaledb:

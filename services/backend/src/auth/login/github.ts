@@ -2,14 +2,11 @@ import { generateState } from "arctic";
 import { GitHub } from "arctic";
 import { type Cookie, Elysia, error, redirect, t } from "elysia";
 import { Queries, Schema } from "../../db/model";
+import { enviroment } from "../../enviroment";
 import { catchError } from "../../types/errors";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "../lucia";
 
-if (!process.env.GITHUB_CLIENT_ID || !process.env.GITHUB_CLIENT_SECRET) {
-	throw new Error("Missing Github client id and secred from environment variables");
-}
-
-export const github = new GitHub(process.env.GITHUB_CLIENT_ID, process.env.GITHUB_CLIENT_SECRET, null);
+export const github = new GitHub(enviroment.GITHUB_CLIENT_ID, enviroment.GITHUB_CLIENT_SECRET, null);
 
 export const githubRoute = new Elysia()
 	.get(

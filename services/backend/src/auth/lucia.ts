@@ -4,11 +4,7 @@ import { t } from "elysia";
 import type { Cookie } from "elysia/cookies";
 import { Queries } from "../db/model";
 import type { Session, User } from "../db/tables";
-
-if (!process.env.PROD) {
-	throw new Error("PROD environment variable is required but not set");
-}
-const IS_PROD = process.env.PROD.toLowerCase() === "true";
+import { enviroment } from "../enviroment";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -58,7 +54,7 @@ export function setSessionTokenCookie(cookie: Cookie<string | undefined>, sessio
 		value: sessionToken,
 		httpOnly: true,
 		sameSite: "lax",
-		secure: IS_PROD,
+		secure: enviroment.PROD,
 		expires: expiresAt,
 		maxAge: 60 * 10,
 		path: "/",
