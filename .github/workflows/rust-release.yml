@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build Release
-    runs-on: windows-latest  # Assuming you want a Windows executable
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
