@@ -1,0 +1,39 @@
+name: Rust Release Build and Asset Upload
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build Release
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+
+    - name: Build release
+      run: cargo build --release
+
+    - name: Rename executable
+      run: |
+        $projectName = (Get-ChildItem Cargo.toml).BaseName
+        Rename-Item "target/release/$projectName.exe" "$projectName.exe"
+
+    - name: Create Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./$projectName.exe
+        asset_name: $projectName.exe
+        asset_content_type: application/octet-stream
