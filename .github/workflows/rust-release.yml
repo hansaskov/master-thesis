@@ -21,15 +21,8 @@ jobs:
         override: true
 
     - name: Build release in services/ingest
-      working-directory: ./services/ingest  # Change working directory
-      run: |
-        cargo build --release
-
-    - name: Rename executable
-      working-directory: ./services/ingest  # Change working directory
-      run: |
-        $projectName = (Get-ChildItem Cargo.toml).BaseName
-        Rename-Item "target/release/$projectName.exe" "$projectName.exe"
+      working-directory: ./services/ingest
+      run: cargo build --release
 
     - name: Create Release Asset
       uses: actions/upload-release-asset@v1
@@ -37,6 +30,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./services/ingest/$projectName.exe  # Update asset path
-        asset_name: $projectName.exe
+        asset_path: ./services/ingest/target/release/ingest.exe
+        asset_name: ingest.exe
         asset_content_type: application/octet-stream
