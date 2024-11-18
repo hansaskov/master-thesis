@@ -1,4 +1,4 @@
-name: Rust Release Build and Asset Upload
+name: publish
 
 on:
   release:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
@@ -25,11 +25,8 @@ jobs:
       run: cargo build --release
 
     - name: Create Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./services/ingest/target/release/ingest.exe
-        asset_name: ingest.exe
-        asset_content_type: application/octet-stream
+        files: ./services/ingest/target/release/ingest.exe
+          
