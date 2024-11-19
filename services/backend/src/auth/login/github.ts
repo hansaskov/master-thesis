@@ -50,7 +50,10 @@ export const githubRoute = new Elysia()
 				return error(500, "Not able to parse github id and login");
 			}
 
-			const existingUser = await Queries.users.selectUniqueWithProvider({provider_name: "Github", provider_id: githubId});
+			const existingUser = await Queries.users.selectUniqueWithProvider({
+				provider_name: "Github",
+				provider_id: githubId,
+			});
 
 			if (existingUser) {
 				const sessionToken = generateSessionToken();

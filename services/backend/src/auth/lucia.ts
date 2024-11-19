@@ -65,13 +65,13 @@ export function deleteSessionTokenCookie(cookie: Cookie<string>) {
 	cookie.remove();
 }
 
-export async function Authenticate(cookie: Cookie<string>): Promise<SessionValidationResult>{
+export async function Authenticate(cookie: Cookie<string>): Promise<SessionValidationResult> {
 	const token = cookie.value;
 
 	const { session, user } = await validateSessionToken(token);
 	if (session === null || user === null) {
 		deleteSessionTokenCookie(cookie);
-		return {session: null, user: null}
+		return { session: null, user: null };
 	}
 
 	setSessionTokenCookie(cookie, token, session.expires_at);

@@ -1,31 +1,9 @@
-import Elysia, { type Cookie, t } from "elysia";
-import { Schema } from "../db/model";
+import Elysia from "elysia";
+
 import { githubRoute } from "./login/github";
 import { microsoftRoute } from "./login/microsoft";
 import { logoutRoutes } from "./logout";
-import { Authenticate } from "./lucia";
-
+import { statusRoutes } from "./status";
 const loginRoutes = new Elysia({ prefix: "/login" }).use(githubRoute).use(microsoftRoute);
 
-export const authRoutes = new Elysia()
-	.use(loginRoutes)
-	.use(logoutRoutes)
-	.get(
-		"/status",
-		async ({ cookie: { sessionId } }) => {
-			if (!sessionId.value) {
-				return "You are not authenticated";
-			}
-
-			const { session, user } = await Authenticate(sessionId as Cookie<string>);
-
-			if (session) { 
-				return `You are authenticated with ${user.provider_name} as user_id: ${user.provider_id}`
-			}
-
-			return "Something went wrong";
-		},
-		{
-			cookie: t.Partial(Schema.cookie.session),
-		},
-	);
+export const authRoutes = new Elysia().use(loginRoutes).use(logoutRoutes).use(statusRoutes);
