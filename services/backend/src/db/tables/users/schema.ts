@@ -1,8 +1,9 @@
-import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { Prettify, StrictOmit, StrictPick } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
+
+export const providerEnum = pgEnum("providers", ["Github", "Microsoft"]);
 
 export const users = pgTable("users", {
 	id: text()
@@ -10,7 +11,8 @@ export const users = pgTable("users", {
 		.notNull()
 		.$default(() => generateRandomString(12)),
 	is_superadmin: boolean().notNull().default(false),
-	microsoft_id: text(),
+	provider_name: providerEnum().notNull(),
+	provider_id: text().notNull(),
 });
 
 export const insertUserSchema = createInsertSchema(users, {

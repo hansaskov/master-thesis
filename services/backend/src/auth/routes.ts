@@ -19,7 +19,9 @@ export const authRoutes = new Elysia()
 
 			const { session, user } = await Authenticate(sessionId as Cookie<string>);
 
-			if (session) return `You are authenticated as user: ${user?.microsoft_id}`;
+			if (session) { 
+				return `You are authenticated with ${user.provider_name} as user_id: ${user.provider_id}`
+			}
 
 			return "Something went wrong";
 		},

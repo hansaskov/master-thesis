@@ -50,7 +50,7 @@ export const githubRoute = new Elysia()
 				return error(500, "Not able to parse github id and login");
 			}
 
-			const existingUser = await Queries.users.selectUniqueWithMicrosoftId(githubId);
+			const existingUser = await Queries.users.selectUniqueWithProvider({provider_name: "Github", provider_id: githubId});
 
 			if (existingUser) {
 				const sessionToken = generateSessionToken();
@@ -58,16 +58,16 @@ export const githubRoute = new Elysia()
 
 				setSessionTokenCookie(sessionId, sessionToken, session.expires_at);
 
-				return redirect("/api/swagger", 302);
+				return redirect("/api/status", 302);
 			}
 
-			const user = await Queries.users.create({ microsoft_id: githubId });
+			const user = await Queries.users.create({ provider_name: "Github", provider_id: githubId });
 
 			const sessionToken = generateSessionToken();
 			const session = await createSession(sessionToken, user.id);
 			setSessionTokenCookie(sessionId, sessionToken, session.expires_at);
 
-			return redirect("/api/swagger", 302);
+			return redirect("/api/status", 302);
 		},
 		{
 			query: t.Object({

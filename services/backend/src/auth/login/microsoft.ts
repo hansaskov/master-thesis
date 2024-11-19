@@ -58,7 +58,7 @@ export const microsoftRoute = new Elysia()
 
 			const userParsed = validateUser.Decode(userResponse);
 
-			const existingUser = await Queries.users.selectUniqueWithMicrosoftId(userParsed.sub);
+			const existingUser = await Queries.users.selectUniqueWithProvider({provider_name: "Microsoft", provider_id: userParsed.sub});
 
 			if (existingUser) {
 				const sessionToken = generateSessionToken();
@@ -69,7 +69,7 @@ export const microsoftRoute = new Elysia()
 				return redirect("/api/status", 302);
 			}
 
-			const user = await Queries.users.create({ microsoft_id: userParsed.sub });
+			const user = await Queries.users.create({provider_name: "Microsoft", provider_id: userParsed.sub });
 
 			const sessionToken = generateSessionToken();
 			const session = await createSession(sessionToken, user.id);
