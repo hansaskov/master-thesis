@@ -19,7 +19,7 @@ export const AuthService = new Elysia({ name: "Service.Auth" })
 	})
 	.resolve(({ user, session, cookie: { sessionId } }) => {
 		// We can safely cast the types here because
-		// sessionId was validated in the previous onBeforeHandle hook
+		// sessionId is validated in the previous onBeforeHandle hook
 		user = user as User;
 		session = session as Session;
 
