@@ -12,6 +12,8 @@ env:
   REGISTRY: ghcr.io
   FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
   BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
+  DATABASE_URL: postgresql://postgres:password@localhost:5432
+  PROD: false
   IMAGE_TAG: 1.0
 
 jobs:
@@ -86,6 +88,8 @@ jobs:
       - name: Install package
         working-directory: ./services/backend
         run: bun install
+      - name: Start TimescaleDB
+        run: docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
       - name: Run backend tests  
         working-directory: ./services/backend
         run: bun test

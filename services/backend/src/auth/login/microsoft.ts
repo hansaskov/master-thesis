@@ -3,15 +3,15 @@ import { MicrosoftEntraId } from "arctic";
 import { type Cookie, Elysia, Static, error, redirect, t } from "elysia";
 import { TypeCompiler } from "elysia/type-system";
 import { Queries, Schema } from "../../db/model";
-import { enviroment } from "../../enviroment";
+import { environment } from "../../environment";
 import { catchError } from "../../types/errors";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "../lucia";
 
 export const entraId = new MicrosoftEntraId(
-	enviroment.MICROSOFT_TENANT_ID,
-	enviroment.MICROSOFT_CLIENT_ID,
-	enviroment.MICROSOFT_CLIENT_SECRET,
-	enviroment.MICROSOFT_REDIRECT_URI,
+	environment.MICROSOFT_TENANT_ID,
+	environment.MICROSOFT_CLIENT_ID,
+	environment.MICROSOFT_CLIENT_SECRET,
+	environment.MICROSOFT_REDIRECT_URI,
 );
 
 export const microsoftRoute = new Elysia()
