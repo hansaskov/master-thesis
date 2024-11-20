@@ -1,6 +1,4 @@
-import Elysia, { Cookie, t } from "elysia";
-import { Schema } from "../db/model";
-import { Authenticate } from "./lucia";
+import Elysia from "elysia";
 import { AuthService } from "./middleware";
 
 export const statusRoutes = new Elysia()
