@@ -12,7 +12,7 @@ env:
   REGISTRY: ghcr.io
   FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
   BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
-  DATABASE_URL: ${{ secrets.POSTGRES_DB }}
+  DATABASE_URL: postgres://username:password@timescaledb:5432/mydatabase
   PROD: false
   IMAGE_TAG: 1.0
 
