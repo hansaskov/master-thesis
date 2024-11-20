@@ -89,7 +89,7 @@ jobs:
         working-directory: ./services/backend
         run: bun install
       - name: Start TimescaleDB
-        run: docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=myuser -e POSTGRES_DB=mydatabase timescale/timescaledb:latest-
+        run: docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=myuser -e POSTGRES_DB=mydatabase timescale/timescaledb:latest-17
       - name: Wait 10 seconds
         run: sleep 10
       - name: List Containers
