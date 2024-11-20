@@ -133,11 +133,13 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
       - name: Run tests in Docker container
+        env:
+          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
         run: |
           docker run --rm \
             -e DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase \
             -e POSTGRES_DB=mydatabase \
             -e POSTGRES_USER=username \
             -e POSTGRES_PASSWORD=password \
-            $(echo "${{ steps.meta.outputs.tags }}") \
+            ${IMAGE_TAG} \
             bun test
