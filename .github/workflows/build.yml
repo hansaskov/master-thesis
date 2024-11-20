@@ -84,6 +84,7 @@ jobs:
       - name: Install bun
         uses: oven-sh/setup-bun@v2
       - name: Install package
+        working-directory: ./services/backend
         run: bun install
       - name: Run backend tests  
         working-directory: ./services/backend
