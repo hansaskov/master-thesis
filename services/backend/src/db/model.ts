@@ -78,7 +78,7 @@ export const Schema = {
 		session: t.Cookie({
 			sessionId: t.String({
 				description: "Session cookie will be used to keep a user logged in",
-				error: "Unauthorized access, due to invalid session cookie",
+				error:{error: "Unauthorized access, due to invalid session cookie"},
 			}),
 		}, ),
 		github: t.Cookie(
