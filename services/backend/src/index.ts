@@ -19,6 +19,7 @@ const client = treaty<App>('localhost:3000').api
 
 client.latest_reading.get({
 	query: {
-		
+		name: "test",
+		system_id: "test"
 	}
 })
