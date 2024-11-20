@@ -5,7 +5,7 @@ import { readings } from "./db/tables/readings/api";
 
 const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
 
-const app = new Elysia({precompile: true})
+const app = new Elysia({ precompile: true })
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api)
 	.listen(process.env.PORT as string);

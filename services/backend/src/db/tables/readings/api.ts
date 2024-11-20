@@ -2,6 +2,7 @@ import Elysia, { error, t } from "elysia";
 import { Queries, Schema, Table } from "../../model";
 import { db } from "../../postgres";
 import { IsoDate } from "../../utils";
+import { AuthService } from "../../../auth/middleware";
 
 export const readings = new Elysia()
 	.post(
@@ -54,4 +55,18 @@ export const readings = new Elysia()
 				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
 			}),
 		},
-	);
+	)
+	.get(
+		"/latest_reading",
+		async ({  query: { name, system_id } }) => {
+			const reading = await Queries.readings.selectLatest({ system_id, name })
+
+			return reading;
+		},
+		{
+			query: t.Object({
+				system_id: Schema.insert.readings.system_id,
+				name: Schema.insert.readings.name
+			})
+		}
+	)

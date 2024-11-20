@@ -132,7 +132,7 @@ impl LocalQueue for SqliteQueue {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
+    use std::time::{Duration, SystemTime};
     use tokio;
 
     fn create_reading(name: &str, value: f32, unit: &str) -> Reading {
