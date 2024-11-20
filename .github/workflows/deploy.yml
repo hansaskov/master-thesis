@@ -1,6 +1,11 @@
 name: Deploy
 
-on: [push]
+on: 
+  workflow_run:
+    workflows: 
+      - "Build and test images"
+    types:
+      - completed
 
 env:
   DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
