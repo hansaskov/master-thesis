@@ -90,6 +90,9 @@ jobs:
         run: bun install
       - name: Start TimescaleDB
         run: docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb-ha:pg16
+      - name: Start migrate
+        working-directory: ./services/backend
+        run: bun db:migrate 
       - name: Run backend tests  
         working-directory: ./services/backend
         run: bun test
