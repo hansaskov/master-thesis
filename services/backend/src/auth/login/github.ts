@@ -2,11 +2,11 @@ import { generateState } from "arctic";
 import { GitHub } from "arctic";
 import { type Cookie, Elysia, error, redirect, t } from "elysia";
 import { Queries, Schema } from "../../db/model";
-import { enviroment } from "../../enviroment";
+import { environment } from "../../environment";
 import { catchError } from "../../types/errors";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "../lucia";
 
-export const github = new GitHub(enviroment.GITHUB_CLIENT_ID, enviroment.GITHUB_CLIENT_SECRET, null);
+export const github = new GitHub(environment.GITHUB_CLIENT_ID, environment.GITHUB_CLIENT_SECRET, null);
 
 export const githubRoute = new Elysia()
 	.get(

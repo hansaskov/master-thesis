@@ -4,7 +4,7 @@ import { t } from "elysia";
 import type { Cookie } from "elysia/cookies";
 import { Queries } from "../db/model";
 import type { Session, User } from "../db/tables";
-import { enviroment } from "../enviroment";
+import { environment } from "../environment";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -54,7 +54,7 @@ export function setSessionTokenCookie(cookie: Cookie<string | undefined>, sessio
 		value: sessionToken,
 		httpOnly: true,
 		sameSite: "lax",
-		secure: enviroment.PROD,
+		secure: environment.PROD,
 		expires: expiresAt,
 		maxAge: 60 * 10,
 		path: "/",
