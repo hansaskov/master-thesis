@@ -137,7 +137,7 @@ jobs:
           docker run --rm \
             -e DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase \
             -e POSTGRES_DB=mydatabase \
-            -e POSTGRES_USER=usernam \
+            -e POSTGRES_USER=username \
             -e POSTGRES_PASSWORD=password \
-            ${{ steps.meta.outputs.tags }} \
+            $(echo "${{ steps.meta.outputs.tags }}") \
             bun test
