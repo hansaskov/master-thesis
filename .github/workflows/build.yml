@@ -80,6 +80,14 @@ jobs:
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install package
+        run: bun install
+      - name: Run backend tests  
+        working-directory: ./services/backend
+        run: bun test
 
       - name: Install cosign
         if: github.event_name != 'pull_request'
