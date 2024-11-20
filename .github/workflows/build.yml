@@ -132,3 +132,12 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+      - name: Run tests in Docker container
+        run: |
+          docker run --rm \
+            -e DATABASE_URL=postgres://username:password@timescaledb:5432/mydatabase \
+            -e POSTGRES_DB=mydatabase
+            -e POSTGRES_USER=usernam
+            -e POSTGRES_PASSWORD=password
+            ${{ steps.meta.outputs.tags }} \
+            bun test
