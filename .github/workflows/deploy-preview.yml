@@ -6,7 +6,6 @@ on:
       - "Build and test images"
     types:
       - completed
-  push:
     branches:
       - preview
 
