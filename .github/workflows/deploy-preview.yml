@@ -6,6 +6,9 @@ on:
       - "Build and test images"
     types:
       - completed
+  push:
+    branches:
+      - preview
 
 env:
   DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
