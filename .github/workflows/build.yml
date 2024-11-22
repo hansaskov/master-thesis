@@ -12,6 +12,8 @@ env:
   REGISTRY: ghcr.io
   FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
   BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
+  DATABASE_URL: postgresql://myuser:password@localhost:5432/mydatabase
+  PROD: false
   IMAGE_TAG: 1.0
 
 jobs:
@@ -80,6 +82,24 @@ jobs:
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install package
+        working-directory: ./services/backend
+        run: bun install
+      - name: Start TimescaleDB
+        run: docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=myuser -e POSTGRES_DB=mydatabase timescale/timescaledb:latest-pg17
+      - name: Wait 10 seconds
+        run: sleep 10
+      - name: List Containers
+        run: docker container list
+      - name: Start migrate
+        working-directory: ./services/backend
+        run: bun db:migrate 
+      - name: Run backend tests  
+        working-directory: ./services/backend
+        run: bun test
 
       - name: Install cosign
         if: github.event_name != 'pull_request'

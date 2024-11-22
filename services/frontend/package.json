@@ -14,7 +14,6 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"backend": "workspace:*",
 		"elysia": "^1.1.25",
 		"@faker-js/faker": "^9.0.3",
 		"@sveltejs/adapter-static": "^3.0.5",
