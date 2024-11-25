@@ -9,9 +9,6 @@
 
 *backend.exe
 
-# Logs
-package.json
-bun.lockb
 
 logs
 _.log

@@ -1,0 +1,16 @@
+{
+  "name": "monorepo-elysia-svelte",
+  "private": true,
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "clean": "rm node_modules packages/backend/node_modules packages/frontend/node_modules bun.lockb packages/backend/bun.lockb packages/frontend/bun.lockb"
+  },
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@sveltejs/kit",
+    "esbuild"
+  ]
+}
