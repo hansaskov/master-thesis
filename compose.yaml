@@ -18,16 +18,20 @@ services:
   ## The frontend service will build the frontend and then serve the files using caddy.
   frontend: 
     profiles: [stateless]
-    build: services/frontend
+    build: 
+      context: .
+      dockerfile: ./packages/frontend/dockerfile
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
-      caddy.reverse_proxy: "{{upstreams 8080}}"
+      caddy.reverse_proxy: "{{upstreams 5173}}"
 
   ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
     profiles: [stateless]
-    build: services/backend
+    build: 
+      context: .
+      dockerfile: ./packages/backend/dockerfile
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
@@ -62,16 +66,6 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-
-  ## Production insights
-  dozzle:
-    profiles: [prod]   
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      caddy: "${DOZZLE_FQDN}"
-      caddy.reverse_proxy: "{{upstreams 8080}}"
 
 volumes:
   caddy-data:
