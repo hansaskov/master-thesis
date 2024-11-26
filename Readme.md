@@ -6,9 +6,9 @@ This project aims to develop a comprehensive web-based system for TriVision to e
 
 ## Technologies Used
 
-The backend of this project is built using Rust, Bun, Drizzle, TimescaleDB. These technologies provide a robust and efficient foundation for handling data processing and API interactions. The frontend is developed with Bun, SvelteKit, Tailwind CSS, and Shadcn-svelte, offering a modern and responsive user interface.
+The backend of this project is built using Elysia, Drizzle and TimescaleDB. These technologies provide a robust and efficient foundation for handling data processing and API interactions. The frontend is developed with SvelteKit, Tailwind CSS and Shadcn-svelte, offering a modern and responsive user interface.
 
-For infrastructure, the project utilizes Docker for containerization, Caddy as a reverse proxy, and TimescaleDB for efficient time-series data storage. Data collection from production systems is facilitated through gRPC, ensuring fast and reliable communication.
+For infrastructure, the project utilizes Docker for containerization, Caddy as a reverse proxy, and TimescaleDB for efficient time-series data storage.
 
 ## Project Overview
 
@@ -20,17 +20,77 @@ A reverse proxy handles routing and SSL termination, ensuring secure communicati
 
 ## Getting Started
 
-To run the project using Docker Compose, follow these steps:
+To get the project up and running, follow these steps:
 
-1. Ensure you have Docker and Docker Compose installed on your system.
-2. Clone the repository to your local machine.
-3. Navigate to the root directory of the project.
-4. Run the following command to start all services:
+### 1. Prerequisites
+Make sure you have the following installed:
+- [Docker](https://docs.docker.com/get-started/get-docker/)
+- [Bun](https://bun.sh/)
 
-   ```
-   docker compose up -d --build
-   ```
+### 2. Download the Project
 
-5. Once the services are up and running, you can access the frontend application through your web browser. at [http://caddy.localhost](http://caddy.localhost).
+Then you'll need to clone the repository.
 
-This setup will launch all necessary services, including the backend server, frontend application, database, and reverse proxy. The system will be ready for data collection and visualization.
+```bash
+git clone https://github.com/hansaskov/master-thesis
+cd master-thesis
+```
+
+### 3. Install the Dependencies
+This project uses a monorepo structure, running `bun install` will install all the dependencies, for both the backend and frontend. Make sure this is run from the root of the project.
+```bash
+bun install
+```
+### 4. Create the `.env` File
+
+You need to set up environment variables for the project. These values help configure things like which domain to serve the app on. 
+
+```bash
+cp .env.example .env
+```
+
+- **`cp .env.example .env`**: This copies the example `.env` file into a new `.env` file, which you can then edit to fill in your own values.
+
+
+## Running the Project
+
+### Development Mode
+
+If you're working on the project locally and want to see live changes as you work, use the following command:
+
+```bash
+docker compose up --build --watch
+```
+
+Let's break down this command:
+
+- **`docker compose up`**: This starts all the services defined in the `docker-compose.yaml` file (like the backend API, frontend, or database) and keeps them running.
+  
+- **`--build`**: This flag forces Docker to rebuild the images for your services (both backend and frontend) before starting them. This ensures that you're working with the most up-to-date version of your code.
+
+- **`--watch`**: This enables "hot reloading" in development mode. Docker will automatically watch your files for changes and rebuild/restart the services as needed, so you don't have to manually restart the project after each change.
+
+Once the command is running, the project will be available at:
+- [http://localhost:3000](http://localhost:3000) if no custom domain is set, or
+- The domain specified by `APP_FQDN` in your `.env` file.
+
+### Production Mode
+
+When you're ready to deploy the project for real (in a production environment), use this command:
+
+```bash
+docker compose -f compose.yaml up --build -d
+```
+
+Let’s break down each part:
+
+- **`docker compose -f compose.yaml`**: Same as the previous example, but now we exclute the compose.override.yaml file, which was used to define a local development environment.
+
+- **`up`**: This starts all the services just like in development mode.
+
+- **`--build`**: Similar to the development mode, this flag forces Docker to rebuild all the images.
+
+- **`-d`**: The `-d` stands for "detached mode." This means Docker will run the services in the background. Once the services are up and running, you can safely close your terminal, and the services will continue to run.
+
+> **Note**: Production mode is set to work only on these standard ports (80 and 443). This is typical for web servers, ensuring compatibility with browsers and users’ requests over HTTP/HTTPS.
+
