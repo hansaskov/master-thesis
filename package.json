@@ -2,8 +2,8 @@
   "name": "monorepo-elysia-svelte",
   "private": true,
   "workspaces": [
-    "packages/backend",
-    "packages/frontend"
+    "services/backend",
+    "services/frontend"
   ],
   "trustedDependencies": [
     "@biomejs/biome",

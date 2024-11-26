@@ -11,19 +11,19 @@ services:
   backend:
     build: 
       context: .
-      dockerfile: ./packages/backend/develop.dockerfile
+      dockerfile: ./services/backend/develop.dockerfile
     develop:
       watch: 
         - action: sync
-          path: ./packages/backend
-          target: /app/packages/backend
+          path: ./services/backend
+          target: /app/services/backend
 
   frontend:
     build: 
       context: .
-      dockerfile: ./packages/frontend/develop.dockerfile
+      dockerfile: ./services/frontend/develop.dockerfile
     develop: 
       watch: 
         - action: sync
-          path: ./packages/frontend
-          target: /app/packages/frontend
+          path: ./services/frontend
+          target: /app/services/frontend

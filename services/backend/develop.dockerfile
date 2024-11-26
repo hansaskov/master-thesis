@@ -6,17 +6,17 @@ WORKDIR /app
 
 # Copy necessary package files to install dependencies
 COPY bun.lockb package.json /app/
-COPY /packages/backend/package.json /app/packages/backend/
-COPY /packages/frontend/package.json /app/packages/frontend/
+COPY /services/backend/package.json /app/services/backend/
+COPY /services/frontend/package.json /app/services/frontend/
 
 # Install dependencies using Bun
 RUN bun install
 
 # Copy the backend source code into the container
-COPY /packages/backend /app/packages/backend
+COPY /services/backend /app/services/backend
 
 # Move directory to frontend
-WORKDIR /app/packages/backend
+WORKDIR /app/services/backend
 
 # Start the backend server in watch mode for development
 CMD ["bun", "--watch", "./src/index.ts"]

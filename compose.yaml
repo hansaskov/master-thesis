@@ -20,7 +20,7 @@ services:
     profiles: [stateless]
     build: 
       context: .
-      dockerfile: ./packages/frontend/dockerfile
+      dockerfile: ./services/frontend/dockerfile
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
@@ -31,7 +31,7 @@ services:
     profiles: [stateless]
     build: 
       context: .
-      dockerfile: ./packages/backend/dockerfile
+      dockerfile: ./services/backend/dockerfile
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}

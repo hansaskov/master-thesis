@@ -3,21 +3,21 @@ FROM oven/bun AS build
 
 WORKDIR /app
 
-# Cache packages
+# Cache services
 COPY package.json package.json
 COPY bun.lockb bun.lockb
 
-COPY /packages/backend/package.json ./packages/backend/package.json
-COPY /packages/frontend/package.json ./packages/frontend/package.json
+COPY /services/backend/package.json ./services/backend/package.json
+COPY /services/frontend/package.json ./services/frontend/package.json
 
 # Install dependencies
 RUN bun install
 
 # Copy the rest of your app's source code
-COPY /packages/frontend ./packages/frontend
+COPY /services/frontend ./services/frontend
 
 # Move directory to frontend
-WORKDIR /app/packages/frontend
+WORKDIR /app/services/frontend
 
 # Build your app
 RUN bun run build
@@ -26,10 +26,10 @@ RUN bun run build
 FROM caddy:2-alpine
 
 # Copy the built assets from the build stage
-COPY --from=build /app/packages/frontend/build /usr/share/caddy
+COPY --from=build /app/services/frontend/build /usr/share/caddy
 
 # Copy your Caddyfile
-COPY ./packages/frontend/Caddyfile /etc/caddy/Caddyfile
+COPY ./services/frontend/Caddyfile /etc/caddy/Caddyfile
 
 # Expose port 8080 HTTP
 EXPOSE 8080

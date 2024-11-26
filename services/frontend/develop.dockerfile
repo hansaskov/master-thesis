@@ -6,17 +6,17 @@ WORKDIR /app
 
 # Copy necessary package files to install dependencies
 COPY bun.lockb package.json /app/
-COPY /packages/backend/package.json /app/packages/backend/
-COPY /packages/frontend/package.json /app/packages/frontend/
+COPY /services/backend/package.json /app/services/backend/
+COPY /services/frontend/package.json /app/services/frontend/
 
 # Install dependencies
 RUN bun install
 
 # Copy the rest of your app's source code
-COPY /packages/frontend ./packages/frontend
+COPY /services/frontend ./services/frontend
 
 # Move directory to frontend
-WORKDIR /app/packages/frontend
+WORKDIR /app/services/frontend
 
 # Build your app
 RUN bun run build
