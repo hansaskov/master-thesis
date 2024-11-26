@@ -16,7 +16,7 @@ env:
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} 
-  INTERFACE_FQDN: https://master-thesis.hjemmet.net
+  INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
   INGEST_FQDN: https://ingest.hjemmet.net
   DOZZLE_FQDN: https://dozzle.hjemmet.net
   
