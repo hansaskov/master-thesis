@@ -1,22 +1,25 @@
-import { logger } from "@bogeychan/elysia-logger";
-import { Elysia, t } from "elysia";
+import { swagger } from "@elysiajs/swagger";
+import { Elysia, error, t } from "elysia";
+import { authRoutes } from "./auth/routes";
+import { readings } from "./db/tables/readings/api";
+import { treaty } from '@elysiajs/eden'
 
-const api = new Elysia({ prefix: "/api" }).get(
-	"/hello",
-	({ query }) => `Hello ${query.name}`,
-	{
-		query: t.Object({
-			name: t.String(),
-		}),
-	},
-);
+const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
 
-const app = new Elysia()
-	.use(logger())
-	.use(api);
+const app = new Elysia({ precompile: true })
+	.use(swagger({ path: "/api/swagger" }))
+	.use(api)
+	.listen(process.env.PORT as string);
 
-app.listen(process.env.PORT as string, () =>
-	console.log(`🦊 Server started at ${app.server?.url.origin}`),
-);
+console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
+
+const client = treaty<App>('localhost:3000').api
+
+client.latest_reading.get({
+	query: {
+		name: "test",
+		system_id: "test"
+	}
+})

@@ -7,12 +7,15 @@
 
 	const api = treaty<App>($page.url.host).api;
 
-	let response: ReturnType<typeof api.hello.get>;
+	let response: ReturnType<typeof api.latest_reading.get>;
 	let name: string;
 
 	function onclick() {
-		response = api.hello.get({
-			query: { name }
+		response = api.latest_reading.get({
+			query: { 
+				name: name, 
+				system_id: "id_test" 
+			}
 		});
 	}
 </script>
