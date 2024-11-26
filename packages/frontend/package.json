@@ -12,10 +12,14 @@
 		"lint": "prettier --check . && eslint ."
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^9.2.0",
+		"@sveltejs/adapter-static": "^3.0.6",
 		"@sveltejs/kit": "^2.8.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.1",
+		"@tailwindcss/typography": "^0.5.15",
 		"@types/bun": "^1.1.13",
 		"@types/eslint": "^9.6.1",
+		"autoprefixer": "^10.4.20",
 		"backend": "workspace:*",
 		"elysia": "^1.1.25",
 		"eslint": "^9.15.0",
@@ -24,6 +28,7 @@
 		"globals": "^15.12.0",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.8",
+		"prettier-plugin-tailwindcss": "^0.6.9",
 		"svelte": "^5.2.6",
 		"svelte-check": "^4.0.9",
 		"typescript": "^5.6.3",
@@ -32,6 +37,16 @@
 	},
 	"dependencies": {
 		"@elysiajs/eden": "^1.1.3",
-		"@sveltejs/adapter-static": "^3.0.6"
+		"@internationalized/date": "^3.6.0",
+		"bits-ui": "^0.21.16",
+		"chart.js": "^4.4.6",
+		"clsx": "^2.1.1",
+		"cmdk-sv": "^0.0.18",
+		"lucide-svelte": "^0.461.0",
+		"mode-watcher": "^0.5.0",
+		"svelte-headless-table": "^0.18.3",
+		"svelte-radix": "^2.0.1",
+		"tailwind-merge": "^2.5.5",
+		"tailwind-variants": "^0.3.0"
 	}
 }
