@@ -9,9 +9,11 @@ import { systems } from "./tables";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
 
+/*
 console.log("Starting migrations");
 await migrate(db, { migrationsFolder: "./drizzle" });
 console.log("Migrations finished");
+*/
 
 const testDbConnection = () =>
 	db
