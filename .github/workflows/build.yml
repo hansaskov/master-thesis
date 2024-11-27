@@ -176,4 +176,8 @@ jobs:
       - name: Deploy caddy
         run: docker compose --profile proxy -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
       - name: Deploy docker compose
-        run: docker compose up -d --build
+        run: docker compose -f compose.yaml up -d --build
+        env:
+          INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
+          MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
+          
