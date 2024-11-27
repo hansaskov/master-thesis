@@ -159,7 +159,6 @@ jobs:
   deploy-services:
     runs-on: ubuntu-latest
     environment: preview
-    needs: build_frontend_docker_image
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -171,13 +170,25 @@ jobs:
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      - name: Create proxy network
-        run: docker network create proxy_network
-      - name: Deploy caddy
-        run: docker compose --profile proxy -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
-      - name: Deploy docker compose
-        run: docker compose --profile stateful,stateless -f compose.yaml up -d --build
+      - name: Create proxy network if not exists
+        run: |
+          if ! docker network inspect proxy_network >/dev/null 2>&1; then
+            docker network create proxy_network;
+          fi
         env:
+          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+      - name: Deploy caddy
+        run: docker compose -f ./services/caddy/compose.yaml up -d
+        env:
+          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+          COMPOSE_PROJECT_NAME: caddy
+          COMPOSE_PROFILES: proxy
+      - name: Deploy docker compose
+        run: docker compose -f compose.yaml up -d --build
+        env:
+          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+          COMPOSE_PROJECT_NAME: thesis-preview
+          COMPOSE_PROFILES: stateless, stateful
           INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
           MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
           MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
