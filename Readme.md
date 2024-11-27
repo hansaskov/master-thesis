@@ -49,7 +49,7 @@ You need to set up environment variables for the project. These values help conf
 cp .env.example .env
 ```
 
-- **`cp .env.example .env`**: This copies the example `.env` file into a new `.env` file, which you can then edit to fill in your own values.
+- **`cp .env.example .env`**: This copies the `.env.example` file into a new `.env` file, which you can then edit to fill in your own values.
 
 
 ## Running the Project

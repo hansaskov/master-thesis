@@ -9,6 +9,7 @@
 
 *backend.exe
 
+.env
 
 logs
 _.log
