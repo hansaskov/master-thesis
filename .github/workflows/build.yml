@@ -19,6 +19,7 @@ env:
 jobs:
   build_frontend_docker_image:
     runs-on: ubuntu-latest
+    need: build_backend_docker_image
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
