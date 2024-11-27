@@ -172,6 +172,6 @@ jobs:
       - name: Create proxy network
         run: docker network create proxy_network
       - name: Deploy caddy
-        run: docker compose -f .\services\caddy\compose.yaml --env-file .\services\caddy\.env.caddy up
+        run: docker compose -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up
       - name: Deploy docker compose
         run: docker compose up -d --build
