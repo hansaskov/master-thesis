@@ -1,5 +1,22 @@
 services:
   ## The frontend service will build the frontend and then serve the files using caddy.
+
+## The entrypoint of our app. This service will proxy requests to all other services. 
+  caddy:
+    profiles: [proxy]
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    networks:
+      - proxy-network
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+
   frontend: 
     profiles: [stateless]
     restart: unless-stopped
@@ -7,7 +24,7 @@ services:
       context: .
       dockerfile: ./services/frontend/dockerfile
     networks:
-      - proxy_network
+      - proxy-network
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
@@ -22,7 +39,7 @@ services:
       dockerfile: ./services/backend/dockerfile
     networks:
       - default
-      - proxy_network
+      - proxy-network
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
@@ -56,7 +73,10 @@ services:
 
 volumes:
   timescaledb-data:
+  caddy-data:
+  caddy-config:
 
 networks:
-  proxy_network:
-    external: true
+  proxy-network:
+    name: proxy-network
+
