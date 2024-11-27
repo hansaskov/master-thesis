@@ -87,6 +87,8 @@ jobs:
         
   build_backend_docker_image:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_HOST: ""
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
