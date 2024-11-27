@@ -1,7 +1,8 @@
 name: Deploy preview
 
 on:
-  workflow_call:
+  push:
+    branches: preview
 
 env:
   DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
