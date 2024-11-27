@@ -178,6 +178,8 @@ jobs:
       - name: Deploy docker compose
         run: docker compose --profile stateful --profile stateless -f compose.yaml up -d --build
         env:
+          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+          COMPOSE_PROJECT_NAME: thesis-preview
           INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
           MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
           MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
