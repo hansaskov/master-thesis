@@ -2,6 +2,7 @@ services:
   ## The frontend service will build the frontend and then serve the files using caddy.
   frontend: 
     profiles: [stateless]
+    restart: unless-stopped
     build: 
       context: .
       dockerfile: ./services/frontend/dockerfile
@@ -15,10 +16,12 @@ services:
   ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
     profiles: [stateless]
+    restart: unless-stopped
     build: 
       context: .
       dockerfile: ./services/backend/dockerfile
     networks:
+      - default
       - proxy_network
     environment:
       - DATABASE_URL=${DATABASE_URL}
@@ -38,7 +41,7 @@ services:
   timescaledb:
     profiles: [stateful]    
     image: timescale/timescaledb:latest-pg17
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}

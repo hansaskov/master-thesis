@@ -3,11 +3,6 @@
 
 services:
 
-  caddy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
-    ports:
-      - "3000:3000"
-
   backend:
     build: 
       context: .
@@ -17,6 +12,10 @@ services:
         - action: sync
           path: ./services/backend
           target: /app/services/backend
+        - action: rebuild
+          path: ./services/backend/package.json
+        - action: rebuild
+          path: .env
 
   frontend:
     build: 
