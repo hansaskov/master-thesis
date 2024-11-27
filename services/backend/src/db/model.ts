@@ -17,6 +17,7 @@ import {
 	partsToSystemModels,
 	readings,
 	selectKeysSchema,
+	selectOrganizationsSchema,
 	selectReadingsSchema,
 	sessions,
 	systemModels,
@@ -71,6 +72,7 @@ export const Schema = {
 		{
 			keys: selectKeysSchema,
 			readings: selectReadingsSchema,
+			organizations: selectOrganizationsSchema,
 		},
 		"select",
 	),

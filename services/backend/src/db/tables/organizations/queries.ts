@@ -1,7 +1,9 @@
 import { and, eq } from "drizzle-orm";
+import { Prettify } from "elysia/types";
 import {
 	type Organizations,
 	type OrganizationsNew,
+	type OrganizationsUpdate,
 	type User,
 	type UserNew,
 	organizations,
@@ -19,7 +21,7 @@ export const organizationQueries = {
 	create: async (values: OrganizationsNew) => {
 		db.insert(organizations).values(values);
 	},
-	update: async (values: Organizations) => {
+	update: async (values: OrganizationsUpdate) => {
 		db.update(organizations).set(values).where(eq(organizations.id, values.id));
 	},
 	selectOrganizationOnUser: async (user: StrictPick<User, "id">) => {

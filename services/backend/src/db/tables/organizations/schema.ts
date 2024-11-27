@@ -1,8 +1,12 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-typebox";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { Prettify } from "elysia/types";
-import { StrictOmit, StrictPartial, StrictPick } from "../../../types/strict";
+import {
+	StrictOmit,
+	type StrictPartial,
+	StrictPick,
+} from "../../../types/strict";
 import { generateRandomString } from "../../utils";
 
 export const organizations = pgTable("organizations", {
@@ -17,5 +21,11 @@ export const insertOrganizationsSchema = createInsertSchema(organizations, {
 	name: t.String({ minLength: 4 }),
 });
 
+export const selectOrganizationsSchema = createSelectSchema(organizations);
+export const updateOrganizationsSchema = createSelectSchema(organizations, {
+	name: t.Optional(t.String()),
+});
+
 export type Organizations = typeof organizations.$inferSelect;
 export type OrganizationsNew = typeof organizations.$inferInsert;
+export type OrganizationsUpdate = StrictPartial<Organizations, "name">;

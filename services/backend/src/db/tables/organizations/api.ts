@@ -1,7 +1,12 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { AuthService } from "../../../auth/middleware";
-import { Queries } from "../../model";
+import { Queries, Schema } from "../../model";
 
 const organizationsApi = new Elysia({ prefix: "organization" })
 	.use(AuthService)
-	.post("/", ({ user }) => "Hello ");
+	.post("/", ({ user, query }) => Queries.organizations.update(query), {
+		query: t.Object({
+			name: t.Optional(Schema.select.organizations.name),
+			id: Schema.select.organizations.id,
+		}),
+	});
