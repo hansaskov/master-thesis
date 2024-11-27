@@ -14,8 +14,6 @@ services:
           target: /app/services/backend
         - action: rebuild
           path: ./services/backend/package.json
-        - action: rebuild
-          path: .env
 
   frontend:
     build: 

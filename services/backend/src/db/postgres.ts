@@ -2,24 +2,16 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { environment } from "../environment";
 import { exit } from "process";
 import { systems } from "./tables";
+import { exponentialBackoff } from "../expoentialBackoff";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
 
-const testDbConnection = async () => {
-    try {
-        console.log("INFO: Testing db connection to systems table");
+const testDbConnection = () => db.select().from(systems).limit(1).then(v => v.at(0))
 
-        // Await the database query
-        await db.select({ id: systems.id }).from(systems).limit(1);
-
-        console.log("INFO: Testing succeeded, continuing");
-
-    } catch (e) {
-        console.error(e)
-        console.error("CRITICAL ERROR: Cannot access systems table. Shutting down");
-        exit(1)
+exponentialBackoff(testDbConnection).then(isSuccess => {
+    if (isSuccess) {
+        console.log("✅ Successfully connected to Postgres")
+    } else {
+        console.log("❗ CRITICAL ERROR: Failed to connect to db")
     }
-};
-
-// Invoke the testDbConnection function on startup
-testDbConnection();
+})
