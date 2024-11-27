@@ -35,10 +35,6 @@ services:
     profiles: [stateful]    
     image: timescale/timescaledb:latest-pg17
     restart: always
-    networks:
-      - proxy_network
-    ports: 
-      - "5433:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
