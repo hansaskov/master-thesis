@@ -14,12 +14,3 @@ const app = new Elysia({ precompile: true })
 console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
-
-const client = treaty<App>('localhost:3000').api
-
-client.latest_reading.get({
-	query: {
-		name: "test",
-		system_id: "test"
-	}
-})

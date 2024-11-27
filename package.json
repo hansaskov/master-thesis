@@ -1,0 +1,13 @@
+{
+  "name": "monorepo-elysia-svelte",
+  "private": true,
+  "workspaces": [
+    "services/backend",
+    "services/frontend"
+  ],
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@sveltejs/kit",
+    "esbuild"
+  ]
+}
