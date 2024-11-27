@@ -1,7 +1,0 @@
-http://localhost {
-    reverse_proxy thesis-dev-frontend:80
-}
-
-http://preview.localhost {
-    reverse_proxy thesis-preview-frontend:80
-}
