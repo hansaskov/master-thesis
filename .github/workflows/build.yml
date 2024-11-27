@@ -178,7 +178,7 @@ jobs:
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       - name: Deploy caddy
-        run: docker compose --profile proxy -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
+        run: docker compose -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       - name: Deploy docker compose
