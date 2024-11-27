@@ -111,6 +111,7 @@ web_modules/
 .env.production.local
 .env.local
 .env.preview
+.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 
