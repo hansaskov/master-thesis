@@ -27,3 +27,5 @@ services:
         - action: sync
           path: ./services/frontend
           target: /app/services/frontend
+        - action: rebuild
+          path: ./services/frontend/package.json
