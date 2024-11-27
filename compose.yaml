@@ -1,26 +1,12 @@
 services:
-
-  ## The entrypoint of our app. This service will proxy requests to all other services. 
-  caddy:
-    profiles: [proxy]
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - caddy-data:/data
-      - caddy-config:/config
-      - /var/run/docker.sock:/var/run/docker.sock
-    
-
   ## The frontend service will build the frontend and then serve the files using caddy.
   frontend: 
     profiles: [stateless]
     build: 
       context: .
       dockerfile: ./services/frontend/dockerfile
+    networks:
+      - proxy_network
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
@@ -32,6 +18,8 @@ services:
     build: 
       context: .
       dockerfile: ./services/backend/dockerfile
+    networks:
+      - proxy_network
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
@@ -51,8 +39,6 @@ services:
     profiles: [stateful]    
     image: timescale/timescaledb:latest-pg17
     restart: always
-    ports: 
-      - "5432:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -68,8 +54,8 @@ services:
       timeout: 10s
 
 volumes:
-  caddy-data:
-  caddy-config:
   timescaledb-data:
 
-
+networks:
+  proxy_network:
+    external: true
