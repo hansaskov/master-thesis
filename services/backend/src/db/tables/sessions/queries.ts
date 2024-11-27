@@ -11,7 +11,9 @@ const prepareSelectUniqueWithUser = db
 
 export const sessionQueries = {
 	selectWithUser: async (sessionId: string) =>
-		await prepareSelectUniqueWithUser.execute({ sessionId }).then((v) => v.at(0)),
+		await prepareSelectUniqueWithUser
+			.execute({ sessionId })
+			.then((v) => v.at(0)),
 	create: async (session: SessionNew) => {
 		await db.insert(sessions).values(session);
 	},

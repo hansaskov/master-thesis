@@ -14,7 +14,9 @@ export const systems = pgTable("systems", {
 	organization_id: text()
 		.notNull()
 		.references(() => organizations.id, { onDelete: "cascade" }),
-	system_model_id: text().references(() => systemModels.id, { onDelete: "set null" }),
+	system_model_id: text().references(() => systemModels.id, {
+		onDelete: "set null",
+	}),
 });
 
 export const insertSystemsSchema = createInsertSchema(systems, {

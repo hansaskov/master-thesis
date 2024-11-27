@@ -148,7 +148,7 @@ describe("Readings", async () => {
 	});
 });
 
-describe("Latest Readings", async() => {
+describe("Latest Readings", async () => {
 	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
 	const api = createTestApi();
 
@@ -157,25 +157,26 @@ describe("Latest Readings", async() => {
 	});
 
 	it("latest reading", async () => {
-
-		const latestReading = seedData.readings.sort((a, b) => a.time.getTime() - b.time.getTime() ).at(0)
+		const latestReading = seedData.readings
+			.sort((a, b) => a.time.getTime() - b.time.getTime())
+			.at(0);
 
 		if (latestReading === undefined) {
 			return "latestReading undefined";
 		}
 
-		const { error , data, } = await api.latest_reading.get({
+		const { error, data } = await api.latest_reading.get({
 			query: {
 				name: latestReading?.name,
-				system_id: latestReading?.system_id
-			}
-		})
+				system_id: latestReading?.system_id,
+			},
+		});
 
 		if (!data) {
 			return "latest API reading undefined";
 		}
 
 		expect(error).toBeNil();
-		expect(latestReading.system_id).toBe(data.system_id)
-	})
-})
+		expect(latestReading.system_id).toBe(data.system_id);
+	});
+});

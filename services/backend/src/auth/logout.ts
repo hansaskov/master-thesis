@@ -1,6 +1,10 @@
 import Elysia, { error, redirect, t } from "elysia";
 import { Schema } from "../db/model";
-import { Authenticate, deleteSessionTokenCookie, invalidateSession } from "./lucia";
+import {
+	Authenticate,
+	deleteSessionTokenCookie,
+	invalidateSession,
+} from "./lucia";
 
 export const logoutRoutes = new Elysia().get(
 	"/logout",

@@ -1,8 +1,8 @@
 import Elysia, { error, t } from "elysia";
+import { AuthService } from "../../../auth/middleware";
 import { Queries, Schema, Table } from "../../model";
 import { db } from "../../postgres";
 import { IsoDate } from "../../utils";
-import { AuthService } from "../../../auth/middleware";
 
 export const readings = new Elysia()
 	.post(
@@ -43,7 +43,9 @@ export const readings = new Elysia()
 	.get(
 		"/readings",
 		async ({ query }) => {
-			const readings = await Queries.readings.selectAll({ system_id: query.system_id });
+			const readings = await Queries.readings.selectAll({
+				system_id: query.system_id,
+			});
 			return readings;
 		},
 		{
@@ -58,15 +60,15 @@ export const readings = new Elysia()
 	)
 	.get(
 		"/latest_reading",
-		async ({  query: { name, system_id } }) => {
-			const reading = await Queries.readings.selectLatest({ system_id, name })
+		async ({ query: { name, system_id } }) => {
+			const reading = await Queries.readings.selectLatest({ system_id, name });
 
 			return reading;
 		},
 		{
 			query: t.Object({
 				system_id: Schema.insert.readings.system_id,
-				name: Schema.insert.readings.name
-			})
-		}
-	)
+				name: Schema.insert.readings.name,
+			}),
+		},
+	);

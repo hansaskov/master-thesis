@@ -1,4 +1,10 @@
-export function catchError<T, E extends new (message: string) => Error, Errors extends E[] = E[]>(
+export function catchError<
+	T,
+	E extends new (
+		message: string,
+	) => Error,
+	Errors extends E[] = E[],
+>(
 	promise: Promise<T>,
 	errorToCatch?: [...Errors],
 ): Promise<[undefined, T] | [InstanceType<Errors[number]>]> {

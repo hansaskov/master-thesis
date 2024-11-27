@@ -1,5 +1,4 @@
 import { t } from "elysia";
-import { github } from "../auth/login/github";
 import {
 	factoryAreas,
 	insertFactoryAreaSchema,
@@ -29,6 +28,7 @@ import {
 	usersToOrganizations,
 } from "./tables";
 import { keysQueries } from "./tables/keys/queries";
+import { organizationQueries } from "./tables/organizations/queries";
 import { readingsQueries } from "./tables/readings/queries";
 import { sessionQueries } from "./tables/sessions/queries";
 import { usersQueries } from "./tables/users/queries";
@@ -78,9 +78,9 @@ export const Schema = {
 		session: t.Cookie({
 			sessionId: t.String({
 				description: "Session cookie will be used to keep a user logged in",
-				error:{error: "Unauthorized access, due to invalid session cookie"},
+				error: { error: "Unauthorized access, due to invalid session cookie" },
 			}),
-		}, ),
+		}),
 		github: t.Cookie(
 			{
 				githubState: t.String(),
@@ -114,4 +114,5 @@ export const Queries = {
 	readings: readingsQueries,
 	sessions: sessionQueries,
 	users: usersQueries,
+	organizations: organizationQueries,
 };

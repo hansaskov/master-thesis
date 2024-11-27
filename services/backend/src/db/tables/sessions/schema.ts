@@ -19,5 +19,7 @@ export const insertSessionsSchema = createInsertSchema(sessions, {
 });
 
 export type Session = typeof sessions.$inferSelect;
-export type SessionNew = typeof sessions.$inferSelect;
-export type SessionUpdate = Prettify<StrictPick<Session, "id"> & Partial<StrictOmit<Session, "id">>>;
+export type SessionNew = typeof sessions.$inferInsert;
+export type SessionUpdate = Prettify<
+	StrictPick<Session, "id"> & Partial<StrictOmit<Session, "id">>
+>;

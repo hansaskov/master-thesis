@@ -28,5 +28,7 @@ export function time_bucket<T extends SQLWrapper & { _: { data: Date } }>(
 	expression: T,
 	interval: IntervalString,
 ): SQL<Date> {
-	return sql`time_bucket(${interval}, ${expression})`.mapWith((v) => new Date(v));
+	return sql`time_bucket(${interval}, ${expression})`.mapWith(
+		(v) => new Date(v),
+	);
 }

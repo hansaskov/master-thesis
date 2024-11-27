@@ -5,7 +5,11 @@ import { TypeCompiler } from "elysia/type-system";
 import { Queries, Schema } from "../../db/model";
 import { environment } from "../../environment";
 import { catchError } from "../../types/errors";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "../lucia";
+import {
+	createSession,
+	generateSessionToken,
+	setSessionTokenCookie,
+} from "../lucia";
 
 export const entraId = new MicrosoftEntraId(
 	environment.MICROSOFT_TENANT_ID,
@@ -44,17 +48,22 @@ export const microsoftRoute = new Elysia()
 			// Call the microsoft API to get validate authorization code
 			const codeVerifier = cookie.microsoftCode.value;
 
-			const [err, tokens] = await catchError(entraId.validateAuthorizationCode(code, codeVerifier));
+			const [err, tokens] = await catchError(
+				entraId.validateAuthorizationCode(code, codeVerifier),
+			);
 			if (err) {
 				return error(400, err);
 			}
 
 			// Call the microsoft API to get user info
-			const userResponse = await fetch("https://graph.microsoft.com/oidc/userinfo", {
-				headers: {
-					Authorization: `Bearer ${tokens.accessToken()}`,
+			const userResponse = await fetch(
+				"https://graph.microsoft.com/oidc/userinfo",
+				{
+					headers: {
+						Authorization: `Bearer ${tokens.accessToken()}`,
+					},
 				},
-			}).then((r) => r.json());
+			).then((r) => r.json());
 
 			const userParsed = validateUser.Decode(userResponse);
 
@@ -67,12 +76,19 @@ export const microsoftRoute = new Elysia()
 				const sessionToken = generateSessionToken();
 				const session = await createSession(sessionToken, existingUser.id);
 
-				setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
+				setSessionTokenCookie(
+					cookie.sessionId,
+					sessionToken,
+					session.expires_at,
+				);
 
 				return redirect("/systems", 302);
 			}
 
-			const user = await Queries.users.create({ provider_name: "Microsoft", provider_id: userParsed.sub });
+			const user = await Queries.users.create({
+				provider_name: "Microsoft",
+				provider_id: userParsed.sub,
+			});
 
 			const sessionToken = generateSessionToken();
 			const session = await createSession(sessionToken, user.id);

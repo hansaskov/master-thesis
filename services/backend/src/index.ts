@@ -1,8 +1,8 @@
+import { treaty } from "@elysiajs/eden";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
 import { authRoutes } from "./auth/routes";
 import { readings } from "./db/tables/readings/api";
-import { treaty } from '@elysiajs/eden'
 
 const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
 

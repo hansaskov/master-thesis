@@ -11,11 +11,13 @@ import {
 } from "drizzle-typebox";
 
 import type { Table } from "drizzle-orm";
-import { customAlphabet } from "nanoid";
 import { error, t } from "elysia";
+import { customAlphabet } from "nanoid";
 
-
-type Spread<T extends TObject | Table, Mode extends "select" | "insert" | undefined> = T extends TObject<infer Fields>
+type Spread<
+	T extends TObject | Table,
+	Mode extends "select" | "insert" | undefined,
+> = T extends TObject<infer Fields>
 	? {
 			[K in keyof Fields]: Fields[K];
 		}
@@ -30,7 +32,10 @@ type Spread<T extends TObject | Table, Mode extends "select" | "insert" | undefi
 /**
  * Spread a Drizzle schema into a plain object
  */
-export const spread = <T extends TObject | Table, Mode extends "select" | "insert" | undefined>(
+export const spread = <
+	T extends TObject | Table,
+	Mode extends "select" | "insert" | undefined,
+>(
 	schema: T,
 	mode?: Mode,
 ): Spread<T, Mode> => {
@@ -45,7 +50,10 @@ export const spread = <T extends TObject | Table, Mode extends "select" | "inser
 				break;
 			}
 
-			table = mode === "insert" ? createInsertSchema(schema) : createSelectSchema(schema);
+			table =
+				mode === "insert"
+					? createInsertSchema(schema)
+					: createSelectSchema(schema);
 
 			break;
 
@@ -54,7 +62,8 @@ export const spread = <T extends TObject | Table, Mode extends "select" | "inser
 			table = schema;
 	}
 
-	for (const key of Object.keys(table.properties)) newSchema[key] = table.properties[key];
+	for (const key of Object.keys(table.properties))
+		newSchema[key] = table.properties[key];
 
 	return newSchema as any;
 };
@@ -71,7 +80,10 @@ const schema = spread(table, 'insert')
 const schema = spread(table, 'select')
 ```
 */
-export const spreads = <T extends Record<string, TObject | Table>, Mode extends "select" | "insert" | undefined>(
+export const spreads = <
+	T extends Record<string, TObject | Table>,
+	Mode extends "select" | "insert" | undefined,
+>(
 	models: T,
 	mode?: Mode,
 ): {
@@ -85,13 +97,12 @@ export const spreads = <T extends Record<string, TObject | Table>, Mode extends 
 	return newSchema as any;
 };
 
-
-
 // Used for generating random ids for primary keys
-export const generateRandomString = customAlphabet("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+export const generateRandomString = customAlphabet(
+	"123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",
+);
 
-
-export const IsoDate = t.Transform(t.String({format: "iso-date-time"}))
+export const IsoDate = t
+	.Transform(t.String({ format: "iso-date-time" }))
 	.Decode((v) => new Date(v))
 	.Encode((v) => v.toISOString());
-
