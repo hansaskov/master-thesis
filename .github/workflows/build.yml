@@ -12,7 +12,7 @@ env:
   REGISTRY: ghcr.io
   FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
   BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
-  DATABASE_URL: postgresql://myuser:password@localhost:15432/mydatabase
+  DATABASE_URL: postgresql://myuser:password@localhost:5432/mydatabase
   DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
