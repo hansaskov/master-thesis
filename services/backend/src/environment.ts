@@ -3,7 +3,7 @@ import { Value } from "@sinclair/typebox/value";
 import { env } from "bun";
 import { t } from "elysia";
 
-const optionalEnviromentSchema = t.Object({
+const optionalEnvironmentSchema = t.Object({
 	GITHUB_CLIENT_ID: t.String({ minLength: 1 }),
 	GITHUB_CLIENT_SECRET: t.String({ minLength: 1 }),
 	MICROSOFT_TENANT_ID: t.String({ minLength: 1 }),
@@ -12,21 +12,21 @@ const optionalEnviromentSchema = t.Object({
 	MICROSOFT_REDIRECT_URI: t.String({ minLength: 1 }),
 });
 
-const requiredEnviromentSchema = t.Object({
+const requiredEnvironmentSchema = t.Object({
 	DATABASE_URL: t.String({ minLength: 1 }),
 	PROD: t.Boolean(),
 });
 
-const enviromentSchema = t.Intersect([
-    requiredEnviromentSchema,
-    optionalEnviromentSchema
+const environmentSchema = t.Intersect([
+    requiredEnvironmentSchema,
+    optionalEnvironmentSchema
 ]);
 
 let cleanedEnv: unknown;
-cleanedEnv = Value.Convert(enviromentSchema, env);
-cleanedEnv = Value.Clean(enviromentSchema, cleanedEnv);
+cleanedEnv = Value.Convert(environmentSchema, env);
+cleanedEnv = Value.Clean(environmentSchema, cleanedEnv);
 
-function parseEnviroment(schema: typeof requiredEnviromentSchema | typeof enviromentSchema) {
+function parseEnvironment(schema: typeof requiredEnvironmentSchema | typeof environmentSchema) {
 
 		if (Value.Check(schema, cleanedEnv) === false) {
 			console.error("Errors while compiling config");
@@ -40,6 +40,6 @@ function parseEnviroment(schema: typeof requiredEnviromentSchema | typeof enviro
 		return Value.Encode(schema, cleanedEnv)
 }
 
-const input = env.PROD === "true" ? enviromentSchema : requiredEnviromentSchema
+const input = env.PROD === "true" ? environmentSchema : requiredEnvironmentSchema
 
-export const environment = parseEnviroment(input) as typeof enviromentSchema.static
+export const environment = parseEnvironment(input) as typeof environmentSchema.static
