@@ -181,6 +181,8 @@ jobs:
         run: docker compose -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+          COMPOSE_PROJECT_NAME: caddy
+          COMPOSE_PROFILES: proxy
       - name: Deploy docker compose
         run: docker compose --profile stateful --profile stateless -f compose.yaml up -d --build
         env:
