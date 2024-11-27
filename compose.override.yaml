@@ -1,0 +1,29 @@
+## Additional compose settings for development
+## For more info see https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
+
+services:
+
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports:
+      - "3000:3000"
+
+  backend:
+    build: 
+      context: .
+      dockerfile: ./services/backend/develop.dockerfile
+    develop:
+      watch: 
+        - action: sync
+          path: ./services/backend
+          target: /app/services/backend
+
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./services/frontend/develop.dockerfile
+    develop: 
+      watch: 
+        - action: sync
+          path: ./services/frontend
+          target: /app/services/frontend

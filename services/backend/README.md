@@ -1,29 +1,6 @@
 # Backend
 
-1. Bun
-2. ElysiaJS
-3. Drizzle
-4. SQLite
-5. Swagger
+This project is made to work in a monorepo with elysia and sveltekit.
 
-## Start dev server
+For development purposes please see the [README.MD](../../README.MD) file.
 
-1. Install Bun for you OS from [here](https://bun.sh/)
-
-2. Install project dependencies
-```bash
-bun install
-```
-
-3. Start the dev server
-```bash
-bun run dev
-```
-
-## Building
-
-To start a production version of your app:
-
-```bash
-bun ./src/index.ts
-```

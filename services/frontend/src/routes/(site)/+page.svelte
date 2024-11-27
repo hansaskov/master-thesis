@@ -1,5 +1,11 @@
 <script lang="ts">
     import { Button } from '$lib/components/ui/button';
+    import { page } from '$app/stores';
+	import { treaty } from '@elysiajs/eden';
+    import type { App } from "backend"
+
+    const api = treaty<App>($page.url.host).api;
+
 </script>
 
 <!-- Login Page Component (login/+page.svelte) -->

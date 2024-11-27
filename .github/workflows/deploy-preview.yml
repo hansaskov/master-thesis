@@ -1,14 +1,7 @@
 name: Deploy preview
 
-on: 
-  workflow_run:
-    workflows: 
-      - "Build and test images"
-    types:
-      - completed
-  push:
-    branches:
-      - preview
+on:
+  workflow_call:
 
 env:
   DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
@@ -17,13 +10,14 @@ env:
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} 
-  INTERFACE_FQDN: https://master-thesis.hjemmet.net
+  INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
   INGEST_FQDN: https://ingest.hjemmet.net
   DOZZLE_FQDN: https://dozzle.hjemmet.net
   
 jobs:
   deploy-services:
     runs-on: ubuntu-latest
+    environment: preview
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
