@@ -13,7 +13,7 @@ export const logoutRoutes = new Elysia().get(
 
 		await invalidateSession(session.id);
 		deleteSessionTokenCookie(sessionId);
-		return redirect("/api/status", 302);
+		return redirect("/", 302);
 	},
 	{
 		cookie: Schema.cookie.session,

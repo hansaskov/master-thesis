@@ -69,7 +69,7 @@ export const microsoftRoute = new Elysia()
 
 				setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
 
-				return redirect("/api/status", 302);
+				return redirect("/systems", 302);
 			}
 
 			const user = await Queries.users.create({ provider_name: "Microsoft", provider_id: userParsed.sub });
@@ -78,7 +78,7 @@ export const microsoftRoute = new Elysia()
 			const session = await createSession(sessionToken, user.id);
 			setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
 
-			return redirect("/api/status", 302);
+			return redirect("/systems", 302);
 		},
 		{
 			query: t.Object({

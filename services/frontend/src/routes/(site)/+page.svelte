@@ -1,10 +1,6 @@
 <script lang="ts">
+    
     import { Button } from '$lib/components/ui/button';
-    import { page } from '$app/stores';
-	import { treaty } from '@elysiajs/eden';
-    import type { App } from "backend"
-
-    const api = treaty<App>($page.url.host).api;
 
 </script>
 
@@ -19,7 +15,7 @@
                 </p>
             </div>
             
-            <Button href="/systems" variant="outline" class="w-full">
+            <Button href="/api/login/microsoft" variant="outline" class="w-full">
                 Login with Microsoft
             </Button>
             

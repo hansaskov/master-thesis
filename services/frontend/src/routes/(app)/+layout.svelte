@@ -132,7 +132,7 @@
 							Support
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/">
+						<DropdownMenu.Item href="/api/logout">
 							<LogOut class="h-4 w-4 mr-2" />
 							Logout
 						</DropdownMenu.Item>

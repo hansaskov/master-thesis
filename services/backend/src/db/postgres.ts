@@ -1,8 +1,9 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import { environment } from "../environment";
-import { exit } from "process";
+
 import { systems } from "./tables";
 import { exponentialBackoff } from "../expoentialBackoff";
+import { exit } from "process";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
 
@@ -12,6 +13,8 @@ exponentialBackoff(testDbConnection).then(isSuccess => {
     if (isSuccess) {
         console.log("✅ Successfully connected to Postgres")
     } else {
-        console.log("❗ CRITICAL ERROR: Failed to connect to db")
+        console.error("❗ CRITICAL ERROR: Failed to connect to db")
+        console.error("😶‍🌫️ Exit code 1")
+        exit(1);
     }
 })
