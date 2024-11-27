@@ -178,16 +178,17 @@ jobs:
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       - name: Deploy caddy
-        run: docker compose -f ./services/caddy/compose.yaml --env-file ./services/caddy/.env.caddy up -d
+        run: docker compose -f ./services/caddy/compose.yaml up -d
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
           COMPOSE_PROJECT_NAME: caddy
           COMPOSE_PROFILES: proxy
       - name: Deploy docker compose
-        run: docker compose --profile stateful --profile stateless -f compose.yaml up -d --build
+        run: docker compose -f compose.yaml up -d --build
         env:
           DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
           COMPOSE_PROJECT_NAME: thesis-preview
+          COMPOSE_PROFILES: stateless, stateful
           INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
           MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
           MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
