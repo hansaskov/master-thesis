@@ -13,6 +13,7 @@ env:
   FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
   BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
   DATABASE_URL: postgresql://myuser:password@localhost:5432/mydatabase
+  DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }} 
@@ -159,3 +160,21 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+  
+  deploy-services:
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy docker compose
+        run: docker compose up -d --build
