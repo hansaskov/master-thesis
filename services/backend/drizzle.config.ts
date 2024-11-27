@@ -1,7 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
 
 if(!process.env.DATABASE_URL) {
-  throw Error("No Database url found in enviroment")
+  throw Error("No Database url found in environment")
 }
  
 export default defineConfig({
