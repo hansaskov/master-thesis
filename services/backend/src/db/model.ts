@@ -110,8 +110,6 @@ export const Schema = {
 	},
 };
 
-const testCookie = t.Required(Schema.cookie.github, {});
-
 export const Queries = {
 	keys: keysQueries,
 	readings: readingsQueries,
