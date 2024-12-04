@@ -8,32 +8,9 @@
     import * as Command from "$lib/components/ui/command";
     import PartSelector from "./(components)/part-selector.svelte"
     import { type Part, partsStore } from "$lib/stores/parts.svelte"
+	import { organizationStore } from '$lib/stores/organization.svelte';
 
     let newOrganization = '';
-	let organizations = [
-		{ id: 1, name: 'TriVision A/S' },
-		{ id: 2, name: 'Vestkraft' }
-	];
-
-	function addOrganization() {
-		if (newOrganization) {
-			organizations = [
-				...organizations,
-				{ id: organizations.length + 1, name: newOrganization, }
-			];
-			console.log('New organization added:', newOrganization);
-			newOrganization = '';
-		}
-	}
-
-	function editOrganization(organizationName: string) {
-
-	}
-
-	function removeOrganization(organizationName: string) {
-		organizations = organizations.filter((organization) => organization.name !== organizationName);
-		console.log('organization removed:', organizationName);
-	}
 
 	interface Model {
 		name: string;
@@ -108,6 +85,19 @@
 			partsStore.selectedParts = partsStore.selectedParts.filter(p => p.id !== part.id);
 		}
 	}
+
+    let loading = true;
+
+    $effect.root(() => {
+        try {
+            organizationStore.update()
+        } catch (e) {
+            console.log(e)
+        } finally {
+            loading = false
+        }
+    })
+
 </script>
 
 <h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
@@ -121,7 +111,7 @@
                 <Label for="new-organization">Add New Organization</Label>
                 <div class="flex gap-2">
                     <Input placeholder="Enter organization name" bind:value={newOrganization} />
-                    <Button type="submit" on:click={addOrganization}>Add Organization</Button>
+                    <Button type="submit" on:click={async () => await organizationStore.add(newOrganization)}>Add Organization</Button>
                 </div>
             </div>
 
@@ -134,7 +124,7 @@
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {#each organizations as organization}
+                    {#each organizationStore.organizations as organization}
                         <Table.Row>
                             <Table.Cell>{organization.id}</Table.Cell>
                             <Table.Cell>{organization.name}</Table.Cell>
@@ -142,7 +132,7 @@
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    on:click={() => editOrganization(organization.name)}
+                                    on:click={async () => await organizationStore.edit(organization)}
                                 >
                                     Edit
                                 </Button>
@@ -151,7 +141,7 @@
                                 <Button
                                     variant="destructive"
                                     size="sm"
-                                    on:click={() => removeOrganization(organization.name)}
+                                    on:click={async () => await organizationStore.remove(organization.id)}
                                 >
                                     Remove
                                 </Button>

@@ -14,7 +14,11 @@ import { db } from "../../postgres";
 
 export const organizationQueries = {
 	delete: async ({ id }: StrictPick<Types.Organization.Select, "id">) =>
-		await db.delete(organizations).where(eq(organizations.id, id)),
+		await db
+			.delete(organizations)
+			.where(eq(organizations.id, id))
+			.returning()
+			.then((v) => v.at(0)),
 	create: async (values: Types.Organization.New) =>
 		await db
 			.insert(organizations)
@@ -28,6 +32,7 @@ export const organizationQueries = {
 			.where(eq(organizations.id, values.id))
 			.returning()
 			.then((v) => v.at(0)),
+	selectAll: async () => await db.select().from(organizations),
 	selectOrganizationsOnUser: async (user: StrictPick<User, "id">) =>
 		await db
 			.select({

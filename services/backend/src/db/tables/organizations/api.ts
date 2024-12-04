@@ -4,27 +4,15 @@ import { Queries, Schema } from "../../model";
 
 export const organizationsApi = new Elysia({ prefix: "organizations" })
 	.use(AuthService)
-	.get("/", ({ user }) =>
-		Queries.organizations.selectOrganizationsOnUser({ id: user.id }),
-	)
-	.post(
-		"/",
-		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to create organizations",
-				);
-			}
+	.get("/", async ({ user }) => {
+		if (user.is_superadmin) {
+			return await Queries.organizations.selectAll();
+		}
 
-			return await Queries.organizations.create({ name: body.name });
-		},
-		{
-			body: t.Object({
-				name: Schema.insert.organizations.name,
-			}),
-		},
-	)
+		return await Queries.organizations.selectOrganizationsOnUser({
+			id: user.id,
+		});
+	})
 	.patch(
 		"/",
 		async ({ user, body }) => {
@@ -54,6 +42,43 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			}
 
 			return result;
+		},
+		{
+			body: t.Object({
+				name: t.Optional(Schema.insert.organizations.name),
+				id: Schema.select.organizations.id,
+			}),
+		},
+	)
+	.post(
+		"/",
+		async ({ user, body }) => {
+			if (!user.is_superadmin) {
+				return error(
+					"Unauthorized",
+					"Only superadmins are allowed to create organizations",
+				);
+			}
+
+			return await Queries.organizations.create({ name: body.name });
+		},
+		{
+			body: t.Object({
+				name: Schema.insert.organizations.name,
+			}),
+		},
+	)
+	.delete(
+		"/",
+		async ({ user, body }) => {
+			if (!user.is_superadmin) {
+				return error(
+					"Unauthorized",
+					"Only superadmins are allowed to create organizations",
+				);
+			}
+
+			return await Queries.organizations.delete({ id: body.id });
 		},
 		{
 			body: t.Object({

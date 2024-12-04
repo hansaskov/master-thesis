@@ -32,10 +32,10 @@ import { keysQueries } from "./tables/keys/queries";
 import { organizationQueries } from "./tables/organizations/queries";
 import { readingsQueries } from "./tables/readings/queries";
 import { sessionQueries } from "./tables/sessions/queries";
+import { systemQueries } from "./tables/systems/queries";
 import { usersQueries } from "./tables/users/queries";
 import { usersToOrganizationQueries } from "./tables/users_to_organizations/queries";
 import { spreads } from "./utils";
-import { systemQueries } from "./tables/systems/queries";
 
 export const Table = {
 	organizations,
@@ -118,5 +118,5 @@ export const Queries = {
 	users: usersQueries,
 	organizations: organizationQueries,
 	usersToOrganizations: usersToOrganizationQueries,
-	systems: systemQueries
+	systems: systemQueries,
 };

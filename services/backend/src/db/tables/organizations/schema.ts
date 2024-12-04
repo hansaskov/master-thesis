@@ -32,6 +32,4 @@ export namespace Types {
 		export type New = typeof organizations.$inferInsert;
 		export type Update = StrictPartial<Select, "name">;
 	}
-
-
 }
