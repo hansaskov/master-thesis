@@ -42,6 +42,10 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
+      - name: Debug POSTGRES_DB secrets
+        run: echo "$POSTGRES_DB"
+      - name: Debug POSTGRES_USER secrets
+        run: echo "$POSTGRES_USER"
       - name: Deploy docker compose
         run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
         env:
