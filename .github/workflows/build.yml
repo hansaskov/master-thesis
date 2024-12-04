@@ -28,7 +28,7 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_USER }}
 
-      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ secrets.POSTGRES_DB }}
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
