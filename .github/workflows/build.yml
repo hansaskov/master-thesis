@@ -18,9 +18,9 @@ jobs:
     env:
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       COMPOSE_PROFILES: stateless, stateful, migrate
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      INTERFACE_FQDN: ${{ secrets.INTERFACE_FQDN }}
-      MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
+      POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+      INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
+      MICROSOFT_REDIRECT_URI: ${{ vars.MICROSOFT_REDIRECT_URI }}
 
       MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
       MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
@@ -50,5 +50,16 @@ jobs:
         run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
         env:
           COMPOSE_PROJECT_NAME: thesis-preview
+          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+          COMPOSE_PROFILES: stateless, stateful, migrate
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          INTERFACE_FQDN: ${{ secrets.INTERFACE_FQDN }}
+          MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
+
+          MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
+          MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
+          MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_USER }}
 
 
