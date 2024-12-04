@@ -25,3 +25,7 @@ export type StrictPick<T, K extends keyof T> = Prettify<Pick<T, K>>;
 export type StrictPartial<T, K extends keyof T> = Prettify<
 	Partial<Pick<T, K>> & Omit<T, K>
 >;
+
+export type PartialExcept<T, K extends keyof T> = Prettify<
+	Partial<Omit<T, K>> & Pick<T, K>
+>;

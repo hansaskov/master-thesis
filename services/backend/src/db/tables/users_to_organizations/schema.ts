@@ -1,5 +1,6 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { organizations, users } from "..";
+import type { PartialExcept } from "../../../types/strict";
 
 export const usersToOrganizations = pgTable(
 	"users_to_organizations",
@@ -16,3 +17,10 @@ export const usersToOrganizations = pgTable(
 		pk: primaryKey({ columns: [table.organization_id, table.user_id] }),
 	}),
 );
+
+export type UserToOrganization = typeof usersToOrganizations.$inferSelect;
+export type UserToOrganizationNew = typeof usersToOrganizations.$inferInsert;
+export type UserToOrganizationUpdate = PartialExcept<
+	UserToOrganization,
+	"organization_id" | "user_id"
+>;
