@@ -17,16 +17,11 @@ jobs:
     environment: preview
     env:
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
-      COMPOSE_PROFILES: stateless, stateful, migrate
-      INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
       MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
       MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
       MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
-      MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
-      POSTGRES_DB: database
-      POSTGRES_USER: username
-      POSTGRES_PASSWORD: password
-      DATABASE_URL: postgres://username:password@timescaledb:5432/database
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,5 +39,5 @@ jobs:
         run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
         env:
           COMPOSE_PROJECT_NAME: thesis-preview
-          
+
 
