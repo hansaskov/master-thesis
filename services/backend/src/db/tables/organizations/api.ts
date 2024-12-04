@@ -9,10 +9,28 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 	)
 	.post(
 		"/",
-		async ({ user, query }) => {
+		async ({ user, body }) => {
+			if (!user.is_superadmin) {
+				return error(
+					"Unauthorized",
+					"Only superadmins are allowed to create organizations",
+				);
+			}
+
+			return await Queries.organizations.create({ name: body.name });
+		},
+		{
+			body: t.Object({
+				name: Schema.insert.organizations.name,
+			}),
+		},
+	)
+	.patch(
+		"/",
+		async ({ user, body }) => {
 			const relation = await Queries.usersToOrganizations.select({
 				user_id: user.id,
-				organization_id: query.id,
+				organization_id: body.id,
 			});
 
 			if (!relation) {
@@ -29,7 +47,7 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 				);
 			}
 
-			const result = await Queries.organizations.update(query);
+			const result = await Queries.organizations.update(body);
 
 			if (result === undefined) {
 				return error("Not Found", "Organization not found");
@@ -38,7 +56,7 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			return result;
 		},
 		{
-			query: t.Object({
+			body: t.Object({
 				id: Schema.select.organizations.id,
 			}),
 		},
