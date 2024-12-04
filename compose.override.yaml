@@ -1,5 +1,19 @@
-# Updated compose.override.yaml
 services:
+
+  ## Frontend development dockerfile and sync the files automatically
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./services/frontend/develop.dockerfile
+    develop: 
+      watch: 
+        - action: sync
+          path: ./services/frontend
+          target: /app/services/frontend
+        - action: rebuild
+          path: ./services/frontend/package.json
+
+  ## Backend development dockerfile and sync the files automatically
   backend:
     build: 
       context: .
@@ -13,7 +27,12 @@ services:
         - action: rebuild
           path: ./services/backend/package.json
 
-## Used to automatically apply migration at startup
+## Direct access to the db
+  timescaledb:
+    ports:
+    - "5432:5432"
+
+## Apply migration at startup
   backend-migrations:
     build:
       context: .
@@ -24,19 +43,3 @@ services:
     depends_on:
       timescaledb: 
         condition: service_healthy
-
-  frontend:
-    build: 
-      context: .
-      dockerfile: ./services/frontend/develop.dockerfile
-    develop: 
-      watch: 
-        - action: sync
-          path: ./services/frontend
-          target: /app/services/frontend
-        - action: rebuild
-          path: ./services/frontend/package.json
-
-  timescaledb:
-    ports:
-    - "5432:5432"
