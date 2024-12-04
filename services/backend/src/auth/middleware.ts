@@ -1,4 +1,4 @@
-import Elysia from "elysia";
+import Elysia, { error } from "elysia";
 import { Schema } from "../db/model";
 import type { Session, User } from "../db/tables";
 import { setSessionTokenCookie, validateSessionToken } from "./lucia";
@@ -11,7 +11,7 @@ export const AuthService = new Elysia({ name: "Service.Auth" })
 		const { user, session } = await validateSessionToken(sessionId.value);
 		return { user, session };
 	})
-	.onBeforeHandle(({ user, session, error, cookie: { sessionId } }) => {
+	.onBeforeHandle(({ user, session, cookie: { sessionId } }) => {
 		if (!user || !session) {
 			sessionId.remove();
 			return error("Unauthorized", "The provided sessionId is invalid");
@@ -27,4 +27,17 @@ export const AuthService = new Elysia({ name: "Service.Auth" })
 
 		return { user, session };
 	})
+	.as("plugin");
+
+export const SuperAdminService = new Elysia({ name: "Service.SuperAdmin" })
+	.use(AuthService)
+	.onBeforeHandle(({ user }) => {
+		if (!user.is_superadmin) {
+			return error(
+				"Unauthorized",
+				"The provided user must be a superadmin to ",
+			);
+		}
+	})
+
 	.as("plugin");

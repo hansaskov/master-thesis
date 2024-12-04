@@ -30,7 +30,7 @@ export const readingsQueries = {
 	selectLatest: async ({
 		system_id,
 		name,
-	}: StrictPick<typeof readings.$inferSelect, ["system_id", "name"]>) => {
+	}: StrictPick<typeof readings.$inferSelect, "system_id" | "name">) => {
 		return await db
 			.select()
 			.from(readings)

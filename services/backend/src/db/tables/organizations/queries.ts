@@ -1,9 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { Prettify } from "elysia/types";
 import {
-	type Organizations,
-	type OrganizationsNew,
-	type OrganizationsUpdate,
+	Types,
 	type User,
 	type UserNew,
 	organizations,
@@ -15,19 +13,21 @@ import { Table } from "../../model";
 import { db } from "../../postgres";
 
 export const organizationQueries = {
-	delete: async ({ id }: StrictPick<Organizations, "id">) =>
+	delete: async ({ id }: StrictPick<Types.Organizations, "id">) =>
 		await db.delete(organizations).where(eq(organizations.id, id)),
-	create: async (values: OrganizationsNew) =>
+	create: async (values: Types.OrganizationsNew) =>
 		await db
 			.insert(organizations)
 			.values(values)
 			.returning()
 			.then((v) => v[0]),
-	update: async (values: OrganizationsUpdate) =>
+	update: async (values: Types.OrganizationsUpdate) =>
 		await db
 			.update(organizations)
 			.set(values)
-			.where(eq(organizations.id, values.id)),
+			.where(eq(organizations.id, values.id))
+			.returning()
+			.then((v) => v.at(0)),
 	selectOrganizationsOnUser: async (user: StrictPick<User, "id">) =>
 		await db
 			.select({
