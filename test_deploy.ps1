@@ -24,3 +24,4 @@ docker compose -f .\compose.yaml --profile stateful --profile stateless  up --bu
 # 5. Clean up the environment variables
 Remove-Item Env:COMPOSE_PROJECT_NAME
 Remove-Item Env:INTERFACE_FQDN
+
