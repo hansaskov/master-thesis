@@ -159,6 +159,17 @@ jobs:
   deploy-services:
     runs-on: ubuntu-latest
     environment: preview
+    env:
+      DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+      COMPOSE_PROFILES: stateless, stateful
+      INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
+      MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
+      MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
+      MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
+      MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -175,24 +186,9 @@ jobs:
           if ! docker network inspect proxy_network >/dev/null 2>&1; then
             docker network create proxy_network;
           fi
-        env:
-          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
-        env:
-          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       - name: Deploy docker compose
-        run: docker compose -f .\compose.yaml --profile stateful --profile stateless  up --build  -d
+        run: docker compose -f compose.yaml --profile stateful --profile stateless  up --build  -d
         env:
-          DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
           COMPOSE_PROJECT_NAME: thesis-preview
-          COMPOSE_PROFILES: stateless, stateful
-          INTERFACE_FQDN: https://preview.master-thesis.hjemmet.net
-          MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
-          MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
-          MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
-          MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          
