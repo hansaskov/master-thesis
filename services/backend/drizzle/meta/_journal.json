@@ -36,6 +36,13 @@
       "when": 1732020425993,
       "tag": "0004_far_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1733298451820,
+      "tag": "0005_fixed_avengers",
+      "breakpoints": true
     }
   ]
 }
