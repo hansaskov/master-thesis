@@ -26,3 +26,7 @@ services:
           target: /app/services/frontend
         - action: rebuild
           path: ./services/frontend/package.json
+
+  timescaledb:
+    ports:
+    - "5432:5432"
