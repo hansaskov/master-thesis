@@ -18,9 +18,9 @@ jobs:
     env:
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       COMPOSE_PROFILES: stateless, stateful, migrate
-      POSTGRES_DB: ${{ env.POSTGRES_DB }}
-      INTERFACE_FQDN: ${{ env.INTERFACE_FQDN }}
-      MICROSOFT_REDIRECT_URI: ${{ env.MICROSOFT_REDIRECT_URI }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      INTERFACE_FQDN: ${{ secrets.INTERFACE_FQDN }}
+      MICROSOFT_REDIRECT_URI: ${{ secrets.MICROSOFT_REDIRECT_URI }}
 
       MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
       MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
@@ -28,7 +28,7 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_USER }}
 
-      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ env.POSTGRES_DB }}
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ secrets.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
