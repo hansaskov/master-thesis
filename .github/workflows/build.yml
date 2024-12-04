@@ -8,6 +8,9 @@ permissions:
   id-token: write
 
 env:
+  REGISTRY: ghcr.io
+  FRONTEND_IMAGE_NAME: hansaskov/master-thesis-frontend
+  BACKEND_IMAGE_NAME: hansaskov/master-thesis-backend
   PROD: false
   IMAGE_TAG: 1.0
 
