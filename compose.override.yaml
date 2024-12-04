@@ -1,12 +1,10 @@
-## Additional compose settings for development
-## For more info see https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
-
+# Updated compose.override.yaml
 services:
-
   backend:
     build: 
       context: .
       dockerfile: ./services/backend/develop.dockerfile
+    command: bun dev
     develop:
       watch: 
         - action: sync
@@ -14,6 +12,18 @@ services:
           target: /app/services/backend
         - action: rebuild
           path: ./services/backend/package.json
+
+## Used to automatically apply migration at startup
+  backend-migrations:
+    build:
+      context: .
+      dockerfile: ./services/backend/develop.dockerfile
+    command: bun db:migrate
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      timescaledb: 
+        condition: service_healthy
 
   frontend:
     build: 
