@@ -10,7 +10,7 @@ const hostname = window.location.hostname;
 const api = treaty<App>(hostname).api;
 
 export class Organization {
-    organizations = $state<Types.Organization[]>([
+    organizations = $state<Types.Organization.Select[]>([
         { id: 'org1', name: 'TriVision' },
         { id: 'org2', name: 'Organization 2' },
         { id: 'org3', name: 'Organization 3' }

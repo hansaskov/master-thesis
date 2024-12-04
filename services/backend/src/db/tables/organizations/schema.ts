@@ -27,7 +27,11 @@ export const updateOrganizationsSchema = createSelectSchema(organizations, {
 });
 
 export namespace Types {
-	export type Organization = typeof organizations.$inferSelect;
-	export type OrganizationNew = typeof organizations.$inferInsert;
-	export type OrganizationUpdate = StrictPartial<Organization, "name">;
+	export namespace Organization {
+		export type Select = typeof organizations.$inferSelect;
+		export type New = typeof organizations.$inferInsert;
+		export type Update = StrictPartial<Select, "name">;
+	}
+
+
 }

@@ -13,15 +13,15 @@ import { Table } from "../../model";
 import { db } from "../../postgres";
 
 export const organizationQueries = {
-	delete: async ({ id }: StrictPick<Types.Organization, "id">) =>
+	delete: async ({ id }: StrictPick<Types.Organization.Select, "id">) =>
 		await db.delete(organizations).where(eq(organizations.id, id)),
-	create: async (values: Types.OrganizationNew) =>
+	create: async (values: Types.Organization.New) =>
 		await db
 			.insert(organizations)
 			.values(values)
 			.returning()
 			.then((v) => v[0]),
-	update: async (values: Types.OrganizationUpdate) =>
+	update: async (values: Types.Organization.Update) =>
 		await db
 			.update(organizations)
 			.set(values)
