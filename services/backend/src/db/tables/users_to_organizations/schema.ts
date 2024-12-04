@@ -1,6 +1,8 @@
-import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { organizations, users } from "..";
 import type { PartialExcept } from "../../../types/strict";
+
+export const rolesEnum = pgEnum("users_to_provider_roles", ["Admin", "User"]);
 
 export const usersToOrganizations = pgTable(
 	"users_to_organizations",
@@ -11,7 +13,7 @@ export const usersToOrganizations = pgTable(
 		user_id: text()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		role: text().notNull(),
+		role: rolesEnum().notNull(),
 	},
 	(table) => ({
 		pk: primaryKey({ columns: [table.organization_id, table.user_id] }),
