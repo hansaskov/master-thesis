@@ -51,6 +51,9 @@ services:
       caddy: "${INTERFACE_FQDN}"
       caddy.handle: /api/*
       caddy.handle.reverse_proxy: "{{upstreams 3000}}"
+    depends_on:
+      timescaledb: 
+        condition: service_healthy
 
   ## A postgres database optimised for timeseries data
   timescaledb:
@@ -70,6 +73,19 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+
+## Apply migration at startup
+  backend-migrations:
+    profiles: [migrate]   
+    build:
+      context: .
+      dockerfile: ./services/backend/develop.dockerfile
+    command: bun db:migrate
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      timescaledb: 
+        condition: service_healthy
 
 volumes:
   timescaledb-data:

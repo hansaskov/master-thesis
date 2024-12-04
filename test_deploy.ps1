@@ -6,7 +6,7 @@ docker compose --profile proxy -p proxy up -d
 ## `-d`                  Will run the service in the background.
 
 # 2. Start the stateless and stateful services in production mode
-docker compose -f .\compose.yaml --profile stateful --profile stateless  up --build  -d
+docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
 
 ## `-f .\compose.yaml`   Will use the production compose file without the `compose.override.yaml`. This step makes sure it does not turn into a development environment. 
 ## `--profile stateful`  Will start the backend and frontend.

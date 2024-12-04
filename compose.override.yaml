@@ -34,12 +34,8 @@ services:
 
 ## Apply migration at startup
   backend-migrations:
-    build:
-      context: .
-      dockerfile: ./services/backend/develop.dockerfile
-    command: bun db:migrate
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-    depends_on:
-      timescaledb: 
-        condition: service_healthy
+    develop: 
+      watch: 
+        - action: sync+restart
+          path: ./services/backend/drizzle
+          target: /app/services/backend/
