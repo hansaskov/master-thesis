@@ -25,3 +25,10 @@ export const insertSystemsSchema = createInsertSchema(systems, {
 	organization_id: t.String({ minLength: 1 }),
 	system_model_id: t.String({ minLength: 1 }),
 });
+
+export namespace Types {
+	export namespace Systems {
+		export type Select = typeof systems.$inferSelect;
+		export type New = typeof systems.$inferInsert;
+	}
+}
