@@ -76,6 +76,8 @@ jobs:
         
   build_backend_docker_image:
     runs-on: ubuntu-latest
+    env: 
+      DATABASE_URL: postgresql://myuser:password@localhost:5432/mydatabase
     steps: 
       - name: Checkout repository
         uses: actions/checkout@v4
