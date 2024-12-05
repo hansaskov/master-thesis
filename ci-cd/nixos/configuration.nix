@@ -27,11 +27,7 @@ in
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "prohibit-password"; # Root login via SSH key only
       PasswordAuthentication = false;       # Disable password authentication
-      X11Forwarding = false;
-      MaxAuthTries = 3;                     # Limit authentication attempts
-      LoginGraceTime = 60;                  # Grace period for login (in seconds)
       AllowUsers = [ "root" "admin" ];      # Allow only root and admin users to log in via SSH
     };
   };
