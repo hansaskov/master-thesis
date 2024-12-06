@@ -1,10 +1,10 @@
 import { and, eq } from "drizzle-orm";
 import { Prettify } from "elysia/types";
+import type { Types } from "../../..";
 import type { StrictPick } from "../../../types/strict";
 import { Table } from "../../model";
 import { db } from "../../postgres";
 import { systems } from "./schema";
-import { Types } from "../../..";
 
 export const systemQueries = {
 	create: async (values: Types.System) =>

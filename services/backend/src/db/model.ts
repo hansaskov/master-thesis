@@ -54,7 +54,6 @@ export const Table = {
 	usersToFactoryAreas,
 } as const;
 
-
 export const Queries = {
 	keys: keysQueries,
 	readings: readingsQueries,

@@ -2,8 +2,8 @@ import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { users } from "..";
+import type { PartialExcept } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
-import { PartialExcept } from "../../../types/strict";
 
 export const userSettings = pgTable("user_settings", {
 	id: text()
@@ -25,4 +25,4 @@ export const insertUserSettingsSchema = createInsertSchema(userSettings, {
 
 export type UserSettings = typeof userSettings.$inferSelect;
 export type UserSettingsNew = typeof userSettings.$inferInsert;
-export type UserSettingsUpdate = PartialExcept<UserSettings, "id">
+export type UserSettingsUpdate = PartialExcept<UserSettings, "id">;

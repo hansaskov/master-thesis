@@ -1,8 +1,8 @@
 import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
+import type { PartialExcept } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
-import { PartialExcept } from "../../../types/strict";
 
 export const providerEnum = pgEnum("providers", ["Github", "Microsoft"]);
 

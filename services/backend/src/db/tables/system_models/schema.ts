@@ -1,8 +1,8 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
+import type { PartialExcept } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
-import { PartialExcept } from "../../../types/strict";
 
 export const systemModels = pgTable("system_models", {
 	id: text()
@@ -19,4 +19,4 @@ export const insertSystemModelsSchema = createInsertSchema(systemModels, {
 
 export type SystemModel = typeof systemModels.$inferSelect;
 export type SystemModelNew = typeof systemModels.$inferInsert;
-export type SystemModelUpdate = PartialExcept<SystemModel, "id">
+export type SystemModelUpdate = PartialExcept<SystemModel, "id">;

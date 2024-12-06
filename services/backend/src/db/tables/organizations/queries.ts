@@ -1,13 +1,9 @@
 import { and, eq } from "drizzle-orm";
-import {
-	organizations,
-	users,
-	usersToOrganizations,
-} from "..";
+import { organizations, users, usersToOrganizations } from "..";
 import type { StrictPick } from "../../../types/strict";
 
-import { db } from "../../postgres";
 import type { Types } from "../../..";
+import { db } from "../../postgres";
 
 export const organizationQueries = {
 	delete: async ({ id }: StrictPick<Types.Organization, "id">) =>

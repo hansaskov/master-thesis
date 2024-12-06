@@ -1,9 +1,9 @@
 import { and, eq } from "drizzle-orm";
 import type { User, UserNew } from "..";
+import type { Types } from "../../..";
 import type { StrictPick } from "../../../types/strict";
 import { Table } from "../../model";
 import { db } from "../../postgres";
-import { Types } from "../../..";
 
 export const usersQueries = {
 	selectUniqueWithProvider: async (

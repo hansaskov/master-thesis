@@ -19,4 +19,4 @@ export const insertSessionsSchema = createInsertSchema(sessions, {
 
 export type Session = typeof sessions.$inferSelect;
 export type SessionNew = typeof sessions.$inferInsert;
-export type SessionUpdate = PartialExcept<Session, "id">
+export type SessionUpdate = PartialExcept<Session, "id">;

@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { type SessionNew, type SessionUpdate, sessions, users } from "..";
+import type { Types } from "../../..";
 import { db } from "../../postgres";
-import { Types } from "../../..";
 
 const prepareSelectUniqueWithUser = db
 	.select({ user: users, session: sessions })

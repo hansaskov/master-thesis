@@ -2,8 +2,8 @@ import { pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { organizations } from "..";
+import type { PartialExcept } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
-import { PartialExcept } from "../../../types/strict";
 
 const LENGTH = 12;
 

@@ -2,8 +2,8 @@ import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systems } from "..";
-import { generateRandomString } from "../../utils";
 import { PartialExcept } from "../../../types/strict";
+import { generateRandomString } from "../../utils";
 
 export const keys = pgTable("keys", {
 	public_key: text()
@@ -23,7 +23,6 @@ export const insertKeysSchema = createInsertSchema(keys, {
 });
 
 export const selectKeysSchema = createSelectSchema(keys);
-
 
 export type Keys = typeof keys.$inferSelect;
 export type KeysNew = typeof keys.$inferInsert;

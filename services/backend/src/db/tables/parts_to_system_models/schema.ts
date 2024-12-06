@@ -15,8 +15,6 @@ export const partsToSystemModels = pgTable(
 	(table) => [primaryKey({ columns: [table.part_id, table.system_model_id] })],
 );
 
-
 export type PartToSystemModel = typeof partsToSystemModels.$inferSelect;
 export type PartToSystemModelNew = typeof partsToSystemModels.$inferInsert;
-export type PartToSystemModelUpdate = PartToSystemModel
-
+export type PartToSystemModelUpdate = PartToSystemModel;

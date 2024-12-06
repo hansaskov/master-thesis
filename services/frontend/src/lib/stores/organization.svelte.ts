@@ -1,25 +1,20 @@
 
-import { page } from '$app/stores';
-import { treaty } from '@elysiajs/eden';
-import type { App } from 'backend';
+import { api } from '$lib/api';
 import type { Types } from 'backend';
-
-// Get the hostname of the current web page
-const hostname = window.location.hostname;
-
-const api = treaty<App>(hostname).api;
 
 export class OrganizationStore {
     public organizations = $state<Types.Organization[]>([])
 
     async update() {
         const {data, error} = await api.organizations.index.get()
-		console.log("data:", data)
-		console.log("error:", error)
 
-		if (data) {
+        if (error) {
+            console.error(error)
+            return
+        }
+
+
 			this.organizations = data
-		}
     }
 
     async add(name: string) {

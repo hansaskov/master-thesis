@@ -9,8 +9,8 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systems } from "..";
+import type { PartialExcept } from "../../../types/strict";
 import { IsoDate } from "../../utils";
-import { PartialExcept } from "../../../types/strict";
 
 export const readings = pgTable(
 	"readings",
@@ -22,9 +22,10 @@ export const readings = pgTable(
 		name: text().notNull(),
 		value: real().notNull(),
 		unit: text().notNull(),
-		
 	},
-	(table) => [primaryKey({ columns: [table.time, table.system_id, table.name] })]
+	(table) => [
+		primaryKey({ columns: [table.time, table.system_id, table.name] }),
+	],
 );
 
 export const insertReadingsSchema = createInsertSchema(readings, {
@@ -36,8 +37,9 @@ export const insertReadingsSchema = createInsertSchema(readings, {
 
 export const selectReadingsSchema = createSelectSchema(readings);
 
-
 export type Reading = typeof readings.$inferSelect;
 export type ReadingNew = typeof readings.$inferInsert;
-export type ReadingUpdate = PartialExcept<Reading, "time" | "system_id" | "name">;
-
+export type ReadingUpdate = PartialExcept<
+	Reading,
+	"time" | "system_id" | "name"
+>;
