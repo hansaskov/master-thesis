@@ -54,6 +54,17 @@ export const Table = {
 	usersToFactoryAreas,
 } as const;
 
+
+export const Queries = {
+	keys: keysQueries,
+	readings: readingsQueries,
+	sessions: sessionQueries,
+	users: usersQueries,
+	organizations: organizationQueries,
+	usersToOrganizations: usersToOrganizationQueries,
+	systems: systemQueries,
+};
+
 export const Schema = {
 	insert: spreads(
 		{
@@ -109,14 +120,4 @@ export const Schema = {
 			},
 		),
 	},
-};
-
-export const Queries = {
-	keys: keysQueries,
-	readings: readingsQueries,
-	sessions: sessionQueries,
-	users: usersQueries,
-	organizations: organizationQueries,
-	usersToOrganizations: usersToOrganizationQueries,
-	systems: systemQueries,
 };
