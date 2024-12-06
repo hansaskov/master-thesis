@@ -16,7 +16,7 @@ in
   # Networking Configuration
   networking = {
     hostName = "nixos";
-    domain = "";
+    domain = ""; # It can be left empty if it is auto-detected through DHCP.
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 80 443 ]; # SSH, HTTP, HTTPS
@@ -52,7 +52,6 @@ in
   
   # Software Packages
   environment.systemPackages = with pkgs; [
-    git
     docker
   ];
   
@@ -61,10 +60,9 @@ in
   
   # System Configuration
   system = {
-    stateVersion = "24.05";   # Target NixOS version
+    stateVersion = "24.11";   # Target NixOS version
     autoUpgrade = {
       enable = true;          # Enable automatic upgrades
-      allowReboot = false;    # Do not allow automatic reboots
     };
   };
 }
