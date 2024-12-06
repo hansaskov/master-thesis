@@ -2,6 +2,7 @@ import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { generateRandomString } from "../../utils";
+import { PartialExcept } from "../../../types/strict";
 
 export const providerEnum = pgEnum("providers", ["Github", "Microsoft"]);
 
@@ -21,3 +22,4 @@ export const insertUserSchema = createInsertSchema(users, {
 
 export type User = typeof users.$inferSelect;
 export type UserNew = typeof users.$inferInsert;
+export type UserUpdate = PartialExcept<User, "id">;

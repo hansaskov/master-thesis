@@ -1,5 +1,6 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { factoryAreas, users } from "..";
+import { PartialExcept } from "../../../types/strict";
 
 export const usersToFactoryAreas = pgTable(
 	"users_to_factory_areas",
@@ -11,7 +12,9 @@ export const usersToFactoryAreas = pgTable(
 			.notNull()
 			.references(() => factoryAreas.id, { onDelete: "cascade" }),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.user_id, table.factory_area_id] }),
-	}),
+	(table) => [primaryKey({ columns: [table.user_id, table.factory_area_id] })],
 );
+
+export type UserToFactoryArea = typeof usersToFactoryAreas.$inferSelect;
+export type UserToFactoryAreaNew = typeof usersToFactoryAreas.$inferInsert;
+export type UserToFactoryAreaUpdate = PartialExcept<UserToFactoryArea, "user_id" | "factory_area_id">;

@@ -1,6 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 import { type SessionNew, type SessionUpdate, sessions, users } from "..";
 import { db } from "../../postgres";
+import { Types } from "../../..";
 
 const prepareSelectUniqueWithUser = db
 	.select({ user: users, session: sessions })
@@ -14,13 +15,13 @@ export const sessionQueries = {
 		await prepareSelectUniqueWithUser
 			.execute({ sessionId })
 			.then((v) => v.at(0)),
-	create: async (session: SessionNew) => {
+	create: async (session: Types.SessionNew) => {
 		await db.insert(sessions).values(session);
 	},
 	delete: async (sessionId: string) => {
 		await db.delete(sessions).where(eq(sessions.id, sessionId));
 	},
-	update: async (session: SessionUpdate) => {
+	update: async (session: Types.SessionUpdate) => {
 		await db.update(sessions).set(session).where(eq(sessions.id, session.id));
 	},
 } as const;

@@ -14,4 +14,4 @@ const app = new Elysia({ precompile: true })
 console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
-export namespace Types {}
+export type * as Types from "./db/tables/index"

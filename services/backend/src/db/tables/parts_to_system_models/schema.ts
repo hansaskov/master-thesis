@@ -1,5 +1,6 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { parts, systemModels } from "..";
+import { PartialExcept } from "../../../types/strict";
 
 export const partsToSystemModels = pgTable(
 	"parts_to_system_models",
@@ -11,7 +12,11 @@ export const partsToSystemModels = pgTable(
 			.notNull()
 			.references(() => systemModels.id, { onDelete: "cascade" }),
 	},
-	(table) => ({
-		pk: primaryKey({ columns: [table.part_id, table.system_model_id] }),
-	}),
+	(table) => [primaryKey({ columns: [table.part_id, table.system_model_id] })],
 );
+
+
+export type PartToSystemModel = typeof partsToSystemModels.$inferSelect;
+export type PartToSystemModelNew = typeof partsToSystemModels.$inferInsert;
+export type PartToSystemModelUpdate = PartToSystemModel
+

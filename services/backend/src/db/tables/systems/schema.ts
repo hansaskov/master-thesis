@@ -4,6 +4,7 @@ import { t } from "elysia";
 import { systemModels } from "..";
 import { generateRandomString } from "../../utils";
 import { organizations } from "../organizations/schema";
+import { PartialExcept } from "../../../types/strict";
 
 export const systems = pgTable("systems", {
 	id: text()
@@ -26,9 +27,9 @@ export const insertSystemsSchema = createInsertSchema(systems, {
 	system_model_id: t.String({ minLength: 1 }),
 });
 
-export namespace Types {
-	export namespace Systems {
-		export type Select = typeof systems.$inferSelect;
-		export type New = typeof systems.$inferInsert;
-	}
-}
+
+export type System = typeof systems.$inferSelect;
+export type SystemNew = typeof systems.$inferInsert;
+export type SystemUpdate = PartialExcept<System, "id">
+
+

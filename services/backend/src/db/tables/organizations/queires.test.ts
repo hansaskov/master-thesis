@@ -1,8 +1,5 @@
-import { beforeAll, describe, expect, it } from "bun:test";
-import { treaty } from "@elysiajs/eden";
-import { Elysia } from "elysia";
-import { Queries, Table } from "../../model";
-import { db } from "../../postgres";
+import { describe, expect, it } from "bun:test";
+import { Queries } from "../../model";
 
 describe("Organization Queries", async () => {
 	it("Select 1 organization on users", async () => {

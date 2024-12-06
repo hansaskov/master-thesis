@@ -1,6 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { keys } from "..";
 import { db } from "../../postgres";
+import { Types } from "../../..";
 
 const PreparedselectUnique = db
 	.select()
@@ -18,7 +19,7 @@ export const keysQueries = {
 	selectUnique: async function selectUnique({
 		private_key,
 		public_key,
-	}: typeof keys.$inferSelect) {
+	}:  Types.Keys) {
 		return await PreparedselectUnique.execute({ private_key, public_key }).then(
 			(v) => v.at(0),
 		);

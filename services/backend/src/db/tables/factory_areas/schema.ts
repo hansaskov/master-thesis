@@ -3,6 +3,7 @@ import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { organizations } from "..";
 import { generateRandomString } from "../../utils";
+import { PartialExcept } from "../../../types/strict";
 
 const LENGTH = 12;
 
@@ -22,3 +23,7 @@ export const insertFactoryAreaSchema = createInsertSchema(factoryAreas, {
 	name: t.String({ minLength: 1 }),
 	organization_id: t.String({ minLength: 1 }),
 });
+
+export type factoryArea = typeof factoryAreas.$inferSelect;
+export type factoryAreasNew = typeof factoryAreas.$inferInsert;
+export type factoryAreaUpdate = PartialExcept<factoryArea, "id">;

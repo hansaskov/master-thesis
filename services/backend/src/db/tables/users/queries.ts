@@ -3,10 +3,11 @@ import type { User, UserNew } from "..";
 import type { StrictPick } from "../../../types/strict";
 import { Table } from "../../model";
 import { db } from "../../postgres";
+import { Types } from "../../..";
 
 export const usersQueries = {
 	selectUniqueWithProvider: async (
-		user: StrictPick<User, "provider_name" | "provider_id">,
+		user: StrictPick<Types.User, "provider_name" | "provider_id">,
 	) =>
 		await db
 			.select()
@@ -18,7 +19,7 @@ export const usersQueries = {
 				),
 			)
 			.then((v) => v.at(0)),
-	create: async (user: UserNew) => {
+	create: async (user: Types.UserNew) => {
 		return await db
 			.insert(Table.users)
 			.values(user)

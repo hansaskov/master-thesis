@@ -2,6 +2,7 @@ import { and, desc, eq, sql } from "drizzle-orm/sql";
 import { readings } from "..";
 import type { StrictOmit, StrictPick } from "../../../types/strict";
 import { db } from "../../postgres";
+import { Types } from "../../..";
 
 const preparedselectUnique = db
 	.select()
@@ -10,10 +11,10 @@ const preparedselectUnique = db
 	.prepare("select_readings");
 
 export const readingsQueries = {
-	insert: async (values: (typeof readings.$inferInsert)[]) =>
+	insert: async (values: Types.Reading[]) =>
 		await db.insert(readings).values(values),
 	insertWithSystemId: async (
-		values: StrictOmit<typeof readings.$inferInsert, "system_id">[],
+		values: StrictOmit<Types.Reading, "system_id">[],
 		system_id: string,
 	) => {
 		const newValues = values.map((reading) => ({
@@ -25,12 +26,12 @@ export const readingsQueries = {
 	},
 	selectAll: async ({
 		system_id,
-	}: StrictPick<typeof readings.$inferSelect, "system_id">) =>
+	}: StrictPick<Types.Reading, "system_id">) =>
 		await preparedselectUnique.execute({ system_id }),
 	selectLatest: async ({
 		system_id,
 		name,
-	}: StrictPick<typeof readings.$inferSelect, "system_id" | "name">) => {
+	}: StrictPick<Types.Reading, "system_id" | "name">) => {
 		return await db
 			.select()
 			.from(readings)

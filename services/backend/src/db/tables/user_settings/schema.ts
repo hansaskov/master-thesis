@@ -3,6 +3,7 @@ import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { users } from "..";
 import { generateRandomString } from "../../utils";
+import { PartialExcept } from "../../../types/strict";
 
 export const userSettings = pgTable("user_settings", {
 	id: text()
@@ -21,3 +22,7 @@ export const insertUserSettingsSchema = createInsertSchema(userSettings, {
 	theme: t.String({ minLength: 1 }),
 	user_id: t.String({ minLength: 12 }),
 });
+
+export type UserSettings = typeof userSettings.$inferSelect;
+export type UserSettingsNew = typeof userSettings.$inferInsert;
+export type UserSettingsUpdate = PartialExcept<UserSettings, "id">

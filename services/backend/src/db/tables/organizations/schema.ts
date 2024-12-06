@@ -3,6 +3,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { Prettify } from "elysia/types";
 import {
+	PartialExcept,
 	StrictOmit,
 	type StrictPartial,
 	StrictPick,
@@ -26,10 +27,10 @@ export const updateOrganizationsSchema = createSelectSchema(organizations, {
 	name: t.Optional(t.String()),
 });
 
-export namespace Types {
-	export namespace Organization {
-		export type Select = typeof organizations.$inferSelect;
-		export type New = typeof organizations.$inferInsert;
-		export type Update = StrictPartial<Select, "name">;
-	}
-}
+
+export type Organization = typeof organizations.$inferSelect;
+export type OrganizationNew = typeof organizations.$inferInsert;
+export type OrganizationUpdate = PartialExcept<Organization, "id">;
+
+
+

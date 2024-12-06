@@ -2,7 +2,7 @@
 import { page } from '$app/stores';
 import { treaty } from '@elysiajs/eden';
 import type { App } from 'backend';
-import type { Types } from 'backend/src/db/tables';
+import type { Types } from 'backend';
 
 // Get the hostname of the current web page
 const hostname = window.location.hostname;
@@ -10,7 +10,7 @@ const hostname = window.location.hostname;
 const api = treaty<App>(hostname).api;
 
 export class OrganizationStore {
-    public organizations = $state<Types.Organization.Select[]>([])
+    public organizations = $state<Types.Organization[]>([])
 
     async update() {
         const {data, error} = await api.organizations.index.get()
@@ -44,7 +44,7 @@ export class OrganizationStore {
         this.organizations = this.organizations.filter((v) => v.id !== id);
     }
 
-    async edit(values: Types.Organization.Update) {
+    async edit(values: Types.OrganizationUpdate) {
         const {data, error} = await api.organizations.index.patch(values)
 
         if (error) {
