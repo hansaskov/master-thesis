@@ -18,9 +18,6 @@ COPY /services/frontend ./services/frontend
 # Move directory to frontend
 WORKDIR /app/services/frontend
 
-# Build your app
-RUN bun run build
-
 CMD ["bunx", "vite", "dev"]
 
 EXPOSE 5173
