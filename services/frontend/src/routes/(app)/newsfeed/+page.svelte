@@ -4,7 +4,7 @@
 	import { Card, CardContent, CardFooter, CardHeader } from '$lib/components/ui/card';
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/separator';
-	
+
 	import ThumbsUp from 'lucide-svelte/icons/thumbs-up';
 	import MessageCircle from 'lucide-svelte/icons/message-circle';
 	import Share2 from 'lucide-svelte/icons/share-2';

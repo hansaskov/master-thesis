@@ -1,1 +1,1 @@
-Settings for the an individual vision system 
+Settings for the an individual vision system

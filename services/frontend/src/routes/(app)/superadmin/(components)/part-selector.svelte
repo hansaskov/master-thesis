@@ -1,14 +1,13 @@
 <script lang="ts">
-	import Check from "svelte-radix/Check.svelte";
-	import CaretSort from "svelte-radix/CaretSort.svelte";
-	import { tick } from "svelte";
+	import Check from 'svelte-radix/Check.svelte';
+	import CaretSort from 'svelte-radix/CaretSort.svelte';
+	import { tick } from 'svelte';
 
-	import { cn } from "$lib/utils.js";
+	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button';
-	import * as Command from "$lib/components/ui/command";
-	import * as Popover from "$lib/components/ui/popover";
-	import { partsStore, type Part } from "$lib/stores/parts.svelte";
-
+	import * as Command from '$lib/components/ui/command';
+	import * as Popover from '$lib/components/ui/popover';
+	import { partsStore, type Part } from '$lib/stores/parts.svelte';
 
 	let partsData = partsStore;
 	let open = false;
@@ -51,12 +50,7 @@
 							}}
 						>
 							{part.name}
-							<Check
-								class={cn(
-									"ml-auto h-4 w-4",
-									part.selected ? "opacity-100" : "opacity-0"
-								)}
-							/>
+							<Check class={cn('ml-auto h-4 w-4', part.selected ? 'opacity-100' : 'opacity-0')} />
 						</Command.Item>
 					{/each}
 				</Command.Group>

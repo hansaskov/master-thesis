@@ -6,28 +6,32 @@
 	import Clock from 'lucide-svelte/icons/clock';
 
 	const supportDetails = {
-		phone: "+45 63 15 47 00",
-		email: "support@trivision.dk",
-		officeHours: "8-16 (CET)",
+		phone: '+45 63 15 47 00',
+		email: 'support@trivision.dk',
+		officeHours: '8-16 (CET)'
 	};
 
 	const faqs = [
 		{
-			question: "What types of support do you offer?",
-			answer: "We offer remote assistance, system updates, regular checks, and fast response support for incidents."
+			question: 'What types of support do you offer?',
+			answer:
+				'We offer remote assistance, system updates, regular checks, and fast response support for incidents.'
 		},
 		{
-			question: "How can I contact support outside of office hours?",
-			answer: "For urgent matters outside office hours, please leave a message, and we'll get back to you as soon as possible."
+			question: 'How can I contact support outside of office hours?',
+			answer:
+				"For urgent matters outside office hours, please leave a message, and we'll get back to you as soon as possible."
 		},
 		{
-			question: "Do you provide on-site support?",
-			answer: "While we primarily offer remote support, on-site assistance can be arranged for complex issues that cannot be resolved remotely."
+			question: 'Do you provide on-site support?',
+			answer:
+				'While we primarily offer remote support, on-site assistance can be arranged for complex issues that cannot be resolved remotely.'
 		},
 		{
-			question: "How quickly can I expect a response?",
-			answer: "We strive to respond to all support requests within 1 business day, with faster response times for critical issues."
-		},
+			question: 'How quickly can I expect a response?',
+			answer:
+				'We strive to respond to all support requests within 1 business day, with faster response times for critical issues.'
+		}
 	];
 </script>
 
@@ -39,14 +43,14 @@
 			</CardHeader>
 			<CardContent>
 				<p class="mt-4 text-muted-foreground">
-					Our customers worldwide can rely on remote assistance from TriVision's support team to keep downtime at a minimum.
+					Our customers worldwide can rely on remote assistance from TriVision's support team to
+					keep downtime at a minimum.
 				</p>
 				<p class="mt-4 text-muted-foreground">
-					The support team keeps TriVision systems updated, performs checks regularly, and provides fast response remote support if incidents occur.
+					The support team keeps TriVision systems updated, performs checks regularly, and provides
+					fast response remote support if incidents occur.
 				</p>
-				<p class="mt-6 text-lg font-semibold">
-					For remote assistance within office hours:
-				</p>
+				<p class="mt-6 text-lg font-semibold">For remote assistance within office hours:</p>
 				<div class="mt-4 space-y-2">
 					<div class="flex items-center space-x-2">
 						<Phone class="h-5 w-5 text-primary" />

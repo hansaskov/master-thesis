@@ -19,7 +19,7 @@
 		notificationEmails: true,
 		publicProfile: false
 	};
-	
+
 	let users = [
 		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
 		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
@@ -87,7 +87,7 @@
 		visionSystems.update((systems) => systems.filter((system) => system !== systemName));
 		console.log('vision system removed:', systemName);
 	}
-	
+
 	function generateOnboardingUrl() {
 		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;
 		showOnboardingUrl = true;
@@ -105,7 +105,6 @@
 			// You could add a toast notification here
 		});
 	}
-
 </script>
 
 <div class="container mx-auto px-4 py-4">

@@ -73,13 +73,13 @@
 					<Table.Row>
 						<Table.Head class="w-[64px]">Image</Table.Head>
 						<Table.Head>Part Name</Table.Head>
-						<Table.Head class="text-right px-6" >Add To Cart</Table.Head>
+						<Table.Head class="text-right px-6">Add To Cart</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
 					{#each filteredParts as part (part.partNumber)}
 						<Table.Row class="hover:bg-muted cursor-pointer">
-							<Table.Cell >
+							<Table.Cell>
 								<img
 									alt="{part.partName} image"
 									class="aspect-square rounded-md object-cover"

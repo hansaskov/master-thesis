@@ -66,15 +66,14 @@
 							<p class="text-muted-foreground text-lg">{user.role}</p>
 						</div>
 					</div>
-						<div>
-							<Label for="email" class="text-base font-medium">Email Address</Label>
-							<p id="email" class="mt-1 text-sm">{user.email}</p>
-						</div>
-						<div>
-							<Label for="company" class="text-base font-medium">Company</Label>
-							<p id="company" class="mt-1 text-sm ">{user.company}</p>
-						</div>
-
+					<div>
+						<Label for="email" class="text-base font-medium">Email Address</Label>
+						<p id="email" class="mt-1 text-sm">{user.email}</p>
+					</div>
+					<div>
+						<Label for="company" class="text-base font-medium">Company</Label>
+						<p id="company" class="mt-1 text-sm">{user.company}</p>
+					</div>
 				</div>
 			</Card.Content>
 		</Card.Root>

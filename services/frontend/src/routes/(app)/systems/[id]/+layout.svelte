@@ -11,23 +11,21 @@
 	}
 
 	function handleGoBack() {
-    if (canGoBack) {
-      history.back();
-    } else {
-      // For playground testing - just log when we can't go back
-      console.log("No history available, would redirect to home");
-    }
-  }
-
+		if (canGoBack) {
+			history.back();
+		} else {
+			// For playground testing - just log when we can't go back
+			console.log('No history available, would redirect to home');
+		}
+	}
 </script>
 
+<Button on:click={handleGoBack} variant="ghost" class="inline-flex md:hidden -ml-2">
+	<ArrowLeft class="mr-2 h-4 w-4" />
+	Back to
+	<span class="ml-1 capitalize">{previousSection}</span>
+</Button>
 
-	<Button on:click={handleGoBack} variant="ghost" class="inline-flex md:hidden -ml-2">
-		<ArrowLeft class="mr-2 h-4 w-4" />
-		Back to
-		<span class="ml-1 capitalize">{previousSection}</span>
-	</Button>
-	
 <div class="py-4 md:container">
 	<slot />
 </div>

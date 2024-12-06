@@ -12,7 +12,8 @@ export const badgeVariants = tv({
 			outline: 'text-foreground',
 			warning: 'border-warning text-secondary-foreground hover:bg-warning/80 border-warning shadow',
 			healthy: 'border-primary text-secondary-foreground hover:bg-primary/80 border-primary shadow',
-			critical: 'border-destructive text-secondary-foreground hover:bg-destructive/80 border-destructive shadow'
+			critical:
+				'border-destructive text-secondary-foreground hover:bg-destructive/80 border-destructive shadow'
 		}
 	},
 	defaultVariants: {

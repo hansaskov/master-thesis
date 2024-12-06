@@ -31,7 +31,7 @@
 
 <Popover.Root bind:open={openCombobox} let:ids>
 	<Popover.Trigger asChild let:builder>
-		<Button 
+		<Button
 			builders={[builder]}
 			variant="ghost"
 			role="combobox"
@@ -48,20 +48,20 @@
 		<Command.Root>
 			<Command.Empty>No organization found.</Command.Empty>
 			<a href="/systems">
-			<Command.Group>
-				{#each organizations as org}
-					<Command.Item
-						value={org.value}
-						onSelect={(currentValue) => {
-							selectedOrg = currentValue;
-							closeAndFocusTrigger(ids.trigger);
-						}}
-					>
-						<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
-						{org.label}
-					</Command.Item>
-				{/each}
-			</Command.Group>
+				<Command.Group>
+					{#each organizations as org}
+						<Command.Item
+							value={org.value}
+							onSelect={(currentValue) => {
+								selectedOrg = currentValue;
+								closeAndFocusTrigger(ids.trigger);
+							}}
+						>
+							<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
+							{org.label}
+						</Command.Item>
+					{/each}
+				</Command.Group>
 			</a>
 		</Command.Root>
 	</Popover.Content>
