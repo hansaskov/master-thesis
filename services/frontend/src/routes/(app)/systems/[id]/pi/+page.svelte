@@ -30,7 +30,7 @@
 
 	let startDate: DateValue = today(getLocalTimeZone());
 	let endDate: DateValue = now(getLocalTimeZone());
-	let selectedTimeRange: Selected<String> = { value: '1hour', label: 'Last hour' };
+	let selectedTimeRange: Selected<string> = { value: '1hour', label: 'Last hour' };
 
 	// Mock data (replace with actual data in a real application)
 	const mockData = {

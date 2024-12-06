@@ -21,19 +21,21 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 				organization_id: body.id,
 			});
 
-			if (!relation) {
-				return error(
-					"Unauthorized",
-					"This organization does not exist, or you do not have permission to update it",
-				);
-			}
-
-			if (relation.role !== "Admin") {
-				return error(
-					"Unauthorized",
-					"Only admins are allowed to edit this organization",
-				);
-			}
+			if (!user.is_superadmin)  {
+				if (!relation) {
+					return error(
+						"Unauthorized",
+						"You do not have access to this organization",
+					);
+				}
+	
+				if (relation.role !== "Admin") {
+					return error(
+						"Unauthorized",
+						"Only admins are allowed to edit this organization",
+					);
+				}
+			} 
 
 			const result = await Queries.organizations.update(body);
 
@@ -74,11 +76,17 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			if (!user.is_superadmin) {
 				return error(
 					"Unauthorized",
-					"Only superadmins are allowed to create organizations",
+					"Only superadmins are allowed to delete organizations",
 				);
 			}
 
-			return await Queries.organizations.delete({ id: body.id });
+			const result =  await Queries.organizations.delete({ id: body.id });
+
+			if (result === undefined) {
+				return error("Not Found", "Cannot delete, because organization was not found")
+			}
+
+			return result
 		},
 		{
 			body: t.Object({
