@@ -14,7 +14,7 @@ export class OrganizationStore {
         }
 
 
-			this.organizations = data
+        this.organizations = data
     }
 
     async add(name: string) {
