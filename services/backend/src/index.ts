@@ -3,10 +3,13 @@ import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
 import { authRoutes } from "./auth/routes";
 import { readings } from "./db/tables/readings/api";
+import { logger } from "@bogeychan/elysia-logger";
+import { organizationsApi } from "./db/tables/organizations/api";
 
-const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
+const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(organizationsApi).use(readings);
 
 const app = new Elysia({ precompile: true })
+	.use(logger())
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api)
 	.listen(process.env.PORT as string);

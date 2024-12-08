@@ -1,27 +1,16 @@
 import { api } from '$lib/api';
+import { onError } from '$lib/error';
 import type { Types } from 'backend';
 import { toast } from 'svelte-sonner';
 
 export class OrganizationStore {
 	public organizations = $state<Types.Organization[]>([]);
 
-
-    private onError(error: {status: number, value: string} |{status: unknown, value: unknown} | null) {
-        if (error) {
-            console.error(error)
-            if ('value' in error && typeof error.value === 'string') {
-                toast.error(error.value);
-            } else {
-                toast.error("Unknown error occured")
-            }
-        }
-    }
-
 	async update() {
 		const { data, error } = await api.organizations.index.get();
 
         if (error) {
-			return this.onError(error)
+			return onError(error)
 		}
 
         
@@ -33,7 +22,7 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.post({ name });
 
 		if (error) {
-			return this.onError(error)
+			return onError(error)
 		}
 
         toast.success(`Successfully created ${data.name}`)
@@ -46,7 +35,7 @@ export class OrganizationStore {
 
 		if (!data ) {
             
-			return this.onError(error)
+			return onError(error)
 		}
 
         toast.success(`Organization \"${data.name}\" has been removed`)
@@ -57,7 +46,7 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.patch(values);
 
 		if (error) {
-			return this.onError(error)
+			return onError(error)
 		}
 
         

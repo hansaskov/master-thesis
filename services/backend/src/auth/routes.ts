@@ -1,5 +1,4 @@
 import Elysia from "elysia";
-import { organizationsApi } from "../db/tables/organizations/api";
 import { microsoftRoute } from "./login/microsoft";
 import { logoutRoutes } from "./logout";
 import { statusRoutes } from "./status";
@@ -9,4 +8,3 @@ export const authRoutes = new Elysia()
 	.use(loginRoutes)
 	.use(logoutRoutes)
 	.use(statusRoutes)
-	.use(organizationsApi);
