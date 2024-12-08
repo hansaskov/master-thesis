@@ -1,12 +1,15 @@
+import { logger } from "@bogeychan/elysia-logger";
 import { treaty } from "@elysiajs/eden";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
 import { authRoutes } from "./auth/routes";
-import { readings } from "./db/tables/readings/api";
-import { logger } from "@bogeychan/elysia-logger";
 import { organizationsApi } from "./db/tables/organizations/api";
+import { readings } from "./db/tables/readings/api";
 
-const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(organizationsApi).use(readings);
+const api = new Elysia({ prefix: "/api" })
+	.use(authRoutes)
+	.use(organizationsApi)
+	.use(readings);
 
 const app = new Elysia({ precompile: true })
 	.use(logger())

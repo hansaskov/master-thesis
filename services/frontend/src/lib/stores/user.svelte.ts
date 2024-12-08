@@ -4,54 +4,54 @@ import { onError } from '$lib/error';
 import type { Types } from 'backend';
 import { toast } from 'svelte-sonner';
 
-
 class UserStore {
+	public user: Types.User | null = $state(null);
+	public isLoading = $state(false);
 
-    public user: Types.User | null = $state(null)
+	private nonAuthorizedRedirectUrl = '/';
+	private authorizedRedirectUrl = '/systems';
 
-    private nonAuthorizedRedirectUrl = "/";
-    private authorizedRedirectUrl = "/systems"
+	public async login(provider: Types.User['provider_name']) {
+		// We onlt support one provider of microsof as of now.
+		// Hardcode to use microsoft. But can be updated to use more that one.
+		if (provider === 'Github') {
+			return onError(`Authentication with ${provider} is currently not supported`);
+		}
 
-    public async login(provider: Types.User['provider_name']) {
+		const { data, error } = await api.login['microsoft'].get();
 
-        // We onlt support one provider of microsof as of now. 
-        // Hardcode to use microsoft. But can be updated to use more that one. 
-        if (provider === "Github") {
-            return onError(`Authentication with ${provider} is currently not supported`)
-        }
+		if (error) {
+			return onError(error);
+		}
 
+		if (data.redirected) {
+			toast.success('Redirecting to Microsoft');
+		}
+	}
 
-        const {data, error} = await api.login["microsoft"].get()
+	public async logout() {
+		const { data, error } = await api.logout.get();
 
-        if (error) {
-            return onError(error);
-        }
+		if (error) {
+			onError(error);
+		}
 
-        if (data.redirected) {
-            toast.success("Redirecting to Microsoft")
-        }
-        
+		toast.success('Successfully logged out');
+		goto(this.nonAuthorizedRedirectUrl);
+	}
 
-    }
+	public async refresh() {
+		this.isLoading = true;
+		const { data, error } = await api.refresh.get();
+		this.isLoading = false;
 
-    public async logout() {
+		if (error) {
+			onError(`Authentication failed. Redirecting to ${this.nonAuthorizedRedirectUrl}`);
+			goto(this.nonAuthorizedRedirectUrl);
+		}
 
-    }
-
-    public async refresh() {
-
-        const {data, error} = await api.refresh.get();
-
-        toast("Calling refresh")
-
-        if (error) {
-            onError(`Authentication failed. Redirecting to ${this.nonAuthorizedRedirectUrl}`);
-            return goto(this.nonAuthorizedRedirectUrl)
-        }
-        this.user = data
-
-        toast.success(`Welcome user with if \"${data.provider_id}\"`)
-    }
+		this.user = data;
+	}
 }
 
 export const userStore = new UserStore();

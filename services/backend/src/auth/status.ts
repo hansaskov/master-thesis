@@ -8,4 +8,4 @@ export const statusRoutes = new Elysia()
 		({ user }) =>
 			`You are authenticated with ${user.provider_name} as user: ${user.provider_id}`,
 	)
-	.get("refresh", ({user}) => user);
+	.get("refresh", ({ user }) => user);

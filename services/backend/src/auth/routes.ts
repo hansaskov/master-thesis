@@ -7,4 +7,4 @@ const loginRoutes = new Elysia({ prefix: "/login" }).use(microsoftRoute);
 export const authRoutes = new Elysia()
 	.use(loginRoutes)
 	.use(logoutRoutes)
-	.use(statusRoutes)
+	.use(statusRoutes);

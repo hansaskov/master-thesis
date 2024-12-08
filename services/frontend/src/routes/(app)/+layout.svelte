@@ -20,6 +20,7 @@
 	import { toggleMode } from 'mode-watcher';
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
+	import { userStore } from '$lib/stores/user.svelte';
 
 	type NavItemType = {
 		name: string;
@@ -123,7 +124,11 @@
 							Support
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/api/logout">
+						<DropdownMenu.Item
+							on:click={() => {
+								userStore.logout();
+							}}
+						>
 							<LogOut class="h-4 w-4 mr-2" />
 							Logout
 						</DropdownMenu.Item>

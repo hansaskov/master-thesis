@@ -9,6 +9,7 @@
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { userStore } from '$lib/stores/user.svelte';
 
 	let newOrganization = '';
 
@@ -28,8 +29,8 @@
 		}
 	];
 
-	let newModelName = '';
-	let selectedModel: any = null;
+	let newModelName = $state('');
+	let selectedModel: any = $state(null);
 
 	let newPartName = '';
 	let newPartImage: any = null;
@@ -94,6 +95,10 @@
 	}
 
 	let loading = true;
+
+	$effect.pre(() => {
+		userStore.refresh();
+	});
 
 	$effect.root(() => {
 		try {

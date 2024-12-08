@@ -9,11 +9,9 @@ export class OrganizationStore {
 	async update() {
 		const { data, error } = await api.organizations.index.get();
 
-        if (error) {
-			return onError(error)
+		if (error) {
+			return onError(error);
 		}
-
-        
 
 		this.organizations = data;
 	}
@@ -22,10 +20,10 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.post({ name });
 
 		if (error) {
-			return onError(error)
+			return onError(error);
 		}
 
-        toast.success(`Successfully created ${data.name}`)
+		toast.success(`Successfully created ${data.name}`);
 
 		this.organizations.push(data);
 	}
@@ -33,12 +31,11 @@ export class OrganizationStore {
 	async remove(id: string) {
 		const { data, error } = await api.organizations.index.delete({ id });
 
-		if (!data ) {
-            
-			return onError(error)
+		if (!data) {
+			return onError(error);
 		}
 
-        toast.success(`Organization \"${data.name}\" has been removed`)
+		toast.success(`Organization \"${data.name}\" has been removed`);
 		this.organizations = this.organizations.filter((v) => v.id !== id);
 	}
 
@@ -46,10 +43,9 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.patch(values);
 
 		if (error) {
-			return onError(error)
+			return onError(error);
 		}
 
-        
 		this.organizations = this.organizations.filter((v) => v.id !== values.id);
 		this.organizations.push(data);
 	}
