@@ -24,9 +24,8 @@ class UserStore {
 			return onError(error);
 		}
 
-		if (data.redirected) {
-			toast.success('Redirecting to Microsoft');
-		}
+		toast.success('Redirecting to Microsoft');
+		goto(this.authorizedRedirectUrl)
 	}
 
 	public async logout() {

@@ -49,6 +49,7 @@ export class OrganizationStore {
 		this.organizations = this.organizations.filter((v) => v.id !== values.id);
 		this.organizations.push(data);
 	}
+
 }
 
 export const organizationStore = new OrganizationStore();

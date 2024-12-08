@@ -1,10 +1,8 @@
 import { drizzle } from "drizzle-orm/postgres-js";
-import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { environment } from "../environment";
 
 import { exit } from "node:process";
 import { exponentialBackoff } from "../expoentialBackoff";
-import { runMigrations } from "./migrate";
 import { systems } from "./tables";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });

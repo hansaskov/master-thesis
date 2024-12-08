@@ -96,19 +96,9 @@
 
 	let loading = true;
 
-	$effect.pre(() => {
-		userStore.refresh();
-	});
+	$effect.pre(() => { userStore.refresh() });
+	$effect.pre(() => { organizationStore.update() })
 
-	$effect.root(() => {
-		try {
-			organizationStore.update();
-		} catch (e) {
-			console.log(e);
-		} finally {
-			loading = false;
-		}
-	});
 </script>
 
 <div class="md:container">

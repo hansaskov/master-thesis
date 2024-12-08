@@ -11,6 +11,7 @@ import {
 	insertSystemsSchema,
 	insertUserSchema,
 	insertUserSettingsSchema,
+	insertUserToOrganizationSchema,
 	keys,
 	organizations,
 	parts,
@@ -34,7 +35,7 @@ import { readingsQueries } from "./tables/readings/queries";
 import { sessionQueries } from "./tables/sessions/queries";
 import { systemQueries } from "./tables/systems/queries";
 import { usersQueries } from "./tables/users/queries";
-import { usersToOrganizationQueries } from "./tables/users_to_organizations/queries";
+import { usersToOrganizationsQueries } from "./tables/users_to_organizations/queries";
 import { spreads } from "./utils";
 
 export const Table = {
@@ -60,7 +61,7 @@ export const Queries = {
 	sessions: sessionQueries,
 	users: usersQueries,
 	organizations: organizationQueries,
-	usersToOrganizations: usersToOrganizationQueries,
+	usersToOrganizations: usersToOrganizationsQueries,
 	systems: systemQueries,
 };
 
@@ -77,6 +78,7 @@ export const Schema = {
 			readings: insertReadingsSchema,
 			parts: insertPartsSchema,
 			keys: insertKeysSchema,
+			usersToOrganizations: insertUserToOrganizationSchema,
 		},
 		"insert",
 	),

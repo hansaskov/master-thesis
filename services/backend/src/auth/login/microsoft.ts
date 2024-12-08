@@ -1,6 +1,6 @@
-import { decodeIdToken, generateCodeVerifier, generateState } from "arctic";
+import { generateCodeVerifier, generateState } from "arctic";
 import { MicrosoftEntraId } from "arctic";
-import { type Cookie, Elysia, Static, error, redirect, t } from "elysia";
+import { Elysia, error, redirect, t } from "elysia";
 import { TypeCompiler } from "elysia/type-system";
 import { Queries, Schema } from "../../db/model";
 import { environment } from "../../environment";

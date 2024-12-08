@@ -1,6 +1,5 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { parts, systemModels } from "..";
-import { PartialExcept } from "../../../types/strict";
 
 export const partsToSystemModels = pgTable(
 	"parts_to_system_models",

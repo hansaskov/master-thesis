@@ -20,6 +20,6 @@
 	{...$$restProps}
 >
 	<slot>
-		<ChevronRight tabindex="-1" />
+		<ChevronRight tabindex={-1} />
 	</slot>
 </li>
