@@ -25,7 +25,7 @@ class UserStore {
 		}
 
 		toast.success('Redirecting to Microsoft');
-		goto(this.authorizedRedirectUrl)
+		goto(this.authorizedRedirectUrl);
 	}
 
 	public async logout() {

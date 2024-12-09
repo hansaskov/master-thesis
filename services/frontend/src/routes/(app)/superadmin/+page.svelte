@@ -6,7 +6,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { faker } from '@faker-js/faker';
 	import * as Command from '$lib/components/ui/command';
-	import AlertDialogBody from "$lib/components/AlertDialogBody.svelte";
+	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
@@ -100,13 +100,13 @@
 
 	let loading = true;
 
-	$effect.pre(() => { userStore.refresh() });
-	$effect.pre(() => { organizationStore.update() })
-
-	
-
+	$effect.pre(() => {
+		userStore.refresh();
+	});
+	$effect.pre(() => {
+		organizationStore.update();
+	});
 </script>
-
 
 {dialogStore.isOpen}
 <div class="md:container">
@@ -119,12 +119,15 @@
 			<Card.Content>
 				<div class="mb-6">
 					<Label for="new-organization">Add New Organization</Label>
-					<form onsubmit={(e) => {e.preventDefault(); organizationStore.add(newOrganization)}} class="flex gap-2">
+					<form
+						onsubmit={(e) => {
+							e.preventDefault();
+							organizationStore.add(newOrganization);
+						}}
+						class="flex gap-2"
+					>
 						<Input placeholder="Enter organization name" bind:value={newOrganization} />
-						<Button
-							type="submit"
-							>Add Organization</Button
-						>
+						<Button type="submit">Add Organization</Button>
 					</form>
 				</div>
 
@@ -158,14 +161,15 @@
 											</DropdownMenu.Item>
 											<DropdownMenu.Separator />
 											<DropdownMenu.Item
-											onclick={() => {
-												dialogStore.open({
-													title: "Are you absolutely sure?",
-													description: "This action cannot be undone. This will permanently delete the organization and all of it's systems",
-													component:  AlertDialogBody,
-													props: {onsubmit: () => (organizationStore.remove(organization.id))}
-												})
-											}}
+												onclick={() => {
+													dialogStore.open({
+														title: 'Are you absolutely sure?',
+														description:
+															"This action cannot be undone. This will permanently delete the organization and all of it's systems",
+														component: AlertDialogBody,
+														props: { onsubmit: () => organizationStore.remove(organization.id) }
+													});
+												}}
 												class="text-red-600"
 											>
 												Remove Organization
@@ -329,4 +333,3 @@
 		</Card.Root>
 	</div>
 </div>
-
