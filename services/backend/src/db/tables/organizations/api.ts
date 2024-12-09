@@ -17,8 +17,8 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 		"/",
 		async ({ user, body }) => {
 			const relation = await Queries.usersToOrganizations.select({
-				user_id: user.id,
-				organization_id: body.id,
+				userId: user.id,
+				organizationId: body.id,
 			});
 
 			if (!user.is_superadmin) {

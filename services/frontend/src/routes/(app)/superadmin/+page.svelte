@@ -10,6 +10,8 @@
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { userStore } from '$lib/stores/user.svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { Ellipsis } from 'lucide-svelte';
 
 	let newOrganization = '';
 
@@ -111,46 +113,52 @@
 			<Card.Content>
 				<div class="mb-6">
 					<Label for="new-organization">Add New Organization</Label>
-					<div class="flex gap-2">
+					<form onsubmit={(e) => {e.preventDefault(); organizationStore.add(newOrganization)}} class="flex gap-2">
 						<Input placeholder="Enter organization name" bind:value={newOrganization} />
 						<Button
 							type="submit"
-							on:click={async () => await organizationStore.add(newOrganization)}
 							>Add Organization</Button
 						>
-					</div>
+					</form>
 				</div>
 
 				<Table.Root>
 					<Table.Caption>List of Organizations</Table.Caption>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[300px]">ID</Table.Head>
 							<Table.Head>Name</Table.Head>
+							<Table.Head class="text-right">Actions</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each organizationStore.organizations as organization}
 							<Table.Row>
-								<Table.Cell>{organization.id}</Table.Cell>
 								<Table.Cell>{organization.name}</Table.Cell>
 								<Table.Cell class="text-right">
-									<Button
-										variant="outline"
-										size="sm"
-										on:click={async () => await organizationStore.edit(organization)}
-									>
-										Edit
-									</Button>
-								</Table.Cell>
-								<Table.Cell class="text-right w-[80px]">
-									<Button
-										variant="destructive"
-										size="sm"
-										on:click={async () => await organizationStore.remove(organization.id)}
-									>
-										Remove
-									</Button>
+									<DropdownMenu.Root>
+										<DropdownMenu.Trigger>
+											<Button variant="ghost" size="icon">
+												<Ellipsis class="h-4 w-4" />
+												<span class="sr-only">Open menu</span>
+											</Button>
+										</DropdownMenu.Trigger>
+										<DropdownMenu.Content align="end">
+											<DropdownMenu.Label>Actions</DropdownMenu.Label>
+											<DropdownMenu.Separator />
+											<DropdownMenu.Item
+												on:click={async () => await organizationStore.edit(organization)}
+											>
+												Edit Organization
+											</DropdownMenu.Item>
+											<DropdownMenu.Separator />
+											<DropdownMenu.Item
+												on:click={async () => await organizationStore.remove(organization.id)}
+												class="text-red-600"
+											>
+												Remove Organization
+											</DropdownMenu.Item>
+										</DropdownMenu.Content>
+									</DropdownMenu.Root>
 								</Table.Cell>
 							</Table.Row>
 						{/each}
