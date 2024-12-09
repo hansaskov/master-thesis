@@ -1,23 +1,22 @@
 import type { Prettify } from "elysia/types";
-import type { Component } from "svelte";
+import type { Component, ComponentProps } from "svelte";
 
-type DialogVariants = "Alert" | "TypedAlert";
+type Props = any
 
-// Generic type for the onsubmit function
-type DialogSubmitFunction<T = void, P = void> = (params?: P) => T | Promise<T>;
-
-interface DialogData<T = void, P = void> {
-    variant: DialogVariants;
+interface DialogData<TComponent extends Component<Props>> {
     title: string;
     description: string;
-    onsubmit: DialogSubmitFunction<T, P>;
-}   
+    component: TComponent;
+    props: ComponentProps<TComponent>;
+}
 
 class DialogStore {
     public isOpen = $state(false);
-    data: DialogData<any, any> | undefined = $state(undefined);
+    data: DialogData<Component<Props>>| undefined = $state(undefined);
 
-    public open<T = void, P = void>(data: Prettify<DialogData<T, P>>) {
+    public open<TComponent extends Component<Props>>(
+        data: Prettify<DialogData<TComponent>>
+    ) {
         this.isOpen = true;
         this.data = data;
     }

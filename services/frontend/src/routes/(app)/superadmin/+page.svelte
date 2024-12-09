@@ -6,6 +6,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { faker } from '@faker-js/faker';
 	import * as Command from '$lib/components/ui/command';
+	import AlertDialogBody from "$lib/components/AlertDialogBody.svelte";
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
@@ -159,10 +160,10 @@
 											<DropdownMenu.Item
 											onclick={() => {
 												dialogStore.open({
-													variant: "Alert",
 													title: "Are you absolutely sure?",
 													description: "This action cannot be undone. This will permanently delete the organization and all of it's systems",
-													onsubmit: () => (organizationStore.remove(organization.id))
+													component:  AlertDialogBody,
+													props: {onsubmit: () => (organizationStore.remove(organization.id))}
 												})
 											}}
 												class="text-red-600"
