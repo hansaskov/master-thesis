@@ -2,9 +2,11 @@
 	import '../app.css';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { ModeWatcher } from 'mode-watcher';
+	import ResponsiveDialog from '$lib/components/ResponsiveDialog.svelte';
 </script>
 
 <ModeWatcher defaultTheme="light" />
 <Toaster />
+<ResponsiveDialog />
 
 <slot></slot>

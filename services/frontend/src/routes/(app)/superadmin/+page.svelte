@@ -12,6 +12,7 @@
 	import { userStore } from '$lib/stores/user.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Ellipsis } from 'lucide-svelte';
+	import { dialogStore } from '$lib/stores/dialog.svelte';
 
 	let newOrganization = '';
 
@@ -101,8 +102,12 @@
 	$effect.pre(() => { userStore.refresh() });
 	$effect.pre(() => { organizationStore.update() })
 
+	
+
 </script>
 
+
+{dialogStore.isOpen}
 <div class="md:container">
 	<h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -152,7 +157,14 @@
 											</DropdownMenu.Item>
 											<DropdownMenu.Separator />
 											<DropdownMenu.Item
-												on:click={async () => await organizationStore.remove(organization.id)}
+											onclick={() => {
+												dialogStore.open({
+													variant: "Alert",
+													title: "Are you absolutely sure?",
+													description: "This action cannot be undone. This will permanently delete the organization and all of it's systems",
+													onsubmit: () => (organizationStore.remove(organization.id))
+												})
+											}}
 												class="text-red-600"
 											>
 												Remove Organization
@@ -316,3 +328,4 @@
 		</Card.Root>
 	</div>
 </div>
+

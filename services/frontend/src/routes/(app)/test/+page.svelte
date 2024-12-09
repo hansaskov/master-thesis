@@ -13,12 +13,11 @@
 
 <Button onclick={() => {
     dialogStore.open({
+		variant: "Alert",
         title: "Are you absolutely sure?",
         description: "This action cannot be undone. This will permanently delete the organization and all of it's systems",
-        children: DialogAlertBody
+		onsubmit: () => (console.log("Ippie"))
     })
 }}>
 Click me!</Button>
 
-<ResponsiveDialog >
-</ResponsiveDialog>

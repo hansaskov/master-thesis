@@ -10,7 +10,7 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.get();
 
 		if (error) {
-			return onError(error);
+			return console.log(error);
 		}
 
 		this.organizations = data;
