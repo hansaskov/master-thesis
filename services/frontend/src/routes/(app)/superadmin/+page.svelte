@@ -14,6 +14,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Ellipsis } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
+	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 
 	let newOrganization = '';
 
@@ -108,7 +109,6 @@
 	});
 </script>
 
-{dialogStore.isOpen}
 <div class="md:container">
 	<h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -155,7 +155,14 @@
 											<DropdownMenu.Label>Actions</DropdownMenu.Label>
 											<DropdownMenu.Separator />
 											<DropdownMenu.Item
-												on:click={async () => await organizationStore.edit(organization)}
+												onclick={() => {
+													dialogStore.open({
+														title: `Update ${organization.name}`,
+														description: "This action will update the name of the selected organization",
+														component: EditOrganizationDialogBody,
+														props: organization
+													})
+												}}
 											>
 												Edit Organization
 											</DropdownMenu.Item>
