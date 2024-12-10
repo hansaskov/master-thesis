@@ -9,6 +9,7 @@
 	import * as Switch from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { writable } from 'svelte/store';
+	import { systemStore } from '$lib/stores/systems.svelte';
 
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Copy from 'lucide-svelte/icons/copy';
@@ -217,7 +218,12 @@
 				<Card.Title>Organization Settings</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<form on:submit|preventDefault={updateOrganizationName}>
+				<form
+					onsubmit={(e) => {
+						e.preventDefault();
+						updateOrganizationName();
+					}}
+				>
 					<Label for="org-name">Organization Name</Label>
 					<div class="mt-2 flex gap-2">
 						<Input id="org-name" bind:value={organizationName} class="mb-4" />
@@ -258,7 +264,14 @@
 				<Card.Title>Production Systems</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<form on:submit|preventDefault={addVisionSystem} class="mb-4">
+				<form 
+					onsubmit={(e) => {
+						e.preventDefault();
+						const organizationId: string = "test-organization-id";
+						systemStore.add(newSystemName, organizationId);
+					}}
+					class="mb-4"
+				>
 					<Label for="system-name">New Vision System</Label>
 					<div class="mt-2 flex gap-2">
 						<Input id="system-name" placeholder="Enter system name" bind:value={newSystemName} />

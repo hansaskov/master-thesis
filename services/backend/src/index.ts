@@ -5,11 +5,13 @@ import { Elysia, error, t } from "elysia";
 import { authRoutes } from "./auth/routes";
 import { organizationsApi } from "./db/tables/organizations/api";
 import { readings } from "./db/tables/readings/api";
+import { systemsApi } from "./db/tables/systems/api";
 
 const api = new Elysia({ prefix: "/api" })
 	.use(authRoutes)
+	.use(readings)
 	.use(organizationsApi)
-	.use(readings);
+	.use(systemsApi);
 
 const app = new Elysia({ precompile: true })
 	.use(logger())

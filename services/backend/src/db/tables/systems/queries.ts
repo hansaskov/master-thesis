@@ -7,12 +7,18 @@ import { db } from "../../postgres";
 import { systems } from "./schema";
 
 export const systemQueries = {
-	create: async (values: Types.System) =>
+	create: async (values: Types.SystemNew) =>
 		await db
 			.insert(systems)
 			.values(values)
 			.returning()
 			.then((v) => v[0]),
+	selectAll: async () =>
+		await db
+			.select()
+			.from(systems),
 	delete: async ({ id }: StrictPick<Types.System, "id">) =>
-		await db.delete(systems).where(eq(systems.id, id)),
+		await db
+			.delete(systems)
+			.where(eq(systems.id, id)),
 };

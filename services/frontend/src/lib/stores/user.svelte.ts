@@ -12,7 +12,7 @@ class UserStore {
 	private authorizedRedirectUrl = '/systems';
 
 	public async login(provider: Types.User['provider_name']) {
-		// We onlt support one provider of microsof as of now.
+		// We only support one provider of microsoft as of now.
 		// Hardcode to use microsoft. But can be updated to use more that one.
 		if (provider === 'Github') {
 			return onError(`Authentication with ${provider} is currently not supported`);
