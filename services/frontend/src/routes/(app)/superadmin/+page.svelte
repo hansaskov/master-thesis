@@ -105,7 +105,7 @@
 		userStore.refresh();
 	});
 	$effect.pre(() => {
-		organizationStore.update();
+		organizationStore.refreshAll();
 	});
 </script>
 

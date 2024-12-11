@@ -14,7 +14,7 @@
 	import Settings from '$lib/components/Settings.svelte';
 	import NavItem from '$lib/components/NavItem.svelte';
 	import type { ComponentType } from 'svelte';
-	import OrgCombobox from './systems/OrgCombobox.svelte';
+	import OrgCombobox from './OrgCombobox.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
@@ -30,7 +30,7 @@
 
 	const navItems: NavItemType[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
-		{ name: 'Search', icon: Search, href: '/newsfeed' }
+		{ name: 'Search', icon: Search, href: '/' }
 	];
 
 	const superAdmin: NavItemType = { name: 'Super Admin', icon: UserRoundCog, href: '/superadmin' };
@@ -40,6 +40,7 @@
 	$: breadcrumbs = pathname
 		.split('/')
 		.filter(Boolean)
+		.slice(2)
 		.map((segment, index, array) => ({
 			href: `/${array.slice(0, index + 1).join('/')}`,
 			label: segment.charAt(0).toUpperCase() + segment.slice(1),
@@ -51,7 +52,7 @@
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a href="/systems">
+			<a href="/organization/trivision/systems">
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
 			</a>

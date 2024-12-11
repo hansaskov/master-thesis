@@ -6,7 +6,7 @@ import { toast } from 'svelte-sonner';
 export class OrganizationStore {
 	public organizations = $state<Types.Organization[]>([]);
 
-	async update() {
+	async refreshAll() {
 		const { data, error } = await api.organizations.index.get();
 
 		if (error) {

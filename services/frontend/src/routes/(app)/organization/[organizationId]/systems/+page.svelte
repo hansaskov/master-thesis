@@ -107,7 +107,7 @@
 					<Table.Body>
 						{#each $sortedSystems as system (system.id)}
 							<Table.Row
-								on:click={() => goto(`/systems/${system.id}`)}
+								on:click={() => goto(`./systems/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
 								<Table.Cell class="hidden md:table-cell">
