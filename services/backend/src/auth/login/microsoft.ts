@@ -82,7 +82,7 @@ export const microsoftRoute = new Elysia()
 					session.expires_at,
 				);
 
-				return redirect("/systems", 302);
+				return redirect("/organization", 302);
 			}
 
 			const user = await Queries.users.create({
