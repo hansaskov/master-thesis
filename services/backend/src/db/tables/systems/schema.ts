@@ -1,5 +1,5 @@
 import { pgTable, text } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-typebox";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systemModels } from "..";
 import type { PartialExcept } from "../../../types/strict";
@@ -26,6 +26,8 @@ export const insertSystemsSchema = createInsertSchema(systems, {
 	organization_id: t.String({ minLength: 1 }),
 	system_model_id: t.String({ minLength: 1 }),
 });
+
+export const selectSystemsSchema = createSelectSchema(systems);
 
 export type System = typeof systems.$inferSelect;
 export type SystemNew = typeof systems.$inferInsert;
