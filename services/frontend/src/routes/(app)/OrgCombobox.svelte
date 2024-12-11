@@ -10,12 +10,8 @@
 	import { page } from '$app/stores';
 	import { organizationStore } from "$lib/stores/organization.svelte"
 
-
-	
-	let currentOrganizationId = $derived($page.params.organizationId)
-
 	let currentOrganization = $derived.by(() => {
-		return organizationStore.organizations.find((v) => v.id === currentOrganizationId)
+		return organizationStore.organizations.find((v) => v.id === $page.params.organizationId)
 	});
 
 
@@ -31,7 +27,7 @@
 </script>
 
 
-{#if currentOrganizationId.length > 0}
+{#if $page.params.organizationId}
 <Popover.Root bind:open={openCombobox} let:ids>
 	<Popover.Trigger asChild let:builder>
 		<Button
