@@ -48,10 +48,11 @@
 	<Popover.Content class="w-[170px] p-0">
 		<Command.Root>
 			<Command.Empty>No organization found.</Command.Empty>
-			<a href="/systems">
+			
 				<Command.Group>
 					{#each organizationStore.organizations as org}
-						<Command.Item
+						<a href={`/organization/${org.id}/systems`}>
+						<Command.Item 
 							value={org.id}
 							onSelect={(currentValue) => {
 								selectedOrg = currentValue;
@@ -61,9 +62,9 @@
 							<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
 							{org.name}
 						</Command.Item>
+						</a>
 					{/each}
 				</Command.Group>
-			</a>
 		</Command.Root>
 	</Popover.Content>
 </Popover.Root>

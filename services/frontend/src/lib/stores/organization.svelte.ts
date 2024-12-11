@@ -41,15 +41,18 @@ export class OrganizationStore {
 
 	async edit(values: Types.OrganizationUpdate) {
 		const { data, error } = await api.organizations.index.patch(values);
-
+	
 		if (error) {
 			return onError(error);
 		}
-
-		this.organizations = this.organizations.filter((v) => v.id !== values.id);
-		this.organizations.push(data);
-		toast.success(`Organization has been updated to \"${data.name}\"`);
+	
+		const index = this.organizations.findIndex((v) => v.id === values.id);
+		if (index !== -1) {
+			this.organizations[index] = data;
+			toast.success(`Organization has been updated to \"${data.name}\"`);
+		}
 	}
+	
 }
 
 export const organizationStore = new OrganizationStore();
