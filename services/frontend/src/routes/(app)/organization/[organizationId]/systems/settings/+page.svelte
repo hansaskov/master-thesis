@@ -20,6 +20,9 @@
 		notificationEmails: true,
 		publicProfile: false
 	};
+	
+	let pathName = window.location.pathname;
+	let organizationId = pathName.split('/')[2];
 
 	let users = [
 		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
@@ -32,7 +35,7 @@
 	let showOnboardingUrl = false;
 
 	let systemModelId: string | null = null;
-	let organizationId: string = "test-organization-id";
+	//let organizationId: string = "test-organization-id";
 
 	let onboardingInvitations = [
 		{ email: 'pendinguser@example.com', status: 'pending' },
