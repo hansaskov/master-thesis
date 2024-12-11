@@ -16,7 +16,7 @@
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 
-	let newOrganization = '';
+	let newOrganization = $state("");
 
 	interface Model {
 		name: string;
@@ -123,6 +123,7 @@
 						onsubmit={(e) => {
 							e.preventDefault();
 							organizationStore.add(newOrganization);
+							newOrganization = ""
 						}}
 						class="flex gap-2"
 					>
