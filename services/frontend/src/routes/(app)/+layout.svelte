@@ -40,7 +40,6 @@
 	$: breadcrumbs = pathname
 		.split('/')
 		.filter(Boolean)
-		.slice(2)
 		.map((segment, index, array) => ({
 			href: `/${array.slice(0, index + 1).join('/')}`,
 			label: segment.charAt(0).toUpperCase() + segment.slice(1),
@@ -82,7 +81,7 @@
 						<OrgCombobox></OrgCombobox>
 					</Breadcrumb.Page>
 					<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
-					{#each breadcrumbs as crumb}
+					{#each breadcrumbs.slice(2) as crumb}
 						{#if !crumb.isLast}
 							<Breadcrumb.Link class="hidden sm:flex" href={crumb.href}>
 								{crumb.label}
