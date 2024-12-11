@@ -8,16 +8,16 @@ export const rolesEnum = pgEnum("users_to_provider_roles", ["Admin", "User"]);
 export const usersToOrganizations = pgTable(
 	"users_to_organizations",
 	{
-		organizationId: text()
+		organization_id: text()
 			.notNull()
 			.references(() => organizations.id, { onDelete: "cascade" }),
-		userId: text()
+		user_id: text()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
 		role: rolesEnum().notNull(),
 	},
 	(table) => ({
-		pk: primaryKey({ columns: [table.organizationId, table.userId] }),
+		pk: primaryKey({ columns: [table.organization_id, table.user_id] }),
 	}),
 );
 
@@ -28,5 +28,5 @@ export type UserToOrganization = typeof usersToOrganizations.$inferSelect;
 export type UserToOrganizationNew = typeof usersToOrganizations.$inferInsert;
 export type UserToOrganizationUpdate = PartialExcept<
 	UserToOrganization,
-	"organizationId" | "userId"
+	"organization_id" | "user_id"
 >;

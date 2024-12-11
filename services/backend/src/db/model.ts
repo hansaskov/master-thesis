@@ -25,6 +25,7 @@ import {
 	systemModels,
 	systems,
 	systemsToFactoryAreas,
+	systemsToParts,
 	userSettings,
 	users,
 	usersToFactoryAreas,
@@ -54,6 +55,7 @@ export const Table = {
 	sessions,
 	usersToOrganizations,
 	usersToFactoryAreas,
+	systemsToParts,
 } as const;
 
 export const Queries = {
@@ -88,7 +90,7 @@ export const Schema = {
 			keys: selectKeysSchema,
 			readings: selectReadingsSchema,
 			organizations: selectOrganizationsSchema,
-			systems: selectSystemsSchema
+			systems: selectSystemsSchema,
 		},
 		"select",
 	),

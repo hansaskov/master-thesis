@@ -13,10 +13,7 @@ export const systemQueries = {
 			.values(values)
 			.returning()
 			.then((v) => v[0]),
-	selectAll: async () =>
-		await db
-			.select()
-			.from(systems),
+	selectAll: async () => await db.select().from(systems),
 	delete: async ({ id }: StrictPick<Types.System, "id">) =>
 		await db
 			.delete(systems)

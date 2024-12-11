@@ -4,20 +4,20 @@ import { Queries, Schema } from "../../model";
 
 export const systemsApi = new Elysia({ prefix: "systems" })
 	.use(AuthService)
-    .get("/", async ({ user }) => {
-        return await Queries.systems.selectAll();
-    })
-    .post(
+	.get("/", async ({ user }) => {
+		return await Queries.systems.selectAll();
+	})
+	.post(
 		"/",
 		async ({ user, body }) => {
 			if (user.is_superadmin) {
-				return await Queries.systems.create({ 
-					name: body.name, 
+				return await Queries.systems.create({
+					name: body.name,
 					organization_id: body.organization_id,
-					system_model_id: body.system_model_id, 
+					system_model: body.system_model,
 				});
 			}
-			
+
 			const relation = await Queries.usersToOrganizations.select({
 				userId: user.id,
 				organizationId: body.organization_id,
@@ -37,24 +37,23 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 				);
 			}
 
-			return await Queries.systems.create({ 
-				name: body.name, 
+			return await Queries.systems.create({
+				name: body.name,
 				organization_id: body.organization_id,
-				system_model_id: body.system_model_id, 
+				system_model: body.system_model,
 			});
 		},
-        {
+		{
 			body: t.Object({
 				name: Schema.insert.systems.name,
-                organization_id: Schema.insert.systems.organization_id,
-				system_model_id: t.Optional(Schema.insert.systems.system_model_id),
+				organization_id: Schema.insert.systems.organization_id,
+				system_model: Schema.insert.systems.system_model,
 			}),
 		},
 	)
 	.delete(
 		"/",
 		async ({ user, body }) => {
-
 			const result = await Queries.systems.delete({ id: body.id });
 
 			if (result === undefined) {
