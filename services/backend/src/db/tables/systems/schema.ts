@@ -1,10 +1,12 @@
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text, pgEnum } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systemModels } from "..";
 import type { PartialExcept } from "../../../types/strict";
 import { generateRandomString } from "../../utils";
 import { organizations } from "../organizations/schema";
+
+export const systemModelEnum = pgEnum("system_models", ["VisioPointer", "VisioCompact", "VisioLine", "SmartInspector", "360 Inspector", "VisioOne", "IML-Inspector"]);
 
 export const systems = pgTable("systems", {
 	id: text()

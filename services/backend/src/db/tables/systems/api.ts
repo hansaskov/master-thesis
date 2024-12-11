@@ -3,12 +3,40 @@ import { AuthService } from "../../../auth/middleware";
 import { Queries, Schema } from "../../model";
 
 export const systemsApi = new Elysia({ prefix: "systems" })
-    .get("/", async () => {
+	.use(AuthService)
+    .get("/", async ({ user }) => {
         return await Queries.systems.selectAll();
     })
     .post(
 		"/",
-		async ({ body }) => {
+		async ({ user, body }) => {
+			if (user.is_superadmin) {
+				return await Queries.systems.create({ 
+					name: body.name, 
+					organization_id: body.organization_id,
+					system_model_id: body.system_model_id, 
+				});
+			}
+			
+			const relation = await Queries.usersToOrganizations.select({
+				userId: user.id,
+				organizationId: body.organization_id,
+			});
+
+			if (!relation) {
+				return error(
+					"Unauthorized",
+					"You do not have access to this organization",
+				);
+			}
+
+			if (relation.role !== "Admin") {
+				return error(
+					"Unauthorized",
+					"Only admins are allowed to create production systems",
+				);
+			}
+
 			return await Queries.systems.create({ 
 				name: body.name, 
 				organization_id: body.organization_id,
@@ -25,7 +53,7 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 	)
 	.delete(
 		"/",
-		async ({ body }) => {
+		async ({ user, body }) => {
 
 			const result = await Queries.systems.delete({ id: body.id });
 

@@ -29,7 +29,7 @@
 		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
 	];
 	let newUserEmail = '';
-	let newSystemName = '';
+	let newSystemName = $state('');
 	let visionSystems = writable<string[]>(['System A', 'System B']);
 	let generatedOnboardingUrl = '';
 	let showOnboardingUrl = false;
@@ -278,6 +278,7 @@
 					onsubmit={(e) => {
 						e.preventDefault();
 						systemStore.add(newSystemName, organizationId, systemModelId);
+						newSystemName = "";
 					}}
 					class="mb-4"
 				>
