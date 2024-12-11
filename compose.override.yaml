@@ -31,11 +31,3 @@ services:
   timescaledb:
     ports:
     - "5432:5432"
-
-## Apply migration at startup
-  backend-migrations:
-    develop: 
-      watch: 
-        - action: sync+restart
-          path: ./services/backend/drizzle
-          target: /app/services/backend/
