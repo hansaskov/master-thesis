@@ -31,12 +31,15 @@
 	let generatedOnboardingUrl = '';
 	let showOnboardingUrl = false;
 
+	let systemModelId: string | null = null;
+	let organizationId: string = "test-organization-id";
+
 	let onboardingInvitations = [
 		{ email: 'pendinguser@example.com', status: 'pending' },
 		{ email: 'completeduser@example.com', status: 'completed' }
 	];
 
-	$: usersAndInvites = users.map((user) => ({
+	const usersAndInvites = users.map((user) => ({
 		...user,
 		onboardingStatus:
 			onboardingInvitations.find((invite) => invite.email === user.email)?.status || 'Not Invited'
@@ -106,6 +109,10 @@
 			// You could add a toast notification here
 		});
 	}
+
+	$effect.pre(() => {
+		systemStore.selectAll();
+	});
 </script>
 
 <div class="container mx-auto px-4 py-4">
@@ -267,8 +274,7 @@
 				<form 
 					onsubmit={(e) => {
 						e.preventDefault();
-						const organizationId: string = "test-organization-id";
-						systemStore.add(newSystemName, organizationId);
+						systemStore.add(newSystemName, organizationId, systemModelId);
 					}}
 					class="mb-4"
 				>
@@ -278,7 +284,7 @@
 						<Button type="submit">Add System</Button>
 					</div>
 				</form>
-				{#if $visionSystems.length > 0}
+				{#if systemStore.systems.length > 0}
 					<Table.Root>
 						<Table.Caption>Existing Vision Systems</Table.Caption>
 						<Table.Header>
@@ -288,14 +294,14 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each $visionSystems as system}
+							{#each systemStore.systems as system}
 								<Table.Row>
-									<Table.Cell>{system}</Table.Cell>
+									<Table.Cell>{system.name}</Table.Cell>
 									<Table.Cell class="text-right">
 										<Button
 											variant="destructive"
 											size="sm"
-											on:click={() => removeVisionSystem(system)}
+											on:click={() => systemStore.delete(system.id)}
 										>
 											Remove
 										</Button>

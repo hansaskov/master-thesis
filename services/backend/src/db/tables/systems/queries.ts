@@ -20,5 +20,7 @@ export const systemQueries = {
 	delete: async ({ id }: StrictPick<Types.System, "id">) =>
 		await db
 			.delete(systems)
-			.where(eq(systems.id, id)),
+			.where(eq(systems.id, id))
+			.returning()
+			.then((v) => v.at(0)),
 };

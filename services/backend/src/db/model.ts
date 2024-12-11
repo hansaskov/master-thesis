@@ -20,6 +20,7 @@ import {
 	selectKeysSchema,
 	selectOrganizationsSchema,
 	selectReadingsSchema,
+	selectSystemsSchema,
 	sessions,
 	systemModels,
 	systems,
@@ -87,6 +88,7 @@ export const Schema = {
 			keys: selectKeysSchema,
 			readings: selectReadingsSchema,
 			organizations: selectOrganizationsSchema,
+			systems: selectSystemsSchema
 		},
 		"select",
 	),
