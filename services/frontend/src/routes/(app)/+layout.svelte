@@ -51,7 +51,7 @@
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a href="/organization/trivision/systems">
+			<a href="/organization">
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
 			</a>
@@ -148,7 +148,7 @@
 		class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden"
 	>
 		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
-			<a href="/systems" class="flex flex-col items-center justify-center">
+			<a href="/organization" class="flex flex-col items-center justify-center">
 				<House class="w-6 h-6" />
 				Home
 				<span class="sr-only">Dashboard</span>
