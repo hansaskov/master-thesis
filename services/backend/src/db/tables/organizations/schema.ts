@@ -13,7 +13,7 @@ export const organizations = pgTable("organizations", {
 });
 
 export const insertOrganizationsSchema = createInsertSchema(organizations, {
-	name: t.String({ minLength: 4, error: "Organization name must be at least 4 characters long." }),
+	name: t.String({ minLength: 4, }),
 });
 
 export const selectOrganizationsSchema = createSelectSchema(organizations);
