@@ -1,13 +1,12 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
+	import { innerWidth } from 'svelte/reactivity/window';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 
-	let innerWidth = $state(window.innerWidth);
-	let isDesktop = $derived(innerWidth > 768);
+	let isDesktop = $derived(innerWidth.current! > 768);
 </script>
 
-<svelte:window bind:innerWidth />
 
 {#if dialogStore.data}
 	{#if isDesktop}

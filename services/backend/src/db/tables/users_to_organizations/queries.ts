@@ -17,39 +17,39 @@ export const usersToOrganizationsQueries = {
 			.set(values)
 			.where(
 				and(
-					eq(usersToOrganizations.organizationId, values.organizationId),
-					eq(usersToOrganizations.userId, values.userId),
+					eq(usersToOrganizations.organization_id, values.organization_id),
+					eq(usersToOrganizations.user_id, values.user_id),
 				),
 			)
 			.returning()
 			.then((v) => v.at(0)),
 
 	delete: async ({
-		organizationId,
-		userId,
-	}: StrictPick<Types.UserToOrganization, "organizationId" | "userId">) =>
+		organization_id,
+		user_id,
+	}: StrictPick<Types.UserToOrganization, "organization_id" | "user_id">) =>
 		await db
 			.delete(usersToOrganizations)
 			.where(
 				and(
-					eq(usersToOrganizations.organizationId, organizationId),
-					eq(usersToOrganizations.userId, userId),
+					eq(usersToOrganizations.organization_id, organization_id),
+					eq(usersToOrganizations.user_id, user_id),
 				),
 			)
 			.returning()
 			.then((v) => v.at(0)),
 
 	select: async ({
-		organizationId,
-		userId,
-	}: StrictPick<Types.UserToOrganization, "organizationId" | "userId">) =>
+		organization_id,
+		user_id,
+	}: StrictPick<Types.UserToOrganization, "organization_id" | "user_id">) =>
 		await db
 			.select()
 			.from(usersToOrganizations)
 			.where(
 				and(
-					eq(usersToOrganizations.organizationId, organizationId),
-					eq(usersToOrganizations.userId, userId),
+					eq(usersToOrganizations.organization_id, organization_id),
+					eq(usersToOrganizations.user_id, user_id),
 				),
 			)
 			.then((v) => v.at(0)),

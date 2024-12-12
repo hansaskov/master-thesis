@@ -1,8 +1,6 @@
-import { and, eq } from "drizzle-orm";
-import { Prettify } from "elysia/types";
+import { eq } from "drizzle-orm";
 import type { Types } from "../../..";
 import type { StrictPick } from "../../../types/strict";
-import { Table } from "../../model";
 import { db } from "../../postgres";
 import { systems } from "./schema";
 

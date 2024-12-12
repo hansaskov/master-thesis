@@ -14,12 +14,15 @@
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Copy from 'lucide-svelte/icons/copy';
 	import AlertCircle from 'lucide-svelte/icons/circle-alert';
+	import type { Types } from 'backend';
 
 	let organizationName = 'My Organization';
 	let organizationSettings = {
 		notificationEmails: true,
 		publicProfile: false
 	};
+
+	let newSystem = $state<Types.SystemNew>()
 	
 	let pathName = window.location.pathname;
 	let organizationId = pathName.split('/')[2];
@@ -277,7 +280,7 @@
 				<form 
 					onsubmit={(e) => {
 						e.preventDefault();
-						systemStore.add(newSystemName, organizationId, systemModelId);
+						systemStore.add(newSystem!);
 						newSystemName = "";
 					}}
 					class="mb-4"

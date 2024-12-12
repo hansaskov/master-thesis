@@ -16,8 +16,8 @@ export class SystemStore {
 		this.systems = data;
 	}
 
-    async add(name: string, organization_id: string, system_model_id?: string | null) {
-		const { data, error } = await api.systems.index.post({ name, organization_id, system_model_id });
+    async add(newSystem: Types.SystemNew) {
+		const { data, error } = await api.systems.index.post(newSystem);
 
 		if (error) {
 			return onError(error);

@@ -23,7 +23,7 @@
 		parts: Part[];
 	}
 
-	let models: Model[] = [
+	let models: Model[] = $state([
 		{
 			name: 'VisioCompact® 1',
 			parts: [partsStore.parts[0], partsStore.parts[1], partsStore.parts[2]]
@@ -32,7 +32,7 @@
 			name: 'VisioPointer® 1',
 			parts: [partsStore.parts[3], partsStore.parts[0]]
 		}
-	];
+	]);
 
 	let newModelName = $state('');
 	let selectedModel: any = $state(null);

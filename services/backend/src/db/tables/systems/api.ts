@@ -19,8 +19,8 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 			}
 
 			const relation = await Queries.usersToOrganizations.select({
-				userId: user.id,
-				organizationId: body.organization_id,
+				user_id: user.id,
+				organization_id: body.organization_id,
 			});
 
 			if (!relation) {
