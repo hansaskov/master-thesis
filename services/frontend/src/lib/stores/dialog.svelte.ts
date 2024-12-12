@@ -25,4 +25,4 @@ class DialogStore {
 	}
 }
 
-export let dialogStore = new DialogStore();
+export const dialogStore = new DialogStore();

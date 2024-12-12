@@ -35,7 +35,7 @@ export class OrganizationStore {
 			return onError(error);
 		}
 
-		toast.success(`Organization \"${data.name}\" has been removed`);
+		toast.success(`Organization ${data.name} has been removed`);
 		this.organizations = this.organizations.filter((v) => v.id !== id);
 	}
 
@@ -49,7 +49,7 @@ export class OrganizationStore {
 		const index = this.organizations.findIndex((v) => v.id === values.id);
 		if (index !== -1) {
 			this.organizations[index] = data;
-			toast.success(`Organization has been updated to \"${data.name}\"`);
+			toast.success(`Organization has been updated to ${data.name}`);
 		}
 	}
 }
