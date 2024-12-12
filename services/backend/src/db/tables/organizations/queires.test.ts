@@ -14,8 +14,8 @@ describe("Organization Queries", async () => {
 		});
 
 		const relationship = await Queries.usersToOrganizations.create({
-			organizationId: organizations.id,
-			userId: user.id,
+			organization_id: organizations.id,
+			user_id: user.id,
 			role: "Admin",
 		});
 
@@ -44,14 +44,14 @@ describe("Organization Queries", async () => {
 		});
 
 		const relationship1 = await Queries.usersToOrganizations.create({
-			organizationId: organizations1.id,
-			userId: user.id,
+			organization_id: organizations1.id,
+			user_id: user.id,
 			role: "Admin",
 		});
 
 		const relationship2 = await Queries.usersToOrganizations.create({
-			organizationId: organizations2.id,
-			userId: user.id,
+			organization_id: organizations2.id,
+			user_id: user.id,
 			role: "User",
 		});
 
