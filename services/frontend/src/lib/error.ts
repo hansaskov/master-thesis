@@ -8,7 +8,13 @@ export function onError(error: string | { value: string } | { value: unknown } |
 			toast.error(error);
 		} else if ('value' in error && typeof error.value === 'string') {
 			toast.error(error.value);
-		} else if ('value' in error && typeof error.value === 'object' &&  error.value && 'message' in error.value && typeof error.value.message ===  "string") {
+		} else if (
+			'value' in error &&
+			typeof error.value === 'object' &&
+			error.value &&
+			'message' in error.value &&
+			typeof error.value.message === 'string'
+		) {
 			toast.error(error.value.message);
 		} else {
 			toast.error('Unknown error occured');

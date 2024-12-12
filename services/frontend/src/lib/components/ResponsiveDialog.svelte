@@ -7,7 +7,6 @@
 	let isDesktop = $derived(innerWidth.current! > 768);
 </script>
 
-
 {#if dialogStore.data}
 	{#if isDesktop}
 		<Dialog.Root bind:open={dialogStore.isOpen}>

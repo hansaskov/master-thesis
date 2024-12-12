@@ -22,8 +22,8 @@
 		publicProfile: false
 	};
 
-	let newSystem = $state<Types.SystemNew>()
-	
+	let newSystem = $state<Types.SystemNew>();
+
 	let pathName = window.location.pathname;
 	let organizationId = pathName.split('/')[2];
 
@@ -277,11 +277,11 @@
 				<Card.Title>Production Systems</Card.Title>
 			</Card.Header>
 			<Card.Content>
-				<form 
+				<form
 					onsubmit={(e) => {
 						e.preventDefault();
 						systemStore.add(newSystem!);
-						newSystemName = "";
+						newSystemName = '';
 					}}
 					class="mb-4"
 				>

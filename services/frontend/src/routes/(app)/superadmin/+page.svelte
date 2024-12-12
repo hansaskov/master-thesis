@@ -16,7 +16,7 @@
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 
-	let newOrganization = $state("");
+	let newOrganization = $state('');
 
 	interface Model {
 		name: string;
@@ -123,7 +123,7 @@
 						onsubmit={(e) => {
 							e.preventDefault();
 							organizationStore.add(newOrganization);
-							newOrganization = ""
+							newOrganization = '';
 						}}
 						class="flex gap-2"
 					>
@@ -159,10 +159,11 @@
 												onclick={() => {
 													dialogStore.open({
 														title: `Update ${organization.name}`,
-														description: "This action will update the name of the selected organization",
+														description:
+															'This action will update the name of the selected organization',
 														component: EditOrganizationDialogBody,
 														props: organization
-													})
+													});
 												}}
 											>
 												Edit Organization
