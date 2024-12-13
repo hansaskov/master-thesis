@@ -3,7 +3,7 @@ import { and, count, eq, sql } from "drizzle-orm";
 import type { User, UserNew } from "..";
 import { Table } from "..";
 import type { StrictPick } from "../../../types/strict";
-import { db } from "../../postgres";
+import { db } from "$db/postgres";
 
 export const usersQueries = {
 	selectUniqueWithProvider: async (

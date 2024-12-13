@@ -1,6 +1,6 @@
 import type { Types } from "$types/index";
 import { and, eq, sql } from "drizzle-orm";
-import { db } from "../../postgres";
+import { db } from "$db/postgres";
 import { keys } from "./schema";
 
 const PreparedselectUnique = db

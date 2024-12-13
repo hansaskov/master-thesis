@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 
 import type { Types } from "$types/index";
 import type { StrictPick } from "../../../types/strict";
-import { db } from "../../postgres";
+import { db } from "$db/postgres";
 import { usersToOrganizations } from "./schema";
 
 export const usersToOrganizationsQueries = {

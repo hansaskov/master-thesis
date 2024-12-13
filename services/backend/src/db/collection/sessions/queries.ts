@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 
 import type { Types } from "$types/index";
-import { db } from "../../postgres";
+import { db } from "$db/postgres";
 import { users } from "../users/schema";
 import { sessions } from "./schema";
 
