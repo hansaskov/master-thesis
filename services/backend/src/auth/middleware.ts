@@ -1,6 +1,6 @@
+import { Schema } from "$db/collection";
 import Elysia, { error } from "elysia";
-import { Schema } from "../db/model";
-import type { Session, User } from "../db/tables";
+import type { Session, User } from "../db/collection";
 import { setSessionTokenCookie, validateSessionToken } from "./lucia";
 
 export const AuthService = new Elysia({ name: "Service.Auth" })

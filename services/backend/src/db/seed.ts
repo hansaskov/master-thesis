@@ -1,4 +1,4 @@
-import { Table } from "./model";
+import { Table } from "$db/collection";
 import { db } from "./postgres";
 
 export async function seedDatabase() {
@@ -22,6 +22,7 @@ export async function seedDatabase() {
 				{
 					name: "VisioPointer",
 					organization_id: organization.id,
+					system_model: "VisioPointer",
 				},
 			])
 			.returning()

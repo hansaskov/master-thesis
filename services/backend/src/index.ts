@@ -3,9 +3,10 @@ import { treaty } from "@elysiajs/eden";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia, error, t } from "elysia";
 import { authRoutes } from "./auth/routes";
-import { organizationsApi } from "./db/tables/organizations/api";
-import { readings } from "./db/tables/readings/api";
-import { systemsApi } from "./db/tables/systems/api";
+import { organizationsApi } from "./db/collection/organizations/api";
+import { readings } from "./db/collection/readings/api";
+import { systemsApi } from "./db/collection/systems/api";
+import { Types } from "./types";
 
 const api = new Elysia({ prefix: "/api" })
 	.use(authRoutes)
@@ -22,4 +23,4 @@ const app = new Elysia({ precompile: true })
 console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
-export type * as Types from "./db/tables/index";
+export type * as Types from "./db/collection";
