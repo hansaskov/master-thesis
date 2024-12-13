@@ -15,8 +15,11 @@
 	import Copy from 'lucide-svelte/icons/copy';
 	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 	import type { Types } from 'backend';
+	import type { Snippet } from 'svelte';
 
-	let organizationName = 'My Organization';
+	let { children }: { children: Snippet } = $props();
+
+	let organizationName = $state('My Organization');
 	let organizationSettings = {
 		notificationEmails: true,
 		publicProfile: false
@@ -31,11 +34,11 @@
 		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
 		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
 	];
-	let newUserEmail = '';
+	let newUserEmail = $state('');
 	let newSystemName = $state('');
 	let visionSystems = writable<string[]>(['System A', 'System B']);
-	let generatedOnboardingUrl = '';
-	let showOnboardingUrl = false;
+	let generatedOnboardingUrl = $state('');
+	let showOnboardingUrl = $state(false);
 
 	let systemModelId: string | null = null;
 	//let organizationId: string = "test-organization-id";
@@ -324,7 +327,7 @@
 		</Card.Root>
 		<!--Bottom Padding-->
 		<main class="p-2">
-			<slot></slot>
+			{@render children?.()}
 		</main>
 	</div>
 </div>

@@ -2,7 +2,6 @@ import { generateRandomString } from "$utils/random";
 import { pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import { systemModels } from "..";
 import type { PartialExcept } from "../../../types/strict";
 import { organizations } from "../organizations/schema";
 

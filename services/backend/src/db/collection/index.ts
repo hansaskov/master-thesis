@@ -57,8 +57,6 @@ import {
 	usersToOrganizations,
 } from "./users_to_organizations/schema";
 
-
-
 export const Table = {
 	organizations,
 	systems,
