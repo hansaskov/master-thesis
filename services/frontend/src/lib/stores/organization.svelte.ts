@@ -6,8 +6,11 @@ import { PersistedState } from "runed";
 import { toast } from 'svelte-sonner';
 
 export class OrganizationStore {
+	// PersistedState will immidiatly fetch values from localstorage.
     #organizations = new PersistedState<Types.Organization[]>("organizations", []);
 
+	// Private helper functions for adding, removing and deleting from list of organization. 
+	// They will return the organization before changes were made to it. 
     #add(organization: Types.Organization) {
         this.#organizations.current.push(organization);
         return organization;
@@ -27,7 +30,8 @@ export class OrganizationStore {
 		return previous
 	}
 
-
+	// Public methods for interacting with organization state. 
+	// They all implement lazy loading. State changes are therefore instant and snappy 
 	async refresh() {
 		const { data, error } = await api.organizations.index.get();
 
