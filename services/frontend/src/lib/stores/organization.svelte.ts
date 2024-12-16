@@ -57,7 +57,7 @@ export class OrganizationStore {
 		toast.success(`Successfully created ${data.name}`);		
 	}
 
-	async remove(id: string) {
+	async remove({ id }: StrictPick<Types.Organization, "id">) {
 
 		const removedOrganization = this.#remove({id});
 
@@ -72,18 +72,18 @@ export class OrganizationStore {
 		toast.success(`Organization ${data.name} has been removed`);
 	}
 
-	async edit(values: Types.OrganizationUpdate) {
+	async edit(organization: Types.OrganizationUpdate) {
 
-		const previousOrganization = this.#edit(values.id, values)
+		const previousOrganization = this.#edit(organization.id, organization)
 
-		const { data, error } = await api.organizations.index.patch(values);
+		const { data, error } = await api.organizations.index.patch(organization);
 
 		if (error) {
 			previousOrganization && this.#add(previousOrganization);
 			return onError(error);
 		}
 
-		this.#edit(values.id, data)
+		this.#edit(organization.id, data)
 		toast.success(`Organization has been updated to ${data.name}`);
 	}
 
