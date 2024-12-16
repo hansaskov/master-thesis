@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 
-	organizationStore.refreshAll();
+	organizationStore.refresh();
 
 	$effect(() => {
 		if (organizationStore.organizations.length > 0) {

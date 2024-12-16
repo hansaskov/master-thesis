@@ -99,14 +99,7 @@
 		}
 	}
 
-	let loading = true;
-
-	$effect.pre(() => {
-		userStore.refresh();
-	});
-	$effect.pre(() => {
-		organizationStore.refreshAll();
-	});
+	organizationStore.refresh();
 </script>
 
 <div class="md:container">
@@ -122,7 +115,7 @@
 					<form
 						onsubmit={(e) => {
 							e.preventDefault();
-							organizationStore.add(newOrganization);
+							organizationStore.add({name: newOrganization});
 							newOrganization = '';
 						}}
 						class="flex gap-2"
