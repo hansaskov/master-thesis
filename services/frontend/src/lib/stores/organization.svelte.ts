@@ -83,7 +83,7 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.patch(organization);
 
 		if (error) {
-			previousOrganization && this.#add(previousOrganization);
+			previousOrganization && this.#edit(organization.id, previousOrganization);
 			return onError(error);
 		}
 
