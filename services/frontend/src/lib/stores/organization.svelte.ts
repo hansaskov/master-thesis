@@ -10,7 +10,7 @@ export class OrganizationStore {
     #organizations = new PersistedState<Types.Organization[]>("organizations", []);
 
 	// Private helper functions for adding, removing and deleting from list of organizations. 
-	// They will return the organization before changes were made to it. 
+	// All private helper functions will return the affected organization before changes are made to it. 
     #add(organization: Types.Organization) {
         this.#organizations.current.push(organization);
         return organization;
