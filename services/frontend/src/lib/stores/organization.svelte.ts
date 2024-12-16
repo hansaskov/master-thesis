@@ -31,7 +31,7 @@ export class OrganizationStore {
 	}
 
 	// Public methods for interacting with organization state. 
-	// They all implement lazy loading. State changes are therefore instant and snappy 
+	// They all implement optimistic updates. State changes are therefore instant and snappy 
 	async refresh() {
 		const { data, error } = await api.organizations.index.get();
 
