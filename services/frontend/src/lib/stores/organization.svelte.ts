@@ -91,6 +91,7 @@ export class OrganizationStore {
 		toast.success(`Organization has been updated to ${data.name}`);
 	}
 
+	// Allows read only access directly to organizations
 	get organizations() {
 		return this.#organizations.current;
 	}
