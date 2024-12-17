@@ -11,7 +11,14 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": "./src",
-    "noEmit": true
+    "noEmit": true,
+    "paths": {
+      "$auth/*":    [ "./src/auth/*" ],
+      "$config/*":  [ "./src/config/*" ],
+      "$db/*":      [ "./src/db/*" ],
+      "$types/*":   [ "./src/types/*" ],
+      "$utils/*":   [ "./src/utilities/*" ],
+    }
   },
   "include": [
     "src"

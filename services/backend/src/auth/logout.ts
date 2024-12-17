@@ -1,5 +1,5 @@
+import { Schema } from "$db/collection";
 import Elysia, { error, redirect, t } from "elysia";
-import { Schema } from "../db/model";
 import {
 	Authenticate,
 	deleteSessionTokenCookie,

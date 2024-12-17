@@ -2,8 +2,9 @@ import { generateCodeVerifier, generateState } from "arctic";
 import { MicrosoftEntraId } from "arctic";
 import { Elysia, error, redirect, t } from "elysia";
 import { TypeCompiler } from "elysia/type-system";
-import { Queries, Schema } from "../../db/model";
-import { environment } from "../../environment";
+import { environment } from "../../config/environment";
+
+import { Queries, Schema } from "$db/collection";
 import { catchError } from "../../types/errors";
 import {
 	createSession,

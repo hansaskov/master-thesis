@@ -7,15 +7,15 @@
     "dev": "bun --watch src/index.ts",
     "build": "bun build src/index.ts --target bun --outdir ./dist",
     "compile": "bun build src/index.ts --compile --minify --sourcemap --target bun --outfile backend",
-    "check": "tsc",
-    "start": "NODE_ENV=production bun dist/index.js",
+    "check": "bunx tsc --noEmit",
+    "preview": "NODE_ENV=production bun dist/index.js",
     "db:generate": "bunx drizzle-kit generate",
     "db:push": "bunx drizzle-kit push --verbose --strict",
     "db:migrate": "bunx drizzle-kit migrate",
     "db:check": "bunx drizzle-kit check",
     "db:studio": "bunx drizzle-kit studio",
     "lint": "bunx @biomejs/biome check src",
-    "lint:fix": "bun lint --write"
+    "lint:fix": "bunx @biomejs/biome check src --write"
   },
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.1.4",

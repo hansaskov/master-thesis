@@ -1,17 +1,10 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import { environment } from "../environment";
-
 import { exit } from "node:process";
-import { exponentialBackoff } from "../exponentialBackoff";
-import { systems } from "./tables";
+import { environment } from "$config/environment";
+import { systems } from "$db/collection/systems/schema";
+import { exponentialBackoff } from "$utils/expoentialBackoff";
+import { drizzle } from "drizzle-orm/postgres-js";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
-
-/*
-console.log("Starting migrations");
-await migrate(db, { migrationsFolder: "./drizzle" });
-console.log("Migrations finished");
-*/
 
 const testDbConnection = () =>
 	db

@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["src/db/utils.ts"]
+		"ignore": ["./src/types/typebox.ts"]
 	},
 	"formatter": {
 		"enabled": true,
