@@ -15,8 +15,11 @@
 	import { Ellipsis } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
+	import type { Types } from 'backend';
 
-	let newOrganization = $state('');
+	let newOrganization = $state<Types.OrganizationNew>({
+		name: ""
+	});
 
 	interface Model {
 		name: string;
@@ -99,14 +102,7 @@
 		}
 	}
 
-	let loading = true;
-
-	$effect.pre(() => {
-		userStore.refresh();
-	});
-	$effect.pre(() => {
-		organizationStore.refreshAll();
-	});
+	organizationStore.refresh();
 </script>
 
 <div class="md:container">
@@ -123,11 +119,11 @@
 						onsubmit={(e) => {
 							e.preventDefault();
 							organizationStore.add(newOrganization);
-							newOrganization = '';
+							newOrganization.name = '';
 						}}
 						class="flex gap-2"
 					>
-						<Input placeholder="Enter organization name" bind:value={newOrganization} />
+						<Input placeholder="Enter organization name" bind:value={newOrganization.name} />
 						<Button type="submit">Add Organization</Button>
 					</form>
 				</div>
@@ -176,7 +172,7 @@
 														description:
 															"This action cannot be undone. This will permanently delete the organization and all of it's systems",
 														component: AlertDialogBody,
-														props: { onsubmit: () => organizationStore.remove(organization.id) }
+														props: { onsubmit: () => organizationStore.remove(organization) }
 													});
 												}}
 												class="text-red-600"
