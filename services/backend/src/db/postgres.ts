@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { environment } from "../environment";
 
 import { exit } from "node:process";
-import { exponentialBackoff } from "../expoentialBackoff";
+import { exponentialBackoff } from "../exponentialBackoff";
 import { systems } from "./tables";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
