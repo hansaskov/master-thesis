@@ -1,7 +1,7 @@
 import { exit } from "node:process";
 import { environment } from "$config/environment";
 import { systems } from "$db/collection/systems/schema";
-import { exponentialBackoff } from "$utils/expoentialBackoff";
+import { exponentialBackoff } from "$utils/exponentialBackoff";
 import { drizzle } from "drizzle-orm/postgres-js";
 
 export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });

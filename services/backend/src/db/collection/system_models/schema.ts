@@ -1,4 +1,4 @@
-import { generateRandomString } from "$utils/random";
+import { generateRandomString } from "../../../utils/random";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
