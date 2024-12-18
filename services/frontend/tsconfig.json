@@ -15,7 +15,7 @@
 			"$config/*": ["../backend/src/config/*"],
 			"$db/*": ["../backend/src/db/*"],
 			"$types/*": ["../backend/src/types/*"],
-			"$utils/*": ["../backend/src/utilities/*"],
+			"$utils/*": ["../backend/src/utils/*"],
 			"$lib/*": ["./src/lib/*"]
 		}
 	}
