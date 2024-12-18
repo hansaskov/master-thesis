@@ -69,6 +69,14 @@ export const microsoftRoute = new Elysia()
 
 			console.log(userResponse)
 
+			if (!validateUser.Check(userResponse)) {
+				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${userResponse}`
+
+				console.error(errorMessage)
+				error(500, errorMessage);
+			}
+
+			
 			const userParsed = validateUser.Decode(userResponse);
 
 			const existingUser = await Queries.users.selectUniqueWithProvider({
