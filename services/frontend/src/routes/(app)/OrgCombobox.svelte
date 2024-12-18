@@ -7,11 +7,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import { tick } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 
 	let currentOrganization = $derived.by(() => {
-		return organizationStore.organizations.find((v) => v.id === $page.params.organizationId);
+		return organizationStore.organizations.find((v) => v.id === page.params.organizationId);
 	});
 
 	let openCombobox = $state(false);
@@ -25,7 +25,7 @@
 	}
 </script>
 
-{#if $page.params.organizationId}
+{#if page.params.organizationId}
 	<Popover.Root bind:open={openCombobox} let:ids>
 		<Popover.Trigger asChild let:builder>
 			<Button
