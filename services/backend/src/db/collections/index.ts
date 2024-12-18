@@ -28,7 +28,7 @@ import {
 	organizations,
 	selectOrganizationsSchema,
 } from "./organizations/schema";
-import { insertPartsSchema, parts } from "./parts/schema";
+import { insertPartsSchema, parts, selectPartsSchema } from "./parts/schema";
 import { partsToSystemModels } from "./parts_to_system_models/schema";
 import { readingsQueries } from "./readings/queries";
 import {
@@ -56,6 +56,7 @@ import {
 	insertUserToOrganizationSchema,
 	usersToOrganizations,
 } from "./users_to_organizations/schema";
+import { partQueries } from "./parts/queries";
 
 export const Table = {
 	organizations,
@@ -83,6 +84,7 @@ export const Queries = {
 	organizations: organizationQueries,
 	usersToOrganizations: usersToOrganizationsQueries,
 	systems: systemQueries,
+	part: partQueries
 };
 
 export const Schema = {
@@ -108,6 +110,8 @@ export const Schema = {
 			readings: selectReadingsSchema,
 			organizations: selectOrganizationsSchema,
 			systems: selectSystemsSchema,
+			part: selectPartsSchema,
+
 		},
 		"select",
 	),
