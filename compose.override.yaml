@@ -1,5 +1,9 @@
 services:
 
+  caddy:
+    ports:
+      - "3000:3000"
+
   ## Frontend development dockerfile and sync the files automatically
   frontend:
     build: 

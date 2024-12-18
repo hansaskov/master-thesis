@@ -52,7 +52,9 @@ export const microsoftRoute = new Elysia()
 			const [err, tokens] = await catchError(
 				entraId.validateAuthorizationCode(code, codeVerifier),
 			);
+
 			if (err) {
+				console.error(`Auth error: ${err}`)
 				return error(400, err);
 			}
 
@@ -102,7 +104,10 @@ export const microsoftRoute = new Elysia()
 				code: t.String(),
 				state: t.String(),
 			}),
-			cookie: Schema.cookie.microsoft,
+			cookie: t.Cookie({
+				microsoftState: t.String(),
+				microsoftCode: t.String()
+			})
 		},
 	);
 
