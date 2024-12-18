@@ -10,10 +10,6 @@
 	import { page } from '$app/state';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 
-	let currentOrganization = $derived.by(() => {
-		return organizationStore.organizations.find((v) => v.id === page.params.organizationId);
-	});
-
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
@@ -35,8 +31,8 @@
 				aria-expanded={openCombobox}
 				class="pr-0 pl-2 font-bold sans-serif tracking-wide text-xl sm:font-medium sm:text-sm"
 			>
-				{#if currentOrganization}
-					{currentOrganization.name}
+				{#if organizationStore.currentOrganization}
+					{organizationStore.currentOrganization.name}
 					<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
 				{/if}
 			</Button>

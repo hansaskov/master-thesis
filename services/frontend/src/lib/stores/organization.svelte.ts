@@ -4,10 +4,13 @@ import type { Types } from 'backend';
 import type { StrictPick } from 'backend/src/types/strict';
 import { PersistedState } from "runed";
 import { toast } from 'svelte-sonner';
+import { page } from '$app/state'
 
 export class OrganizationStore {
 	// PersistedState will immidiatly fetch values from localstorage.
     #organizations = new PersistedState<Types.Organization[]>("organizations", []);
+	public currentOrganization = $derived(this.#organizations.current.find(org => org.id === page.params.organizationId));
+
 
 	// Private helper functions for adding, removing and deleting from list of organizations. 
 	// All private helper functions will return the affected organization before changes are made to it. 
