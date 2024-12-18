@@ -1,5 +1,5 @@
 import { AuthService } from "$auth/middleware";
-import { Queries, Schema } from "$db/collection";
+import { Queries, Schema } from "$db/collections";
 import Elysia, { error, t } from "elysia";
 
 export const usersToOrganizationsApi = new Elysia({

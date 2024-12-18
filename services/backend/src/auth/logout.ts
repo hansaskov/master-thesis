@@ -1,4 +1,4 @@
-import { Schema } from "$db/collection";
+import { Schema } from "$db/collections";
 import Elysia, { error, redirect, t } from "elysia";
 import {
 	Authenticate,

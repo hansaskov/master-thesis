@@ -2,9 +2,9 @@ import { logger } from "@bogeychan/elysia-logger";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 import { authRoutes } from "./auth/routes";
-import { organizationsApi } from "./db/collection/organizations/api";
-import { readings } from "./db/collection/readings/api";
-import { systemsApi } from "./db/collection/systems/api";
+import { organizationsApi } from "./db/collections/organizations/api";
+import { readings } from "./db/collections/readings/api";
+import { systemsApi } from "./db/collections/systems/api";
 
 
 const api = new Elysia({ prefix: "/api" })
@@ -22,4 +22,4 @@ const app = new Elysia({ precompile: true })
 console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
-export type * as Types from "./db/collection";
+export type * as Types from "./db/collections";

@@ -1,1 +1,1 @@
-export type * as Types from "../db/collection";
+export type * as Types from "../db/collections";

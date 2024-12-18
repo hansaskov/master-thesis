@@ -2,7 +2,7 @@ import type { Types } from "$types/index";
 import { and, desc, eq, sql } from "drizzle-orm/sql";
 import type { StrictOmit, StrictPick } from "$types/strict";
 import { db } from "$db/postgres";
-import { readings } from "../readings/schema";
+import { readings } from "./schema";
 
 const preparedselectUnique = db
 	.select()
