@@ -11,6 +11,7 @@ import {
 	generateSessionToken,
 	setSessionTokenCookie,
 } from "../lucia";
+import { convertKeys } from "$utils/transform";
 
 export const entraId = new MicrosoftEntraId(
 	environment.MICROSOFT_TENANT_ID,
@@ -65,19 +66,24 @@ export const microsoftRoute = new Elysia()
 						Authorization: `Bearer ${tokens.accessToken()}`,
 					},
 				},
-			).then((r) => r.json())
+			)
+			.then(r => r.json())
 
 			console.log(userResponse)
 
-			if (!validateUser.Check(userResponse)) {
-				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${userResponse}`
+			const parsedUserResponse = convertKeys(userResponse);
+
+			console.log(parsedUserResponse)
+
+			if (!validateUser.Check(parsedUserResponse)) {
+				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${parsedUserResponse}`
 
 				console.error(errorMessage)
-				error(500, errorMessage);
+				return error(500, errorMessage);
 			}
 
 			
-			const userParsed = validateUser.Decode(userResponse);
+			const userParsed = validateUser.Decode(parsedUserResponse);
 
 			const existingUser = await Queries.users.selectUniqueWithProvider({
 				provider_name: "Microsoft",
@@ -122,10 +128,10 @@ export const microsoftRoute = new Elysia()
 
 const UserSchema = t.Object({
 	sub: t.String(),
-	familyname: t.String(),
-	givenname: t.String(),
-	locale: t.String(),
-	picture: t.String(),
+	familyname: t.Optional(t.String()),
+	givenname: t.Optional(t.String()),
+	locale: t.Optional(t.String()),
+	picture: t.Optional(t.String()),
 });
 
 const validateUser = TypeCompiler.Compile(UserSchema);
