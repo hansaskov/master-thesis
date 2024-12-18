@@ -49,8 +49,10 @@ services:
       - PROD=${PROD}
     labels:
       caddy: "${INTERFACE_FQDN}"
-      caddy.handle: /api/*
-      caddy.handle.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_0: /api/*
+      caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_1: /.well-known/*
+      caddy.handle_1.reverse_proxy: "{{upstreams 3000}}"
     depends_on:
       timescaledb: 
         condition: service_healthy

@@ -16,6 +16,7 @@ const api = new Elysia({ prefix: "/api" })
 	.use(partsApi);
 
 const app = new Elysia({ precompile: true })
+	.get(".well-known/microsoft-identity-association.json", Bun.file('public/.well-known/microsoft-identity-association.json'))
 	.use(logger())
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api)
