@@ -54,7 +54,6 @@ export const microsoftRoute = new Elysia()
 			);
 
 			if (err) {
-				console.error(`Auth error: ${err}`)
 				return error(400, err);
 			}
 
@@ -66,7 +65,9 @@ export const microsoftRoute = new Elysia()
 						Authorization: `Bearer ${tokens.accessToken()}`,
 					},
 				},
-			).then((r) => r.json());
+			).then((r) => r.json())
+
+			console.log(userResponse)
 
 			const userParsed = validateUser.Decode(userResponse);
 
@@ -97,7 +98,7 @@ export const microsoftRoute = new Elysia()
 			const session = await createSession(sessionToken, user.id);
 			setSessionTokenCookie(cookie.sessionId, sessionToken, session.expires_at);
 
-			return redirect("/systems", 302);
+			return redirect("/organization", 302);
 		},
 		{
 			query: t.Object({
@@ -113,9 +114,9 @@ export const microsoftRoute = new Elysia()
 
 const UserSchema = t.Object({
 	sub: t.String(),
-	name: t.String(),
-	family_name: t.String(),
-	given_name: t.String(),
+	familyname: t.String(),
+	givenname: t.String(),
+	locale: t.String(),
 	picture: t.String(),
 });
 
