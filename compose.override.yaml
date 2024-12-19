@@ -35,3 +35,21 @@ services:
   timescaledb:
     ports:
     - "5432:5432"
+
+#
+#  studio:
+#    profiles: [stateless]
+#    build:
+#      context: .
+#      dockerfile: ./services/backend/develop.dockerfile
+#    command: bun db:studio -- --host=0.0.0.0
+#    ports:
+#      - "4983:4983"
+#    networks:
+#      - default
+#    environment:
+#      - DATABASE_URL=${DATABASE_URL}
+#    depends_on:
+#      timescaledb: 
+#        condition: service_healthy
+        
