@@ -21,6 +21,18 @@
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 	import { userStore } from '$lib/stores/user.svelte';
+	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { goto } from '$app/navigation';
+
+	function navigateToSystems() {
+		if (organizationStore.currentOrganization) {
+			goto(`/organization/${organizationStore.currentOrganization.id}/systems`)
+		} else if (organizationStore.organizations.length > 0) {
+			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
+		} else {
+			goto(`/organization`)
+		}
+	}
 
 	type NavItemType = {
 		name: string;
@@ -51,10 +63,10 @@
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a href="/organization">
+			<button onclick={navigateToSystems}>
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
-			</a>
+			</button>
 			{#each navItems as item}
 				<NavItem props={item} />
 			{/each}
@@ -148,11 +160,11 @@
 		class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden"
 	>
 		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
-			<a href="/organization" class="flex flex-col items-center justify-center">
+			<button onclick={navigateToSystems} class="flex flex-col items-center justify-center">
 				<House class="w-6 h-6" />
 				Home
 				<span class="sr-only">Dashboard</span>
-			</a>
+			</button>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Newspaper />
