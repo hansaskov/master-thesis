@@ -3,12 +3,13 @@ import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import type { PartialExcept } from "../../../types/strict";
+import { systemModelEnum } from "../systems/schema";
 export const systemModels = pgTable("system_models", {
 	id: text()
 		.primaryKey()
 		.notNull()
 		.$default(() => generateRandomString(12)),
-	name: text().notNull(),
+	name: systemModelEnum().notNull(),
 });
 
 export const insertSystemModelsSchema = createInsertSchema(systemModels, {
