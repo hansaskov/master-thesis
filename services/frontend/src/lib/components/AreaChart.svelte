@@ -5,7 +5,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
 
-	let chartCanvas: HTMLCanvasElement;
+	let chartCanvas = $state<HTMLCanvasElement>();
 
 	interface DataSet {
 		dataY: number[];
@@ -13,13 +13,24 @@
 		unit?: string;
 	}
 
-	export let dataX: string[];
-	export let dataSets: DataSet[];
-	export let min: number | undefined = undefined;
-	export let max: number | undefined = undefined;
+	interface Props {
+		dataX: string[];
+		dataSets: DataSet[];
+		min?: number | undefined;
+		max?: number | undefined;
+		[key: string]: any
+	}
+
+	let {
+		dataX,
+		dataSets,
+		min = undefined,
+		max = undefined,
+		...rest
+	}: Props = $props();
 
 	onMount(() => {
-		const ctx = chartCanvas.getContext('2d');
+		const ctx = chartCanvas?.getContext('2d');
 		if (ctx) {
 			const primaryColor = getComputedStyle(document.documentElement)
 				.getPropertyValue('--primary')
@@ -67,7 +78,7 @@
 	});
 </script>
 
-<div {...$$restProps}>
+<div {...rest}>
 	<div class="my-4 flex flex-wrap justify-center gap-2">
 		{#each dataSets as { label }, i}
 			<div class="flex">

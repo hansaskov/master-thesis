@@ -4,7 +4,11 @@
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
 
-	export let asMenuItem = false;
+	interface Props {
+		asMenuItem?: boolean;
+	}
+
+	let { asMenuItem = false }: Props = $props();
 </script>
 
 {#if asMenuItem}
