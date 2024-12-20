@@ -5,16 +5,18 @@ import { authRoutes } from "./auth/routes";
 import { organizationsApi } from "./db/collections/organizations/api";
 import { readings } from "./db/collections/readings/api";
 import { systemsApi } from "./db/collections/systems/api";
-import { systemModelEnumList } from "./db/collections";
+import { partsApi } from "$db/collections/parts/api";
 
 
 const api = new Elysia({ prefix: "/api" })
 	.use(authRoutes)
 	.use(readings)
 	.use(organizationsApi)
-	.use(systemsApi);
+	.use(systemsApi)
+	.use(partsApi);
 
 const app = new Elysia({ precompile: true })
+	.get(".well-known/microsoft-identity-association.json", Bun.file('public/.well-known/microsoft-identity-association.json'))
 	.use(logger())
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api)

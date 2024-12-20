@@ -2,45 +2,32 @@ import Elysia, { error, t } from "elysia";
 import { Queries, Schema } from "..";
 import { AuthService } from "../../../auth/middleware";
 
-export const organizationsApi = new Elysia({ prefix: "organizations" })
+export const partsApi = new Elysia({ prefix: "parts" })
 	.use(AuthService)
 	.get("/", async ({ user }) => {
-		if (user.is_superadmin) {
-			return await Queries.organizations.selectAll();
+		if (!user.is_superadmin) {
+			return error(
+				"Unauthorized",
+				"Only superadmins are allowed to select all parts",
+			);
 		}
-
-		return await Queries.organizations.selectOrganizationsOnUser({
-			id: user.id,
-		});
+		
+		return await Queries.part.selectAll();
 	})
 	.patch(
 		"/",
 		async ({ user, body }) => {
-			const relation = await Queries.usersToOrganizations.select({
-				user_id: user.id,
-				organization_id: body.id,
-			});
-
 			if (!user.is_superadmin) {
-				if (!relation) {
-					return error(
-						"Unauthorized",
-						"You do not have access to this organization",
-					);
-				}
-
-				if (relation.role !== "Admin") {
-					return error(
-						"Unauthorized",
-						"Only admins are allowed to edit this organization",
-					);
-				}
+				return error(
+					"Unauthorized",
+					"Only superadmins are allowed to select all parts",
+				);
 			}
 
 			const result = await Queries.organizations.update(body);
 
 			if (result === undefined) {
-				return error("Not Found", "Organization not found");
+				return error("Not Found", "Part to edit was not found");
 			}
 
 			return result;
@@ -58,15 +45,15 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			if (!user.is_superadmin) {
 				return error(
 					"Unauthorized",
-					"Only superadmins are allowed to create organizations",
+					"Only superadmins are allowed to create parts",
 				);
 			}
 
-			return await Queries.organizations.create(body);
+			return await Queries.part.create(body);
 		},
 		{
 			body: t.Object({
-				name: Schema.insert.organizations.name,
+				name: Schema.insert.parts.name,
 			}),
 		},
 	)
@@ -76,7 +63,7 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			if (!user.is_superadmin) {
 				return error(
 					"Unauthorized",
-					"Only superadmins are allowed to delete organizations",
+					"Only superadmins are allowed to delete parts",
 				);
 			}
 
@@ -85,7 +72,7 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			if (result === undefined) {
 				return error(
 					"Not Found",
-					"Cannot delete, because organization was not found",
+					"Cannot delete, because the part was not found",
 				);
 			}
 
@@ -93,7 +80,7 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 		},
 		{
 			body: t.Object({
-				id: Schema.select.organizations.id,
+				id: Schema.select.part.id,
 			}),
 		},
 	);
