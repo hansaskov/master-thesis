@@ -96,7 +96,7 @@
 							</Table.Head>
 							{#each headers as { label, key }, i}
 								<Table.Head class={i > 2 ? 'hidden md:table-cell' : ''}>
-									<button on:click={() => sortSystems(key)}>
+									<button onclick={() => sortSystems(key)}>
 										{label}
 										<ArrowDownUp class="w-3 h-3 inline-block ml-1" />
 									</button>

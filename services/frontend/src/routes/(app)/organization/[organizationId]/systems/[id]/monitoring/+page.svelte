@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import {
 		Card,
 		CardContent,
@@ -22,8 +21,6 @@
 	import Camera from 'lucide-svelte/icons/camera';
 	import Thermometer from 'lucide-svelte/icons/thermometer';
 	import AreaChart from '$lib/components/AreaChart.svelte';
-
-	$: systemId = $page.params.id;
 
 	interface Metric {
 		name: string;
@@ -168,7 +165,7 @@
 			<Card>
 				<CardHeader>
 					<CardTitle class="flex items-center gap-2">
-						<svelte:component this={group.icon} class="h-4 w-4" />
+						<group.icon class="h-4 w-4" />
 						<span>{group.title}</span>
 					</CardTitle>
 				</CardHeader>

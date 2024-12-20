@@ -1,13 +1,13 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion';
-	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
 	import Check from 'lucide-svelte/icons/check';
 	import X from 'lucide-svelte/icons/x';
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 
-	$: systemId = $page.params.id;
+	let systemId = $derived(page.params.id);
 
 	const plans = [
 		{
@@ -65,7 +65,7 @@
 	];
 
 	// Array to hold the names of the open accordions
-	let openAccordions: string[] = [];
+	let openAccordions: string[] = $state([]);
 
 	// Function to progressively open accordions, starting the first one immediately
 	function openAccordionsSequentially() {

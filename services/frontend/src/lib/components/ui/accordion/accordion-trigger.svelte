@@ -18,7 +18,7 @@
 			className
 		)}
 		{...$$restProps}
-		on:click
+		onclick
 	>
 		<slot />
 		<ChevronDown class="text-muted-foreground h-4 w-4 shrink-0 transition-transform duration-200" />

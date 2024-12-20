@@ -7,7 +7,6 @@
 	import { Button } from '$lib/components/ui/button';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import { tick } from 'svelte';
-	import { page } from '$app/state';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 
 	let openCombobox = $state(false);

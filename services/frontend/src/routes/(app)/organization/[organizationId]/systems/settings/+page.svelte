@@ -16,8 +16,6 @@
 	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 	import type { Types } from 'backend';
 	import type { Snippet } from 'svelte';
-	import { organizationStore } from '$lib/stores/organization.svelte';
-	import { page } from '$app/state';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -29,8 +27,6 @@
 
 	let newSystem = $state<Types.SystemNew>();
 
-	let pathName = $state(page.url.pathname);
-
 	let users = [
 		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
 		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
@@ -41,8 +37,6 @@
 	let generatedOnboardingUrl = $state('');
 	let showOnboardingUrl = $state(false);
 
-	let systemModelId: string | null = null;
-	//let organizationId: string = "test-organization-id";
 
 	let onboardingInvitations = [
 		{ email: 'pendinguser@example.com', status: 'pending' },
@@ -89,18 +83,6 @@
 		console.log('User removed:', userId);
 	}
 
-	function addVisionSystem() {
-		if (newSystemName) {
-			visionSystems.update((systems) => [...systems, newSystemName]);
-			console.log('New vision system added:', newSystemName);
-			newSystemName = '';
-		}
-	}
-
-	function removeVisionSystem(systemName: string) {
-		visionSystems.update((systems) => systems.filter((system) => system !== systemName));
-		console.log('vision system removed:', systemName);
-	}
 
 	function generateOnboardingUrl() {
 		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;

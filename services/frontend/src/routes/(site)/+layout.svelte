@@ -4,6 +4,8 @@
 	import Sun from 'lucide-svelte/icons/sun';
 	import { Button } from '$lib/components/ui/button';
 	import { toggleMode } from 'mode-watcher';
+
+	let { children } = $props();
 </script>
 
 <div class="flex h-screen w-full flex-col bg-background/40 text-foreground">
@@ -24,7 +26,7 @@
 	</header>
 
 	<main class="flex-1 bg-background">
-		<slot></slot>
+		{@render children()}
 	</main>
 
 	<footer class="border-t bg-background p-4 text-center text-sm text-muted-foreground">

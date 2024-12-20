@@ -18,7 +18,7 @@
 	import { systems } from '$lib/stores/systems';
 
 	// Get the system ID from the route parameters
-	$: systemId = $page.params.id;
+	let systemId = $derived($page.params.id);
 
 	const navigationOptions = [
 		{
@@ -71,7 +71,7 @@
 						variant="outline"
 						class="w-full h-auto py-4 px-6 flex flex-col items-center justify-center text-center hover:bg-primary/5"
 					>
-						<svelte:component this={option.icon} class="w-6 h-6 mb-2" />
+						<option.icon class="w-6 h-6 mb-2" />
 						<span class="text-base sm:text-lg font-semibold mb-1 leading-tight">{option.label}</span
 						>
 						<span

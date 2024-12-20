@@ -2,8 +2,12 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-	export let goodParts: number;
-	export let badParts: number;
+	interface Props {
+		goodParts: number;
+		badParts: number;
+	}
+
+	let { goodParts, badParts }: Props = $props();
 </script>
 
 <Card class="w-full">

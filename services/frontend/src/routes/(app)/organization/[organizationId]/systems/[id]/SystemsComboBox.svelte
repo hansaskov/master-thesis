@@ -15,11 +15,11 @@
 		{ value: 'sys4', label: 'SmartInspector® 1' }
 	];
 
-	let openCombobox = false;
-	let selectedOrg = '';
+	let openCombobox = $state(false);
+	let selectedOrg = $state('');
 
-	$: selectedOrgLabel =
-		organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`;
+	let selectedOrgLabel =
+		$derived(organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`);
 
 	function closeAndFocusTrigger(triggerId: string) {
 		openCombobox = false;

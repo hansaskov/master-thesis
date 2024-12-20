@@ -17,14 +17,14 @@
 	};
 
 	// User preferences
-	let preferences = {
+	let preferences = $state({
 		emailNotifications: {
 			updates: true,
 			newsletters: false,
 			promotions: false
 		},
 		theme: 'system'
-	};
+	});
 
 	// Available themes
 	const themes = [

@@ -3,7 +3,11 @@
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import { Progress } from '$lib/components/ui/progress';
 
-	export let oee: number;
+	interface Props {
+		oee: number;
+	}
+
+	let { oee }: Props = $props();
 </script>
 
 <Card class="w-full">
