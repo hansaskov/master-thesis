@@ -12,12 +12,10 @@
 
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
-
-
 </script>
 
 {#if page.params.organizationId}
-	<Popover.Root bind:open={openCombobox} >
+	<Popover.Root bind:open={openCombobox}>
 		<Popover.Trigger>
 			<Button
 				variant="ghost"
@@ -38,9 +36,7 @@
 				<Command.Group>
 					{#each organizationStore.organizations as org}
 						<a href={`/organization/${org.id}/systems`}>
-							<Command.Item
-								value={org.id}
-							>
+							<Command.Item value={org.id}>
 								<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
 								{org.name}
 							</Command.Item>

@@ -18,8 +18,9 @@
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
-	let selectedOrgLabel =
-		$derived(organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`);
+	let selectedOrgLabel = $derived(
+		organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`
+	);
 
 	function closeAndFocusTrigger(triggerId: string) {
 		openCombobox = false;
@@ -29,8 +30,8 @@
 	}
 </script>
 
-<Popover.Root bind:open={openCombobox} >
-	<Popover.Trigger >
+<Popover.Root bind:open={openCombobox}>
+	<Popover.Trigger>
 		<Button
 			variant="outline"
 			role="combobox"
@@ -48,9 +49,7 @@
 			<a href="/systems">
 				<Command.Group>
 					{#each organizations as org}
-						<Command.Item
-							value={org.value}
-						>
+						<Command.Item value={org.value}>
 							<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
 							{org.label}
 						</Command.Item>

@@ -18,16 +18,10 @@
 		dataSets: DataSet[];
 		min?: number | undefined;
 		max?: number | undefined;
-		[key: string]: any
+		[key: string]: any;
 	}
 
-	let {
-		dataX,
-		dataSets,
-		min = undefined,
-		max = undefined,
-		...rest
-	}: Props = $props();
+	let { dataX, dataSets, min = undefined, max = undefined, ...rest }: Props = $props();
 
 	onMount(() => {
 		const ctx = chartCanvas?.getContext('2d');

@@ -26,9 +26,9 @@
 
 	let searchTerm = $state('');
 
-	let filteredParts = $derived(spareParts.filter((part) =>
-		part.partName.toLowerCase().includes(searchTerm.toLowerCase())
-	));
+	let filteredParts = $derived(
+		spareParts.filter((part) => part.partName.toLowerCase().includes(searchTerm.toLowerCase()))
+	);
 
 	const orders = new Map<string, number>();
 

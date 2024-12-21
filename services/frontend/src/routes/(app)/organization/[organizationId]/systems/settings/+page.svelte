@@ -37,7 +37,6 @@
 	let generatedOnboardingUrl = $state('');
 	let showOnboardingUrl = $state(false);
 
-
 	let onboardingInvitations = [
 		{ email: 'pendinguser@example.com', status: 'pending' },
 		{ email: 'completeduser@example.com', status: 'completed' }
@@ -82,7 +81,6 @@
 		users = users.filter((user) => user.id !== userId);
 		console.log('User removed:', userId);
 	}
-
 
 	function generateOnboardingUrl() {
 		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;
@@ -196,10 +194,7 @@
 												</DropdownMenu.Item>
 											{/if}
 											<DropdownMenu.Separator />
-											<DropdownMenu.Item
-												onclick={() => removeUser(person.id)}
-												class="text-red-600"
-											>
+											<DropdownMenu.Item onclick={() => removeUser(person.id)} class="text-red-600">
 												Remove User
 											</DropdownMenu.Item>
 										</DropdownMenu.Content>

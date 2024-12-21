@@ -22,10 +22,10 @@
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 	import type { Types } from 'backend';
 	import { systemStore } from '$lib/stores/systems.svelte';
-	import * as Select from "$lib/components/ui/select/index.js";
+	import * as Select from '$lib/components/ui/select/index.js';
 
 	let newOrganization = $state<Types.OrganizationNew>({
-		name: ""
+		name: ''
 	});
 
 	interface Model {
@@ -66,27 +66,26 @@
 	type SystemModelType = Types.SystemNew['system_model'];
 
 	const systemModels: Array<{ value: SystemModelType; label: string }> = [
-		{ value: "VisioPointer", label: "VisioPointer" },
-		{ value: "VisioLine", label: "VisioLine" },
-		{ value: "SmartInspector", label: "SmartInspector" },
-		{ value: "360 Inspector", label: "360 Inspector" },
-		{ value: "VisioOne", label: "VisioOne" },
-		{ value: "IML-Inspector", label: "IML-Inspector" }
+		{ value: 'VisioPointer', label: 'VisioPointer' },
+		{ value: 'VisioLine', label: 'VisioLine' },
+		{ value: 'SmartInspector', label: 'SmartInspector' },
+		{ value: '360 Inspector', label: '360 Inspector' },
+		{ value: 'VisioOne', label: 'VisioOne' },
+		{ value: 'IML-Inspector', label: 'IML-Inspector' }
 	];
 
-	let selected = $state("VisioPointer");
+	let selected = $state('VisioPointer');
 
 	$inspect(selected);
 
 	let newSystem = $state<Types.SystemNew>({
-		name: "",
-		organization_id: "",
-		system_model: "VisioPointer"
+		name: '',
+		organization_id: '',
+		system_model: 'VisioPointer'
 	});
 
-
 	$effect(() => {
-    	newSystem.organization_id = selectedOrg;
+		newSystem.organization_id = selectedOrg;
 	});
 
 	function addPart() {
@@ -243,9 +242,9 @@
 					<Label for="new-model">Add New Vision System</Label>
 					<form
 						onsubmit={(e) => {
-						e.preventDefault();
-						systemStore.add(newSystem);
-					}}
+							e.preventDefault();
+							systemStore.add(newSystem);
+						}}
 					>
 						<div class="space-y-4">
 							<div class="flex gap-2">
@@ -253,21 +252,21 @@
 								<PartSelector />
 							</div>
 							<Select.Root type="single" bind:value={selected}>
-								<Select.Trigger class="w-[180px]" placeholder="Select type"/>
+								<Select.Trigger class="w-[180px]" placeholder="Select type" />
 								<Select.Content>
-								  <Select.Group>
-									{#each systemModels as systemModel}
-									  	<Select.Item value={systemModel.value} label={systemModel.label}>
-											{systemModel.label}
-										</Select.Item>
-									{/each}
-								  </Select.Group>
+									<Select.Group>
+										{#each systemModels as systemModel}
+											<Select.Item value={systemModel.value} label={systemModel.label}>
+												{systemModel.label}
+											</Select.Item>
+										{/each}
+									</Select.Group>
 								</Select.Content>
 								<Input name="Model Type" />
 							</Select.Root>
 							<div>
 								<Popover.Root bind:open={openCombobox}>
-									<Popover.Trigger >
+									<Popover.Trigger>
 										<Button
 											variant="outline"
 											role="combobox"
@@ -289,11 +288,15 @@
 											<Command.Empty>No organization found.</Command.Empty>
 											<Command.Group>
 												{#each organizationStore.organizations as org}
-														<Command.Item
-														>
-															<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
-															{org.name}
-														</Command.Item>
+													<Command.Item>
+														<Check
+															class={cn(
+																'mr-2 h-4 w-4',
+																selectedOrg !== org.id && 'text-transparent'
+															)}
+														/>
+														{org.name}
+													</Command.Item>
 												{/each}
 											</Command.Group>
 										</Command.Root>

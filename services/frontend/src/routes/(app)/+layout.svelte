@@ -7,6 +7,7 @@
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
 	import Settings from '$lib/components/Settings.svelte';
@@ -20,34 +21,29 @@
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 	import { userStore } from '$lib/stores/user.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
-	import { page } from '$app/state'
+	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import type { Snippet } from 'svelte';
 
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
-			goto(`/organization/${organizationStore.currentOrganization.id}/systems`)
+			goto(`/organization/${organizationStore.currentOrganization.id}/systems`);
 		} else if (organizationStore.organizations.length > 0) {
 			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
 		} else {
-			goto(`/organization`)
+			goto(`/organization`);
 		}
 	}
 
-	type NavItemType = {
-		name: string;
-		href: string;
-		icon: typeof IconType;
-	};
+	const { children } = $props();
 
+	/*
 	const navItems: NavItemType[] = [
 		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
 		{ name: 'Search', icon: Search, href: '/' }
 	];
-
-	const superAdmin: NavItemType = { name: 'Super Admin', icon: UserRoundCog, href: '/superadmin' };
-	const settings: NavItemType = { name: 'Support', icon: Wrench, href: '/support' };
-
-	let breadcrumbs = $derived.by(() => 
+	*/
+	let breadcrumbs = $derived.by(() =>
 		page.url.pathname
 			.split('/')
 			.filter(Boolean)
@@ -56,27 +52,49 @@
 				label: segment.charAt(0).toUpperCase() + segment.slice(1),
 				isLast: index === array.length - 1
 			}))
-	)
+	);
 </script>
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<button onclick={navigateToSystems}>
+			<button
+				onclick={navigateToSystems}
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
 			</button>
-			{#each navItems as item}
-				<NavItem {...item} />
-			{/each}
+			<a
+				href="/newsfeed"
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
+				<Newspaper class="w-5 h-5" />
+			</a>
+			<a
+				href="/"
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
+				<Search class="w-5 h-5" />
+			</a>
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<NavItem {...superAdmin} />
+				<a
+					href="/superadmin"
+					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+				>
+					<UserRoundCog class="w-5 h-5" />
+				</a>
 			</nav>
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<NavItem {...settings} />
+				<a
+					href="/support"
+					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+				>
+					<Wrench class="w-5 h-5" />
+				</a>
 			</nav>
 		</div>
 	</aside>
@@ -87,7 +105,7 @@
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
 			<!-- Breadcrumb and other header elements -->
-			
+
 			<Breadcrumb.Root>
 				<Breadcrumb.List>
 					<Breadcrumb.Page>
@@ -109,7 +127,6 @@
 					{/each}
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
-			
 
 			<nav class="flex items-center space-x-2 ml-auto">
 				<!-- TODO: Hide settings for user without permissions to change settings of the page-->
@@ -124,7 +141,7 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item >
+						<DropdownMenu.Item>
 							<a href="/settings">
 								<UserRoundCog class="h-4 w-4 mr-2" />
 								User Settings
@@ -157,7 +174,7 @@
 
 		<!--Bottom Padding-->
 		<main class="p-4 pb-[5rem]">
-			<slot></slot>
+			{@render children()}
 		</main>
 	</div>
 
