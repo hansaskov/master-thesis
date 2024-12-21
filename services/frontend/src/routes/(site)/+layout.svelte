@@ -17,7 +17,7 @@
 			</a>
 		</div>
 		<nav class="flex items-center gap-2">
-			<Button on:click={toggleMode} variant="outline" size="icon" class="h-9 w-9">
+			<Button onclick={toggleMode} variant="outline" size="icon" class="h-9 w-9">
 				<Sun class="absolute h-4 w-4 rotate-0 scale-100 dark:scale-0" />
 				<Moon class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 " />
 			</Button>

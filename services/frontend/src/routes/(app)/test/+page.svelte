@@ -2,4 +2,6 @@
 	import SpareParts from '../superadmin/SpareParts.svelte';
 </script>
 
-<SpareParts></SpareParts>
+Hello world!!
+
+<p>How are you today</p>

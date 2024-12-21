@@ -13,19 +13,13 @@
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
-	function closeAndFocusTrigger(triggerId: string) {
-		openCombobox = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
+
 </script>
 
 {#if page.params.organizationId}
-	<Popover.Root bind:open={openCombobox} let:ids>
-		<Popover.Trigger asChild let:builder>
+	<Popover.Root bind:open={openCombobox} >
+		<Popover.Trigger>
 			<Button
-				builders={[builder]}
 				variant="ghost"
 				role="combobox"
 				aria-expanded={openCombobox}
@@ -38,7 +32,7 @@
 			</Button>
 		</Popover.Trigger>
 		<Popover.Content class="w-[170px] p-0">
-			<Command.Root>
+			<Command.Root bind:value={selectedOrg}>
 				<Command.Empty>No organization found.</Command.Empty>
 
 				<Command.Group>
@@ -46,10 +40,6 @@
 						<a href={`/organization/${org.id}/systems`}>
 							<Command.Item
 								value={org.id}
-								onSelect={(currentValue) => {
-									selectedOrg = currentValue;
-									closeAndFocusTrigger(ids.trigger);
-								}}
 							>
 								<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
 								{org.name}

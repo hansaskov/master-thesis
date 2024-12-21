@@ -24,7 +24,7 @@
 	}
 </script>
 
-<Button on:click={handleGoBack} variant="ghost" class="inline-flex md:hidden -ml-2">
+<Button onclick={handleGoBack} variant="ghost" class="inline-flex md:hidden -ml-2">
 	<ArrowLeft class="mr-2 h-4 w-4" />
 	Back to
 	<span class="ml-1 capitalize">{previousSection}</span>

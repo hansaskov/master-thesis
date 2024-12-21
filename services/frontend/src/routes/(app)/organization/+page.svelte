@@ -21,7 +21,7 @@
 
 <Card.Root class="w-full max-w-md mx-auto">
 	<Card.Header>
-	  <Card.Title tag="h2" class="text-xl">Organization Missing</Card.Title>
+	  <Card.Title class="text-xl">Organization Missing</Card.Title>
 	  <Card.Description>You are not currently part of any organization.</Card.Description>
 	</Card.Header>
 	<Card.Content class="text-sm text-muted-foreground">

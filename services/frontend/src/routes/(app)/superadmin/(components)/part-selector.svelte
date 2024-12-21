@@ -9,26 +9,16 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import { partsStore, type Part } from '$lib/stores/parts.svelte';
 
-	let open = $state(false);
+	let isOpen = $state(false);
 
-	// We want to refocus the trigger button when the user selects
-	// an item from the list so users can continue navigating the
-	// rest of the form with the keyboard.
-	function closeAndFocusTrigger(triggerId: string) {
-		open = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
 </script>
 
-<Popover.Root bind:open let:ids>
-	<Popover.Trigger asChild let:builder>
+<Popover.Root bind:open={isOpen}>
+	<Popover.Trigger>
 		<Button
-			builders={[builder]}
 			variant="outline"
 			role="combobox"
-			aria-expanded={open}
+			aria-expanded={isOpen}
 			class="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
 		>
 			{partsStore.selectedParts}
@@ -45,7 +35,7 @@
 						<Command.Item
 							class="aria-selected:bg-primary aria-selected:text-primary-foreground"
 							onSelect={() => {
-								closeAndFocusTrigger(ids.trigger);
+								isOpen = !isOpen
 							}}
 						>
 							{part.name}

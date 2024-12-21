@@ -74,10 +74,7 @@
 		{ value: "IML-Inspector", label: "IML-Inspector" }
 	];
 
-	let selected = $state<{ value: SystemModelType; label: string }>({
-    	value: "VisioPointer",
-   		label: "VisioPointer"
-	});
+	let selected = $state("VisioPointer");
 
 	$inspect(selected);
 
@@ -87,9 +84,6 @@
 		system_model: "VisioPointer"
 	});
 
-	$effect(() => {
-    	newSystem.system_model = selected.value;
-	});
 
 	$effect(() => {
     	newSystem.organization_id = selectedOrg;
@@ -258,10 +252,8 @@
 								<Input placeholder="Enter name" bind:value={newSystem.name} />
 								<PartSelector />
 							</div>
-							<Select.Root bind:selected>
-								<Select.Trigger class="w-[180px]">
-									<Select.Value placeholder="Select type" />
-								</Select.Trigger>
+							<Select.Root type="single" bind:value={selected}>
+								<Select.Trigger class="w-[180px]" placeholder="Select type"/>
 								<Select.Content>
 								  <Select.Group>
 									{#each systemModels as systemModel}
@@ -271,13 +263,12 @@
 									{/each}
 								  </Select.Group>
 								</Select.Content>
-								<Select.Input name="Model Type" />
+								<Input name="Model Type" />
 							</Select.Root>
 							<div>
-								<Popover.Root bind:open={openCombobox} let:ids>
-									<Popover.Trigger asChild let:builder>
+								<Popover.Root bind:open={openCombobox}>
+									<Popover.Trigger >
 										<Button
-											builders={[builder]}
 											variant="outline"
 											role="combobox"
 											aria-expanded={openCombobox}
@@ -293,17 +284,12 @@
 										</Button>
 									</Popover.Trigger>
 									<Popover.Content class="w-[170px] p-0">
-										<Command.Root>
+										<Command.Root bind:value={selectedOrg}>
 											<Command.Input placeholder="Search organizations..." />
 											<Command.Empty>No organization found.</Command.Empty>
 											<Command.Group>
 												{#each organizationStore.organizations as org}
 														<Command.Item
-															bind:value={selectedOrg}
-															onSelect={(currentValue) => {
-																selectedOrg = currentValue;
-																closeAndFocusTrigger(ids.trigger);
-															}}
 														>
 															<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
 															{org.name}
@@ -334,12 +320,12 @@
 							<Table.Row>
 								<Table.Cell>{model.name}</Table.Cell>
 								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" on:click={() => toggleModel(modelIndex)}>
+									<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
 										{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
 									</Button>
 								</Table.Cell>
 								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" on:click={() => removeModel(modelIndex)}>
+									<Button variant="destructive" size="sm" onclick={() => removeModel(modelIndex)}>
 										Remove
 									</Button>
 								</Table.Cell>
@@ -367,7 +353,7 @@
 											<Button
 												variant="destructive"
 												size="sm"
-												on:click={() => removePartFromModel(modelIndex, partIndex)}
+												onclick={() => removePartFromModel(modelIndex, partIndex)}
 											>
 												Remove
 											</Button>
@@ -408,7 +394,7 @@
 								<p class="text-gray-600 mt-2 text-sm truncate">{fileName}</p>
 							{/if}
 						</div>
-						<Button type="submit" on:click={partsStore.addPart}>Add Part</Button>
+						<Button type="submit" onclick={partsStore.addPart}>Add Part</Button>
 					</div>
 				</div>
 
@@ -436,12 +422,12 @@
 									/>
 								</Table.Cell>
 								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" on:click={() => editPart(part.name)}>
+									<Button variant="outline" size="sm" onclick={() => editPart(part.name)}>
 										Edit
 									</Button>
 								</Table.Cell>
 								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" on:click={() => removePart(partIndex)}>
+									<Button variant="destructive" size="sm" onclick={() => removePart(partIndex)}>
 										Remove
 									</Button>
 								</Table.Cell>

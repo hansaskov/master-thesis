@@ -20,10 +20,9 @@
 	}
 </script>
 
-<Popover.Root bind:open={openCombobox} let:ids>
-    <Popover.Trigger asChild let:builder>
+<Popover.Root bind:open={openCombobox}>
+    <Popover.Trigger >
         <Button
-            builders={[builder]}
             variant="outline"
             role="combobox"
             aria-expanded={openCombobox}
@@ -39,7 +38,7 @@
         </Button>
     </Popover.Trigger>
     <Popover.Content class="w-[170px] p-0">
-        <Command.Root>
+        <Command.Root bind:value={selectedOrg}>
             <Command.Input placeholder="Search organizations..." />
             <Command.Empty>No organization found.</Command.Empty>
 
@@ -48,10 +47,6 @@
                     <a href={`/organization/${org.id}/systems`}>
                         <Command.Item
                             value={org.name}
-                            onSelect={(currentValue) => {
-                                selectedOrg = currentValue;
-                                closeAndFocusTrigger(ids.trigger);
-                            }}
                         >
                             <Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
                             {org.name}

@@ -29,10 +29,9 @@
 	}
 </script>
 
-<Popover.Root bind:open={openCombobox} let:ids>
-	<Popover.Trigger asChild let:builder>
+<Popover.Root bind:open={openCombobox} >
+	<Popover.Trigger >
 		<Button
-			builders={[builder]}
 			variant="outline"
 			role="combobox"
 			aria-expanded={openCombobox}
@@ -51,10 +50,6 @@
 					{#each organizations as org}
 						<Command.Item
 							value={org.value}
-							onSelect={(currentValue) => {
-								selectedOrg = currentValue;
-								closeAndFocusTrigger(ids.trigger);
-							}}
 						>
 							<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.value && 'text-transparent')} />
 							{org.label}

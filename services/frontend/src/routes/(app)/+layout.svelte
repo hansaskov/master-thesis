@@ -11,7 +11,7 @@
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
 	import Settings from '$lib/components/Settings.svelte';
 	import NavItem from '$lib/components/NavItem.svelte';
-	import type { ComponentType } from 'svelte';
+	import type { Icon as IconType } from 'lucide-svelte';
 	import OrgCombobox from './OrgCombobox.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
@@ -22,9 +22,6 @@
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { page } from '$app/state'
 	import { goto } from '$app/navigation';
-
-	let { children } = $props()
-
 
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
@@ -39,7 +36,7 @@
 	type NavItemType = {
 		name: string;
 		href: string;
-		icon: ComponentType;
+		icon: typeof IconType;
 	};
 
 	const navItems: NavItemType[] = [
@@ -71,15 +68,15 @@
 				<span class="sr-only">Dashboard</span>
 			</button>
 			{#each navItems as item}
-				<NavItem props={item} />
+				<NavItem {...item} />
 			{/each}
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<NavItem props={superAdmin} />
+				<NavItem {...superAdmin} />
 			</nav>
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<NavItem props={settings} />
+				<NavItem {...settings} />
 			</nav>
 		</div>
 	</aside>
@@ -127,22 +124,26 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/settings">
-							<UserRoundCog class="h-4 w-4 mr-2" />
-							User Settings
+						<DropdownMenu.Item >
+							<a href="/settings">
+								<UserRoundCog class="h-4 w-4 mr-2" />
+								User Settings
+							</a>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={toggleMode}>
+						<DropdownMenu.Item onclick={toggleMode}>
 							<Sun class="h-4 w-4 rotate-0 scale-100 dark:scale-0 mr-2" />
 							<Moon class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 mr-2" />
 							<span>Toggle theme</span>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item href="/support">
-							<Wrench class="h-4 w-4 mr-2" />
-							Support
+						<DropdownMenu.Item>
+							<a href="/support">
+								<Wrench class="h-4 w-4 mr-2" />
+								Support
+							</a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item
-							on:click={() => {
+							onclick={() => {
 								userStore.logout();
 							}}
 						>
@@ -156,7 +157,7 @@
 
 		<!--Bottom Padding-->
 		<main class="p-4 pb-[5rem]">
-			{@render children()}
+			<slot></slot>
 		</main>
 	</div>
 

@@ -120,7 +120,7 @@
 					<Label for="new-user">Invite New User</Label>
 					<div class="flex gap-2">
 						<Input id="new-user" type="email" placeholder="Enter email" bind:value={newUserEmail} />
-						<Button on:click={addUser}>Invite & Onboard</Button>
+						<Button onclick={addUser}>Invite & Onboard</Button>
 					</div>
 				</div>
 
@@ -131,7 +131,7 @@
 						<Alert.Description>
 							<div class="flex items-center gap-2">
 								<Input value={generatedOnboardingUrl} readonly />
-								<Button size="sm" on:click={() => copyToClipboard(generatedOnboardingUrl)}>
+								<Button size="sm" onclick={() => copyToClipboard(generatedOnboardingUrl)}>
 									<Copy class="mr-2 h-4 w-4" />
 									Copy
 								</Button>
@@ -181,23 +181,23 @@
 											<DropdownMenu.Label>Actions</DropdownMenu.Label>
 											<DropdownMenu.Separator />
 											<DropdownMenu.Item
-												on:click={() =>
+												onclick={() =>
 													updateUserRole(person.id, person.role === 'Admin' ? 'User' : 'Admin')}
 											>
 												{person.role === 'Admin' ? 'Demote to User' : 'Promote to Admin'}
 											</DropdownMenu.Item>
 											{#if person.onboardingStatus === 'pending'}
-												<DropdownMenu.Item on:click={() => resendOnboardingEmail(person.email)}>
+												<DropdownMenu.Item onclick={() => resendOnboardingEmail(person.email)}>
 													Resend Onboarding Email
 												</DropdownMenu.Item>
 											{:else if person.onboardingStatus === 'Not Invited'}
-												<DropdownMenu.Item on:click={generateOnboardingUrl}>
+												<DropdownMenu.Item onclick={generateOnboardingUrl}>
 													Generate Onboarding URL
 												</DropdownMenu.Item>
 											{/if}
 											<DropdownMenu.Separator />
 											<DropdownMenu.Item
-												on:click={() => removeUser(person.id)}
+												onclick={() => removeUser(person.id)}
 												class="text-red-600"
 											>
 												Remove User
@@ -239,7 +239,7 @@
 						</div>
 						<Switch.Root
 							checked={organizationSettings.notificationEmails}
-							on:click={() => toggleSetting('notificationEmails')}
+							onclick={() => toggleSetting('notificationEmails')}
 						/>
 					</div>
 					<div class="flex items-center justify-between">
@@ -251,7 +251,7 @@
 						</div>
 						<Switch.Root
 							checked={organizationSettings.publicProfile}
-							on:click={() => toggleSetting('publicProfile')}
+							onclick={() => toggleSetting('publicProfile')}
 						/>
 					</div>
 				</div>
@@ -294,7 +294,7 @@
 										<Button
 											variant="destructive"
 											size="sm"
-											on:click={() => systemStore.delete(system.id)}
+											onclick={() => systemStore.delete(system.id)}
 										>
 											Remove
 										</Button>

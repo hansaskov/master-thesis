@@ -33,11 +33,11 @@
 	function getHealthVariant(health: System['health']) {
 		switch (health) {
 			case 'Healthy':
-				return 'healthy';
+				return 'outline';
 			case 'At Risk':
-				return 'warning';
+				return 'default';
 			case 'Critical':
-				return 'critical';
+				return 'destructive';
 		}
 	}
 
@@ -107,7 +107,7 @@
 					<Table.Body>
 						{#each $sortedSystems as system (system.id)}
 							<Table.Row
-								on:click={() => goto(`./systems/${system.id}`)}
+								onclick={() => goto(`./systems/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
 								<Table.Cell class="hidden md:table-cell">

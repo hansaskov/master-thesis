@@ -93,7 +93,7 @@
 										variant="outline"
 										size="sm"
 										class="h-6 w-6"
-										on:click={() => decrement(part)}
+										onclick={() => decrement(part)}
 									>
 										-
 									</Button>
@@ -106,7 +106,7 @@
 										variant="outline"
 										size="sm"
 										class="h-6 w-6"
-										on:click={() => increment(part)}
+										onclick={() => increment(part)}
 									>
 										+
 									</Button>
