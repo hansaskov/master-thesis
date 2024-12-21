@@ -17,6 +17,7 @@
 	import type { Types } from 'backend';
 	import type { Snippet } from 'svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { page } from '$app/state';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -28,7 +29,7 @@
 
 	let newSystem = $state<Types.SystemNew>();
 
-	let pathName = window.location.pathname;
+	let pathName = $state(page.url.pathname);
 
 	let users = [
 		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },

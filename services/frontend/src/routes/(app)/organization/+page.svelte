@@ -7,8 +7,11 @@
 
 	organizationStore.refresh();
 
-	$effect(() => {
-		if (organizationStore.organizations.length > 0) {
+	$effect.pre(() => {
+
+		if (organizationStore.currentOrganization) {
+			goto(`/organization/${organizationStore.currentOrganization.id}/systems`)
+		} else if (organizationStore.organizations.length > 0) {
 			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
 		}
 	});

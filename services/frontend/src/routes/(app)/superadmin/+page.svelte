@@ -6,6 +6,11 @@
 	import { Label } from '$lib/components/ui/label';
 	import { faker } from '@faker-js/faker';
 	import * as Command from '$lib/components/ui/command';
+	import * as Popover from '$lib/components/ui/popover';
+	import { Check } from 'svelte-radix';
+	import { cn } from '$lib/utils';
+	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
+	import { tick } from 'svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
@@ -16,6 +21,8 @@
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 	import type { Types } from 'backend';
+	import { systemStore } from '$lib/stores/systems.svelte';
+	import * as Select from "$lib/components/ui/select/index.js";
 
 	let newOrganization = $state<Types.OrganizationNew>({
 		name: ""
@@ -43,6 +50,50 @@
 	let newPartName = '';
 	let newPartImage: any = null;
 	let fileName = '';
+
+	let openCombobox = $state(false);
+	let selectedOrg = $state('');
+
+	$inspect(selectedOrg);
+
+	function closeAndFocusTrigger(triggerId: string) {
+		openCombobox = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
+
+	type SystemModelType = Types.SystemNew['system_model'];
+
+	const systemModels: Array<{ value: SystemModelType; label: string }> = [
+		{ value: "VisioPointer", label: "VisioPointer" },
+		{ value: "VisioLine", label: "VisioLine" },
+		{ value: "SmartInspector", label: "SmartInspector" },
+		{ value: "360 Inspector", label: "360 Inspector" },
+		{ value: "VisioOne", label: "VisioOne" },
+		{ value: "IML-Inspector", label: "IML-Inspector" }
+	];
+
+	let selected = $state<{ value: SystemModelType; label: string }>({
+    	value: "VisioPointer",
+   		label: "VisioPointer"
+	});
+
+	$inspect(selected);
+
+	let newSystem = $state<Types.SystemNew>({
+		name: "",
+		organization_id: "",
+		system_model: "VisioPointer"
+	});
+
+	$effect(() => {
+    	newSystem.system_model = selected.value;
+	});
+
+	$effect(() => {
+    	newSystem.organization_id = selectedOrg;
+	});
 
 	function addPart() {
 		if (newPartName && newPartImage) {
@@ -191,23 +242,87 @@
 
 		<Card.Root class="col-span-1 md:col-span-2">
 			<Card.Header>
-				<Card.Title>Production System Management</Card.Title>
+				<Card.Title>Vision System Management</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<div class="mb-6">
-					<Label for="new-model">Add New Production System</Label>
-					<div class="space-y-4">
-						<div class="flex gap-2">
-							<Input placeholder="Enter name" bind:value={newModelName} />
-							<PartSelector />
+					<Label for="new-model">Add New Vision System</Label>
+					<form
+						onsubmit={(e) => {
+						e.preventDefault();
+						systemStore.add(newSystem);
+					}}
+					>
+						<div class="space-y-4">
+							<div class="flex gap-2">
+								<Input placeholder="Enter name" bind:value={newSystem.name} />
+								<PartSelector />
+							</div>
+							<Select.Root bind:selected>
+								<Select.Trigger class="w-[180px]">
+									<Select.Value placeholder="Select type" />
+								</Select.Trigger>
+								<Select.Content>
+								  <Select.Group>
+									{#each systemModels as systemModel}
+									  	<Select.Item value={systemModel.value} label={systemModel.label}>
+											{systemModel.label}
+										</Select.Item>
+									{/each}
+								  </Select.Group>
+								</Select.Content>
+								<Select.Input name="Model Type" />
+							</Select.Root>
+							<div>
+								<Popover.Root bind:open={openCombobox} let:ids>
+									<Popover.Trigger asChild let:builder>
+										<Button
+											builders={[builder]}
+											variant="outline"
+											role="combobox"
+											aria-expanded={openCombobox}
+											class="pr-0 pl-2 font-bold sans-serif tracking-wide text-xl sm:font-medium sm:text-sm"
+										>
+											{#if organizationStore.currentOrganization}
+												{organizationStore.currentOrganization.name}
+												<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
+											{:else}
+												<span>Select Organization</span>
+												<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
+											{/if}
+										</Button>
+									</Popover.Trigger>
+									<Popover.Content class="w-[170px] p-0">
+										<Command.Root>
+											<Command.Input placeholder="Search organizations..." />
+											<Command.Empty>No organization found.</Command.Empty>
+											<Command.Group>
+												{#each organizationStore.organizations as org}
+														<Command.Item
+															bind:value={selectedOrg}
+															onSelect={(currentValue) => {
+																selectedOrg = currentValue;
+																closeAndFocusTrigger(ids.trigger);
+															}}
+														>
+															<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
+															{org.name}
+														</Command.Item>
+												{/each}
+											</Command.Group>
+										</Command.Root>
+									</Popover.Content>
+								</Popover.Root>
+							</div>
+							<div>
+								<Button type="submit">Create Vision System</Button>
+							</div>
 						</div>
-
-						<Button type="submit" on:click={addModel}>Create Production System</Button>
-					</div>
+					</form>
 				</div>
 
 				<Table.Root>
-					<Table.Caption>List of Production Systems</Table.Caption>
+					<Table.Caption>List of Vision Systems</Table.Caption>
 					<Table.Header>
 						<Table.Row class="justify-between">
 							<Table.Head>Name</Table.Head>

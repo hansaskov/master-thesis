@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
 	import Newspaper from 'lucide-svelte/icons/newspaper';
 	import Wrench from 'lucide-svelte/icons/wrench';
 	import House from 'lucide-svelte/icons/house';
@@ -21,6 +19,22 @@
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 	import { userStore } from '$lib/stores/user.svelte';
+	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { page } from '$app/state'
+	import { goto } from '$app/navigation';
+
+	let { children } = $props()
+
+
+	function navigateToSystems() {
+		if (organizationStore.currentOrganization) {
+			goto(`/organization/${organizationStore.currentOrganization.id}/systems`)
+		} else if (organizationStore.organizations.length > 0) {
+			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
+		} else {
+			goto(`/organization`)
+		}
+	}
 
 	type NavItemType = {
 		name: string;
@@ -36,25 +50,26 @@
 	const superAdmin: NavItemType = { name: 'Super Admin', icon: UserRoundCog, href: '/superadmin' };
 	const settings: NavItemType = { name: 'Support', icon: Wrench, href: '/support' };
 
-	$: pathname = $page.url.pathname;
-	$: breadcrumbs = pathname
-		.split('/')
-		.filter(Boolean)
-		.map((segment, index, array) => ({
-			href: `/${array.slice(0, index + 1).join('/')}`,
-			label: segment.charAt(0).toUpperCase() + segment.slice(1),
-			isLast: index === array.length - 1
-		}));
+	let breadcrumbs = $derived.by(() => 
+		page.url.pathname
+			.split('/')
+			.filter(Boolean)
+			.map((segment, index, array) => ({
+				href: `/${array.slice(0, index + 1).join('/')}`,
+				label: segment.charAt(0).toUpperCase() + segment.slice(1),
+				isLast: index === array.length - 1
+			}))
+	)
 </script>
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a href="/organization">
+			<button onclick={navigateToSystems}>
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
-			</a>
+			</button>
 			{#each navItems as item}
 				<NavItem props={item} />
 			{/each}
@@ -75,27 +90,29 @@
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
 			<!-- Breadcrumb and other header elements -->
+			
 			<Breadcrumb.Root>
 				<Breadcrumb.List>
 					<Breadcrumb.Page>
 						<OrgCombobox></OrgCombobox>
 					</Breadcrumb.Page>
-					<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
+					{#if organizationStore.currentOrganization}
+						<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
+					{/if}
 					{#each breadcrumbs.slice(2) as crumb}
 						{#if !crumb.isLast}
 							<Breadcrumb.Link class="hidden sm:flex" href={crumb.href}>
 								{crumb.label}
 							</Breadcrumb.Link>
+
+							<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
 						{:else}
 							<Breadcrumb.Page class="hidden sm:flex">{crumb.label}</Breadcrumb.Page>
-						{/if}
-
-						{#if !crumb.isLast}
-							<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
 						{/if}
 					{/each}
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
+			
 
 			<nav class="flex items-center space-x-2 ml-auto">
 				<!-- TODO: Hide settings for user without permissions to change settings of the page-->
@@ -139,7 +156,7 @@
 
 		<!--Bottom Padding-->
 		<main class="p-4 pb-[5rem]">
-			<slot></slot>
+			{@render children()}
 		</main>
 	</div>
 
@@ -148,11 +165,11 @@
 		class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden"
 	>
 		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
-			<a href="/organization" class="flex flex-col items-center justify-center">
+			<button onclick={navigateToSystems} class="flex flex-col items-center justify-center">
 				<House class="w-6 h-6" />
 				Home
 				<span class="sr-only">Dashboard</span>
-			</a>
+			</button>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Newspaper />
