@@ -37,12 +37,6 @@
 
 	const { children } = $props();
 
-	/*
-	const navItems: NavItemType[] = [
-		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
-		{ name: 'Search', icon: Search, href: '/' }
-	];
-	*/
 	let breadcrumbs = $derived.by(() =>
 		page.url.pathname
 			.split('/')
