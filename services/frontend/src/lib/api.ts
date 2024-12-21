@@ -4,7 +4,7 @@ import {} from 'svelte/reactivity/window';
 import { navigating, page, updated } from '$app/state';
 
 // Get the hostname of the current web page
-// const host = window.location.host;
-const host = page.url.host;
+const host = window.location.host;
+// const host = page.url.host;
 
 export const api = treaty<App>(host).api;
