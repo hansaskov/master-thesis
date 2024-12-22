@@ -70,8 +70,8 @@
 	let selected = $state('');
 
 	const triggerContent = $derived(
-    	systemModels.find((v) => v.value === selected)?.label ?? "Select a fruit"
-  	);
+		systemModels.find((v) => v.value === selected)?.label ?? 'Select a fruit'
+	);
 
 	$inspect(selected);
 

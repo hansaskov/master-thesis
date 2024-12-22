@@ -88,10 +88,7 @@
 					<div>
 						<Label for="theme" class="text-sm font-medium">Theme</Label>
 						<Select.Root type="single">
-							<Select.Trigger
-								id="theme"
-								class="w-full"
-								placeholder="Select a theme"
+							<Select.Trigger id="theme" class="w-full" placeholder="Select a theme"
 							></Select.Trigger>
 							<Select.Content>
 								{#each themes as theme}
