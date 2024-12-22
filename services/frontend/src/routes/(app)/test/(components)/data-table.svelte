@@ -19,7 +19,7 @@
 		getSortedRowModel
 	} from '@tanstack/table-core';
 	import DataTableToolbar from './data-table-toolbar.svelte';
-	import DataTablePagination from './data-table-pagination.svelte';
+	import DataTablePagination from '$lib/components/data-table/data-table-pagination.svelte';
 	import { createSvelteTable } from '$lib/components/ui/data-table/data-table.svelte.js';
 	import FlexRender from '$lib/components/ui/data-table/flex-render.svelte';
 	import * as Table from '$lib/components/ui/table/index.js';
