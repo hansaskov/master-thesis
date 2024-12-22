@@ -56,13 +56,6 @@
 
 	$inspect(selectedOrg);
 
-	function closeAndFocusTrigger(triggerId: string) {
-		openCombobox = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-
 	type SystemModelType = Types.SystemNew['system_model'];
 
 	const systemModels: Array<{ value: SystemModelType; label: string }> = [
@@ -74,7 +67,11 @@
 		{ value: 'IML-Inspector', label: 'IML-Inspector' }
 	];
 
-	let selected = $state('VisioPointer');
+	let selected = $state('');
+
+	const triggerContent = $derived(
+    	systemModels.find((v) => v.value === selected)?.label ?? "Select a fruit"
+  	);
 
 	$inspect(selected);
 
@@ -252,11 +249,13 @@
 								<PartSelector />
 							</div>
 							<Select.Root type="single" bind:value={selected}>
-								<Select.Trigger class="w-[180px]" placeholder="Select type" />
+								<Select.Trigger class="w-[180px]" placeholder="Select type">
+									{triggerContent}
+								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
 										{#each systemModels as systemModel}
-											<Select.Item value={systemModel.value} label={systemModel.label}>
+											<Select.Item {...systemModel}>
 												{systemModel.label}
 											</Select.Item>
 										{/each}
