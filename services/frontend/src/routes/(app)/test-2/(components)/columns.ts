@@ -1,7 +1,5 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { priorities, statuses } from '../(data)/data.js';
 import { createRawSnippet } from 'svelte';
-import type { Task } from '../(data)/schema';
 import {
 	DataTableCheckbox,
 	DataTableColumnHeader,
@@ -10,8 +8,9 @@ import {
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
 import DataTableCellSelect from '$lib/components/data-table/data-table-cell-select.svelte';
+import type { Types } from 'backend';
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Types.Part>[] = [
 	{
 		id: 'select',
 		header: ({ table }) =>
@@ -34,7 +33,7 @@ export const columns: ColumnDef<Task>[] = [
 	{
 		accessorKey: 'id',
 		header: ({ column }) => {
-			return renderComponent(DataTableColumnHeader<Task, unknown>, {
+			return renderComponent(DataTableColumnHeader<Types.Part, unknown>, {
 				column,
 				title: 'Task'
 			});
@@ -53,52 +52,23 @@ export const columns: ColumnDef<Task>[] = [
 		enableHiding: false
 	},
 	{
-		accessorKey: 'title',
+		accessorKey: 'name',
 		header: ({ column }) =>
-			renderComponent(DataTableColumnHeader<Task, unknown>, { column, title: 'Title' }),
+			renderComponent(DataTableColumnHeader<Types.Part, unknown>, { column, title: 'Name' }),
 		cell: ({ row }) => {
 			return renderComponent(DataTableCellText, {
-				value: row.original.title
+				value: row.original.name
 			});
-		}
-	},
-	{
-		accessorKey: 'status',
-		header: ({ column }) =>
-			renderComponent(DataTableColumnHeader<Task, unknown>, {
-				column,
-				title: 'Status'
-			}),
-		cell: ({ row }) => {
-			return renderComponent(DataTableCellSelect, {
-				value: row.original.status,
-				choices: statuses
-			});
-		},
-		filterFn: (row, id, value) => {
-			return value.includes(row.getValue(id));
-		}
-	},
-	{
-		accessorKey: 'priority',
-		header: ({ column }) => {
-			return renderComponent(DataTableColumnHeader<Task, unknown>, {
-				title: 'Priority',
-				column
-			});
-		},
-		cell: ({ row }) => {
-			return renderComponent(DataTableCellSelect, {
-				value: row.original.priority,
-				choices: priorities
-			});
-		},
-		filterFn: (row, id, value) => {
-			return value.includes(row.getValue(id));
 		}
 	},
 	{
 		id: 'actions',
+		header: ({ column }) => {
+			return renderComponent(DataTableColumnHeader<Types.Part, unknown>, {
+				column,
+				title: 'Action'
+			});
+		},
 		cell: ({ row }) => renderComponent(DataTableCellActions, {})
 	}
 ];
