@@ -136,7 +136,8 @@
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item>
-							<a href="/settings">
+						
+							<a href="/settings" class="flex items-center gap-2">
 								<UserRoundCog class="h-4 w-4 mr-2" />
 								User Settings
 							</a>
@@ -147,19 +148,19 @@
 							<span>Toggle theme</span>
 						</DropdownMenu.Item>
 						<DropdownMenu.Item>
-							<a href="/support">
+							<a href="/support" class="flex items-center gap-2">
 								<Wrench class="h-4 w-4 mr-2" />
 								Support
 							</a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item
-							onclick={() => {
-								userStore.logout();
-							}}
+							onclick={() => userStore.logout()}
 						>
+						
 							<LogOut class="h-4 w-4 mr-2" />
-							Logout
+							<p>Logout</p>
+						
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
@@ -180,25 +181,25 @@
 			<button onclick={navigateToSystems} class="flex flex-col items-center justify-center">
 				<House class="w-6 h-6" />
 				Home
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">Home</span>
 			</button>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Newspaper />
 				News
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">News</span>
 			</a>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Search />
 				Search
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">Search</span>
 			</a>
 
 			<a href="/support" class="flex flex-col items-center justify-center">
 				<Wrench />
 				Support
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">Support</span>
 			</a>
 		</nav>
 	</aside>
