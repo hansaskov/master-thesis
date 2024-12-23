@@ -300,8 +300,8 @@
 												{#each organizationStore.organizations as org}
 														<Command.Item
 															bind:value={selectedOrg}
-															onSelect={(currentValue) => {
-																selectedOrg = currentValue;
+															onSelect={() => {
+																selectedOrg = org.id;
 																closeAndFocusTrigger(ids.trigger);
 															}}
 														>
