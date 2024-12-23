@@ -1,19 +1,7 @@
-<script lang="ts" module>
-	type TData = unknown;
-</script>
-
-<script lang="ts" generics="TData">
-	import Ellipsis from 'lucide-svelte/icons/ellipsis';
-	import type { Row } from '@tanstack/table-core';
-	import { labels } from '../(data)/data.js';
-	import { taskSchema } from '../(data)/schema.js';
+<script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Parse } from '@sinclair/typebox/value';
-
-	let { row }: { row: Row<TData> } = $props();
-
-	const task = Parse(taskSchema, row.original);
 </script>
 
 <DropdownMenu.Root>
@@ -29,19 +17,6 @@
 		<DropdownMenu.Item>Edit</DropdownMenu.Item>
 		<DropdownMenu.Item>Make a copy</DropdownMenu.Item>
 		<DropdownMenu.Item>Favorite</DropdownMenu.Item>
-		<DropdownMenu.Separator />
-		<DropdownMenu.Sub>
-			<DropdownMenu.SubTrigger>Labels</DropdownMenu.SubTrigger>
-			<DropdownMenu.SubContent>
-				<DropdownMenu.RadioGroup value={task.label}>
-					{#each labels as label (label.value)}
-						<DropdownMenu.RadioItem value={label.value}>
-							{label.label}
-						</DropdownMenu.RadioItem>
-					{/each}
-				</DropdownMenu.RadioGroup>
-			</DropdownMenu.SubContent>
-		</DropdownMenu.Sub>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item>
 			Delete

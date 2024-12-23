@@ -7,21 +7,6 @@ import CircleOff from 'lucide-svelte/icons/circle-off';
 import CircleHelp from 'lucide-svelte/icons/circle-help';
 import Timer from 'lucide-svelte/icons/timer';
 
-export const labels = [
-	{
-		value: 'bug',
-		label: 'Bug'
-	},
-	{
-		value: 'feature',
-		label: 'Feature'
-	},
-	{
-		value: 'documentation',
-		label: 'Documentation'
-	}
-];
-
 export const statuses = [
 	{
 		value: 'backlog',
