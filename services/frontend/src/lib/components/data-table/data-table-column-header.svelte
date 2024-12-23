@@ -23,7 +23,7 @@
 	let { column, class: className, title, ...restProps }: WithoutChildren<Props> = $props();
 </script>
 
-{#if !column?.getCanSort()}
+{#if !column.getCanSort()}
 	<div class={className} {...restProps}>
 		{title}
 	</div>
@@ -52,19 +52,25 @@
 				{/snippet}
 			</DropdownMenu.Trigger>
 			<DropdownMenu.Content align="start">
-				<DropdownMenu.Item onclick={() => column.toggleSorting(false)}>
-					<ArrowUp class="text-muted-foreground/70 mr-2 size-3.5" />
-					Asc
-				</DropdownMenu.Item>
-				<DropdownMenu.Item onclick={() => column.toggleSorting(true)}>
-					<ArrowDown class="text-muted-foreground/70 mr-2 size-3.5" />
-					Desc
-				</DropdownMenu.Item>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item onclick={() => column.toggleVisibility(false)}>
-					<EyeOff class="text-muted-foreground/70 mr-2 size-3.5" />
-					Hide
-				</DropdownMenu.Item>
+				{#if column.getCanSort()}
+					<DropdownMenu.Item onclick={() => column.toggleSorting(false)}>
+						<ArrowUp class="text-muted-foreground/70 mr-2 size-3.5" />
+						Asc
+					</DropdownMenu.Item>
+					<DropdownMenu.Item onclick={() => column.toggleSorting(true)}>
+						<ArrowDown class="text-muted-foreground/70 mr-2 size-3.5" />
+						Desc
+					</DropdownMenu.Item>
+				{/if}
+				{#if column.getCanHide() && column.getCanSort()}
+					<DropdownMenu.Separator />					
+				{/if}
+				{#if column.getCanHide()}
+					<DropdownMenu.Item onclick={() => column.toggleVisibility(false)}>
+						<EyeOff class="text-muted-foreground/70 mr-2 size-3.5" />
+						Hide
+					</DropdownMenu.Item>
+				{/if}
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</div>
