@@ -10,7 +10,6 @@
 	import { partsStore, type Part } from '$lib/stores/parts.svelte';
 
 	let isOpen = $state(false);
-
 </script>
 
 <Popover.Root bind:open={isOpen}>
@@ -35,7 +34,7 @@
 						<Command.Item
 							class="aria-selected:bg-primary aria-selected:text-primary-foreground"
 							onSelect={() => {
-								isOpen = !isOpen
+								isOpen = !isOpen;
 							}}
 						>
 							{part.name}

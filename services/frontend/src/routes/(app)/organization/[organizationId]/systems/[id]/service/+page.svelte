@@ -6,7 +6,7 @@
 	import X from 'lucide-svelte/icons/x';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { slide } from "svelte/transition";
+	import { slide } from 'svelte/transition';
 
 	let systemId = $derived(page.params.id);
 

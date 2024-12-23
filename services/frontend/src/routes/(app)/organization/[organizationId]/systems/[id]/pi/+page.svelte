@@ -89,8 +89,8 @@
 	<div class="flex flex-col w-full sm:w-[200px]">
 		<label for="time-range-select" class="text-sm font-medium mb-1">Select Time Range</label>
 		<Select.Root type="single" bind:value={selectedTimeRange}>
-			<Select.Trigger id="time-range-select" class="w-full" placeholder="Select time range">
-			</Select.Trigger>
+			<Select.Trigger id="time-range-select" class="w-full" placeholder="Select time range"
+			></Select.Trigger>
 			<Select.Content>
 				<Select.Item value="custom" label="Custom" />
 				<Select.Item value="10min" label="Last 10 minutes" />
@@ -112,7 +112,6 @@
 							id="{label.toLowerCase()}-date"
 							variant="outline"
 							class={cn('justify-start text-left font-normal', !date && 'text-muted-foreground')}
-
 						>
 							<CalendarIcon class="mr-2 h-4 w-4" />
 							<span class="truncate">

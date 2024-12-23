@@ -2,18 +2,17 @@
 	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import { Button } from '$lib/components/ui/button';
 	import type { Snippet } from 'svelte';
-	import { page } from '$app/state'
+	import { page } from '$app/state';
 
-	let { children }: {children?: Snippet} = $props();
+	let { children }: { children?: Snippet } = $props();
 
 	let canGoBack = $state(false);
 	let previousSection = $derived(page.url.pathname.split('/').pop());
 
-
-	 $effect.pre(() => {
+	$effect.pre(() => {
 		canGoBack = window.history.length > 1;
-	 })
-	
+	});
+
 	function handleGoBack() {
 		if (canGoBack) {
 			history.back();
