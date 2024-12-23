@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/table-core';
+import { priorities, statuses } from '../(data)/data.js';
 import { createRawSnippet } from 'svelte';
 import type { Task } from '../(data)/schema';
 import {
 	DataTableCheckbox,
 	DataTableColumnHeader,
-	DataTablePriorityCell,
-	DataTableRowActions,
-	DataTableStatusCell,
-	DataTableTitleCell
+	DataTableCellActions,
+	DataTableCellText
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
+import DataTableCellSelect from '../../../../lib/components/data-table/data-table-cell-select.svelte';
 
 export const columns: ColumnDef<Task>[] = [
 	{
@@ -57,8 +57,7 @@ export const columns: ColumnDef<Task>[] = [
 		header: ({ column }) =>
 			renderComponent(DataTableColumnHeader<Task, unknown>, { column, title: 'Title' }),
 		cell: ({ row }) => {
-			return renderComponent(DataTableTitleCell, {
-				labelValue: row.original.label,
+			return renderComponent(DataTableCellText, {
 				value: row.original.title
 			});
 		}
@@ -71,8 +70,9 @@ export const columns: ColumnDef<Task>[] = [
 				title: 'Status'
 			}),
 		cell: ({ row }) => {
-			return renderComponent(DataTableStatusCell, {
-				value: row.original.status
+			return renderComponent(DataTableCellSelect, {
+				value: row.original.status,
+				choices: statuses
 			});
 		},
 		filterFn: (row, id, value) => {
@@ -88,8 +88,9 @@ export const columns: ColumnDef<Task>[] = [
 			});
 		},
 		cell: ({ row }) => {
-			return renderComponent(DataTablePriorityCell, {
-				value: row.original.priority
+			return renderComponent(DataTableCellSelect, {
+				value: row.original.priority,
+				choices: priorities
 			});
 		},
 		filterFn: (row, id, value) => {
@@ -98,6 +99,6 @@ export const columns: ColumnDef<Task>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => renderComponent(DataTableRowActions<Task>, { row })
+		cell: ({ row }) => renderComponent(DataTableCellActions<Task>, { row })
 	}
 ];

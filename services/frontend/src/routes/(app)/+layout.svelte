@@ -136,7 +136,6 @@
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
 						<DropdownMenu.Item>
-						
 							<a href="/settings" class="flex items-center gap-2">
 								<UserRoundCog class="h-4 w-4 mr-2" />
 								User Settings
@@ -154,13 +153,9 @@
 							</a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item
-							onclick={() => userStore.logout()}
-						>
-						
+						<DropdownMenu.Item onclick={() => userStore.logout()}>
 							<LogOut class="h-4 w-4 mr-2" />
 							<p>Logout</p>
-						
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
