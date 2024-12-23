@@ -9,8 +9,13 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
 	let { table }: { table: Table<TData> } = $props();
+
+	let columns = $derived(table
+				.getAllColumns()
+				.filter((col) => typeof col.accessorFn !== 'undefined' && col.getCanHide()))
 </script>
 
+{#if columns.length !== 0}
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger
 		class={buttonVariants({
@@ -26,9 +31,7 @@
 		<DropdownMenu.Group>
 			<DropdownMenu.GroupHeading>Toggle columns</DropdownMenu.GroupHeading>
 			<DropdownMenu.Separator />
-			{#each table
-				.getAllColumns()
-				.filter((col) => typeof col.accessorFn !== 'undefined' && col.getCanHide()) as column}
+			{#each columns as column}
 				<DropdownMenu.CheckboxItem
 					controlledChecked
 					checked={column.getIsVisible()}
@@ -41,3 +44,4 @@
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
+{/if}

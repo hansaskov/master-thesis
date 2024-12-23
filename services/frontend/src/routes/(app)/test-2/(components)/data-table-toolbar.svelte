@@ -38,5 +38,6 @@
 			</Button>
 		{/if}
 	</div>
+	
 	<DataTableViewOptions {table} />
 </div>

@@ -35,7 +35,7 @@ export const columns: ColumnDef<Types.Part>[] = [
 		header: ({ column }) => {
 			return renderComponent(DataTableColumnHeader<Types.Part, unknown>, {
 				column,
-				title: 'Task'
+				title: 'Part id'
 			});
 		},
 		cell: ({ row }) => {
@@ -59,7 +59,8 @@ export const columns: ColumnDef<Types.Part>[] = [
 			return renderComponent(DataTableCellText, {
 				value: row.original.name
 			});
-		}
+		},
+		enableHiding: false
 	},
 	{
 		id: 'actions',
