@@ -23,6 +23,7 @@
 	import type { Types } from 'backend';
 	import { systemStore } from '$lib/stores/systems.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import SpareParts from './SpareParts.svelte';
 
 	let newOrganization = $state<Types.OrganizationNew>({
 		name: ''
@@ -369,75 +370,6 @@
 			</Card.Content>
 		</Card.Root>
 
-		<Card.Root class="col-span-1 md:col-span-2">
-			<Card.Header>
-				<Card.Title>Vision System Spare Parts</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="mb-6">
-					<Label for="new-organization">Add New Spare Part</Label>
-					<div class="flex gap-2">
-						<Input placeholder="Enter spare part name" bind:value={partsStore.newPart.name} />
-						<div class="file-input-wrapper relative">
-							<label for="file-upload" class="file-input-label block">
-								<span
-									class="bg-gray-100 px-4 py-4 rounded cursor-pointer border border-gray-300 hover:bg-gray-200 h-9 flex items-center justify-center w-32"
-								>
-									Image
-								</span>
-							</label>
-							<Input
-								id="file-upload"
-								type="file"
-								accept=".jpg, .jpeg, .png, .webp"
-								class="hidden"
-							/>
-							{#if fileName}
-								<p class="text-gray-600 mt-2 text-sm truncate">{fileName}</p>
-							{/if}
-						</div>
-						<Button type="submit" onclick={partsStore.addPart}>Add Part</Button>
-					</div>
-				</div>
-
-				<Table.Root>
-					<Table.Caption>List of Spare Parts</Table.Caption>
-					<Table.Header>
-						<Table.Row>
-							<Table.Head class="w-[300px]">ID</Table.Head>
-							<Table.Head>Name</Table.Head>
-							<Table.Head>Image</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{#each partsStore.parts as part, partIndex}
-							<Table.Row>
-								<Table.Cell>{part.id}</Table.Cell>
-								<Table.Cell>{part.name}</Table.Cell>
-								<Table.Cell>
-									<img
-										alt="{part.name} image"
-										class="aspect-square rounded-md object-cover"
-										height="64"
-										width="64"
-										src={part.image}
-									/>
-								</Table.Cell>
-								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" onclick={() => editPart(part.name)}>
-										Edit
-									</Button>
-								</Table.Cell>
-								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" onclick={() => removePart(partIndex)}>
-										Remove
-									</Button>
-								</Table.Cell>
-							</Table.Row>
-						{/each}
-					</Table.Body>
-				</Table.Root>
-			</Card.Content>
-		</Card.Root>
+		<SpareParts/>
 	</div>
 </div>

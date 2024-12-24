@@ -17,6 +17,15 @@
 	let newPart = $state<Types.PartNew>({
 		name: ''
 	});
+
+	function remove(e: SubmitEvent) {
+		e.preventDefault()
+		partsStore.add(newPart)
+		newPart = {
+			name: ''
+		}
+	}
+
 </script>
 
 <Card.Root class="col-span-1 md:col-span-2">
@@ -26,7 +35,7 @@
 	<Card.Content>
 		<div class="mb-6">
 			<Label for="new-organization">Add New Spare Part</Label>
-			<form class="flex gap-2" onsubmit={() => partsStore.add(newPart)}>
+			<form class="flex gap-2" onsubmit={remove}>
 				<Input placeholder="Enter spare part name" bind:value={newPart.name} />
 				<Button type="submit">Add Part</Button>
 			</form>
