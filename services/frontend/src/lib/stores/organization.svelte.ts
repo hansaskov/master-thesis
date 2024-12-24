@@ -8,9 +8,12 @@ import { page } from '$app/state';
 
 export class OrganizationStore {
 	// PersistedState will immidiatly fetch values from localstorage.
-	#organizations = new PersistedState<Types.Organization[]>('organizations', []);
+	#organizations = new PersistedState<Types.Organization[]>('organizations', [], {
+		storage: "session",
+		syncTabs: false
+	});
 	public currentOrganization = $derived(
-		this.#organizations.current.find((org) => org.id === page.params.organizationId)
+		this.#organizations.current?.find((org) => org.id === page.params.organizationId)
 	);
 
 	// Private helper functions for adding, removing and deleting from list of organizations.
