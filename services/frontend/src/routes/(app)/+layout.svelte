@@ -7,12 +7,10 @@
 
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Button } from '$lib/components/ui/button';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
 	import Settings from '$lib/components/Settings.svelte';
-	import NavItem from '$lib/components/NavItem.svelte';
-	import type { Icon as IconType } from 'lucide-svelte';
+
 	import OrgCombobox from './OrgCombobox.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
@@ -23,7 +21,6 @@
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
-	import type { Snippet } from 'svelte';
 
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
