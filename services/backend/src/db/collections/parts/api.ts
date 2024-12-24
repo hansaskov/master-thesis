@@ -24,7 +24,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				);
 			}
 
-			const result = await Queries.organizations.update(body);
+			const result = await Queries.part.update(body);
 
 			if (result === undefined) {
 				return error("Not Found", "Part to edit was not found");
@@ -67,7 +67,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				);
 			}
 
-			const result = await Queries.organizations.delete({ id: body.id });
+			const result = await Queries.part.delete({ id: body.id });
 
 			if (result === undefined) {
 				return error(
