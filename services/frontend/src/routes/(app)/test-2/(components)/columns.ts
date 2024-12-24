@@ -70,6 +70,6 @@ export const columns: ColumnDef<Types.Part>[] = [
 				title: 'Action'
 			});
 		},
-		cell: ({ row }) => renderComponent(DataTableCellActions, {})
+		cell: ({ row }) => renderComponent(DataTableCellActions<Types.Part>, {row})
 	}
 ];

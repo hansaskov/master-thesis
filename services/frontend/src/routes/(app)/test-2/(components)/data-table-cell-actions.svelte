@@ -1,7 +1,29 @@
-<script lang="ts">
+<script lang="ts" module>
+	type TData = unknown;
+</script>
+
+<script lang="ts" generics="TData">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Button from '$lib/components/ui/button/button.svelte';
+
+	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
+	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
+
+	import type { Row } from "@tanstack/table-core";
+	import { Parse } from '@sinclair/typebox/value';
+	import { partSchema } from '../(data)/schema';
+	import { dialogStore } from '$lib/stores/dialog.svelte';
+	import type { Types } from 'backend';
+	import { partsStore } from '$lib/stores/new-parts.svelte';
+
+	let { row }: { row: Row<TData> } = $props();
+
+	const part = Parse(partSchema, row.original)
+
+	let newPart = $state<Types.PartNew>({
+		name: ''
+	});
 </script>
 
 <DropdownMenu.Root>
@@ -13,14 +35,36 @@
 			</Button>
 		{/snippet}
 	</DropdownMenu.Trigger>
-	<DropdownMenu.Content class="w-[160px]" align="end">
-		<DropdownMenu.Item>Edit</DropdownMenu.Item>
-		<DropdownMenu.Item>Make a copy</DropdownMenu.Item>
-		<DropdownMenu.Item>Favorite</DropdownMenu.Item>
+	<DropdownMenu.Content align="end">
+		<DropdownMenu.Label>Actions</DropdownMenu.Label>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item>
-			Delete
-			<DropdownMenu.Shortcut>⌘⌫</DropdownMenu.Shortcut>
+		<DropdownMenu.Item
+			onclick={() => {
+				dialogStore.open({
+					title: `Update ${part.name}`,
+					description:
+						'This action will update the name of the selected organization',
+					component: EditPartDialogBody,
+					props: part
+				});
+			}}
+		>
+			Edit Organization
+		</DropdownMenu.Item>
+		<DropdownMenu.Separator />
+		<DropdownMenu.Item
+			onclick={() => {
+				dialogStore.open({
+					title: 'Are you absolutely sure?',
+					description:
+						"This action cannot be undone. This will permanently delete the organization and all of it's systems",
+					component: AlertDialogBody,
+					props: { onsubmit: () => {console.log(part); partsStore.remove(part)} }
+				});
+			}}
+			class="text-red-600"
+		>
+			Remove Organization
 		</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
