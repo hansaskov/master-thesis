@@ -1,26 +1,22 @@
 {
-  "compilerOptions": {
-    "lib": [
-      "ESNext"
-    ],
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "Bundler",
-    "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "rootDir": "./src",
-    "noEmit": true,
-    "paths": {
-      "$auth/*":    [ "./src/auth/*" ],
-      "$config/*":  [ "./src/config/*" ],
-      "$db/*":      [ "./src/db/*" ],
-      "$types/*":   [ "./src/types/*" ],
-      "$utils/*":   [ "./src/utils/*" ],
-    }
-  },
-  "include": [
-    "src"
-  ]
+	"compilerOptions": {
+		"lib": ["ESNext"],
+		"module": "ESNext",
+		"target": "ESNext",
+		"moduleResolution": "Bundler",
+		"esModuleInterop": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"rootDir": "./src",
+		"noEmit": true,
+		"paths": {
+			"$auth/*": ["./src/auth/*"],
+			"$config/*": ["./src/config/*"],
+			"$db/*": ["./src/db/*"],
+			"$types/*": ["./src/types/*"],
+			"$utils/*": ["./src/utils/*"]
+		}
+	},
+	"include": ["src"]
 }
