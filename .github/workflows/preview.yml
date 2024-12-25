@@ -39,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: bun install
       - name: Compose up
-        run: docker compose up --build -d
+        run: docker compose --env-file .env.example up --build -d
       - name: Unit test
         run: docker compose exec backend bun test
         
