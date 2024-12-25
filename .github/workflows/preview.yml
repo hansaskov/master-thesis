@@ -61,16 +61,32 @@ jobs:
       DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
+    
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      
+      - name: Prune old containers
+        run: docker container prune -f --filter "until=720h"
+
+      - name: Prune old images
+        run: docker image prune -a -f --filter "until=720h"
+
+      - name: Prune unused volumes
+        run: docker volume prune -f
+
+      - name: Prune unused networks
+        run: docker network prune -f --filter "until=720h"
+
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
+
       - name: Deploy docker compose
         run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
 
