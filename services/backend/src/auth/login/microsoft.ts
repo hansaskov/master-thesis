@@ -5,13 +5,13 @@ import { TypeCompiler } from "elysia/type-system";
 import { environment } from "../../config/environment";
 
 import { Queries, Schema } from "$db/collections";
+import { convertKeys } from "$utils/transform";
 import { catchError } from "../../types/errors";
 import {
 	createSession,
 	generateSessionToken,
 	setSessionTokenCookie,
 } from "../lucia";
-import { convertKeys } from "$utils/transform";
 
 export const entraId = new MicrosoftEntraId(
 	environment.MICROSOFT_TENANT_ID,
@@ -66,7 +66,7 @@ export const microsoftRoute = new Elysia()
 						Authorization: `Bearer ${tokens.accessToken()}`,
 					},
 				},
-			).then((r) => r.json() as Record<string, any>);
+			).then((r) => r.json());
 
 			console.log(userResponse);
 

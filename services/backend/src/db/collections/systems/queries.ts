@@ -1,7 +1,7 @@
+import { db } from "$db/postgres";
 import type { Types } from "$types/index";
 import { eq } from "drizzle-orm";
 import type { StrictPick } from "../../../types/strict";
-import { db } from "$db/postgres";
 import { systems } from "./schema";
 
 export const systemQueries = {

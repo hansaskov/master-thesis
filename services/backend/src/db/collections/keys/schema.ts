@@ -1,7 +1,7 @@
-import { generateRandomString } from "../../../utils/random";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
+import { generateRandomString } from "../../../utils/random";
 import { systems } from "../systems/schema";
 
 export const keys = pgTable("keys", {

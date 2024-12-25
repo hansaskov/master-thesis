@@ -1,3 +1,4 @@
+import type { PartialExcept } from "$types/strict";
 import {
 	pgTable,
 	primaryKey,
@@ -7,7 +8,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
-import type { PartialExcept } from "$types/strict";
 import { systems } from "../systems/schema";
 
 export const readings = pgTable(

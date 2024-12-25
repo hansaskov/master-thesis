@@ -1,8 +1,8 @@
-import { generateRandomString } from "../../../utils/random";
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import type { PartialExcept } from "../../../types/strict";
+import { generateRandomString } from "../../../utils/random";
 import { users } from "../users/schema";
 
 export const userSettings = pgTable("user_settings", {

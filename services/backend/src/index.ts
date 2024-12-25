@@ -1,3 +1,4 @@
+import { partsApi } from "$db/collections/parts/api";
 import { logger } from "@bogeychan/elysia-logger";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
@@ -5,7 +6,6 @@ import { authRoutes } from "./auth/routes";
 import { organizationsApi } from "./db/collections/organizations/api";
 import { readings } from "./db/collections/readings/api";
 import { systemsApi } from "./db/collections/systems/api";
-import { partsApi } from "$db/collections/parts/api";
 
 const api = new Elysia({ prefix: "/api" })
 	.use(authRoutes)

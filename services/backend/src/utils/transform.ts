@@ -5,9 +5,9 @@ type RemoveUnderscoreAndLowercase<S extends string> =
 		: Lowercase<S>;
 
 // Modified TransformKeys type using the custom type
-type TransformKeys<T> = T extends Array<any>
+type TransformKeys<T> = T extends Array<unknown>
 	? Array<TransformKeys<T[number]>>
-	: T extends object
+	: T extends Record<string, unknown>
 		? {
 				[K in keyof T as RemoveUnderscoreAndLowercase<
 					string & K
@@ -15,9 +15,7 @@ type TransformKeys<T> = T extends Array<any>
 			}
 		: T;
 
-export function convertKeys<T extends Record<string, any>>(
-	obj: T,
-): TransformKeys<T> {
+export function convertKeys<T>(obj: T): TransformKeys<T> {
 	if (obj === null || typeof obj !== "object") {
 		return obj as TransformKeys<T>;
 	}
@@ -26,9 +24,16 @@ export function convertKeys<T extends Record<string, any>>(
 		return obj.map((item) => convertKeys(item)) as TransformKeys<T>;
 	}
 
-	return Object.entries(obj).reduce((acc: any, [key, value]) => {
-		const newKey = key.toLowerCase().replace(/_/g, "");
-		acc[newKey] = typeof value === "object" ? convertKeys(value) : value;
-		return acc;
-	}, {}) as TransformKeys<T>;
+	return Object.entries(obj as Record<string, unknown>).reduce(
+		(acc: Partial<TransformKeys<T>>, [key, value]) => {
+			const newKey = key
+				.toLowerCase()
+				.replace(/_/g, "") as keyof TransformKeys<T>;
+			acc[newKey] = (
+				typeof value === "object" ? convertKeys(value) : value
+			) as TransformKeys<T>[keyof TransformKeys<T>];
+			return acc;
+		},
+		{},
+	) as TransformKeys<T>;
 }

@@ -1,8 +1,8 @@
-import { generateRandomString } from "../../../utils/random";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import type { PartialExcept } from "../../../types/strict";
+import { generateRandomString } from "../../../utils/random";
 import { systemModelEnum } from "../systems/schema";
 export const systemModels = pgTable("system_models", {
 	id: text()
