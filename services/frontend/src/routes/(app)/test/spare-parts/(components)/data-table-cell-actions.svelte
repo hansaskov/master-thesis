@@ -10,8 +10,8 @@
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
 
-	import type { Row } from "@tanstack/table-core";
-	import { Parse } from '@sinclair/typebox/value';
+	import type { Row } from '@tanstack/table-core';
+	import { Value } from '@sinclair/typebox/value';
 	import { partSchema } from '../(data)/schema';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import type { Types } from 'backend';
@@ -19,7 +19,7 @@
 
 	let { row }: { row: Row<TData> } = $props();
 
-	const part = Parse(partSchema, row.original)
+	const part = Value.Parse(partSchema, row.original);
 
 	let newPart = $state<Types.PartNew>({
 		name: ''
@@ -42,8 +42,7 @@
 			onclick={() => {
 				dialogStore.open({
 					title: `Update ${part.name}`,
-					description:
-						'This action will update the name of the selected organization',
+					description: 'This action will update the name of the selected organization',
 					component: EditPartDialogBody,
 					props: part
 				});
@@ -59,7 +58,12 @@
 					description:
 						"This action cannot be undone. This will permanently delete the organization and all of it's systems",
 					component: AlertDialogBody,
-					props: { onsubmit: () => {console.log(part); partsStore.remove(part)} }
+					props: {
+						onsubmit: () => {
+							console.log(part);
+							partsStore.remove(part);
+						}
+					}
 				});
 			}}
 			class="text-red-600"

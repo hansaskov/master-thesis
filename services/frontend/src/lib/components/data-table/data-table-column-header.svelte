@@ -63,7 +63,7 @@
 					</DropdownMenu.Item>
 				{/if}
 				{#if column.getCanHide() && column.getCanSort()}
-					<DropdownMenu.Separator />					
+					<DropdownMenu.Separator />
 				{/if}
 				{#if column.getCanHide()}
 					<DropdownMenu.Item onclick={() => column.toggleVisibility(false)}>

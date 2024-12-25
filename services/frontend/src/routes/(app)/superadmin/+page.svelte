@@ -256,7 +256,7 @@
 								<Select.Content>
 									<Select.Group>
 										{#each systemModels as systemModel}
-											<Select.Item value={systemModel.value} label={systemModel.label} >
+											<Select.Item value={systemModel.value} label={systemModel.label}>
 												{systemModel.label}
 											</Select.Item>
 										{/each}
@@ -369,6 +369,6 @@
 			</Card.Content>
 		</Card.Root>
 
-		<SpareParts/>
+		<SpareParts />
 	</div>
 </div>

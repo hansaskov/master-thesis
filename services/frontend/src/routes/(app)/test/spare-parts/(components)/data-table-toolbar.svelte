@@ -9,15 +9,14 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 
-	let { table, searchColumn }: { table: Table<TData>, searchColumn?: string } = $props();
-
+	let { table, searchColumn }: { table: Table<TData>; searchColumn?: string } = $props();
 
 	const isFiltered = $derived(table.getState().columnFilters.length > 0);
 </script>
 
 <div class="flex items-center justify-between">
 	<div class="flex flex-1 items-center space-x-2">
-		{#if searchColumn} 
+		{#if searchColumn}
 			<Input
 				placeholder="Filter tasks..."
 				value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ''}
@@ -38,6 +37,6 @@
 			</Button>
 		{/if}
 	</div>
-	
+
 	<DataTableViewOptions {table} />
 </div>

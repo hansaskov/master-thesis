@@ -6,4 +6,4 @@ export const partSchema = t.Object({
 	name: t.String()
 });
 
-export type Part = Types.Part
+export type Part = Types.Part;

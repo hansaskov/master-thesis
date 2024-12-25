@@ -14,7 +14,7 @@ const config = {
 		adapter: adapter({
 			fallback: '200.html'
 		}),
-		
+
 		alias: {
 			'@/*': './src/lib/*',
 			'$auth/*': '../backend/src/auth/*',

@@ -9,7 +9,7 @@ import { page } from '$app/state';
 export class OrganizationStore {
 	// PersistedState will immidiatly fetch values from localstorage.
 	#organizations = new PersistedState<Types.Organization[]>('organizations', [], {
-		storage: "session",
+		storage: 'session',
 		syncTabs: false
 	});
 	public currentOrganization = $derived(

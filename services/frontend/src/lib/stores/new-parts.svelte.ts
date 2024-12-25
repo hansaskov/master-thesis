@@ -84,9 +84,8 @@ export class PartsStore {
 			return onError(error);
 		}
 
-		this.#edit(part.id, data)
+		this.#edit(part.id, data);
 		toast.success(`Part has been updated to ${data.name}`);
-
 	}
 
 	// Allows read only access directly to parts

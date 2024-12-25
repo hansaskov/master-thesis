@@ -19,13 +19,12 @@
 	});
 
 	function remove(e: SubmitEvent) {
-		e.preventDefault()
-		partsStore.add(newPart)
+		e.preventDefault();
+		partsStore.add(newPart);
 		newPart = {
 			name: ''
-		}
+		};
 	}
-
 </script>
 
 <Card.Root class="col-span-1 md:col-span-2">

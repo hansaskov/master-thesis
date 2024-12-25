@@ -3,7 +3,7 @@
 	import { columns } from './(components)/columns';
 	import { partsStore } from '$lib/stores/new-parts.svelte';
 
-	partsStore.refresh()
+	partsStore.refresh();
 </script>
 
 <div class="h-full flex-1 flex-col space-y-8 p-8 md:flex">

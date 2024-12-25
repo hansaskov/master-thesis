@@ -10,38 +10,38 @@
 
 	let { table }: { table: Table<TData> } = $props();
 
-	let columns = $derived(table
-				.getAllColumns()
-				.filter((col) => typeof col.accessorFn !== 'undefined' && col.getCanHide()))
+	let columns = $derived(
+		table.getAllColumns().filter((col) => typeof col.accessorFn !== 'undefined' && col.getCanHide())
+	);
 </script>
 
 {#if columns.length !== 0}
-<DropdownMenu.Root>
-	<DropdownMenu.Trigger
-		class={buttonVariants({
-			variant: 'outline',
-			size: 'sm',
-			class: 'ml-auto h-8'
-		})}
-	>
-		<Settings2 />
-		View
-	</DropdownMenu.Trigger>
-	<DropdownMenu.Content>
-		<DropdownMenu.Group>
-			<DropdownMenu.GroupHeading>Toggle columns</DropdownMenu.GroupHeading>
-			<DropdownMenu.Separator />
-			{#each columns as column}
-				<DropdownMenu.CheckboxItem
-					controlledChecked
-					checked={column.getIsVisible()}
-					onCheckedChange={(v) => column.toggleVisibility(!!v)}
-					class="capitalize"
-				>
-					{column.id}
-				</DropdownMenu.CheckboxItem>
-			{/each}
-		</DropdownMenu.Group>
-	</DropdownMenu.Content>
-</DropdownMenu.Root>
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger
+			class={buttonVariants({
+				variant: 'outline',
+				size: 'sm',
+				class: 'ml-auto h-8'
+			})}
+		>
+			<Settings2 />
+			View
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.GroupHeading>Toggle columns</DropdownMenu.GroupHeading>
+				<DropdownMenu.Separator />
+				{#each columns as column}
+					<DropdownMenu.CheckboxItem
+						controlledChecked
+						checked={column.getIsVisible()}
+						onCheckedChange={(v) => column.toggleVisibility(!!v)}
+						class="capitalize"
+					>
+						{column.id}
+					</DropdownMenu.CheckboxItem>
+				{/each}
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
 {/if}
