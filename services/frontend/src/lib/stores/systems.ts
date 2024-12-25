@@ -1,6 +1,6 @@
-type StatusType = 'Active' |'Offline' | 'Paused'
+type StatusType = 'Active' | 'Offline' | 'Paused';
 
-type HealthType = 'Healthy'| 'At Risk'|'Critical'
+type HealthType = 'Healthy' | 'At Risk' | 'Critical';
 
 interface SystemsType {
 	id: string;

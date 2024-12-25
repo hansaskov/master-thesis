@@ -20,7 +20,6 @@
 	let selectedOrgLabel = $derived(
 		organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`
 	);
-
 </script>
 
 <Popover.Root bind:open={openCombobox}>

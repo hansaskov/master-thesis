@@ -6,7 +6,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Command from '$lib/components/ui/command';
 	import * as Popover from '$lib/components/ui/popover';
-	import { partsStore} from '$lib/stores/parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 
 	let isOpen = $state(false);
 </script>

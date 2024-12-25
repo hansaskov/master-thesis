@@ -74,7 +74,7 @@ export class OrganizationStore {
 
 		if (data) {
 			toast.success(`Organization ${data.name} has been removed`);
-			return
+			return;
 		}
 
 		if (error && removedOrganization) {
@@ -82,8 +82,7 @@ export class OrganizationStore {
 			return onError(error);
 		}
 
-		console.log("Unreachable branch in Organization.remove")
-		
+		console.log('Unreachable branch in Organization.remove');
 	}
 
 	async edit(organization: Types.OrganizationUpdate) {
@@ -94,7 +93,7 @@ export class OrganizationStore {
 		if (data) {
 			this.#edit(organization.id, data);
 			toast.success(`Organization has been updated to ${data.name}`);
-			return
+			return;
 		}
 
 		if (error && previousOrganization) {
@@ -102,8 +101,7 @@ export class OrganizationStore {
 			return onError(error);
 		}
 
-		console.log("Unreachable branch in Organization.edit")
-
+		console.log('Unreachable branch in Organization.edit');
 	}
 
 	// Allows read only access directly to organizations

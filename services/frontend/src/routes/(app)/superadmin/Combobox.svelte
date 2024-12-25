@@ -10,7 +10,6 @@
 
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
-
 </script>
 
 <Popover.Root bind:open={openCombobox}>

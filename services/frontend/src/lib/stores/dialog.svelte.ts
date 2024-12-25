@@ -1,6 +1,6 @@
 import type { Prettify } from 'elysia/types';
 import type { Component, ComponentProps } from 'svelte';
-  
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Props = any;
 

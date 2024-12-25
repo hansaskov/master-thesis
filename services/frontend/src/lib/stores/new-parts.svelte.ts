@@ -67,7 +67,7 @@ export class PartsStore {
 
 		if (data) {
 			toast.success(`Part ${data.name} has been removed`);
-			return
+			return;
 		}
 
 		if (error && removed) {
@@ -75,7 +75,7 @@ export class PartsStore {
 			return onError(error);
 		}
 
-		console.log("Unreachable branch in Parts.remove")
+		console.log('Unreachable branch in Parts.remove');
 	}
 
 	async edit(part: Types.PartUpdate) {
@@ -86,7 +86,7 @@ export class PartsStore {
 		if (data) {
 			this.#edit(part.id, data);
 			toast.success(`Part has been updated to ${data.name}`);
-			return
+			return;
 		}
 
 		if (error && previous) {
@@ -94,8 +94,7 @@ export class PartsStore {
 			return onError(error);
 		}
 
-		console.log("Unreachable branch in Parts.edit")
-
+		console.log('Unreachable branch in Parts.edit');
 	}
 
 	// Allows read only access directly to parts

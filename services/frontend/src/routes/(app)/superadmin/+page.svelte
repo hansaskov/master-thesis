@@ -77,7 +77,6 @@
 		newSystem.organization_id = selectedOrg;
 	});
 
-
 	function removeModel(index: number) {
 		models = models.filter((_, i) => i !== index);
 	}
@@ -89,7 +88,6 @@
 	function toggleModel(index: number) {
 		selectedModel = selectedModel === index ? null : index;
 	}
-
 
 	organizationStore.refresh();
 </script>

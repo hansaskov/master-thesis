@@ -19,7 +19,6 @@
 	let { row }: { row: Row<TData> } = $props();
 
 	const part = Value.Parse(partSchema, row.original);
-
 </script>
 
 <DropdownMenu.Root>
