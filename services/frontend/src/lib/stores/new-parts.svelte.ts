@@ -84,11 +84,12 @@ export class PartsStore {
 			return onError(error);
 		}
 
-		this.#edit(part.id, data);
-		toast.success(`Organization has been updated to ${data.name}`);
+		this.#edit(part.id, data)
+		toast.success(`Part has been updated to ${data.name}`);
+
 	}
 
-	// Allows read only access directly to organizations
+	// Allows read only access directly to parts
 	get parts() {
 		return this.#parts.current;
 	}

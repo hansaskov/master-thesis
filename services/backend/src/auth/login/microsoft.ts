@@ -67,7 +67,7 @@ export const microsoftRoute = new Elysia()
 					},
 				},
 			)
-			.then(r => r.json())
+			.then(r => r.json() as Record<string, any>)
 
 			console.log(userResponse)
 
