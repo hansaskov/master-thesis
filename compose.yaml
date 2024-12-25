@@ -77,7 +77,7 @@ services:
       start_period: 30s
 
 ## Apply migration at startup
-  backend-migrations:
+  migrate:
     profiles: [migrate]   
     build:
       context: .
