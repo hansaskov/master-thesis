@@ -6,7 +6,7 @@
 	import { toggleMode } from 'mode-watcher';
 
 	let { children } = $props();
-</scrt>
+</script>
 
 <div class="flex h-screen w-full flex-col bg-background/40 text-foreground">
 	<header class="flex h-14 items-center justify-between border-b bg-background px-4 sm:px-6">
