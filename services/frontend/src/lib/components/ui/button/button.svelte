@@ -30,7 +30,6 @@
 
 	export type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
 	export type ButtonSize = VariantProps<typeof buttonVariants>['size'];
-
 	export type ButtonProps = WithElementRef<HTMLButtonAttributes> &
 		WithElementRef<HTMLAnchorAttributes> & {
 			variant?: ButtonVariant;
@@ -39,8 +38,6 @@
 </script>
 
 <script lang="ts">
-	import { cn } from '$lib/utils.js';
-
 	let {
 		class: className,
 		variant = 'default',
@@ -51,19 +48,17 @@
 		children,
 		...restProps
 	}: ButtonProps = $props();
+
+	// Get the base classes from buttonVariants
+	const baseClasses = buttonVariants({ variant, size });
 </script>
 
 {#if href}
-	<a bind:this={ref} class={cn(buttonVariants({ variant, size, className }))} {href} {...restProps}>
+	<a bind:this={ref} class={[baseClasses, className]} {href} {...restProps}>
 		{@render children?.()}
 	</a>
 {:else}
-	<button
-		bind:this={ref}
-		class={cn(buttonVariants({ variant, size, className }))}
-		{type}
-		{...restProps}
-	>
+	<button bind:this={ref} class={[baseClasses, className]} {type} {...restProps}>
 		{@render children?.()}
 	</button>
 {/if}
