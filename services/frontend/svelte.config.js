@@ -15,6 +15,15 @@ const config = {
 			fallback: '200.html'
 		}),
 
+		output: {
+			bundleStrategy: 'single',
+			preloadStrategy: 'modulepreload'
+		},
+
+		router: {
+			type: 'pathname'
+		},
+
 		alias: {
 			'@/*': './src/lib/*',
 			'$auth/*': '../backend/src/auth/*',
