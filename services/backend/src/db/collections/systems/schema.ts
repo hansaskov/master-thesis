@@ -5,15 +5,20 @@ import { t } from "elysia";
 import type { PartialExcept } from "../../../types/strict";
 import { organizations } from "../organizations/schema";
 
-export const systemModelEnumList = ["VisioPointer",
+export const systemModelEnumList = [
+	"VisioPointer",
 	"VisioCompact",
 	"VisioLine",
 	"SmartInspector",
 	"360 Inspector",
 	"VisioOne",
-	"IML-Inspector"] as const;
+	"IML-Inspector",
+] as const;
 
-export const systemModelEnum = pgEnum("system_models_enum", systemModelEnumList);
+export const systemModelEnum = pgEnum(
+	"system_models_enum",
+	systemModelEnumList,
+);
 
 export const systems = pgTable("systems", {
 	id: text()

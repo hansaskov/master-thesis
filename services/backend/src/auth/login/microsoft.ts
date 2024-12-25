@@ -66,23 +66,21 @@ export const microsoftRoute = new Elysia()
 						Authorization: `Bearer ${tokens.accessToken()}`,
 					},
 				},
-			)
-			.then(r => r.json() as Record<string, any>)
+			).then((r) => r.json() as Record<string, any>);
 
-			console.log(userResponse)
+			console.log(userResponse);
 
 			const parsedUserResponse = convertKeys(userResponse);
 
-			console.log(parsedUserResponse)
+			console.log(parsedUserResponse);
 
 			if (!validateUser.Check(parsedUserResponse)) {
-				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${parsedUserResponse}`
+				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${parsedUserResponse}`;
 
-				console.error(errorMessage)
+				console.error(errorMessage);
 				return error(500, errorMessage);
 			}
 
-			
 			const userParsed = validateUser.Decode(parsedUserResponse);
 
 			const existingUser = await Queries.users.selectUniqueWithProvider({
@@ -121,8 +119,8 @@ export const microsoftRoute = new Elysia()
 			}),
 			cookie: t.Cookie({
 				microsoftState: t.String(),
-				microsoftCode: t.String()
-			})
+				microsoftCode: t.String(),
+			}),
 		},
 	);
 

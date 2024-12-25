@@ -84,7 +84,7 @@ export const Queries = {
 	organizations: organizationQueries,
 	usersToOrganizations: usersToOrganizationsQueries,
 	systems: systemQueries,
-	part: partQueries
+	part: partQueries,
 };
 
 export const Schema = {
@@ -111,7 +111,6 @@ export const Schema = {
 			organizations: selectOrganizationsSchema,
 			systems: selectSystemsSchema,
 			part: selectPartsSchema,
-
 		},
 		"select",
 	),

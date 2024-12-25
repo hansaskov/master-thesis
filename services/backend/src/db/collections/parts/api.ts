@@ -11,7 +11,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				"Only superadmins are allowed to select all parts",
 			);
 		}
-		
+
 		return await Queries.part.selectAll();
 	})
 	.patch(
