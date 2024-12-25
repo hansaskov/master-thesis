@@ -1,13 +1,12 @@
 <script lang="ts">
 	import Check from 'svelte-radix/Check.svelte';
 	import CaretSort from 'svelte-radix/CaretSort.svelte';
-	import { tick } from 'svelte';
 
 	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as Command from '$lib/components/ui/command';
 	import * as Popover from '$lib/components/ui/popover';
-	import { partsStore, type Part } from '$lib/stores/parts.svelte';
+	import { partsStore} from '$lib/stores/parts.svelte';
 
 	let isOpen = $state(false);
 </script>

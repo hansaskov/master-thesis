@@ -99,6 +99,6 @@ export const columns: ColumnDef<Task>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => renderComponent(DataTableCellActions, {})
+		cell: () => renderComponent(DataTableCellActions, {})
 	}
 ];

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Chart, { type ChartConfiguration, type ChartData, type ChartDataset } from 'chart.js/auto';
+	import Chart, { type ChartConfiguration, type ChartDataset } from 'chart.js/auto';
 
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
@@ -18,7 +18,6 @@
 		dataSets: DataSet[];
 		min?: number | undefined;
 		max?: number | undefined;
-		[key: string]: any;
 	}
 
 	let { dataX, dataSets, min = undefined, max = undefined, ...rest }: Props = $props();

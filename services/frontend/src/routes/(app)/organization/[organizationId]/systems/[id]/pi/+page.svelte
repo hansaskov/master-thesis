@@ -2,13 +2,11 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
-	import { Progress } from '$lib/components/ui/progress/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import AreaChart from '$lib/components/AreaChart.svelte';
 
 	import AvailabilityCard from './AvailabilityCard.svelte';
-	import OeeCard from './OeeCard.svelte';
 	import ProductionSpeedCard from './ProductionSpeedCard.svelte';
 	import QualityCard from './QualityCard.svelte';
 
@@ -23,7 +21,6 @@
 		now
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils';
-	import type { Selected } from 'bits-ui';
 	import GaugeChart from '$lib/components/GaugeChart.svelte';
 	import { Input } from '$lib/components/ui/input';
 

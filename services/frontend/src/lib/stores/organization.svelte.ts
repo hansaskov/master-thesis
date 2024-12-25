@@ -72,12 +72,18 @@ export class OrganizationStore {
 
 		const { data, error } = await api.organizations.index.delete({ id });
 
-		if (error) {
-			removedOrganization && this.#add(removedOrganization);
+		if (data) {
+			toast.success(`Organization ${data.name} has been removed`);
+			return
+		}
+
+		if (error && removedOrganization) {
+			this.#add(removedOrganization);
 			return onError(error);
 		}
 
-		toast.success(`Organization ${data.name} has been removed`);
+		console.log("Unreachable branch in Organization.remove")
+		
 	}
 
 	async edit(organization: Types.OrganizationUpdate) {
@@ -85,13 +91,19 @@ export class OrganizationStore {
 
 		const { data, error } = await api.organizations.index.patch(organization);
 
-		if (error) {
-			previousOrganization && this.#edit(organization.id, previousOrganization);
+		if (data) {
+			this.#edit(organization.id, data);
+			toast.success(`Organization has been updated to ${data.name}`);
+			return
+		}
+
+		if (error && previousOrganization) {
+			this.#edit(organization.id, previousOrganization);
 			return onError(error);
 		}
 
-		this.#edit(organization.id, data);
-		toast.success(`Organization has been updated to ${data.name}`);
+		console.log("Unreachable branch in Organization.edit")
+
 	}
 
 	// Allows read only access directly to organizations

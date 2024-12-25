@@ -14,16 +14,12 @@
 	import { Value } from '@sinclair/typebox/value';
 	import { partSchema } from '../(data)/schema';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
-	import type { Types } from 'backend';
 	import { partsStore } from '$lib/stores/new-parts.svelte';
 
 	let { row }: { row: Row<TData> } = $props();
 
 	const part = Value.Parse(partSchema, row.original);
 
-	let newPart = $state<Types.PartNew>({
-		name: ''
-	});
 </script>
 
 <DropdownMenu.Root>

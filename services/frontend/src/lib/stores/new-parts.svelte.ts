@@ -4,7 +4,6 @@ import type { Types } from 'backend';
 import type { StrictPick } from 'backend/src/types/strict';
 import { PersistedState } from 'runed';
 import { toast } from 'svelte-sonner';
-import { page } from '$app/state';
 
 export class PartsStore {
 	// PersistedState will immidiatly fetch values from localstorage.
@@ -66,12 +65,17 @@ export class PartsStore {
 
 		const { data, error } = await api.parts.index.delete({ id });
 
-		if (error) {
-			removed && this.#add(removed);
+		if (data) {
+			toast.success(`Part ${data.name} has been removed`);
+			return
+		}
+
+		if (error && removed) {
+			this.#add(removed);
 			return onError(error);
 		}
 
-		toast.success(`Part ${data.name} has been removed`);
+		console.log("Unreachable branch in Parts.remove")
 	}
 
 	async edit(part: Types.PartUpdate) {
@@ -79,13 +83,19 @@ export class PartsStore {
 
 		const { data, error } = await api.parts.index.patch(part);
 
-		if (error) {
-			previous && this.#edit(part.id, previous);
+		if (data) {
+			this.#edit(part.id, data);
+			toast.success(`Part has been updated to ${data.name}`);
+			return
+		}
+
+		if (error && previous) {
+			this.#edit(part.id, previous);
 			return onError(error);
 		}
 
-		this.#edit(part.id, data);
-		toast.success(`Part has been updated to ${data.name}`);
+		console.log("Unreachable branch in Parts.edit")
+
 	}
 
 	// Allows read only access directly to parts

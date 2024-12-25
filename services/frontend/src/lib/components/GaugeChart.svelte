@@ -16,7 +16,6 @@
 
 	interface Props {
 		gauges: GaugeData[];
-		[key: string]: any;
 	}
 
 	let { gauges, ...rest }: Props = $props();

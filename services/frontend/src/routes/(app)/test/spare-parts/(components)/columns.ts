@@ -7,7 +7,6 @@ import {
 	DataTableCellText
 } from './index.js';
 import { renderComponent, renderSnippet } from '$lib/components/ui/data-table/index.js';
-import DataTableCellSelect from '$lib/components/data-table/data-table-cell-select.svelte';
 import type { Types } from 'backend';
 
 export const columns: ColumnDef<Types.Part>[] = [

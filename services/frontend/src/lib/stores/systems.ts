@@ -1,8 +1,6 @@
-const statusTypes = ['Active', 'Offline', 'Paused'] as const;
-type StatusType = (typeof statusTypes)[number];
+type StatusType = 'Active' |'Offline' | 'Paused'
 
-const healthTypes = ['Healthy', 'At Risk', 'Critical'] as const;
-type HealthType = (typeof healthTypes)[number];
+type HealthType = 'Healthy'| 'At Risk'|'Critical'
 
 interface SystemsType {
 	id: string;

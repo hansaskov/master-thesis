@@ -104,7 +104,7 @@
 	<div class="rounded-md border">
 		<Table.Root>
 			<Table.Header>
-				{#each table.getHeaderGroups() as headerGroup, index (headerGroup.id)}
+				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 					<Table.Row>
 						{#each headerGroup.headers as header (header.id)}
 							<Table.Head colspan={header.colSpan}>
@@ -122,7 +122,7 @@
 			<Table.Body>
 				{#each table.getRowModel().rows as row (row.id)}
 					<Table.Row data-state={row.getIsSelected() && 'selected'}>
-						{#each row.getVisibleCells() as cell, index (cell.id)}
+						{#each row.getVisibleCells() as cell (cell.id)}
 							<Table.Cell>
 								<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
 							</Table.Cell>

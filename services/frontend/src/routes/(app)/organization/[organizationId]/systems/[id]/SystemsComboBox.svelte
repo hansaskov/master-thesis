@@ -6,7 +6,6 @@
 	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import { tick } from 'svelte';
 
 	const organizations = [
 		{ value: 'sys1', label: 'VisioPointer® 1' },
@@ -22,12 +21,6 @@
 		organizations.find((org) => org.value === selectedOrg)?.label ?? `${organizations[0].label}`
 	);
 
-	function closeAndFocusTrigger(triggerId: string) {
-		openCombobox = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
 </script>
 
 <Popover.Root bind:open={openCombobox}>

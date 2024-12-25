@@ -4,18 +4,15 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
-	import { faker } from '@faker-js/faker';
 	import * as Command from '$lib/components/ui/command';
 	import * as Popover from '$lib/components/ui/popover';
 	import { Check } from 'svelte-radix';
 	import { cn } from '$lib/utils';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import { tick } from 'svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
-	import { userStore } from '$lib/stores/user.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Ellipsis } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
@@ -45,13 +42,7 @@
 		}
 	]);
 
-	let newModelName = $state('');
-	let selectedModel: any = $state(null);
-
-	let newPartName = '';
-	let newPartImage: any = null;
-	let fileName = '';
-
+	let selectedModel: number | null = $state(null);
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
@@ -86,44 +77,8 @@
 		newSystem.organization_id = selectedOrg;
 	});
 
-	function addPart() {
-		if (newPartName && newPartImage) {
-			partsStore.parts.push({
-				id: partsStore.parts.length + 1,
-				name: newPartName,
-				image: newPartImage,
-				selected: false
-			});
-		}
-		console.log('New part added:', newPartName);
-		newPartName = '';
-		newPartImage = '';
-	}
 
-	function removePart(partIndex: number) {
-		partsStore;
-		console.log('Removed part with index: ', partIndex);
-	}
-
-	function editPart(partName: string) {
-		// TODO: Implement editing parts
-	}
-
-	function addModel() {
-		if (newModelName) {
-			models = [
-				...models,
-				{
-					name: newModelName,
-					parts: partsStore.selectedParts
-				}
-			];
-			newModelName = '';
-			partsStore.selectedParts = [];
-		}
-	}
-
-	function removeModel(index: any) {
+	function removeModel(index: number) {
 		models = models.filter((_, i) => i !== index);
 	}
 
@@ -131,18 +86,10 @@
 		models[modelIndex].parts = models[modelIndex].parts.filter((_, i) => i !== partIndex);
 	}
 
-	function toggleModel(index: any) {
+	function toggleModel(index: number) {
 		selectedModel = selectedModel === index ? null : index;
 	}
 
-	function togglePartSelection(part: Part) {
-		const index = partsStore.selectedParts.findIndex((p) => p.id === part.id);
-		if (index === -1) {
-			partsStore.selectedParts = [...partsStore.selectedParts, part];
-		} else {
-			partsStore.selectedParts = partsStore.selectedParts.filter((p) => p.id !== part.id);
-		}
-	}
 
 	organizationStore.refresh();
 </script>

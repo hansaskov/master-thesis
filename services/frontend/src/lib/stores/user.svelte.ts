@@ -18,7 +18,7 @@ class UserStore {
 			return onError(`Authentication with ${provider} is currently not supported`);
 		}
 
-		const { data, error } = await api.login['microsoft'].get();
+		const { error } = await api.login['microsoft'].get();
 
 		if (error) {
 			return onError(error);
@@ -29,7 +29,7 @@ class UserStore {
 	}
 
 	public async logout() {
-		const { data, error } = await api.logout.get();
+		const { error } = await api.logout.get();
 
 		if (error) {
 			onError(error);

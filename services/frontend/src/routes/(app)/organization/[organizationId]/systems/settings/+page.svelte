@@ -8,7 +8,6 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Switch from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
-	import { writable } from 'svelte/store';
 	import { systemStore } from '$lib/stores/systems.svelte';
 
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
@@ -33,7 +32,6 @@
 	];
 	let newUserEmail = $state('');
 	let newSystemName = $state('');
-	let visionSystems = writable<string[]>(['System A', 'System B']);
 	let generatedOnboardingUrl = $state('');
 	let showOnboardingUrl = $state(false);
 

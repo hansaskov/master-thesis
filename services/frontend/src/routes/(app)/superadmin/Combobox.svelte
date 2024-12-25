@@ -6,18 +6,11 @@
 	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
-	import { tick } from 'svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
-	function closeAndFocusTrigger(triggerId: string) {
-		openCombobox = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
 </script>
 
 <Popover.Root bind:open={openCombobox}>
