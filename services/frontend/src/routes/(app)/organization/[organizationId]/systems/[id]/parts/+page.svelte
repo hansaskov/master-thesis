@@ -1,10 +1,7 @@
 <script lang="ts">
-	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Search from 'lucide-svelte/icons/search';
-	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Table from '$lib/components/ui/table';
 	import { Input } from '$lib/components/ui/input';
 	import { faker } from '@faker-js/faker';
@@ -25,12 +22,12 @@
 		};
 	}
 
-	let spareParts: SparePart[] = Array.from({ length: 20 }, generateSparePart);
+	let spareParts: SparePart[] = $state(Array.from({ length: 20 }, generateSparePart));
 
-	let searchTerm = '';
+	let searchTerm = $state('');
 
-	$: filteredParts = spareParts.filter((part) =>
-		part.partName.toLowerCase().includes(searchTerm.toLowerCase())
+	let filteredParts = $derived(
+		spareParts.filter((part) => part.partName.toLowerCase().includes(searchTerm.toLowerCase()))
 	);
 
 	const orders = new Map<string, number>();
@@ -47,7 +44,7 @@
 		orders.set(part.partName, part.quantity);
 	}
 
-	let mailBody: string = '';
+	let mailBody: string = $state('');
 
 	function populateMail() {
 		mailBody = '';
@@ -96,7 +93,7 @@
 										variant="outline"
 										size="sm"
 										class="h-6 w-6"
-										on:click={() => decrement(part)}
+										onclick={() => decrement(part)}
 									>
 										-
 									</Button>
@@ -109,7 +106,7 @@
 										variant="outline"
 										size="sm"
 										class="h-6 w-6"
-										on:click={() => increment(part)}
+										onclick={() => increment(part)}
 									>
 										+
 									</Button>
@@ -127,7 +124,7 @@
 			href="mailto:spareparts@trivision.dk?subject=Sparepart%20Order&body=Order%20Spareparts:%20{mailBody}"
 			variant="default"
 			class="text-lg"
-			on:click={() => populateMail()}
+			onclick={() => populateMail()}
 		>
 			Order Now
 		</Button>

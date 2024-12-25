@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
-	import * as Accordion from '$lib/components/ui/accordion/index.js';
+	import * as Accordion from '$lib/components/ui/accordion';
 	import Phone from 'lucide-svelte/icons/phone';
 	import Mail from 'lucide-svelte/icons/mail';
 	import Clock from 'lucide-svelte/icons/clock';
@@ -74,7 +74,7 @@
 				<CardTitle class="text-2xl font-bold">Frequently Asked Questions</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<Accordion.Root>
+				<Accordion.Root type="multiple">
 					{#each faqs as faq, index}
 						<Accordion.Item value="item-{index}">
 							<Accordion.Trigger>{faq.question}</Accordion.Trigger>

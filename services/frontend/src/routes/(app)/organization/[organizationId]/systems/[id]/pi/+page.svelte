@@ -25,12 +25,13 @@
 	import { cn } from '$lib/utils';
 	import type { Selected } from 'bits-ui';
 	import GaugeChart from '$lib/components/GaugeChart.svelte';
+	import { Input } from '$lib/components/ui/input';
 
 	const df = new DateFormatter('en-US', { dateStyle: 'medium' });
 
 	let startDate: DateValue = today(getLocalTimeZone());
 	let endDate: DateValue = now(getLocalTimeZone());
-	let selectedTimeRange: Selected<string> = { value: '1hour', label: 'Last hour' };
+	let selectedTimeRange = $state('1hour');
 
 	// Mock data (replace with actual data in a real application)
 	const mockData = {
@@ -87,10 +88,9 @@
 <div class="flex flex-col sm:flex-row-reverse sm:justify-start mb-4 items-end gap-4">
 	<div class="flex flex-col w-full sm:w-[200px]">
 		<label for="time-range-select" class="text-sm font-medium mb-1">Select Time Range</label>
-		<Select.Root bind:selected={selectedTimeRange}>
-			<Select.Trigger id="time-range-select" class="w-full">
-				<Select.Value placeholder="Select time range" />
-			</Select.Trigger>
+		<Select.Root type="single" bind:value={selectedTimeRange}>
+			<Select.Trigger id="time-range-select" class="w-full" placeholder="Select time range"
+			></Select.Trigger>
 			<Select.Content>
 				<Select.Item value="custom" label="Custom" />
 				<Select.Item value="10min" label="Last 10 minutes" />
@@ -98,21 +98,20 @@
 				<Select.Item value="8hours" label="Last 8 hours" />
 				<Select.Item value="24hours" label="Last 24 hours" />
 			</Select.Content>
-			<Select.Input hidden bind:value={selectedTimeRange} />
+			<Input hidden bind:value={selectedTimeRange} />
 		</Select.Root>
 	</div>
 
-	{#if selectedTimeRange.value === 'custom'}
+	{#if selectedTimeRange === 'custom'}
 		{#each [{ label: 'From', date: startDate }, { label: 'To', date: endDate }] as { label, date }}
 			<div class="flex flex-col w-full sm:w-[200px]">
 				<label for="{label.toLowerCase()}-date" class="text-sm font-medium mb-1">{label}</label>
 				<Popover.Root>
-					<Popover.Trigger asChild let:builder>
+					<Popover.Trigger>
 						<Button
 							id="{label.toLowerCase()}-date"
 							variant="outline"
 							class={cn('justify-start text-left font-normal', !date && 'text-muted-foreground')}
-							builders={[builder]}
 						>
 							<CalendarIcon class="mr-2 h-4 w-4" />
 							<span class="truncate">
@@ -141,7 +140,7 @@
 
 	<Card.Root class="md:row-span-3 md:col-span-2">
 		<Card.Header class="flex flex-row items-center justify-between pb-2">
-			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange.label}</Card.Title>
+			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange}</Card.Title>
 			<Gauge class="text-muted-foreground h-4 w-4" />
 		</Card.Header>
 		<Separator class="mb-4" />
@@ -156,7 +155,7 @@
 
 	<Card.Root class="md:row-span-3 md:col-span-2">
 		<Card.Header class="flex flex-row items-center justify-between pb-2">
-			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange.label}</Card.Title>
+			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange}</Card.Title>
 			<Gauge class="text-muted-foreground h-4 w-4" />
 		</Card.Header>
 		<Separator class="mb-4" />

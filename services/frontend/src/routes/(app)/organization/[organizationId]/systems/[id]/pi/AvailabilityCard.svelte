@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-	export let uptime: number;
-	export let downtime: number;
+	interface Props {
+		uptime: number;
+		downtime: number;
+	}
+
+	let { uptime, downtime }: Props = $props();
 </script>
 
 <Card class="w-full">

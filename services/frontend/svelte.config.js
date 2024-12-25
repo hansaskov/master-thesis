@@ -12,18 +12,18 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter({
-			fallback: '200.html',
+			fallback: '200.html'
 		}),
+		
 		alias: {
-			'@/*': './path/to/lib/*',
-			"$auth/*": "../backend/src/auth/*",
-			"$config/*": "../backend/src/config/*",
-			"$db/*": "../backend/src/db/*",
-			"$types/*": "../backend/src/types/*",
-			"$utils/*": "../backend/src/utils/*",
-		},		
-	},
-	
+			'@/*': './src/lib/*',
+			'$auth/*': '../backend/src/auth/*',
+			'$config/*': '../backend/src/config/*',
+			'$db/*': '../backend/src/db/*',
+			'$types/*': '../backend/src/types/*',
+			'$utils/*': '../backend/src/utils/*'
+		}
+	}
 };
 
 export default config;

@@ -4,9 +4,9 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	$: pathname = $page.url.pathname;
-	$: lastPathname = $page.url.pathname.split('/').filter(Boolean).at(-1);
-	$: systemId = $page.params.id;
+	let pathname = $derived($page.url.pathname);
+	let lastPathname = $derived($page.url.pathname.split('/').filter(Boolean).at(-1));
+	let systemId = $derived($page.params.id);
 
 	const whitelist = ['systems'];
 
@@ -25,7 +25,7 @@
 
 {#if lastPathname && (whitelist.includes(lastPathname) || lastPathname === systemId)}
 	<Button
-		on:click={handleSettingsClick}
+		onclick={handleSettingsClick}
 		variant="outline"
 		size="icon"
 		class="ml-auto h-9 w-9 bg-background"

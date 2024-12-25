@@ -22,10 +22,11 @@
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 	import type { Types } from 'backend';
 	import { systemStore } from '$lib/stores/systems.svelte';
-	import * as Select from "$lib/components/ui/select/index.js";
+	import * as Select from '$lib/components/ui/select/index.js';
+	import SpareParts from './SpareParts.svelte';
 
 	let newOrganization = $state<Types.OrganizationNew>({
-		name: ""
+		name: ''
 	});
 
 	interface Model {
@@ -56,43 +57,33 @@
 
 	$inspect(selectedOrg);
 
-	function closeAndFocusTrigger(triggerId: string) {
-		openCombobox = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
-
 	type SystemModelType = Types.SystemNew['system_model'];
 
 	const systemModels: Array<{ value: SystemModelType; label: string }> = [
-		{ value: "VisioPointer", label: "VisioPointer" },
-		{ value: "VisioLine", label: "VisioLine" },
-		{ value: "SmartInspector", label: "SmartInspector" },
-		{ value: "360 Inspector", label: "360 Inspector" },
-		{ value: "VisioOne", label: "VisioOne" },
-		{ value: "IML-Inspector", label: "IML-Inspector" }
+		{ value: 'VisioPointer', label: 'VisioPointer' },
+		{ value: 'VisioLine', label: 'VisioLine' },
+		{ value: 'SmartInspector', label: 'SmartInspector' },
+		{ value: '360 Inspector', label: '360 Inspector' },
+		{ value: 'VisioOne', label: 'VisioOne' },
+		{ value: 'IML-Inspector', label: 'IML-Inspector' }
 	];
 
-	let selected = $state<{ value: SystemModelType; label: string }>({
-    	value: "VisioPointer",
-   		label: "VisioPointer"
-	});
+	let selected = $state('');
+
+	const triggerContent = $derived(
+		systemModels.find((v) => v.value === selected)?.label ?? 'Select a fruit'
+	);
 
 	$inspect(selected);
 
 	let newSystem = $state<Types.SystemNew>({
-		name: "",
-		organization_id: "",
-		system_model: "VisioPointer"
+		name: '',
+		organization_id: '',
+		system_model: 'VisioPointer'
 	});
 
 	$effect(() => {
-    	newSystem.system_model = selected.value;
-	});
-
-	$effect(() => {
-    	newSystem.organization_id = selectedOrg;
+		newSystem.organization_id = selectedOrg;
 	});
 
 	function addPart() {
@@ -249,35 +240,33 @@
 					<Label for="new-model">Add New Vision System</Label>
 					<form
 						onsubmit={(e) => {
-						e.preventDefault();
-						systemStore.add(newSystem);
-					}}
+							e.preventDefault();
+							systemStore.add(newSystem);
+						}}
 					>
 						<div class="space-y-4">
 							<div class="flex gap-2">
 								<Input placeholder="Enter name" bind:value={newSystem.name} />
 								<PartSelector />
 							</div>
-							<Select.Root bind:selected>
+							<Select.Root type="single" bind:value={selected}>
 								<Select.Trigger class="w-[180px]">
-									<Select.Value placeholder="Select type" />
+									{triggerContent}
 								</Select.Trigger>
 								<Select.Content>
-								  <Select.Group>
-									{#each systemModels as systemModel}
-									  	<Select.Item value={systemModel.value} label={systemModel.label}>
-											{systemModel.label}
-										</Select.Item>
-									{/each}
-								  </Select.Group>
+									<Select.Group>
+										{#each systemModels as systemModel}
+											<Select.Item value={systemModel.value} label={systemModel.label} >
+												{systemModel.label}
+											</Select.Item>
+										{/each}
+									</Select.Group>
 								</Select.Content>
-								<Select.Input name="Model Type" />
 							</Select.Root>
 							<div>
-								<Popover.Root bind:open={openCombobox} let:ids>
-									<Popover.Trigger asChild let:builder>
+								<Popover.Root bind:open={openCombobox}>
+									<Popover.Trigger>
 										<Button
-											builders={[builder]}
 											variant="outline"
 											role="combobox"
 											aria-expanded={openCombobox}
@@ -293,21 +282,20 @@
 										</Button>
 									</Popover.Trigger>
 									<Popover.Content class="w-[170px] p-0">
-										<Command.Root>
+										<Command.Root bind:value={selectedOrg}>
 											<Command.Input placeholder="Search organizations..." />
 											<Command.Empty>No organization found.</Command.Empty>
 											<Command.Group>
 												{#each organizationStore.organizations as org}
-														<Command.Item
-															bind:value={selectedOrg}
-															onSelect={() => {
-																selectedOrg = org.id;
-																closeAndFocusTrigger(ids.trigger);
-															}}
-														>
-															<Check class={cn('mr-2 h-4 w-4', selectedOrg !== org.id && 'text-transparent')} />
-															{org.name}
-														</Command.Item>
+													<Command.Item>
+														<Check
+															class={cn(
+																'mr-2 h-4 w-4',
+																selectedOrg !== org.id && 'text-transparent'
+															)}
+														/>
+														{org.name}
+													</Command.Item>
 												{/each}
 											</Command.Group>
 										</Command.Root>
@@ -334,12 +322,12 @@
 							<Table.Row>
 								<Table.Cell>{model.name}</Table.Cell>
 								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" on:click={() => toggleModel(modelIndex)}>
+									<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
 										{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
 									</Button>
 								</Table.Cell>
 								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" on:click={() => removeModel(modelIndex)}>
+									<Button variant="destructive" size="sm" onclick={() => removeModel(modelIndex)}>
 										Remove
 									</Button>
 								</Table.Cell>
@@ -367,7 +355,7 @@
 											<Button
 												variant="destructive"
 												size="sm"
-												on:click={() => removePartFromModel(modelIndex, partIndex)}
+												onclick={() => removePartFromModel(modelIndex, partIndex)}
 											>
 												Remove
 											</Button>
@@ -381,75 +369,6 @@
 			</Card.Content>
 		</Card.Root>
 
-		<Card.Root class="col-span-1 md:col-span-2">
-			<Card.Header>
-				<Card.Title>Vision System Spare Parts</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="mb-6">
-					<Label for="new-organization">Add New Spare Part</Label>
-					<div class="flex gap-2">
-						<Input placeholder="Enter spare part name" bind:value={partsStore.newPart.name} />
-						<div class="file-input-wrapper relative">
-							<label for="file-upload" class="file-input-label block">
-								<span
-									class="bg-gray-100 px-4 py-4 rounded cursor-pointer border border-gray-300 hover:bg-gray-200 h-9 flex items-center justify-center w-32"
-								>
-									Image
-								</span>
-							</label>
-							<Input
-								id="file-upload"
-								type="file"
-								accept=".jpg, .jpeg, .png, .webp"
-								class="hidden"
-							/>
-							{#if fileName}
-								<p class="text-gray-600 mt-2 text-sm truncate">{fileName}</p>
-							{/if}
-						</div>
-						<Button type="submit" on:click={partsStore.addPart}>Add Part</Button>
-					</div>
-				</div>
-
-				<Table.Root>
-					<Table.Caption>List of Spare Parts</Table.Caption>
-					<Table.Header>
-						<Table.Row>
-							<Table.Head class="w-[300px]">ID</Table.Head>
-							<Table.Head>Name</Table.Head>
-							<Table.Head>Image</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{#each partsStore.parts as part, partIndex}
-							<Table.Row>
-								<Table.Cell>{part.id}</Table.Cell>
-								<Table.Cell>{part.name}</Table.Cell>
-								<Table.Cell>
-									<img
-										alt="{part.name} image"
-										class="aspect-square rounded-md object-cover"
-										height="64"
-										width="64"
-										src={part.image}
-									/>
-								</Table.Cell>
-								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" on:click={() => editPart(part.name)}>
-										Edit
-									</Button>
-								</Table.Cell>
-								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" on:click={() => removePart(partIndex)}>
-										Remove
-									</Button>
-								</Table.Cell>
-							</Table.Row>
-						{/each}
-					</Table.Body>
-				</Table.Root>
-			</Card.Content>
-		</Card.Root>
+		<SpareParts/>
 	</div>
 </div>

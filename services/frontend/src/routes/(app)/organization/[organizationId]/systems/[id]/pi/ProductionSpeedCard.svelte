@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-	export let productionSpeed: number;
+	interface Props {
+		productionSpeed: number;
+	}
+
+	let { productionSpeed }: Props = $props();
 </script>
 
 <Card class="w-full">

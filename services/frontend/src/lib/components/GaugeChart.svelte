@@ -4,7 +4,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
 
-	let chartCanvas: HTMLCanvasElement;
+	let chartCanvas = $state<HTMLCanvasElement>();
 
 	interface GaugeData {
 		label: string;
@@ -14,11 +14,16 @@
 		value: number;
 	}
 
-	export let gauges: GaugeData[];
+	interface Props {
+		gauges: GaugeData[];
+		[key: string]: any;
+	}
+
+	let { gauges, ...rest }: Props = $props();
 	let primaryColor: string;
 
 	onMount(() => {
-		const ctx = chartCanvas.getContext('2d');
+		const ctx = chartCanvas?.getContext('2d');
 		if (ctx) {
 			primaryColor = getComputedStyle(document.documentElement)
 				.getPropertyValue('--primary')
@@ -69,7 +74,7 @@
 	});
 </script>
 
-<div {...$$restProps}>
+<div {...rest}>
 	<div class="my-4 flex flex-wrap justify-center gap-2">
 		{#each gauges as gauge, i}
 			<div class="flex items-center">

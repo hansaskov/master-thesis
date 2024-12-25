@@ -17,14 +17,14 @@
 	};
 
 	// User preferences
-	let preferences = {
+	let preferences = $state({
 		emailNotifications: {
 			updates: true,
 			newsletters: false,
 			promotions: false
 		},
 		theme: 'system'
-	};
+	});
 
 	// Available themes
 	const themes = [
@@ -87,10 +87,9 @@
 				<div class="space-y-4">
 					<div>
 						<Label for="theme" class="text-sm font-medium">Theme</Label>
-						<Select.Root>
-							<Select.Trigger id="theme" class="w-full">
-								<Select.Value placeholder="Select a theme" />
-							</Select.Trigger>
+						<Select.Root type="single">
+							<Select.Trigger id="theme" class="w-full" placeholder="Select a theme"
+							></Select.Trigger>
 							<Select.Content>
 								{#each themes as theme}
 									<Select.Item value={theme.value}>{theme.label}</Select.Item>
@@ -141,7 +140,7 @@
 						<Button
 							variant="outline"
 							class="flex w-full items-center justify-between"
-							on:click={() => window.open('/privacy-policy', '_blank')}
+							onclick={() => window.open('/privacy-policy', '_blank')}
 						>
 							Privacy Policy
 							<ExternalLink class="h-4 w-4" />
@@ -151,7 +150,7 @@
 						<Button
 							variant="outline"
 							class="flex w-full items-center justify-between"
-							on:click={() => window.open('/terms-of-service', '_blank')}
+							onclick={() => window.open('/terms-of-service', '_blank')}
 						>
 							Terms of Service
 							<ExternalLink class="h-4 w-4" />
@@ -163,6 +162,6 @@
 	</div>
 
 	<div class="mt-8 flex justify-end">
-		<Button on:click={updatePreferences}>Save Changes</Button>
+		<Button onclick={updatePreferences}>Save Changes</Button>
 	</div>
 </div>
