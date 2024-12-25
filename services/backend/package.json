@@ -26,7 +26,7 @@
     "@sinclair/typebox": "0.32.34",
     "arctic": "^2.3.3",
     "drizzle-orm": "^0.38.2",
-    "drizzle-typebox": "^0.2.0",
+    "drizzle-typebox": "0.1.1",
     "elysia": "^1.1.26",
     "nanoid": "^5.0.9",
     "postgres": "^3.4.5"
