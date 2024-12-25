@@ -72,17 +72,8 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       
-      - name: Prune old containers
-        run: docker container prune -f --filter "until=12h"
-
-      - name: Prune old images
-        run: docker image prune -a -f --filter "until=12h"
-
-      - name: Prune unused volumes
-        run: docker volume prune -f
-
-      - name: Prune unused networks
-        run: docker network prune -f --filter "until=12h"
+      - name: Docker prune
+        run: docker system prune --all --force --filter "until=12h"
 
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
