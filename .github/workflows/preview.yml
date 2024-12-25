@@ -35,10 +35,10 @@ jobs:
     steps: 
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - name: See env file
-        run: cat .env.example  
+      - name: Copy env file
+        run: cp .env.example .env
       - name: Compose up
-        run: docker compose --env-file .env.example up --build -d
+        run: docker compose up --build -d
       - name: Unit test
         run: docker compose exec backend bun test
         
