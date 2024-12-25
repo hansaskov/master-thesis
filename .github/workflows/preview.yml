@@ -61,7 +61,7 @@ jobs:
       DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_USER }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
     steps:
-    
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -73,16 +73,16 @@ jobs:
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       
       - name: Prune old containers
-        run: docker container prune -f --filter "until=720h"
+        run: docker container prune -f --filter "until=12h"
 
       - name: Prune old images
-        run: docker image prune -a -f --filter "until=720h"
+        run: docker image prune -a -f --filter "until=12h"
 
       - name: Prune unused volumes
         run: docker volume prune -f
 
       - name: Prune unused networks
-        run: docker network prune -f --filter "until=720h"
+        run: docker network prune -f --filter "until=12h"
 
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
