@@ -250,19 +250,18 @@
 								<PartSelector />
 							</div>
 							<Select.Root type="single" bind:value={selected}>
-								<Select.Trigger class="w-[180px]" placeholder="Select type">
+								<Select.Trigger class="w-[180px]">
 									{triggerContent}
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Group>
 										{#each systemModels as systemModel}
-											<Select.Item {...systemModel}>
+											<Select.Item value={systemModel.value} label={systemModel.label} >
 												{systemModel.label}
 											</Select.Item>
 										{/each}
 									</Select.Group>
 								</Select.Content>
-								<Input name="Model Type" />
 							</Select.Root>
 							<div>
 								<Popover.Root bind:open={openCombobox}>
