@@ -10,7 +10,9 @@
 
 	let name = $state(props.name);
 
-	function onsubmit() {
+	function onsubmit(e: SubmitEvent) {
+		e.preventDefault();
+
 		partsStore.edit({
 			id: props.id,
 			name: name

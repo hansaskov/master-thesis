@@ -81,8 +81,7 @@
 										onclick={() => {
 											dialogStore.open({
 												title: 'Are you absolutely sure?',
-												description:
-													"This action cannot be undone. This will permanently delete the organization and all of it's systems",
+												description: 'This action cannot be undone',
 												component: AlertDialogBody,
 												props: { onsubmit: () => partsStore.remove(part) }
 											});

@@ -10,7 +10,9 @@
 
 	let name = $state(props.name);
 
-	function onsubmit() {
+	function onsubmit(e: SubmitEvent) {
+		e.preventDefault();
+
 		organizationStore.edit({
 			id: props.id,
 			name: name

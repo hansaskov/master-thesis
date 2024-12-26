@@ -10,7 +10,7 @@
 </script>
 
 <ModeWatcher defaultTheme="light" />
-<Toaster position={isDesktop ? "bottom-right" : "top-center"}/>
+<Toaster position={isDesktop ? 'bottom-right' : 'top-center'} />
 <ResponsiveDialog />
 
 {@render children()}
