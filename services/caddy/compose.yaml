@@ -1,0 +1,24 @@
+
+services: 
+  caddy:
+    profiles: [proxy]
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    restart: unless-stopped
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    networks:
+      - proxy-network
+
+volumes:
+  caddy-data:
+  caddy-config:
+
+networks:
+  proxy-network:
+    name: proxy-network

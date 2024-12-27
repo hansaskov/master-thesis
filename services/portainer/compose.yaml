@@ -1,0 +1,16 @@
+services: 
+  portainer:
+    profiles: [monitor]   
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - proxy-network
+    labels:
+      caddy: "${PORTAINER_FQDN}"
+      caddy.reverse_proxy: "{{upstreams}}"
+
+volumes: 
+  portainer-data:

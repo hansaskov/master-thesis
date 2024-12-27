@@ -7,10 +7,10 @@ const optionalEnvironmentSchema = t.Object({
 	MICROSOFT_TENANT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_SECRET: t.String({ minLength: 1 }),
-	MICROSOFT_REDIRECT_URI: t.String({ minLength: 1 }),
 });
 
 const requiredEnvironmentSchema = t.Object({
+	INTERFACE_FQDN: t.String({ minLength: 1 }),
 	DATABASE_URL: t.String({ minLength: 1 }),
 	PROD: t.Boolean(),
 });
