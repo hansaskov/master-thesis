@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - preview
+  pull_request:
+    branches:
+      - main
+    branches-ignore:
+      - '!preview'
 
 jobs:
   check:
@@ -76,6 +81,7 @@ jobs:
     env:
       PROD: true
       COMPOSE_PROJECT_NAME: thesis-preview
+      COMPOSE_PROFILES: stateless, stateful, migrate
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
       MICROSOFT_TENANT_ID: ${{ secrets.MICROSOFT_TENANT_ID }}
@@ -100,12 +106,15 @@ jobs:
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
       
       - name: Docker prune
-        run: docker system prune --all --force --filter "until=72h"
+        run: docker system prune --all --force --filter "until=36h"
 
       - name: Deploy caddy
         run: docker compose --profile proxy -p proxy up -d
 
       - name: Deploy docker compose
         run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate  up --build  -d
+
+      - name: Deploy monitoring
+        run: docker compose --profile monitor -p monitor up -d
 
 
