@@ -4,11 +4,6 @@ on:
   push:
     branches:
       - preview
-  pull_request:
-    branches:
-      - main
-    branches-ignore:
-      - '!preview'
 
 jobs:
   check:
