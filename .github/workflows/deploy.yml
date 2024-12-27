@@ -14,16 +14,15 @@ jobs:
       COMPOSE_PROJECT_NAME: ${{ github.ref_name }}
       COMPOSE_PROFILES: stateless, stateful, migrate
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
       MICROSOFT_TENANT_ID: ${{ vars.MICROSOFT_TENANT_ID }}
       MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
       MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
-      MICROSOFT_REDIRECT_URI: ${{ vars.MICROSOFT_REDIRECT_URI }}
       POSTGRES_DB: ${{ vars.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       PORTAINER_FQDN: ${{ vars.PORTAINER_FQDN }}
     
     steps:
