@@ -17,8 +17,11 @@ export const entraId = new MicrosoftEntraId(
 	environment.MICROSOFT_TENANT_ID,
 	environment.MICROSOFT_CLIENT_ID,
 	environment.MICROSOFT_CLIENT_SECRET,
-	new URL('/api/login/microsoft/callback', environment.INTERFACE_FQDN).toString()
-  );
+	new URL(
+		"/api/login/microsoft/callback",
+		environment.INTERFACE_FQDN,
+	).toString(),
+);
 
 export const microsoftRoute = new Elysia()
 	.get(
