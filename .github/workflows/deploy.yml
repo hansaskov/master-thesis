@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.name == main' && 'production' || 'preview' }}
+    environment: ${{ github.ref_name == main' && 'production' || 'preview' }}
     env:
       PROD: true
       COMPOSE_PROJECT_NAME: ${{ github.ref_name }} 
@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Which branch?
-        run: echo "Current Branch: ${{ github.name }}"
+        run: echo "${{ github.ref_name }}"
 
       - name: Set up SSH key
         run: |
