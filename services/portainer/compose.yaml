@@ -10,7 +10,7 @@ services:
       - proxy-network
     labels:
       caddy: "${PORTAINER_FQDN}"
-      caddy.reverse_proxy: "{{upstreams}}"
+      caddy.reverse_proxy: "{{upstreams 9000}}"
 
 volumes: 
   portainer-data:

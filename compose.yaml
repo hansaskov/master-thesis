@@ -1,5 +1,6 @@
 include: 
   - ./services/caddy/compose.yaml
+  - ./services/timescaledb/compose.yaml
   - ./services/portainer/compose.yaml
 
 services:
@@ -16,7 +17,6 @@ services:
       caddy.encode: zstd gzip
       caddy.reverse_proxy: "{{upstreams 5173}}"
 
-  ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
     profiles: [stateless]
     restart: unless-stopped
@@ -43,25 +43,6 @@ services:
       timescaledb: 
         condition: service_healthy
 
-  ## A postgres database optimised for timeseries data
-  timescaledb:
-    profiles: [stateful]    
-    image: timescale/timescaledb:latest-pg17
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-      - timescaledb-data:/var/lib/postgresql/data
-    
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
 ## Apply migration at startup
   migrate:
     profiles: [migrate]   
@@ -74,6 +55,3 @@ services:
     depends_on:
       timescaledb: 
         condition: service_healthy
-
-volumes:
-  timescaledb-data:
