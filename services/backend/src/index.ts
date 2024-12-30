@@ -6,11 +6,13 @@ import { authRoutes } from "./auth/routes";
 import { organizationsApi } from "./db/collections/organizations/api";
 import { readings } from "./db/collections/readings/api";
 import { systemsApi } from "./db/collections/systems/api";
+import { healthApi } from "./health/api";
 
 const api = new Elysia({ prefix: "/api" })
 	.use(authRoutes)
 	.use(readings)
 	.use(organizationsApi)
+	.use(healthApi)
 	.use(systemsApi)
 	.use(partsApi);
 
