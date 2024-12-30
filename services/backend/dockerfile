@@ -27,20 +27,33 @@ RUN bun build \
 	--outfile server \
 	./services/backend/src/index.ts
 
-# Use a distroless image as the base
-FROM gcr.io/distroless/base
+# Get the httpget utility for healthchecks
+FROM ghcr.io/cryptaliagy/httpget:latest as httpget
 
-# Set the working directory to /app inside the container
+# Use a minimal distroless image as the final base to reduce attack surface
+FROM gcr.io/distroless/base as runner
+
+# Set up the working directory for the application
 WORKDIR /app
 
-# Copy the backend binary from the build stage
+# Copy the httpget utility from its build stage
+COPY --from=httpget /httpget /httpget
+
+# Copy application artifacts from build stage:
+# - Compiled backend binary
+# - Static public assets
 COPY --from=build /app/server server
 COPY --from=build /app/services/backend/public public
 
-# Set the environment variable to production
+# Configure production environment
 ENV NODE_ENV=production
 
-# Run the backend server
+# Command to start the backend server
 CMD ["./server"]
 
+# Make the application port available
 EXPOSE 3000
+
+# Configure healthcheck to monitor application status
+# Runs every 30s with 30s timeout and 3 retries after 5s startup period
+HEALTHCHECK --interval=30s --timeout=10s --start-period=2s --retries=3 CMD ["/httpget", "http://localhost:3000/api/health"]
