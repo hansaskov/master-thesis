@@ -5,21 +5,12 @@ import {
 	deleteSessionTokenCookie,
 	invalidateSession,
 } from "./lucia";
+import { AuthService } from "./middleware";
 
-export const logoutRoutes = new Elysia().get(
-	"/logout",
-	async ({ cookie: { sessionId } }) => {
-		const { session } = await Authenticate(sessionId);
-
-		if (!session) {
-			return error(401);
-		}
-
+export const logoutRoutes = new Elysia()
+	.use(AuthService)
+	.get("/logout", async ({ session, cookie: { sessionId } }) => {
 		await invalidateSession(session.id);
 		deleteSessionTokenCookie(sessionId);
 		return redirect("/", 302);
-	},
-	{
-		cookie: Schema.cookie.session,
-	},
-);
+	});
