@@ -1,10 +1,5 @@
-import { Schema } from "$db/collections";
 import Elysia, { error, redirect, t } from "elysia";
-import {
-	Authenticate,
-	deleteSessionTokenCookie,
-	invalidateSession,
-} from "./lucia";
+import { deleteSessionTokenCookie, invalidateSession } from "./lucia";
 import { AuthService } from "./middleware";
 
 export const logoutRoutes = new Elysia()
