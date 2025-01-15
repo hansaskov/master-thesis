@@ -1,0 +1,32 @@
+name: NixOS Server Provisioner
+
+on:
+  workflow_dispatch:
+    inputs:
+      server_name:
+        description: 'Name for the server'
+        required: false
+        default: 'nixos'
+      ssh_key:
+        description: 'Name of the SSH key registered in Hetzner Cloud'
+        required: false
+        default: 'deploy-key'
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Hetzner Cloud CLI
+      uses: hetznercloud/setup-hcloud@v1
+      env:
+        HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+
+    - name: Run NixOS Server Provisioner
+      env:
+        PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
+      run: |
+        cd ci-cd/nixos/
+        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}"
