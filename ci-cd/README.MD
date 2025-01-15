@@ -1,4 +1,8 @@
-# Continuous Integration and Continuous Deployment (CI/CD)
+# DEBRICATED
+
+#  Continuous Integration and Continuous Deployment (CI/CD)
+
+
 
 Welcome to the guide on deploying services using CI/CD. This guide walks you through key steps such as generating SSH keys, setting up Hetzner servers, and configuring NixOS for deployment. Follow along to simplify and automate the deployment process.
 
