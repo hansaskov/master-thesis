@@ -1,9 +1,14 @@
+#!/bin/bash
+set -e
+
+
+if [ $# -eq 0 ]; then
+    show_usage "Backup file path is required"
+fi
+
+BACKUP_FILE="$1"
+
 docker compose exec timescaledb pg_dump \
- -U username \
- -d database \
- --format=custom \
- --data-only \
- --exclude-extension=timescaledb \
- --exclude-table='__drizzle_migrations' \
- --verbose \
- --no-owner > backup.sql.zst
+    -U "$POSTGRES_USER" \
+    -d "$POSTGRES_DB" \
+    --format=custom > "$BACKUP_FILE"
