@@ -38,10 +38,9 @@ export const organizationQueries = {
 			.from(usersToOrganizations)
 			.innerJoin(
 				organizations,
-				eq(usersToOrganizations.organization_id, organizations.id),
-			)
-			.innerJoin(users, eq(usersToOrganizations.user_id, users.id))
-			.where(
-				and(eq(users.id, user.id), eq(usersToOrganizations.user_id, user.id)),
+				and(
+					eq(usersToOrganizations.organization_id, organizations.id),
+					eq(usersToOrganizations.user_id, user.id),
+				),
 			),
 };
