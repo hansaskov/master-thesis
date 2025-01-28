@@ -11,6 +11,8 @@ const preparedselectUnique = db
 	.prepare("select_readings");
 
 export const readingsQueries = {
+	createMany: async (values: Types.ReadingNew[]) =>
+		await db.insert(readings).values(values).returning(),
 	insert: async (values: Types.Reading[]) =>
 		await db.insert(readings).values(values),
 	insertWithSystemId: async (

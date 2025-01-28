@@ -6,7 +6,7 @@ export const readingsApi = new Elysia()
 	.post(
 		"/reading",
 		async ({ headers, body }) => {
-			const key = await Queries.keys.selectUnique(headers);
+			const key = await Queries.keys.select(headers);
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");
 			}

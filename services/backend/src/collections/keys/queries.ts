@@ -16,12 +16,14 @@ const PreparedselectUnique = db
 	.prepare("select_unique_Key");
 
 export const keysQueries = {
-	selectUnique: async function selectUnique({
-		private_key,
-		public_key,
-	}: Types.Keys) {
-		return await PreparedselectUnique.execute({ private_key, public_key }).then(
-			(v) => v.at(0),
-		);
-	},
+	select: async (values: Types.Keys) =>
+		await PreparedselectUnique.execute(values).then((v) => v.at(0)),
+	create: async (values: Types.KeysNew) =>
+		await db
+			.insert(keys)
+			.values(values)
+			.returning()
+			.then((v) => v[0]),
+	createMany: async (values: Types.KeysNew[]) =>
+		await db.insert(keys).values(values).returning(),
 } as const;

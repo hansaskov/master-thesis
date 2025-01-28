@@ -1,8 +1,52 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { seedDatabase } from "$db/seed";
+import { Queries } from "$collections/queries";
 import { treaty } from "@elysiajs/eden";
 import { Elysia } from "elysia";
 import { readingsApi } from "./api";
+
+async function seedDatabase() {
+	// Insert organization
+	const organization = await Queries.organizations.create({
+		name: "Trivision",
+	});
+
+	// Insert system
+	const system = await Queries.systems.create({
+		name: "VisioPointer",
+		organization_id: organization.id,
+		system_model: "VisioPointer",
+	});
+
+	// Insert key
+	const key = await Queries.keys.create({ private_key: system.id });
+
+	// Insert readings.
+	const readings = await Queries.readings.createMany([
+		{
+			name: "cpu temperature",
+			time: new Date(),
+			unit: "C",
+			value: 40,
+			system_id: system.id,
+		},
+		{
+			name: "cpu usage",
+			time: new Date(),
+			unit: "%",
+			value: 20,
+			system_id: system.id,
+		},
+		{
+			name: "disk usage",
+			time: new Date(),
+			unit: "%",
+			value: 95,
+			system_id: system.id,
+		},
+	]);
+
+	return { organization, system, key, readings };
+}
 
 function createTestApi() {
 	const app = new Elysia().use(readingsApi);
