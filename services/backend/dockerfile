@@ -5,7 +5,7 @@ FROM oven/bun:1.2 AS build
 WORKDIR /app
 
 # Copy necessary package files to install dependencies
-COPY bun.lock package.json /app/
+COPY bun.lockb package.json /app/
 COPY /services/backend/package.json /app/services/backend/
 COPY /services/frontend/package.json /app/services/frontend/
 
