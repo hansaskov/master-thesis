@@ -16,7 +16,7 @@
 		"@faker-js/faker": "^9.4.0",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.16.1",
-		"@sveltejs/vite-plugin-svelte": "^4.0.4",
+		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"@tailwindcss/typography": "^0.5.16",
 		"@types/bun": "^1.2.1",
 		"@types/eslint": "^9.6.1",
@@ -36,7 +36,7 @@
 		"typescript": "^5.7.3",
 		"typescript-eslint": "^8.22.0",
 		"vaul-svelte": "^1.0.0-next.3",
-		"vite": "^5.4.14"
+		"vite": "^6.0.11"
 	},
 	"dependencies": {
 		"@elysiajs/eden": "^1.2.0",
@@ -46,7 +46,7 @@
 		"bits-ui": "^1.0.0-next.78",
 		"chart.js": "^4.4.7",
 		"clsx": "^2.1.1",
-		"lucide-svelte": "^0.469.0",
+		"lucide-svelte": "^0.474.0",
 		"mode-watcher": "^0.5.1",
 		"runed": "^0.23.1",
 		"svelte-radix": "^2.0.1",
