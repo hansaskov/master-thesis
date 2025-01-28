@@ -1,5 +1,6 @@
+import { Queries } from "$collections/queries";
+import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
-import { Queries, Schema } from "..";
 
 export const readingsApi = new Elysia()
 	.post(

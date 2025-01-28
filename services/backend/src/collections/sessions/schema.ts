@@ -1,5 +1,5 @@
 import type { PartialExcept } from "$types/strict";
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { users } from "../users/schema";

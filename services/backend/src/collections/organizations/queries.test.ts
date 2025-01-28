@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { Queries } from "..";
+import { Queries } from "$collections/queries";
 
 describe("Organization Queries", async () => {
 	it("Select 1 organization on users", async () => {

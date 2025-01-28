@@ -1,5 +1,5 @@
 import { db } from "$db/postgres";
-import type { Types } from "$types/index";
+import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
 import { and, desc, eq, sql } from "drizzle-orm/sql";
 import { readings } from "./schema";

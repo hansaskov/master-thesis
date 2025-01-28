@@ -1,25 +1,18 @@
 import { spreads } from "$types/typebox";
 import { t } from "elysia";
 import { insertFactoryAreaSchema } from "./factory_areas/schema";
-
 import { insertKeysSchema, selectKeysSchema } from "./keys/schema";
-
 import {
 	insertOrganizationsSchema,
 	selectOrganizationsSchema,
 } from "./organizations/schema";
-
-import { insertPartsSchema, parts, selectPartsSchema } from "./parts/schema";
-
+import { insertPartsSchema, selectPartsSchema } from "./parts/schema";
 import { insertReadingsSchema, selectReadingsSchema } from "./readings/schema";
-
 import { insertSessionsSchema } from "./sessions/schema";
 import { insertSystemModelsSchema } from "./system_models/schema";
 import { insertSystemsSchema, selectSystemsSchema } from "./systems/schema";
-
 import { insertUserSettingsSchema } from "./user_settings/schema";
 import { insertUserSchema } from "./users/schema";
-
 import { insertUserToOrganizationSchema } from "./users_to_organizations/schema";
 
 export const Schema = {

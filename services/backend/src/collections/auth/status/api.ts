@@ -1,5 +1,5 @@
+import { AuthService } from "$auth/middleware";
 import Elysia from "elysia";
-import { AuthService } from "../../../auth/middleware";
 
 export const statusApi = new Elysia()
 	.use(AuthService)

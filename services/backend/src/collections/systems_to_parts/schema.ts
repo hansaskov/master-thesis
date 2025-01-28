@@ -1,5 +1,5 @@
 import type { PartialExcept } from "$types/strict";
-import { pgEnum, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { parts } from "../parts/schema";
 import { systems } from "../systems/schema";
 

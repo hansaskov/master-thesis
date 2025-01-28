@@ -1,4 +1,4 @@
-import { Table } from "$collections/index";
+import { Table } from "$collections/table";
 import { db } from "./postgres";
 
 export async function seedDatabase() {

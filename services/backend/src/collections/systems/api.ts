@@ -1,6 +1,7 @@
 import { AuthService } from "$auth/middleware";
+import { Queries } from "$collections/queries";
+import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
-import { Queries, Schema } from "..";
 
 export const systemsApi = new Elysia({ prefix: "systems" })
 	.use(AuthService)
