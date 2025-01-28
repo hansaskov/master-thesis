@@ -31,7 +31,7 @@ const config = {
 			'$db/*': '../backend/src/db/*',
 			'$types/*': '../backend/src/types/*',
 			'$utils/*': '../backend/src/utils/*',
-			"$collections/*": "../backend/src/collections/*"
+			'$collections/*': '../backend/src/collections/*'
 		}
 	}
 };
