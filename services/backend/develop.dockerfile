@@ -1,5 +1,5 @@
 # Updated Dockerfile (./services/backend/develop.dockerfile)
-FROM oven/bun:1 AS build
+FROM oven/bun:1.2 AS build
 
 # Set the working directory to /app inside the container
 WORKDIR /app

@@ -1,16 +1,16 @@
-import { partsApi } from "$db/collections/parts/api";
+import { authApi } from "$collections/auth/api";
+import { healthApi } from "$collections/health/api";
+import { organizationsApi } from "$collections/organizations/api";
+import { partsApi } from "$collections/parts/api";
+import { readingsApi } from "$collections/readings/api";
+import { systemsApi } from "$collections/systems/api";
 import { logger } from "@bogeychan/elysia-logger";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
-import { authRoutes } from "./auth/routes";
-import { organizationsApi } from "./db/collections/organizations/api";
-import { readings } from "./db/collections/readings/api";
-import { systemsApi } from "./db/collections/systems/api";
-import { healthApi } from "./health/api";
 
 const api = new Elysia({ prefix: "/api" })
-	.use(authRoutes)
-	.use(readings)
+	.use(authApi)
+	.use(readingsApi)
 	.use(organizationsApi)
 	.use(healthApi)
 	.use(systemsApi)
@@ -29,4 +29,4 @@ const app = new Elysia({ precompile: true })
 console.log(`🦊 Server started at ${app.server?.url.origin}`);
 
 export type App = typeof app;
-export type * as Types from "./db/collections";
+export type * as Types from "$collections/index";

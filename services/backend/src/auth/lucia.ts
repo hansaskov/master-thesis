@@ -1,13 +1,12 @@
-import { Queries } from "$db/collections";
+import { Queries } from "$collections/index";
+import type { Session, User } from "$collections/index";
 import { sha256 } from "@oslojs/crypto/sha2";
 import {
 	encodeBase32LowerCaseNoPadding,
 	encodeHexLowerCase,
 } from "@oslojs/encoding";
-import { t } from "elysia";
 import type { Cookie } from "elysia/cookies";
 import { environment } from "../config/environment";
-import type { Session, User } from "../db/collections";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);

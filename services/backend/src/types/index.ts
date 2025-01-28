@@ -1,1 +1,1 @@
-export type * as Types from "../db/collections";
+export type * as Types from "$collections/index";
