@@ -46,7 +46,7 @@ jobs:
         run: docker compose --profile proxy -p proxy up -d
       
       - name: Deploy docker compose
-        run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate up --build -d
+        run: docker compose -f compose.yaml --profile stateful --profile stateless --profile migrate up --build -d --wait
       
       - name: Deploy monitoring
         run: docker compose --profile monitor -p monitor up -d

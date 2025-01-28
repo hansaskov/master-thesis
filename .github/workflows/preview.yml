@@ -64,8 +64,6 @@ jobs:
       - name: Copy env file
         run: cp .env.example .env
       - name: Compose up
-        run: docker compose up backend timescaledb migrate --build -d
-      - name: Wait 2 sec
-        run: sleep 2
+        run: docker compose up backend timescaledb migrate --build -d --wait
       - name: Unit test
         run: docker compose exec backend bun test
