@@ -1,19 +1,22 @@
-import { api } from "$collections/api";
-import { logger } from "@bogeychan/elysia-logger";
-import { swagger } from "@elysiajs/swagger";
-import { Elysia } from "elysia";
+import cluster from "node:cluster";
+import { availableParallelism } from "node:os";
+import process from "node:process";
+import { app } from "./server";
 
-const app = new Elysia({ precompile: true })
-	.get(
-		".well-known/microsoft-identity-association.json",
-		Bun.file("public/.well-known/microsoft-identity-association.json"),
-	)
-	.use(logger())
-	.use(swagger({ path: "/api/swagger" }))
-	.use(api)
-	.listen(process.env.PORT as string);
+if (cluster.isPrimary) {
+	console.log(`Primary ${process.pid} is running`);
 
-console.log(`🦊 Server started at ${app.server?.url.origin}`);
+	// Start N workers for the number of CPUs
+	const numberOfThreads = Math.min(availableParallelism());
+	for (let i = 0; i < numberOfThreads; i++) {
+		cluster.fork();
+	}
 
-export type App = typeof app;
-export type * as Types from "$collections/types";
+	cluster.on("exit", (worker) => {
+		console.log(`worker ${worker.process.pid} died`);
+		process.exit(1);
+	});
+} else {
+	app.listen(process.env.PORT as string);
+	console.log(`🦊 Worker ${process.pid} started at ${app.server?.url.origin}`);
+}
