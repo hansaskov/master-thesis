@@ -1,4 +1,4 @@
-name: NixOS Server Provisioner
+name: start server
 
 on:
   workflow_dispatch:
