@@ -1,9 +1,7 @@
+import { db } from "$db/postgres";
+import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
 import { and, eq } from "drizzle-orm";
-
-import { db } from "$db/postgres";
-import type { Types } from "$types/index";
-import { users } from "../users/schema";
 import { usersToOrganizations } from "../users_to_organizations/schema";
 import { organizations } from "./schema";
 

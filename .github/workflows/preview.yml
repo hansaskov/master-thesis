@@ -66,4 +66,4 @@ jobs:
       - name: Compose up
         run: docker compose up backend timescaledb migrate --build -d --wait
       - name: Unit test
-        run: docker compose exec backend bun test
+        run: docker compose exec backend bun test --coverage

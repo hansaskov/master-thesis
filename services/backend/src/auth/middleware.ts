@@ -1,5 +1,5 @@
-import { Schema } from "$collections/index";
-import type { Session, User } from "$collections/index";
+import { Schema } from "$collections/schema";
+import type { Session, User } from "$collections/types";
 import Elysia, { error } from "elysia";
 import { setSessionTokenCookie, validateSessionToken } from "./lucia";
 

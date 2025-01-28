@@ -4,7 +4,8 @@ import { Elysia, error, redirect, t } from "elysia";
 import { TypeCompiler } from "elysia/type-system";
 import { environment } from "../../../../config/environment";
 
-import { Queries, Schema } from "$collections/index";
+import { Queries } from "$collections/queries";
+import { Schema } from "$collections/schema";
 import { convertKeys } from "$utils/transform";
 import {
 	createSession,

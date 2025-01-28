@@ -1,5 +1,5 @@
-import { Queries } from "$collections/index";
-import type { Session, User } from "$collections/index";
+import { Queries } from "$collections/queries";
+import type { Session, User } from "$collections/types";
 import { sha256 } from "@oslojs/crypto/sha2";
 import {
 	encodeBase32LowerCaseNoPadding,
