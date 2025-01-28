@@ -33,7 +33,6 @@
 				<DropdownMenu.Separator />
 				{#each columns as column}
 					<DropdownMenu.CheckboxItem
-						controlledChecked
 						checked={column.getIsVisible()}
 						onCheckedChange={(v) => column.toggleVisibility(!!v)}
 						class="capitalize"
