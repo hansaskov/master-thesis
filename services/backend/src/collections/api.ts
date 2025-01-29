@@ -15,4 +15,3 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(readingsApi)
 	.use(systemsApi)
 	.use(usersToOrganizationsApi);
-	
