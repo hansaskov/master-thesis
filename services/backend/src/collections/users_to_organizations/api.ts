@@ -4,7 +4,7 @@ import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
 
 export const usersToOrganizationsApi = new Elysia({
-	prefix: "organization-members",
+	prefix: "/usersToOrganization",
 })
 	.use(AuthService)
 	.post(
