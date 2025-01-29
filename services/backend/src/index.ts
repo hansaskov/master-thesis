@@ -3,6 +3,9 @@ import { availableParallelism } from "node:os";
 import process from "node:process";
 import { app } from "./server";
 
+export type App = typeof app;
+export type * as Types from "$collections/types";
+
 if (cluster.isPrimary) {
 	console.log(`Primary ${process.pid} is running`);
 

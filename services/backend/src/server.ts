@@ -11,6 +11,3 @@ export const app = new Elysia({ precompile: true })
 	.use(logger())
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api);
-
-export type App = typeof app;
-export type * as Types from "$collections/types";
