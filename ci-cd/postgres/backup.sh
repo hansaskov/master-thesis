@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-
 if [ $# -eq 0 ]; then
     show_usage "Backup file path is required"
 fi
