@@ -1,5 +1,5 @@
 import { $ } from "bun";
 
-const ls = $`docker container ls`.then(v => v.text())
+const ls = $`docker container ls`.text()
 
 console.log(await ls)
