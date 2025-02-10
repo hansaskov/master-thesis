@@ -36,20 +36,21 @@ services:
     ports:
     - "5432:5432"
 
-#
-#  studio:
-#    profiles: [stateless]
-#    build:
-#      context: .
-#      dockerfile: ./services/backend/develop.dockerfile
-#    command: bun db:studio -- --host=0.0.0.0
-#    ports:
-#      - "4983:4983"
-#    networks:
-#      - default
-#    environment:
-#      - DATABASE_URL=${DATABASE_URL}
-#    depends_on:
-#      timescaledb: 
-#        condition: service_healthy
+  minio:
+    profiles: [stateful]
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # MinIO browser UI
+      - "9001:9001" # MinIO API
+    environment:
+      MINIO_ACCESS_KEY: ${S3_ACCESS_KEY_ID}
+      MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+volumes:
+  minio_data:
         
