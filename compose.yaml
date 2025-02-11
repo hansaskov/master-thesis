@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     build: 
       context: .
-      dockerfile: ./services/backend/dockerfile
+      dockerfile: ./services/backend/Dockerfile
     networks:
       - default
       - proxy-network
