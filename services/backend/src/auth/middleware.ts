@@ -1,3 +1,4 @@
+import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import type { Session, User } from "$collections/types";
 import Elysia, { error } from "elysia";
@@ -76,6 +77,47 @@ export const authMiddleware = new Elysia()
 				}
 
 				return { user, session };
+			},
+		},
+		isOrganizationAdmin: {
+			async resolve({ cookie: { sessionId, organizationId } }) {
+				if (!sessionId.value) {
+					return error("Bad Request", "sessionId is required in your cookies");
+				}
+
+				if (!organizationId.value) {
+					return error(
+						"Bad Request",
+						"organizationId is required in your cookies",
+					);
+				}
+
+				const { user, session } = await validateSessionToken(sessionId.value);
+
+				if (!session) {
+					return error("Unauthorized", "You session has expired");
+				}
+
+				const organization = await Queries.usersToOrganizations.select({
+					user_id: user.id,
+					organization_id: organizationId.value,
+				});
+
+				if (!organization) {
+					return error(
+						"Unauthorized",
+						"You do not have access to this organization",
+					);
+				}
+
+				if (organization.role !== "Admin") {
+					return error(
+						"Unauthorized",
+						"Only admins are allowed to edit this organization",
+					);
+				}
+
+				return { user, session, organization };
 			},
 		},
 	})

@@ -49,6 +49,13 @@ export const Schema = {
 				error: { error: "Unauthorized access, due to invalid session cookie" },
 			}),
 		}),
+		organization: t.Cookie({
+			organizationId: t.String({
+				description:
+					"Organization id will be stored in the browser to denote the current organization the user it on",
+				error: { error: "You must provide a valid organization Id" },
+			}),
+		}),
 		github: t.Cookie(
 			{
 				githubState: t.String(),
