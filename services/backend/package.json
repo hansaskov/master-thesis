@@ -24,22 +24,22 @@
     "@elysiajs/swagger": "^1.2.0",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "@sinclair/typebox": "0.34.13",
+    "@sinclair/typebox": "0.34.15",
     "arctic": "^2.3.4",
-    "drizzle-orm": "^0.39.0",
+    "drizzle-orm": "^0.39.3",
     "drizzle-typebox": "0.1.1",
-    "elysia": "^1.2.10",
+    "elysia": "^1.2.12",
     "nanoid": "^5.0.9",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@types/bun": "^1.2.1",
-    "@types/node": "^22.12.0",
-    "drizzle-kit": "^0.30.3",
+    "@types/bun": "^1.2.2",
+    "@types/node": "^22.13.1",
+    "drizzle-kit": "^0.30.4",
     "typescript": "^5.7.3"
   },
   "overrides": {
-    "@sinclair/typebox": "0.34.13"
+    "@sinclair/typebox": "0.34.15"
   }
 }
