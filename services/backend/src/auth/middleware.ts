@@ -41,3 +41,42 @@ export const SuperAdminService = new Elysia({ name: "Service.SuperAdmin" })
 	})
 
 	.as("plugin");
+
+export const authMiddleware = new Elysia()
+	.macro({
+		isAuth: {
+			async resolve({ cookie: { sessionId } }) {
+				if (!sessionId.value) {
+					return error("Bad Request", "You must pass a valid session id");
+				}
+
+				const { user, session } = await validateSessionToken(sessionId.value);
+
+				if (!session) {
+					return error("Unauthorized", "Authentication is required");
+				}
+
+				return { user, session };
+			},
+		},
+		isSuperAdmin: {
+			async resolve({ cookie: { sessionId } }) {
+				if (!sessionId.value) {
+					return error("Bad Request", "You must pass a valid session id");
+				}
+
+				const { user, session } = await validateSessionToken(sessionId.value);
+
+				if (!session) {
+					return error("Unauthorized", "Authentication is required");
+				}
+
+				if (user.is_superadmin === false) {
+					return error("Unauthorized", "Superadmin priviliges are required");
+				}
+
+				return { user, session };
+			},
+		},
+	})
+	.as("plugin");

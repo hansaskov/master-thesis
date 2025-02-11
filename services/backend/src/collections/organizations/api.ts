@@ -1,18 +1,20 @@
-import { AuthService } from "$auth/middleware";
+import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
 
 export const organizationsApi = new Elysia({ prefix: "organizations" })
-	.use(AuthService)
+	.use(authMiddleware)
 	.get("/", async ({ user }) => {
-		if (user.is_superadmin) {
+		if (user.is_superadmin === true) {
 			return await Queries.organizations.selectAll();
 		}
 
 		return await Queries.organizations.selectOrganizationsOnUser({
 			id: user.id,
 		});
+	}, {
+		isAuth: true
 	})
 	.patch(
 		"/",
@@ -51,36 +53,25 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 				name: t.Optional(Schema.insert.organizations.name),
 				id: Schema.select.organizations.id,
 			}),
+			isAuth: true
 		},
 	)
 	.post(
 		"/",
-		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to create organizations",
-				);
-			}
-
+		async ({ body }) => {
 			return await Queries.organizations.create(body);
 		},
 		{
 			body: t.Object({
 				name: Schema.insert.organizations.name,
 			}),
+			isSuperAdmin: true
+
 		},
 	)
 	.delete(
 		"/",
-		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to delete organizations",
-				);
-			}
-
+		async ({ body }) => {
 			const result = await Queries.organizations.delete({ id: body.id });
 
 			if (result === undefined) {
@@ -96,5 +87,6 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			body: t.Object({
 				id: Schema.select.organizations.id,
 			}),
+			isSuperAdmin: true
 		},
 	);
