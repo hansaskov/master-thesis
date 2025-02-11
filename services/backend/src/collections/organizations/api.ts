@@ -95,10 +95,10 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 		},
 	)
 	.post(
-		"/session",
+		"/cookie",
 		({ cookie, body: { organizationId }, session }) => {
 			setSessionTokenCookie(
-				cookie.sessionId,
+				cookie.organizationId,
 				organizationId,
 				session.expires_at,
 			);

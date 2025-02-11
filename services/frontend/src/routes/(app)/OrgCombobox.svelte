@@ -8,9 +8,22 @@
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import { page } from '$app/state';
 	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { api } from '@/api';
+	import { Previous } from 'runed';
 
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
+
+	const previousOrganizationId = new Previous(() => page.params.organizationId);
+
+	// Update organizationId cookie
+	$effect(() => {
+		if (page.params.organizationId && page.params.organizationId != previousOrganizationId.current) {
+			api.organizations.cookie.post({
+				organizationId: page.params.organizationId
+			})
+		}
+	})
 </script>
 
 {#if page.params.organizationId}
