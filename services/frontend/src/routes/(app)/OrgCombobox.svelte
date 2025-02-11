@@ -18,12 +18,15 @@
 
 	// Update organizationId cookie
 	$effect(() => {
-		if (page.params.organizationId && page.params.organizationId != previousOrganizationId.current) {
+		if (
+			page.params.organizationId &&
+			page.params.organizationId != previousOrganizationId.current
+		) {
 			api.organizations.cookie.post({
 				organizationId: page.params.organizationId
-			})
+			});
 		}
-	})
+	});
 </script>
 
 {#if page.params.organizationId}

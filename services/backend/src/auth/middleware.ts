@@ -1,6 +1,11 @@
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
-import type { Session, User } from "$collections/types";
+import type {
+	Session,
+	User,
+	UserToOrganizationNew,
+	UserToOrganizationUpdate,
+} from "$collections/types";
 import Elysia, { error } from "elysia";
 import { setSessionTokenCookie, validateSessionToken } from "./lucia";
 
@@ -81,11 +86,11 @@ export const authMiddleware = new Elysia()
 		},
 		isOrganizationAdmin: {
 			async resolve({ cookie: { sessionId, organizationId } }) {
-				if (!sessionId.value) {
+				if (sessionId.value === undefined) {
 					return error("Bad Request", "sessionId is required in your cookies");
 				}
 
-				if (!organizationId.value) {
+				if (organizationId.value === undefined) {
 					return error(
 						"Bad Request",
 						"organizationId is required in your cookies",
@@ -98,26 +103,35 @@ export const authMiddleware = new Elysia()
 					return error("Unauthorized", "You session has expired");
 				}
 
-				const organization = await Queries.usersToOrganizations.select({
-					user_id: user.id,
+				let relation: UserToOrganizationUpdate = {
 					organization_id: organizationId.value,
-				});
+					user_id: user.id,
+				};
 
-				if (!organization) {
-					return error(
-						"Unauthorized",
-						"You do not have access to this organization",
-					);
+				if (user.is_superadmin === false) {
+					const r = await Queries.usersToOrganizations.select({
+						user_id: user.id,
+						organization_id: organizationId.value,
+					});
+
+					if (!r) {
+						return error(
+							"Bad Request",
+							"User has no relation that organization",
+						);
+					}
+
+					if (relation.role !== "Admin") {
+						return error(
+							"Unauthorized",
+							"Only organization admins are allowed to edit this organization",
+						);
+					}
+
+					relation = r;
 				}
 
-				if (organization.role !== "Admin") {
-					return error(
-						"Unauthorized",
-						"Only admins are allowed to edit this organization",
-					);
-				}
-
-				return { user, session, organization };
+				return { user, session, relation };
 			},
 		},
 	})

@@ -6,23 +6,14 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Switch from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { systemStore } from '$lib/stores/systems.svelte';
+	import OrganizationSettings from './OrganizationSettings.svelte';
 
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
 	import Copy from 'lucide-svelte/icons/copy';
 	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 	import type { Types } from 'backend';
-	import type { Snippet } from 'svelte';
-
-	let { children }: { children: Snippet } = $props();
-
-	let organizationName = $state('My Organization');
-	let organizationSettings = {
-		notificationEmails: true,
-		publicProfile: false
-	};
 
 	let newSystem = $state<Types.SystemNew>();
 
@@ -45,15 +36,6 @@
 		onboardingStatus:
 			onboardingInvitations.find((invite) => invite.email === user.email)?.status || 'Not Invited'
 	}));
-
-	function updateOrganizationName() {
-		console.log('Organization name updated:', organizationName);
-	}
-
-	function toggleSetting(settingKey: keyof typeof organizationSettings) {
-		organizationSettings[settingKey] = !organizationSettings[settingKey];
-		console.log(`Setting ${settingKey} updated to`, organizationSettings[settingKey]);
-	}
 
 	function addUser() {
 		if (newUserEmail) {
@@ -205,51 +187,7 @@
 			</Card.Content>
 		</Card.Root>
 
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Organization Settings</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<form
-					onsubmit={(e) => {
-						e.preventDefault();
-						updateOrganizationName();
-					}}
-				>
-					<Label for="org-name">Organization Name</Label>
-					<div class="mt-2 flex gap-2">
-						<Input id="org-name" bind:value={organizationName} class="mb-4" />
-						<Button type="submit">Update</Button>
-					</div>
-				</form>
-				<div class="mt-6 space-y-4">
-					<div class="flex items-center justify-between">
-						<div>
-							<Label>Notification Emails</Label>
-							<p class="text-sm text-muted-foreground">
-								Receive email notifications for activity in your organization
-							</p>
-						</div>
-						<Switch.Root
-							checked={organizationSettings.notificationEmails}
-							onclick={() => toggleSetting('notificationEmails')}
-						/>
-					</div>
-					<div class="flex items-center justify-between">
-						<div>
-							<Label>Public Profile</Label>
-							<p class="text-sm text-muted-foreground">
-								Allow your organization profile to be publicly visible
-							</p>
-						</div>
-						<Switch.Root
-							checked={organizationSettings.publicProfile}
-							onclick={() => toggleSetting('publicProfile')}
-						/>
-					</div>
-				</div>
-			</Card.Content>
-		</Card.Root>
+		<OrganizationSettings />
 
 		<Card.Root>
 			<Card.Header>
@@ -301,9 +239,5 @@
 				{/if}
 			</Card.Content>
 		</Card.Root>
-		<!--Bottom Padding-->
-		<main class="p-2">
-			{@render children?.()}
-		</main>
 	</div>
 </div>

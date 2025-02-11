@@ -23,29 +23,11 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 	)
 	.patch(
 		"/",
-		async ({ user, body }) => {
-			const relation = await Queries.usersToOrganizations.select({
-				user_id: user.id,
-				organization_id: body.id,
+		async ({ body, relation }) => {
+			const result = await Queries.organizations.update({
+				id: relation.organization_id,
+				name: body.name,
 			});
-
-			if (!user.is_superadmin) {
-				if (!relation) {
-					return error(
-						"Unauthorized",
-						"You do not have access to this organization",
-					);
-				}
-
-				if (relation.role !== "Admin") {
-					return error(
-						"Unauthorized",
-						"Only admins are allowed to edit this organization",
-					);
-				}
-			}
-
-			const result = await Queries.organizations.update(body);
 
 			if (result === undefined) {
 				return error("Not Found", "Organization not found");
@@ -54,11 +36,10 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 			return result;
 		},
 		{
+			isOrganizationAdmin: true,
 			body: t.Object({
 				name: t.Optional(Schema.insert.organizations.name),
-				id: Schema.select.organizations.id,
 			}),
-			isAuth: true,
 		},
 	)
 	.post(
