@@ -1,25 +1,25 @@
-import { swagger } from "@elysiajs/swagger";
-import { Elysia, error, t } from "elysia";
-import { authRoutes } from "./auth/routes";
-import { readings } from "./db/tables/readings/api";
-import { treaty } from '@elysiajs/eden'
-
-const api = new Elysia({ prefix: "/api" }).use(authRoutes).use(readings);
-
-const app = new Elysia({ precompile: true })
-	.use(swagger({ path: "/api/swagger" }))
-	.use(api)
-	.listen(process.env.PORT as string);
-
-console.log(`🦊 Server started at ${app.server?.url.origin}`);
+import cluster from "node:cluster";
+import { availableParallelism } from "node:os";
+import process from "node:process";
+import { app } from "./server";
 
 export type App = typeof app;
+export type * as Types from "$collections/types";
 
-const client = treaty<App>('localhost:3000').api
+if (cluster.isPrimary) {
+	console.log(`Primary ${process.pid} is running`);
 
-client.latest_reading.get({
-	query: {
-		name: "test",
-		system_id: "test"
+	// Start N workers for the number of CPUs
+	const numberOfThreads = Math.ceil(availableParallelism() / 2);
+	for (let i = 0; i < numberOfThreads; i++) {
+		cluster.fork();
 	}
-})
+
+	cluster.on("exit", (worker) => {
+		console.log(`worker ${worker.process.pid} died`);
+		process.exit(1);
+	});
+} else {
+	app.listen(process.env.PORT as string);
+	console.log(`🦊 Worker ${process.pid} started at ${app.server?.url.origin}`);
+}

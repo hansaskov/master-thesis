@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Chart, { type ChartConfiguration, type ChartData, type ChartDataset } from 'chart.js/auto';
+	import Chart, { type ChartConfiguration, type ChartDataset } from 'chart.js/auto';
 
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
 
-	let chartCanvas: HTMLCanvasElement;
+	let chartCanvas = $state<HTMLCanvasElement>();
 
 	interface DataSet {
 		dataY: number[];
@@ -13,14 +13,17 @@
 		unit?: string;
 	}
 
-	export let dataX: string[];
-	export let dataSets: DataSet[];
-    export let min: number | undefined = undefined;
-    export let max: number | undefined = undefined;
+	interface Props {
+		dataX: string[];
+		dataSets: DataSet[];
+		min?: number | undefined;
+		max?: number | undefined;
+	}
 
+	let { dataX, dataSets, min = undefined, max = undefined, ...rest }: Props = $props();
 
 	onMount(() => {
-		const ctx = chartCanvas.getContext('2d');
+		const ctx = chartCanvas?.getContext('2d');
 		if (ctx) {
 			const primaryColor = getComputedStyle(document.documentElement)
 				.getPropertyValue('--primary')
@@ -54,13 +57,12 @@
 							display: false
 						}
 					},
-                    scales: {
-                        y: {
-                            min: min,
-                            max: max,
-                        }
-                    }
-
+					scales: {
+						y: {
+							min: min,
+							max: max
+						}
+					}
 				}
 			};
 
@@ -69,19 +71,17 @@
 	});
 </script>
 
-<div {...$$restProps}>
+<div {...rest}>
 	<div class="my-4 flex flex-wrap justify-center gap-2">
 		{#each dataSets as { label }, i}
 			<div class="flex">
-
-                {#if i === 0}
-                    <Badge class="h-4 w-12 bg-primary/60"/>
-                {:else if i===1}
-                    <Badge class="h-4 w-12 bg-primary/20"/>
-                {:else if i === 2 }
-                    <Badge class="h-4 w-12 bg-primary/100"/>        
-                {/if}   
-
+				{#if i === 0}
+					<Badge class="h-4 w-12 bg-primary/60" />
+				{:else if i === 1}
+					<Badge class="h-4 w-12 bg-primary/20" />
+				{:else if i === 2}
+					<Badge class="h-4 w-12 bg-primary/100" />
+				{/if}
 
 				<Label class="ml-2">{label}</Label>
 			</div>

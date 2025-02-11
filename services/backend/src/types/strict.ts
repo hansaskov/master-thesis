@@ -18,10 +18,14 @@ type Prettify<T> = {
  * type ReducedUser = StrictOmit<User, ["id", "age"]>;
  * // Equivalent to: { name: string; email: string; }
  */
-export type StrictOmit<T, K extends keyof T | readonly (keyof T)[]> = Prettify<
-	Omit<T, K extends readonly (keyof T)[] ? K[number] : K>
+export type StrictOmit<T, K extends keyof T> = Prettify<Omit<T, K>>;
+
+export type StrictPick<T, K extends keyof T> = Prettify<Pick<T, K>>;
+
+export type StrictPartial<T, K extends keyof T> = Prettify<
+	Partial<Pick<T, K>> & Omit<T, K>
 >;
 
-export type StrictPick<T, K extends keyof T | readonly (keyof T)[]> = Prettify<
-	Pick<T, K extends readonly (keyof T)[] ? K[number] : K>
+export type PartialExcept<T, K extends keyof T> = Prettify<
+	Partial<Omit<T, K>> & Pick<T, K>
 >;

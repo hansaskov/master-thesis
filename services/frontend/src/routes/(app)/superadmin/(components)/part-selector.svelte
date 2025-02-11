@@ -1,36 +1,22 @@
 <script lang="ts">
-	import Check from "svelte-radix/Check.svelte";
-	import CaretSort from "svelte-radix/CaretSort.svelte";
-	import { tick } from "svelte";
+	import Check from 'svelte-radix/Check.svelte';
+	import CaretSort from 'svelte-radix/CaretSort.svelte';
 
-	import { cn } from "$lib/utils.js";
+	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button';
-	import * as Command from "$lib/components/ui/command";
-	import * as Popover from "$lib/components/ui/popover";
-	import { partsStore, type Part } from "$lib/stores/parts.svelte";
+	import * as Command from '$lib/components/ui/command';
+	import * as Popover from '$lib/components/ui/popover';
+	import { partsStore } from '$lib/stores/parts.svelte';
 
-
-	let partsData = partsStore;
-	let open = false;
-
-	// We want to refocus the trigger button when the user selects
-	// an item from the list so users can continue navigating the
-	// rest of the form with the keyboard.
-	function closeAndFocusTrigger(triggerId: string) {
-		open = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
+	let isOpen = $state(false);
 </script>
 
-<Popover.Root bind:open let:ids>
-	<Popover.Trigger asChild let:builder>
+<Popover.Root bind:open={isOpen}>
+	<Popover.Trigger>
 		<Button
-			builders={[builder]}
 			variant="outline"
 			role="combobox"
-			aria-expanded={open}
+			aria-expanded={isOpen}
 			class="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
 		>
 			{partsStore.selectedParts}
@@ -47,16 +33,11 @@
 						<Command.Item
 							class="aria-selected:bg-primary aria-selected:text-primary-foreground"
 							onSelect={() => {
-								closeAndFocusTrigger(ids.trigger);
+								isOpen = !isOpen;
 							}}
 						>
 							{part.name}
-							<Check
-								class={cn(
-									"ml-auto h-4 w-4",
-									part.selected ? "opacity-100" : "opacity-0"
-								)}
-							/>
+							<Check class={cn('ml-auto h-4 w-4', part.selected ? 'opacity-100' : 'opacity-0')} />
 						</Command.Item>
 					{/each}
 				</Command.Group>

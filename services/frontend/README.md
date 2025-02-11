@@ -1,24 +1,13 @@
-# Frontend
+# Single Page Application with sveltekit
 
-1. Bun
-2. SvelteKit
-3. Tailwind
-4. Shadcn-svelte
+This project is made to work in a monorepo with elysia and sveltekit.
 
-## Start dev server
+For development purposes please see the [README.MD](../../README.MD) file.
 
-1. Install Bun for you OS from [here](https://bun.sh/)
-
-2. Install dependencies
+## Developing
 
 ```bash
-bun install
-```
-
-3. Start the dev server
-
-```bash
-bun run dev
+bun dev
 ```
 
 ## Building
@@ -29,8 +18,4 @@ To create a production version of your app:
 bun run build
 ```
 
-You can preview the production build with `
-
-```bash
-bun run preview
-```
+You can preview the production build with `bun preview`.

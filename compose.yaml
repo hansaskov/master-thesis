@@ -1,81 +1,57 @@
+include: 
+  - ./services/caddy/compose.yaml
+  - ./services/timescaledb/compose.yaml
+  - ./services/portainer/compose.yaml
+
 services:
-
-  ## The entrypoint of our app. This service will proxy requests to all other services. 
-  caddy:
-    profiles: [proxy]
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - caddy-data:/data
-      - caddy-config:/config
-      - /var/run/docker.sock:/var/run/docker.sock
-    
-
-  ## The frontend service will build the frontend and then serve the files using caddy.
   frontend: 
     profiles: [stateless]
-    build: services/frontend
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: ./services/frontend/dockerfile
+    networks:
+      - proxy-network
     labels:
       caddy: "${INTERFACE_FQDN}"
       caddy.encode: zstd gzip
-      caddy.reverse_proxy: "{{upstreams 8080}}"
+      caddy.reverse_proxy: "{{upstreams 5173}}"
 
-  ## The Backend will host our REST JSON api. Our spa will use this for data communication.
   backend: 
     profiles: [stateless]
-    build: services/backend
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: ./services/backend/Dockerfile
+    networks:
+      - default
+      - proxy-network
     environment:
+      - INTERFACE_FQDN=${INTERFACE_FQDN}
       - DATABASE_URL=${DATABASE_URL}
-      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
-      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
       - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
       - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID}
       - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET}
-      - MICROSOFT_REDIRECT_URI=${MICROSOFT_REDIRECT_URI}
       - PROD=${PROD}
     labels:
       caddy: "${INTERFACE_FQDN}"
-      caddy.handle: /api/*
-      caddy.handle.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_0: /api/*
+      caddy.handle_0.reverse_proxy: "{{upstreams 3000}}"
+      caddy.handle_1: /.well-known/*
+      caddy.handle_1.reverse_proxy: "{{upstreams 3000}}"
+    depends_on:
+      timescaledb: 
+        condition: service_healthy
 
-  ## A postgres database optimised for timeseries data
-  timescaledb:
-    profiles: [stateful]    
-    image: timescale/timescaledb:latest-pg17
-    restart: always
-    ports: 
-      - "5432:5432"
+## Apply migration at startup
+  migrate:
+    profiles: [migrate]   
+    build:
+      context: .
+      dockerfile: ./services/backend/develop.dockerfile
+    command: bun db:migrate
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    volumes:
-      - timescaledb-data:/var/lib/postgresql/data
-    
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-
-  ## Production insights
-  dozzle:
-    profiles: [prod]   
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    labels:
-      caddy: "${DOZZLE_FQDN}"
-      caddy.reverse_proxy: "{{upstreams 8080}}"
-
-volumes:
-  caddy-data:
-  caddy-config:
-  timescaledb-data:
-
-
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      timescaledb: 
+        condition: service_healthy

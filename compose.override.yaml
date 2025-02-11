@@ -1,0 +1,56 @@
+services:
+
+  caddy:
+    ports:
+      - "3000:3000"
+
+  ## Frontend development dockerfile and sync the files automatically
+  frontend:
+    build: 
+      context: .
+      dockerfile: ./services/frontend/develop.dockerfile
+    develop: 
+      watch: 
+        - action: sync
+          path: ./services/frontend
+          target: /app/services/frontend
+        - action: rebuild
+          path: ./services/frontend/package.json
+
+  ## Backend development dockerfile and sync the files automatically
+  backend:
+    build: 
+      context: .
+      dockerfile: ./services/backend/develop.dockerfile
+    command: bun dev
+    develop:
+      watch: 
+        - action: sync
+          path: ./services/backend
+          target: /app/services/backend
+        - action: rebuild
+          path: ./services/backend/package.json
+
+## Direct access to the db
+  timescaledb:
+    ports:
+    - "5432:5432"
+
+  minio:
+    profiles: [stateful]
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # MinIO browser UI
+      - "9001:9001" # MinIO API
+    environment:
+      MINIO_ACCESS_KEY: ${S3_ACCESS_KEY_ID}
+      MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+
+volumes:
+  minio_data:
+        

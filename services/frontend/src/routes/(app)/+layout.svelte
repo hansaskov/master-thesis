@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-
 	import Newspaper from 'lucide-svelte/icons/newspaper';
 	import Wrench from 'lucide-svelte/icons/wrench';
 	import House from 'lucide-svelte/icons/house';
@@ -11,61 +9,83 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
-	import Settings from '$lib/components/Settings.svelte'
-	import NavItem from '$lib/components/NavItem.svelte';
-	import type { ComponentType } from 'svelte';
-	import OrgCombobox from './systems/OrgCombobox.svelte';
+	import Settings from '$lib/components/Settings.svelte';
+
+	import OrgCombobox from './OrgCombobox.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
+	import { userStore } from '$lib/stores/user.svelte';
+	import { organizationStore } from '$lib/stores/organization.svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 
-	type NavItemType = {
-		name: string;
-		href: string;
-		icon: ComponentType;
-	};
+	function navigateToSystems() {
+		if (organizationStore.currentOrganization) {
+			goto(`/organization/${organizationStore.currentOrganization.id}/systems`);
+		} else if (organizationStore.organizations.length > 0) {
+			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
+		} else {
+			goto(`/organization`);
+		}
+	}
 
-	const navItems: NavItemType[] = [
-		{ name: 'News Feed', icon: Newspaper, href: '/newsfeed' },
-		{ name: 'Search', icon: Search, href: '/newsfeed' },
-	];
+	const { children } = $props();
 
-	const superAdmin: NavItemType = { name: 'Super Admin', icon: UserRoundCog, href: '/superadmin'}
-	const settings: NavItemType = { name: 'Support', icon: Wrench, href: '/support' };
-
-	$: pathname = $page.url.pathname;
-	$: breadcrumbs = pathname
-		.split('/')
-		.filter(Boolean)
-		.map((segment, index, array) => ({
-			href: `/${array.slice(0, index + 1).join('/')}`,
-			label: segment.charAt(0).toUpperCase() + segment.slice(1),
-			isLast: index === array.length - 1,
-		}));
+	let breadcrumbs = $derived.by(() =>
+		page.url.pathname
+			.split('/')
+			.filter(Boolean)
+			.map((segment, index, array) => ({
+				href: `/${array.slice(0, index + 1).join('/')}`,
+				label: segment.charAt(0).toUpperCase() + segment.slice(1),
+				isLast: index === array.length - 1
+			}))
+	);
 </script>
-
-
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
 	<!-- Left sidebar (hidden on small screens) -->
 	<aside class="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 py-4">
-			<a href="/systems">
-				<House class="w-5 h-5"/>
+			<button
+				onclick={navigateToSystems}
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
+				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
+			</button>
+			<a
+				href="/newsfeed"
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
+				<Newspaper class="w-5 h-5" />
 			</a>
-			{#each navItems as item}
-				<NavItem props={item} />
-			{/each}
+			<a
+				href="/"
+				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+			>
+				<Search class="w-5 h-5" />
+			</a>
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-					<NavItem props={superAdmin} />
+				<a
+					href="/superadmin"
+					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+				>
+					<UserRoundCog class="w-5 h-5" />
+				</a>
 			</nav>
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-					<NavItem props={settings} />
+				<a
+					href="/support"
+					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+				>
+					<Wrench class="w-5 h-5" />
+				</a>
 			</nav>
 		</div>
 	</aside>
@@ -76,28 +96,26 @@
 			class="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6"
 		>
 			<!-- Breadcrumb and other header elements -->
+
 			<Breadcrumb.Root>
 				<Breadcrumb.List>
 					<Breadcrumb.Page>
 						<OrgCombobox></OrgCombobox>
 					</Breadcrumb.Page>
+					{#if organizationStore.currentOrganization}
 						<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
-						{#each breadcrumbs as crumb}
-							{#if !crumb.isLast}
-								<Breadcrumb.Link
-									class="hidden sm:flex"
-									href={crumb.href}
-								>
-									{crumb.label}
-								</Breadcrumb.Link>
-							{:else}
-								<Breadcrumb.Page class="hidden sm:flex">{crumb.label}</Breadcrumb.Page>
-							{/if}
-								
-							{#if !crumb.isLast}
-								<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
-							{/if}
-						{/each}
+					{/if}
+					{#each breadcrumbs.slice(2) as crumb}
+						{#if !crumb.isLast}
+							<Breadcrumb.Link class="hidden sm:flex" href={crumb.href}>
+								{crumb.label}
+							</Breadcrumb.Link>
+
+							<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
+						{:else}
+							<Breadcrumb.Page class="hidden sm:flex">{crumb.label}</Breadcrumb.Page>
+						{/if}
+					{/each}
 				</Breadcrumb.List>
 			</Breadcrumb.Root>
 
@@ -114,27 +132,27 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/settings">
-							<UserRoundCog class="h-4 w-4 mr-2" />
-							User Settings
+						<DropdownMenu.Item>
+							<a href="/settings" class="flex items-center gap-2">
+								<UserRoundCog class="h-4 w-4 mr-2" />
+								User Settings
+							</a>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={toggleMode}>
-							<Sun
-								class="h-4 w-4 rotate-0 scale-100 dark:scale-0 mr-2"
-							/>
-							<Moon
-								class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 mr-2"
-							/>
+						<DropdownMenu.Item onclick={toggleMode}>
+							<Sun class="h-4 w-4 rotate-0 scale-100 dark:scale-0 mr-2" />
+							<Moon class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 mr-2" />
 							<span>Toggle theme</span>
 						</DropdownMenu.Item>
-						<DropdownMenu.Item href="/support">
-							<Wrench class="h-4 w-4 mr-2" />
-							Support
+						<DropdownMenu.Item>
+							<a href="/support" class="flex items-center gap-2">
+								<Wrench class="h-4 w-4 mr-2" />
+								Support
+							</a>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item href="/">
+						<DropdownMenu.Item onclick={() => userStore.logout()}>
 							<LogOut class="h-4 w-4 mr-2" />
-							Logout
+							<p>Logout</p>
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
@@ -143,35 +161,37 @@
 
 		<!--Bottom Padding-->
 		<main class="p-4 pb-[5rem]">
-			<slot></slot>
+			{@render children()}
 		</main>
 	</div>
 
 	<!-- Bottom navbar (only visible on small screens) -->
-	<aside class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden">
+	<aside
+		class="fixed inset-x-0 bottom-0 z-10 flex w-full flex-col border-t bg-background sm:hidden"
+	>
 		<nav class="flex flex-row items-center justify-around gap-4 px-2 py-2">
-			<a href="/systems" class="flex flex-col items-center justify-center">
-				<House class="w-6 h-6"/>
+			<button onclick={navigateToSystems} class="flex flex-col items-center justify-center">
+				<House class="w-6 h-6" />
 				Home
-				<span class="sr-only">Dashboard</span>
-			</a>
+				<span class="sr-only">Home</span>
+			</button>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Newspaper />
 				News
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">News</span>
 			</a>
 
 			<a href="/newsfeed" class="flex flex-col items-center justify-center">
 				<Search />
 				Search
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">Search</span>
 			</a>
 
 			<a href="/support" class="flex flex-col items-center justify-center">
 				<Wrench />
 				Support
-				<span class="sr-only">Dashboard</span>
+				<span class="sr-only">Support</span>
 			</a>
 		</nav>
 	</aside>

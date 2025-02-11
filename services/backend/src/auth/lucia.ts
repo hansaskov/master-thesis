@@ -1,10 +1,12 @@
+import { Queries } from "$collections/queries";
+import type { Session, User } from "$collections/types";
 import { sha256 } from "@oslojs/crypto/sha2";
-import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
-import { t } from "elysia";
+import {
+	encodeBase32LowerCaseNoPadding,
+	encodeHexLowerCase,
+} from "@oslojs/encoding";
 import type { Cookie } from "elysia/cookies";
-import { Queries } from "../db/model";
-import type { Session, User } from "../db/tables";
-import { environment } from "../environment";
+import { environment } from "../config/environment";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
@@ -13,7 +15,10 @@ export function generateSessionToken(): string {
 	return token;
 }
 
-export async function createSession(token: string, user_id: string): Promise<Session> {
+export async function createSession(
+	token: string,
+	user_id: string,
+): Promise<Session> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: Session = {
 		id: sessionId,
@@ -24,8 +29,12 @@ export async function createSession(token: string, user_id: string): Promise<Ses
 	return session;
 }
 
-export type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
-export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
+export type SessionValidationResult =
+	| { session: Session; user: User }
+	| { session: null; user: null };
+export async function validateSessionToken(
+	token: string,
+): Promise<SessionValidationResult> {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const result = await Queries.sessions.selectWithUser(sessionId);
 
@@ -49,7 +58,11 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 	await Queries.sessions.delete(sessionId);
 }
 
-export function setSessionTokenCookie(cookie: Cookie<string | undefined>, sessionToken: string, expiresAt?: Date) {
+export function setSessionTokenCookie(
+	cookie: Cookie<string | undefined>,
+	sessionToken: string,
+	expiresAt?: Date,
+) {
 	cookie.cookie = {
 		value: sessionToken,
 		httpOnly: true,
@@ -65,7 +78,9 @@ export function deleteSessionTokenCookie(cookie: Cookie<string>) {
 	cookie.remove();
 }
 
-export async function Authenticate(cookie: Cookie<string>): Promise<SessionValidationResult> {
+export async function Authenticate(
+	cookie: Cookie<string>,
+): Promise<SessionValidationResult> {
 	const token = cookie.value;
 
 	const { session, user } = await validateSessionToken(token);

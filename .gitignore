@@ -8,10 +8,9 @@
 /services/ingest/local_readings.db
 
 *backend.exe
+backup.sql*
 
-# Logs
-package.json
-bun.lockb
+.env
 
 logs
 _.log
@@ -112,6 +111,8 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.env.preview
+.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 

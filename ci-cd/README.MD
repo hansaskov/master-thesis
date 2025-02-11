@@ -1,4 +1,8 @@
-# Continuous Integration and Continuous Deployment (CI/CD)
+# DEBRICATED
+
+#  Continuous Integration and Continuous Deployment (CI/CD)
+
+
 
 Welcome to the guide on deploying services using CI/CD. This guide walks you through key steps such as generating SSH keys, setting up Hetzner servers, and configuring NixOS for deployment. Follow along to simplify and automate the deployment process.
 
@@ -141,4 +145,4 @@ This command will build and start the containers defined in your `docker-compose
 
 ---
 
-That’s it! You’ve now set up a secure Hetzner server running NixOS, deployed your services using Docker, and locked down security to prevent unauthorized access. Feel free to tweak configurations or reach out for further clarification!
+That’s it! You’ve now set up a secure Hetzner server running NixOS, deployed your services using Docker, and locked down security to prevent unauthorized access. Feel free to tweak configurations or reach out for further clarification! 
