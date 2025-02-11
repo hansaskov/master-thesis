@@ -145,4 +145,4 @@ This command will build and start the containers defined in your `docker-compose
 
 ---
 
-That’s it! You’ve now set up a secure Hetzner server running NixOS, deployed your services using Docker, and locked down security to prevent unauthorized access. Feel free to tweak configurations or reach out for further clarification!
+That’s it! You’ve now set up a secure Hetzner server running NixOS, deployed your services using Docker, and locked down security to prevent unauthorized access. Feel free to tweak configurations or reach out for further clarification! 
