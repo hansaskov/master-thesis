@@ -1,7 +1,7 @@
 services:
   timescaledb:
     profiles: [stateful]    
-    image: timescale/timescaledb:latest-pg17
+    image: timescale/timescaledb:2.18.0-pg17
     restart: unless-stopped
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
