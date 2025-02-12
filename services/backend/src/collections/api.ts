@@ -6,6 +6,7 @@ import { partsApi } from "./parts/api";
 import { readingsApi } from "./readings/api";
 import { systemsApi } from "./systems/api";
 import { usersToOrganizationsApi } from "./users_to_organizations/api";
+import { systemModelsApi } from "./system_models/api";
 
 export const api = new Elysia({ prefix: "/api" })
 	.use(authApi)
@@ -14,4 +15,5 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(partsApi)
 	.use(readingsApi)
 	.use(systemsApi)
-	.use(usersToOrganizationsApi);
+	.use(usersToOrganizationsApi)
+	.use(systemModelsApi)

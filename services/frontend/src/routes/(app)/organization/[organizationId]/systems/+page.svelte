@@ -7,7 +7,9 @@
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
 	import { writable } from 'svelte/store';
-	import { systems } from '$lib/stores/systems';
+	// import { systems } from '$lib/stores/systems';
+	import { systemStore } from '$lib/stores/systems.svelte';
+
 
 	type System = {
 		id: string;
@@ -47,23 +49,23 @@
 		return parseInt(value) * (multipliers[unit.replace(/s$/, '') as keyof typeof multipliers] || 0);
 	};
 
-	const sortedSystems = writable<System[]>(systems);
+	// const sortedSystems = writable<System[]>(systems);
 	let currentOrder = 1;
 
 	type SortKey = 'name' | 'health' | 'status' | 'type' | 'lastCheck';
 
-	const sortSystems = (key: SortKey) => {
-		sortedSystems.update((systems) => {
-			const sorted = [...systems].sort((a, b) => {
-				if (key === 'lastCheck') {
-					return (parseTime(a[key]) - parseTime(b[key])) * currentOrder;
-				}
-				return (a[key] > b[key] ? 1 : -1) * currentOrder;
-			});
-			currentOrder *= -1;
-			return sorted;
-		});
-	};
+	// const sortSystems = (key: SortKey) => {
+	// 	sortedSystems.update((systems) => {
+	// 		const sorted = [...systems].sort((a, b) => {
+	// 			if (key === 'lastCheck') {
+	// 				return (parseTime(a[key]) - parseTime(b[key])) * currentOrder;
+	// 			}
+	// 			return (a[key] > b[key] ? 1 : -1) * currentOrder;
+	// 		});
+	// 		currentOrder *= -1;
+	// 		return sorted;
+	// 	});
+	// };
 
 	let name = 'User'; // Replace with actual user name
 
@@ -74,6 +76,8 @@
 		{ label: 'Location', key: 'type' },
 		{ label: 'Last Check', key: 'lastCheck' }
 	];
+
+	systemStore.refresh();
 </script>
 
 <div class="md:container">
@@ -90,7 +94,7 @@
 			<div class="overflow-x-auto">
 				<Table.Root>
 					<Table.Header>
-						<Table.Row>
+						<!-- <Table.Row>
 							<Table.Head class="hidden w-[100px] md:table-cell">
 								<span class="sr-only">Image</span>
 							</Table.Head>
@@ -102,10 +106,10 @@
 									</button>
 								</Table.Head>
 							{/each}
-						</Table.Row>
+						</Table.Row> -->
 					</Table.Header>
 					<Table.Body>
-						{#each $sortedSystems as system (system.id)}
+						{#each systemStore.systems as system (system.id)}
 							<Table.Row
 								onclick={() => goto(`./systems/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
@@ -134,13 +138,42 @@
 								<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
 							</Table.Row>
 						{/each}
+						<!-- {#each $sortedSystems as system (system.id)}
+							<Table.Row
+								onclick={() => goto(`./systems/${system.id}`)}
+								class="hover:bg-muted cursor-pointer"
+							>
+								<Table.Cell class="hidden md:table-cell">
+									<img
+										alt="{system.name} icon"
+										class="aspect-square rounded-md object-cover"
+										height="64"
+										src={system.image}
+										width="64"
+									/>
+								</Table.Cell>
+								<Table.Cell class="font-medium">{system.name}</Table.Cell>
+								<Table.Cell>
+									<Badge variant={getHealthVariant(system.health)}>
+										{system.health}
+									</Badge>
+								</Table.Cell>
+								<Table.Cell>
+									<Badge variant={getStatusVariant(system.status)}>
+										{system.status}
+									</Badge>
+								</Table.Cell>
+								<Table.Cell class="hidden md:table-cell">{system.type}</Table.Cell>
+								<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
+							</Table.Row>
+						{/each} -->
 					</Table.Body>
 				</Table.Root>
 			</div>
 		</Card.Content>
 		<Card.Footer class="flex justify-between">
 			<div class="text-muted-foreground text-xs">
-				Showing <strong>{$sortedSystems.length}</strong> of <strong>{systems.length}</strong> systems
+				Showing <strong>{systemStore.systems.length}</strong> of <strong>{systemStore.systems.length}</strong> systems
 			</div>
 			<Button href="/systems" variant="outline" size="sm">
 				View All Systems

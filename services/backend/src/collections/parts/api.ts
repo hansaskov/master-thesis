@@ -1,10 +1,10 @@
-import { AuthService } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
+import { authMiddleware } from "$auth/middleware";
 
 export const partsApi = new Elysia({ prefix: "parts" })
-	.use(AuthService)
+	.use(authMiddleware)
 	.get("/", async ({ user }) => {
 		if (!user.is_superadmin) {
 			return error(
@@ -55,6 +55,36 @@ export const partsApi = new Elysia({ prefix: "parts" })
 		{
 			body: t.Object({
 				name: Schema.insert.parts.name,
+			}),
+		},
+	)
+	.post(
+		"/system_models",
+		async ({ user, body }) => {
+			if (!user.is_superadmin) {
+				return error(
+					"Unauthorized",
+					"Only superadmins are allowed to assign parts to system models",
+				);
+			}
+			try {
+				return await Queries.part.assignToSystemModel(body);
+			  } catch (err) {
+				if (err && typeof err === 'object' && 'code' in err) {
+					if (err.code === '23505') {
+					  return error(
+						"Conflict",
+						"This part is already assigned to this system model"
+					  );
+					}
+				}
+				throw err;
+			  }
+		},
+		{
+			body: t.Object({
+				part_id: Schema.select.part.id,
+				system_model_id: Schema.select.part.id
 			}),
 		},
 	)

@@ -3,6 +3,7 @@ import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
 import { eq } from "drizzle-orm";
 import { parts } from "./schema";
+import { partsToSystemModels } from "../parts_to_system_models/schema";
 
 export const partQueries = {
 	delete: async ({ id }: StrictPick<Types.Part, "id">) =>
@@ -25,4 +26,10 @@ export const partQueries = {
 			.returning()
 			.then((v) => v.at(0)),
 	selectAll: async () => await db.select().from(parts),
+	assignToSystemModel: async ({ part_id, system_model_id }: Types.PartToSystemModelNew) =>
+		await db
+			.insert(partsToSystemModels)
+			.values({ part_id, system_model_id })
+			.returning()
+			.then((v) => v[0]),
 };

@@ -134,5 +134,48 @@ export const authMiddleware = new Elysia()
 				return { user, session, relation };
 			},
 		},
+		isOrganization: {
+			async resolve({ cookie: { sessionId, organizationId } }) {
+				if (sessionId.value === undefined) {
+					return error("Bad Request", "sessionId is required in your cookies");
+				}
+
+				if (organizationId.value === undefined) {
+					return error(
+						"Bad Request",
+						"organizationId is required in your cookies",
+					);
+				}
+
+				const { user, session } = await validateSessionToken(sessionId.value);
+
+				if (!session) {
+					return error("Unauthorized", "You session has expired");
+				}
+
+				let relation: UserToOrganizationUpdate = {
+					organization_id: organizationId.value,
+					user_id: user.id,
+				};
+
+				if (user.is_superadmin === false) {
+					const r = await Queries.usersToOrganizations.select({
+						user_id: user.id,
+						organization_id: organizationId.value,
+					});
+
+					if (!r) {
+						return error(
+							"Bad Request",
+							"User has no relation that organization",
+						);
+					}
+
+					relation = r;
+				}
+
+				return { user, session, relation };
+			},
+		},
 	})
 	.as("plugin");

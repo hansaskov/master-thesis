@@ -21,6 +21,10 @@
 	import { systemStore } from '$lib/stores/systems.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import SpareParts from './SpareParts.svelte';
+	import { systemModelStore } from '$lib/stores/system-models.svelte';
+	import CaretSort from 'svelte-radix/CaretSort.svelte';
+
+	let isOpen = $state(false);
 
 	let newOrganization = $state<Types.OrganizationNew>({
 		name: ''
@@ -49,33 +53,24 @@
 	$inspect(selectedOrg);
 
 	type SystemModelType = Types.SystemNew['system_model'];
+	
+	let selectedType = $state('');
 
-	const systemModels: Array<{ value: SystemModelType; label: string }> = [
-		{ value: 'VisioPointer', label: 'VisioPointer' },
-		{ value: 'VisioLine', label: 'VisioLine' },
-		{ value: 'SmartInspector', label: 'SmartInspector' },
-		{ value: '360 Inspector', label: '360 Inspector' },
-		{ value: 'VisioOne', label: 'VisioOne' },
-		{ value: 'IML-Inspector', label: 'IML-Inspector' }
-	];
-
-	let selected = $state('');
-
-	const triggerContent = $derived(
-		systemModels.find((v) => v.value === selected)?.label ?? 'Select a fruit'
-	);
-
-	$inspect(selected);
+	$inspect(selectedType);
 
 	let newSystem = $state<Types.SystemNew>({
 		name: '',
 		organization_id: '',
-		system_model: 'VisioPointer'
+		system_model: ''
 	});
 
 	$effect(() => {
 		newSystem.organization_id = selectedOrg;
 	});
+
+	$effect(() => {
+		newSystem.system_model = selectedType
+	})
 
 	function removeModel(index: number) {
 		models = models.filter((_, i) => i !== index);
@@ -90,6 +85,8 @@
 	}
 
 	organizationStore.refresh();
+	let currentOrg = organizationStore.currentOrganization
+	systemModelStore.refresh();
 </script>
 
 <div class="md:container">
@@ -182,7 +179,7 @@
 			</Card.Header>
 			<Card.Content>
 				<div class="mb-6">
-					<Label for="new-model">Add New Vision System</Label>
+					<Label for="new-model">Name of new Vision System</Label>
 					<form
 						onsubmit={(e) => {
 							e.preventDefault();
@@ -192,47 +189,27 @@
 						<div class="space-y-4">
 							<div class="flex gap-2">
 								<Input placeholder="Enter name" bind:value={newSystem.name} />
-								<PartSelector />
-							</div>
-							<Select.Root type="single" bind:value={selected}>
-								<Select.Trigger class="w-[180px]">
-									{triggerContent}
-								</Select.Trigger>
-								<Select.Content>
-									<Select.Group>
-										{#each systemModels as systemModel}
-											<Select.Item value={systemModel.value} label={systemModel.label}>
-												{systemModel.label}
-											</Select.Item>
-										{/each}
-									</Select.Group>
-								</Select.Content>
-							</Select.Root>
-							<div>
-								<Popover.Root bind:open={openCombobox}>
+								<Popover.Root>
 									<Popover.Trigger>
 										<Button
 											variant="outline"
 											role="combobox"
-											aria-expanded={openCombobox}
-											class="pr-0 pl-2 font-bold sans-serif tracking-wide text-xl sm:font-medium sm:text-sm"
+											aria-expanded={isOpen}
+											class="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
 										>
-											{#if organizationStore.currentOrganization}
-												{organizationStore.currentOrganization.name}
-												<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
-											{:else}
-												<span>Select Organization</span>
-												<ChevronsUpDown class="h-4 shrink-0 opacity-50" />
-											{/if}
+											{organizationStore.currentOrganization}
+											<CaretSort class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 										</Button>
 									</Popover.Trigger>
 									<Popover.Content class="w-[170px] p-0">
-										<Command.Root bind:value={selectedOrg}>
+										<Command.Root>
 											<Command.Input placeholder="Search organizations..." />
 											<Command.Empty>No organization found.</Command.Empty>
 											<Command.Group>
 												{#each organizationStore.organizations as org}
-													<Command.Item>
+													<Command.Item onSelect={() =>
+														{ isOpen = !isOpen; selectedOrg = org.id} 
+														}>
 														<Check
 															class={cn(
 																'mr-2 h-4 w-4',
@@ -246,74 +223,78 @@
 										</Command.Root>
 									</Popover.Content>
 								</Popover.Root>
+								<PartSelector />
 							</div>
+							<Table.Root>
+								<Table.Caption>List of Vision Systems</Table.Caption>
+								<Table.Header>
+									<Table.Row class="justify-between">
+										<Table.Head>Name</Table.Head>
+										<Table.Head class="text-right">Actions</Table.Head>
+									</Table.Row>
+								</Table.Header>
+								<Table.Body>
+									{#each systemModelStore.systemModels as model, modelIndex}
+										<Table.Row
+											onclick={()=> selectedType = model.name}
+										>
+											<Table.Cell>{model.name}</Table.Cell>
+											<Table.Cell class="text-right">
+												<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
+													{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
+												</Button>
+											</Table.Cell>
+											<Table.Cell class="text-right w-[80px]">
+												<Button variant="destructive" size="sm" onclick={() => removeModel(modelIndex)}>
+													Remove
+												</Button>
+											</Table.Cell>
+										</Table.Row>
+										<!-- Parts List (Visible when model is selected) -->
+										{#if selectedModel === modelIndex}
+											<Table.Row class="bg-muted justify-between">
+												<Table.Cell class="text-muted-foreground">Image</Table.Cell>
+												<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
+												<Table.Cell class="text-muted-foreground">Actions</Table.Cell>
+											</Table.Row>
+											<!-- {#each model.parts as part, partIndex}
+												<Table.Row>
+													<Table.Cell>
+														<img
+															src={part.image}
+															alt={part.name}
+															class="w-12 h-12 rounded-md object-cover"
+														/>
+													</Table.Cell>
+													<Table.Cell>
+														{part.name}
+													</Table.Cell>
+													<Table.Cell>
+														<Button
+															variant="destructive"
+															size="sm"
+															onclick={() => removePartFromModel(modelIndex, partIndex)}
+														>
+															Remove
+														</Button>
+													</Table.Cell>
+												</Table.Row>
+											{/each} -->
+										{/if}
+									{/each}
+								</Table.Body>
+							</Table.Root>
 							<div>
 								<Button type="submit">Create Vision System</Button>
 							</div>
 						</div>
 					</form>
 				</div>
-
-				<Table.Root>
-					<Table.Caption>List of Vision Systems</Table.Caption>
-					<Table.Header>
-						<Table.Row class="justify-between">
-							<Table.Head>Name</Table.Head>
-							<Table.Head class="text-right">Actions</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{#each models as model, modelIndex}
-							<Table.Row>
-								<Table.Cell>{model.name}</Table.Cell>
-								<Table.Cell class="text-right">
-									<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
-										{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
-									</Button>
-								</Table.Cell>
-								<Table.Cell class="text-right w-[80px]">
-									<Button variant="destructive" size="sm" onclick={() => removeModel(modelIndex)}>
-										Remove
-									</Button>
-								</Table.Cell>
-							</Table.Row>
-							<!-- Parts List (Visible when model is selected) -->
-							{#if selectedModel === modelIndex}
-								<Table.Row class="bg-muted justify-between">
-									<Table.Cell class="text-muted-foreground">Image</Table.Cell>
-									<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
-									<Table.Cell class="text-muted-foreground">Actions</Table.Cell>
-								</Table.Row>
-								{#each model.parts as part, partIndex}
-									<Table.Row>
-										<Table.Cell>
-											<img
-												src={part.image}
-												alt={part.name}
-												class="w-12 h-12 rounded-md object-cover"
-											/>
-										</Table.Cell>
-										<Table.Cell>
-											{part.name}
-										</Table.Cell>
-										<Table.Cell>
-											<Button
-												variant="destructive"
-												size="sm"
-												onclick={() => removePartFromModel(modelIndex, partIndex)}
-											>
-												Remove
-											</Button>
-										</Table.Cell>
-									</Table.Row>
-								{/each}
-							{/if}
-						{/each}
-					</Table.Body>
-				</Table.Root>
 			</Card.Content>
 		</Card.Root>
 
 		<SpareParts />
+
+		
 	</div>
 </div>
