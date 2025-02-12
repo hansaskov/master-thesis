@@ -57,8 +57,8 @@
 	let selectedType = $state<SystemModelType>('VisioPointer');
 
 	$inspect(selectedType);
-	
-	// TODO: 
+
+	// TODO:
 	let newSystem = $state<Types.SystemNew>({
 		name: '',
 		organization_id: '',

@@ -218,7 +218,7 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each systemStore.systems as system}
+							{#each systemStore.systems as system (system.id)}
 								<Table.Row>
 									<Table.Cell>{system.name}</Table.Cell>
 									<Table.Cell class="text-right">
