@@ -1,6 +1,6 @@
 import { Table } from "$collections/table";
 import { db } from "$db/postgres";
-import { Types } from "$types/collection";
+import type { Types } from "$types/collection";
 import { and, eq } from "drizzle-orm";
 
 export const invitesQueries = {
@@ -32,8 +32,9 @@ export const invitesQueries = {
 			.returning()
 			.then((v) => v.at(0)),
 	selectAll: async () => await db.select().from(Table.invites),
-    selectInvitesOnOrganization: async (organization: Types.OrganizationUnique) =>
-        await db.select()
-        .from(Table.invites)
-        .where(eq(Table.invites.organization_id, organization.id))
-}
+	selectInvitesOnOrganization: async (organization: Types.OrganizationUnique) =>
+		await db
+			.select()
+			.from(Table.invites)
+			.where(eq(Table.invites.organization_id, organization.id)),
+};

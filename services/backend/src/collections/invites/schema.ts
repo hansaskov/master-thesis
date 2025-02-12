@@ -1,10 +1,10 @@
+import { rolesEnum } from "$collections/users_to_organizations/schema";
 import type { PartialExcept, StrictPick } from "$types/strict";
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 import { organizations } from "../organizations/schema";
 import { users } from "../users/schema";
-import { rolesEnum } from "$collections/users_to_organizations/schema";
-import { t } from "elysia";
 
 export const invites = pgTable("invites", {
 		email: text().notNull(),
@@ -24,9 +24,8 @@ export const insertInvitesSchema = createInsertSchema(invites, {
 });
 
 export const selectInvitesSchema = createSelectSchema(invites, {
-    email: t.String({ minLength: 1, format: "email" }),
+	email: t.String({ minLength: 1, format: "email" }),
 });
-
 
 export type Invites = typeof invites.$inferSelect;
 export type InvitesNew = typeof invites.$inferInsert;

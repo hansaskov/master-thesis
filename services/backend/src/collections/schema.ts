@@ -1,6 +1,7 @@
 import { spreads } from "$types/typebox";
 import { t } from "elysia";
 import { insertFactoryAreaSchema } from "./factory_areas/schema";
+import { insertInvitesSchema, selectInvitesSchema } from "./invites/schema";
 import { insertKeysSchema, selectKeysSchema } from "./keys/schema";
 import {
 	insertOrganizationsSchema,
@@ -14,7 +15,6 @@ import { insertSystemsSchema, selectSystemsSchema } from "./systems/schema";
 import { insertUserSettingsSchema } from "./user_settings/schema";
 import { insertUserSchema, selectUserSchema } from "./users/schema";
 import { insertUserToOrganizationSchema } from "./users_to_organizations/schema";
-import { insertInvitesSchema, selectInvitesSchema } from "./invites/schema";
 
 export const Schema = {
 	insert: spreads(
@@ -30,7 +30,7 @@ export const Schema = {
 			parts: insertPartsSchema,
 			keys: insertKeysSchema,
 			usersToOrganizations: insertUserToOrganizationSchema,
-			invites: insertInvitesSchema
+			invites: insertInvitesSchema,
 		},
 		"insert",
 	),
@@ -42,7 +42,7 @@ export const Schema = {
 			systems: selectSystemsSchema,
 			part: selectPartsSchema,
 			users: selectUserSchema,
-			invites: selectInvitesSchema
+			invites: selectInvitesSchema,
 		},
 		"select",
 	),

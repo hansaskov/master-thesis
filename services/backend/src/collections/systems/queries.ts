@@ -12,11 +12,13 @@ export const systemQueries = {
 			.returning()
 			.then((v) => v[0]),
 	selectAll: async () => await db.select().from(systems),
-	selectAllOnOrgId: async (organization: StrictPick<Types.Organization, "id">) => 
+	selectAllOnOrgId: async (
+		organization: StrictPick<Types.Organization, "id">,
+	) =>
 		await db
-		.select()
-		.from(systems)
-		.where(eq(systems.organization_id, organization.id)),
+			.select()
+			.from(systems)
+			.where(eq(systems.organization_id, organization.id)),
 	delete: async ({ id }: StrictPick<Types.System, "id">) =>
 		await db
 			.delete(systems)
