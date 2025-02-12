@@ -19,6 +19,9 @@ export const users = pgTable("users", {
 export const insertUserSchema = createInsertSchema(users, {
 	id: t.String({ minLength: 12 }),
 });
+export const selectUserSchema = createInsertSchema(users, {
+	id: t.String({ minLength: 12 }),
+});
 
 export type User = typeof users.$inferSelect;
 export type UserNew = typeof users.$inferInsert;

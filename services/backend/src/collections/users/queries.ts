@@ -3,7 +3,7 @@ import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 
 import type { StrictPick } from "$types/strict";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 
 export const usersQueries = {
 	selectUniqueWithProvider: async (
@@ -18,6 +18,12 @@ export const usersQueries = {
 					eq(Table.users.provider_id, user.provider_id),
 				),
 			)
+			.then((v) => v.at(0)),
+	select: async (user: StrictPick<Types.User, "id">) =>
+		await db
+			.select()
+			.from(Table.users)
+			.where(eq(Table.users.id, user.id))
 			.then((v) => v.at(0)),
 	create: async (user: Types.UserNew) => {
 		// Check if this is the first user
@@ -36,4 +42,22 @@ export const usersQueries = {
 			.returning()
 			.then((v) => v[0]);
 	},
+	delete: async (user: StrictPick<Types.User, "id">) =>
+		await db.delete(Table.users).where(eq(Table.users.id, user.id)).returning(),
+	selectAllOnOrganization: async (
+		organization: StrictPick<Types.Organization, "id">,
+	) =>
+		await db
+			.select({
+				role: Table.usersToOrganizations.role,
+				...getTableColumns(Table.users),
+			})
+			.from(Table.users)
+			.innerJoin(
+				Table.usersToOrganizations,
+				and(
+					eq(Table.users.id, Table.usersToOrganizations.user_id),
+					eq(Table.usersToOrganizations.organization_id, organization.id),
+				),
+			),
 };
