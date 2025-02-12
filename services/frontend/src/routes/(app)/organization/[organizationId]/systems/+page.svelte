@@ -51,7 +51,7 @@
 	// const sortedSystems = writable<System[]>(systems);
 	let currentOrder = 1;
 
-	type SortKey = 'name' | 'health' | 'status' | 'type' | 'lastCheck';
+	type SortKey = 'image' | 'name' | 'health' | 'status' | 'type' | 'lastCheck';
 
 	// const sortSystems = (key: SortKey) => {
 	// 	sortedSystems.update((systems) => {
@@ -69,6 +69,7 @@
 	let name = 'User'; // Replace with actual user name
 
 	const headers: { label: string; key: SortKey }[] = [
+		{ label: 'Image', key: 'image' },
 		{ label: 'Name', key: 'name' },
 		{ label: 'Health', key: 'health' },
 		{ label: 'Status', key: 'status' },
@@ -93,19 +94,16 @@
 			<div class="overflow-x-auto">
 				<Table.Root>
 					<Table.Header>
-						<!-- <Table.Row>
-							<Table.Head class="hidden w-[100px] md:table-cell">
-								<span class="sr-only">Image</span>
-							</Table.Head>
+						<Table.Row>
 							{#each headers as { label, key }, i}
-								<Table.Head class={i > 2 ? 'hidden md:table-cell' : ''}>
-									<button onclick={() => sortSystems(key)}>
+								<Table.Head class={i > 3 ? 'hidden md:table-cell' : ''}>
+									<button>
 										{label}
 										<ArrowDownUp class="w-3 h-3 inline-block ml-1" />
 									</button>
 								</Table.Head>
 							{/each}
-						</Table.Row> -->
+						</Table.Row>
 					</Table.Header>
 					<Table.Body>
 						{#each systemStore.systems as system (system.id)}
@@ -114,19 +112,19 @@
 								onclick={() => goto(`./systems/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
+								<Table.Cell>Placeholder Image</Table.Cell>
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
-									<Badge variant='outline'>
-										Healthy
-									</Badge>
+									<!-- TODO: Make dynamic -->
+									<Badge variant="default">Healthy</Badge>
 								</Table.Cell>
 								<Table.Cell>
-									<Badge variant={getStatusVariant(system.status)}>
-										{system.status}
-									</Badge>
+									<!-- TODO: Make dynamic -->
+									<Badge variant="outline">Running</Badge>
 								</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.type}</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
+								<Table.Cell class="hidden md:table-cell">{system.system_model}</Table.Cell>
+								<!-- TODO: Make dynamic -->
+								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
 							</Table.Row>
 						{/each}
 						<!-- {#each $sortedSystems as system (system.id)}
