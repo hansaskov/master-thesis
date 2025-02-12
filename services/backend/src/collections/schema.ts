@@ -14,6 +14,7 @@ import { insertSystemsSchema, selectSystemsSchema } from "./systems/schema";
 import { insertUserSettingsSchema } from "./user_settings/schema";
 import { insertUserSchema, selectUserSchema } from "./users/schema";
 import { insertUserToOrganizationSchema } from "./users_to_organizations/schema";
+import { insertInvitesSchema, selectInvitesSchema } from "./invites/schema";
 
 export const Schema = {
 	insert: spreads(
@@ -29,6 +30,7 @@ export const Schema = {
 			parts: insertPartsSchema,
 			keys: insertKeysSchema,
 			usersToOrganizations: insertUserToOrganizationSchema,
+			invites: insertInvitesSchema
 		},
 		"insert",
 	),
@@ -40,6 +42,7 @@ export const Schema = {
 			systems: selectSystemsSchema,
 			part: selectPartsSchema,
 			users: selectUserSchema,
+			invites: selectInvitesSchema
 		},
 		"select",
 	),
