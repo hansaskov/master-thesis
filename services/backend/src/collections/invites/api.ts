@@ -18,7 +18,6 @@ export const invitesApi = new Elysia({ prefix: "invites" })
 	.delete(
 		"/",
 		async ({ user, body, relation }) => {
-			
 			const result = await Queries.invites.delete(body);
 
 			if (result === undefined) {

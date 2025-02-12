@@ -6,12 +6,14 @@ import { t } from "elysia";
 import { organizations } from "../organizations/schema";
 import { users } from "../users/schema";
 
-export const invites = pgTable("invites", {
+export const invites = pgTable(
+	"invites",
+	{
 		email: text().notNull(),
 		organization_id: text()
 			.notNull()
 			.references(() => organizations.id, { onDelete: "cascade" }),
-        inviter_id: text()
+		inviter_id: text()
 			.notNull()
 			.references(() => users.id),
 		role: rolesEnum().notNull().default("User"),
@@ -29,5 +31,5 @@ export const selectInvitesSchema = createSelectSchema(invites, {
 
 export type Invites = typeof invites.$inferSelect;
 export type InvitesNew = typeof invites.$inferInsert;
-export type InvitesUpdate = PartialExcept<Invites,"organization_id" | "email">;
-export type InvitesUnique = StrictPick<Invites,"organization_id" | "email">;
+export type InvitesUpdate = PartialExcept<Invites, "organization_id" | "email">;
+export type InvitesUnique = StrictPick<Invites, "organization_id" | "email">;

@@ -7,11 +7,12 @@ export const invitesQueries = {
 	delete: async (values: Types.InvitesUnique) =>
 		await db
 			.delete(Table.invites)
-            .where(
-                and(
-                    eq(Table.invites.organization_id, values.organization_id), 
-                    eq(Table.invites.inviter_id, values.email))
-                )
+			.where(
+				and(
+					eq(Table.invites.organization_id, values.organization_id),
+					eq(Table.invites.inviter_id, values.email),
+				),
+			)
 			.returning()
 			.then((v) => v.at(0)),
 	create: async (values: Types.InvitesNew) =>
@@ -25,10 +26,11 @@ export const invitesQueries = {
 			.update(Table.invites)
 			.set(values)
 			.where(
-                and(
-                    eq(Table.invites.organization_id, values.organization_id), 
-                    eq(Table.invites.inviter_id, values.email))
-                )
+				and(
+					eq(Table.invites.organization_id, values.organization_id),
+					eq(Table.invites.inviter_id, values.email),
+				),
+			)
 			.returning()
 			.then((v) => v.at(0)),
 	selectAll: async () => await db.select().from(Table.invites),
