@@ -10,7 +10,6 @@
 	// import { systems } from '$lib/stores/systems';
 	import { systemStore } from '$lib/stores/systems.svelte';
 
-
 	type System = {
 		id: string;
 		name: string;
@@ -110,23 +109,15 @@
 					</Table.Header>
 					<Table.Body>
 						{#each systemStore.systems as system (system.id)}
+							<!-- TODO: Load image matching the system model type. Get status based on recent readings  -->
 							<Table.Row
 								onclick={() => goto(`./systems/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
-								<Table.Cell class="hidden md:table-cell">
-									<img
-										alt="{system.name} icon"
-										class="aspect-square rounded-md object-cover"
-										height="64"
-										src={system.image}
-										width="64"
-									/>
-								</Table.Cell>
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
-									<Badge variant={getHealthVariant(system.health)}>
-										{system.health}
+									<Badge variant='outline'>
+										Healthy
 									</Badge>
 								</Table.Cell>
 								<Table.Cell>
@@ -173,7 +164,8 @@
 		</Card.Content>
 		<Card.Footer class="flex justify-between">
 			<div class="text-muted-foreground text-xs">
-				Showing <strong>{systemStore.systems.length}</strong> of <strong>{systemStore.systems.length}</strong> systems
+				Showing <strong>{systemStore.systems.length}</strong> of
+				<strong>{systemStore.systems.length}</strong> systems
 			</div>
 			<Button href="/systems" variant="outline" size="sm">
 				View All Systems

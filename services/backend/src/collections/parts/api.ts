@@ -6,25 +6,15 @@ import { authMiddleware } from "$auth/middleware";
 export const partsApi = new Elysia({ prefix: "parts" })
 	.use(authMiddleware)
 	.get("/", async ({ user }) => {
-		if (!user.is_superadmin) {
-			return error(
-				"Unauthorized",
-				"Only superadmins are allowed to select all parts",
-			);
-		}
-
 		return await Queries.part.selectAll();
-	})
+	},
+	{
+		isSuperAdmin: true
+	},
+	)
 	.patch(
 		"/",
 		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to select all parts",
-				);
-			}
-
 			const result = await Queries.part.update(body);
 
 			if (result === undefined) {
@@ -38,35 +28,24 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				name: t.Optional(Schema.insert.organizations.name),
 				id: Schema.select.organizations.id,
 			}),
+			isSuperAdmin: true
 		},
 	)
 	.post(
 		"/",
 		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to create parts",
-				);
-			}
-
 			return await Queries.part.create(body);
 		},
 		{
 			body: t.Object({
 				name: Schema.insert.parts.name,
 			}),
+			isSuperAdmin: true
 		},
 	)
 	.post(
 		"/system_models",
 		async ({ user, body }) => {
-			if (!user.is_superadmin) {
-				return error(
-					"Unauthorized",
-					"Only superadmins are allowed to assign parts to system models",
-				);
-			}
 			try {
 				return await Queries.part.assignToSystemModel(body);
 			  } catch (err) {
@@ -86,6 +65,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				part_id: Schema.select.part.id,
 				system_model_id: Schema.select.part.id
 			}),
+			isSuperAdmin: true
 		},
 	)
 	.delete(
@@ -113,5 +93,6 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			body: t.Object({
 				id: Schema.select.part.id,
 			}),
+			isSuperAdmin: true
 		},
 	);

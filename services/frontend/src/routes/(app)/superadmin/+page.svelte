@@ -53,15 +53,16 @@
 	$inspect(selectedOrg);
 
 	type SystemModelType = Types.SystemNew['system_model'];
-	
-	let selectedType = $state('');
+
+	let selectedType = $state<SystemModelType>('VisioPointer');
 
 	$inspect(selectedType);
-
+	
+	// TODO: 
 	let newSystem = $state<Types.SystemNew>({
 		name: '',
 		organization_id: '',
-		system_model: ''
+		system_model: 'VisioPointer'
 	});
 
 	$effect(() => {
@@ -69,8 +70,8 @@
 	});
 
 	$effect(() => {
-		newSystem.system_model = selectedType
-	})
+		newSystem.system_model = selectedType;
+	});
 
 	function removeModel(index: number) {
 		models = models.filter((_, i) => i !== index);
@@ -85,7 +86,7 @@
 	}
 
 	organizationStore.refresh();
-	let currentOrg = organizationStore.currentOrganization
+	let currentOrg = organizationStore.currentOrganization;
 	systemModelStore.refresh();
 </script>
 
@@ -207,9 +208,12 @@
 											<Command.Empty>No organization found.</Command.Empty>
 											<Command.Group>
 												{#each organizationStore.organizations as org}
-													<Command.Item onSelect={() =>
-														{ isOpen = !isOpen; selectedOrg = org.id} 
-														}>
+													<Command.Item
+														onSelect={() => {
+															isOpen = !isOpen;
+															selectedOrg = org.id;
+														}}
+													>
 														<Check
 															class={cn(
 																'mr-2 h-4 w-4',
@@ -235,9 +239,7 @@
 								</Table.Header>
 								<Table.Body>
 									{#each systemModelStore.systemModels as model, modelIndex}
-										<Table.Row
-											onclick={()=> selectedType = model.name}
-										>
+										<Table.Row onclick={() => (selectedType = model.name)}>
 											<Table.Cell>{model.name}</Table.Cell>
 											<Table.Cell class="text-right">
 												<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
@@ -245,7 +247,11 @@
 												</Button>
 											</Table.Cell>
 											<Table.Cell class="text-right w-[80px]">
-												<Button variant="destructive" size="sm" onclick={() => removeModel(modelIndex)}>
+												<Button
+													variant="destructive"
+													size="sm"
+													onclick={() => removeModel(modelIndex)}
+												>
 													Remove
 												</Button>
 											</Table.Cell>
@@ -294,7 +300,5 @@
 		</Card.Root>
 
 		<SpareParts />
-
-		
 	</div>
 </div>

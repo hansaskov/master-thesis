@@ -6,10 +6,10 @@ import { PersistedState } from 'runed';
 import type { StrictPick } from 'backend/src/types/strict';
 
 export class SystemStore {
-	#systems = new PersistedState<Types.SystemModels[]>('systems', [], {
-        storage: 'session',
-        syncTabs: false
-    })
+	#systems = new PersistedState<Types.System[]>('systems', [], {
+		storage: 'session',
+		syncTabs: false
+	});
 
 	#add(system: Types.System) {
 		this.#systems.current.push(system);
@@ -38,7 +38,7 @@ export class SystemStore {
 			return console.log(error);
 		}
 
-		this.#systems = data;
+		this.#systems.current = data;
 	}
 
 	async add(newSystem: Types.SystemNew) {
@@ -67,7 +67,6 @@ export class SystemStore {
 			this.#add(removedSystem);
 			return onError(error);
 		}
-
 
 		// const { data, error } = await api.systems.index.delete({ id });
 

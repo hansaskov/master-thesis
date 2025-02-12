@@ -5,22 +5,22 @@ import { PersistedState } from 'runed';
 //import { toast } from 'svelte-sonner';
 
 export class SystemModelStore {
-	#systemModels = new PersistedState<Types.SystemModels[]>('systemModels', [], {
-        storage: 'session',
-        syncTabs: false
-    })
+	#systemModels = new PersistedState<Types.SystemModel[]>('systemModels', [], {
+		storage: 'session',
+		syncTabs: false
+	});
 
-    async refresh() {
-        const { data, error } = await api.system_models.get();
+	async refresh() {
+		const { data, error } = await api.system_models.index.get();
 
-        if (error) {
-            return console.log(error);
-        }
+		if (error) {
+			return console.log(error);
+		}
 
-		console.log('retrieved ' + data.length + ' things')
+		console.log('retrieved ' + data.length + ' things');
 
-        this.#systemModels.current = data;
-    }
+		this.#systemModels.current = data;
+	}
 
 	get systemModels() {
 		return this.#systemModels.current;

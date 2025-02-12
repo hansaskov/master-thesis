@@ -8,7 +8,7 @@
 	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import { page } from '$app/state';
 	import { organizationStore } from '$lib/stores/organization.svelte';
-	import { systemStore } from '$lib/stores/systems.svelte'
+	import { systemStore } from '$lib/stores/systems.svelte';
 	import { api } from '@/api';
 	import { Previous } from 'runed';
 
@@ -23,13 +23,14 @@
 			page.params.organizationId &&
 			page.params.organizationId != previousOrganizationId.current
 		) {
-			api.organizations.cookie.post({
-				organizationId: page.params.organizationId
-			})
-			.then(() => {
-				systemStore.refresh();
-			console.log("system store refreshed");
-			});
+			api.organizations.cookie
+				.post({
+					organizationId: page.params.organizationId
+				})
+				.then(() => {
+					systemStore.refresh();
+					console.log('system store refreshed');
+				});
 		}
 	});
 </script>
