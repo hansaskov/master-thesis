@@ -19,7 +19,7 @@
 
 	let users = $state<User[]>([]);
 	let invites = $state<Invite[]>([]);
-    let newUserEmail = $state('');
+	let newUserEmail = $state('');
 
 	async function getUsers() {
 		let { data, error } = await api.users.onOrganization.get();
@@ -51,21 +51,25 @@
 		}
 	}
 
-	async function inviteUser() {
+	async function inviteUser(e: SubmitEvent) {
+		e.preventDefault();
 		let { data, error } = await api.invites.index.post({ email: newUserEmail });
 
-		if (error) {
+		if (error || data == null) {
 			console.error(error);
 			return;
 		}
 
-		console.log('Successfully invited user');
+		console.log(`Successfully invited ${data.email}`);
+		newUserEmail = '';
 		getInvites();
 	}
 
-	async function updateInvite() {}
+	async function removeInvite(email: string) {
+		let { data, error } = await api.invites.index.delete({ email });
 
-
+		getInvites();
+	}
 
 	function resendOnboardingEmail(email: string) {
 		console.log('Resend onboarding email to:', email);
@@ -88,13 +92,13 @@
 		<Card.Title>User Management</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<div class="mb-6">
+		<form onsubmit={inviteUser} class="mb-6">
 			<Label for="new-user">Invite New User</Label>
 			<div class="flex gap-2">
 				<Input id="new-user" type="email" placeholder="Enter email" bind:value={newUserEmail} />
-				<Button onclick={inviteUser}>Invite & Onboard</Button>
+				<Button type="submit">Invite & Onboard</Button>
 			</div>
-		</div>
+		</form>
 
 		<Table.Root>
 			<Table.Caption>Users and Onboarding Status</Table.Caption>
@@ -124,7 +128,7 @@
 							</div>
 						</Table.Cell>
 						<Table.Cell>{person.role}</Table.Cell>
-						<Table.Cell>{true}</Table.Cell>
+						<Table.Cell>Onboarded</Table.Cell>
 						<Table.Cell class="text-right">
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger>
@@ -136,9 +140,47 @@
 								<DropdownMenu.Content align="end">
 									<DropdownMenu.Label>Actions</DropdownMenu.Label>
 									<DropdownMenu.Separator />
-									<DropdownMenu.Separator />
 									<DropdownMenu.Item onclick={() => removeUser(person.id)} class="text-red-600">
 										Remove User
+									</DropdownMenu.Item>
+								</DropdownMenu.Content>
+							</DropdownMenu.Root>
+						</Table.Cell>
+					</Table.Row>
+				{/each}
+				{#each invites as invite}
+					<Table.Row class="bg-muted/50">
+						<Table.Cell>
+							<div class="flex items-center space-x-4">
+								<Avatar.Root>
+									<Avatar.Image alt={invite.email} />
+									<Avatar.Fallback class="font-semibold uppercase">
+										{invite.email.slice(0, 2)}
+									</Avatar.Fallback>
+								</Avatar.Root>
+								<div>
+									<div class="font-bold">{invite.email}</div>
+								</div>
+							</div>
+						</Table.Cell>
+						<Table.Cell>{invite.role}</Table.Cell>
+						<Table.Cell>Waiting</Table.Cell>
+						<Table.Cell class="text-right">
+							<DropdownMenu.Root>
+								<DropdownMenu.Trigger>
+									<Button variant="ghost" size="icon">
+										<Ellipsis class="h-4 w-4" />
+										<span class="sr-only">Open menu</span>
+									</Button>
+								</DropdownMenu.Trigger>
+								<DropdownMenu.Content align="end">
+									<DropdownMenu.Label>Actions</DropdownMenu.Label>
+									<DropdownMenu.Separator />
+									<DropdownMenu.Item
+										onclick={() => removeInvite(invite.email)}
+										class="text-red-600"
+									>
+										Remove Invite
 									</DropdownMenu.Item>
 								</DropdownMenu.Content>
 							</DropdownMenu.Root>

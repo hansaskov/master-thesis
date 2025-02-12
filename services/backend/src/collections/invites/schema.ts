@@ -10,8 +10,7 @@ export const invites = pgTable(
 	"invites",
 	{
 		email: text().notNull(),
-		organization_id: text()
-			.notNull(),
+		organization_id: text().notNull(),
 		inviter_id: text()
 			.notNull()
 			.references(() => users.id),
