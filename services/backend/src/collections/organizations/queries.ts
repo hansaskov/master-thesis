@@ -1,7 +1,7 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { usersToOrganizations } from "../users_to_organizations/schema";
 import { organizations } from "./schema";
 
@@ -29,9 +29,8 @@ export const organizationQueries = {
 	selectOrganizationsOnUser: async (user: StrictPick<Types.User, "id">) =>
 		await db
 			.select({
-				id: organizations.id,
-				name: organizations.name,
 				userRole: usersToOrganizations.role,
+				...getTableColumns(organizations),
 			})
 			.from(usersToOrganizations)
 			.innerJoin(
