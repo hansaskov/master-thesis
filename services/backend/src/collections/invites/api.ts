@@ -19,7 +19,7 @@ export const invitesApi = new Elysia({ prefix: "invites" })
 		"/",
 		async ({ user, body, relation }) => {
 			
-			const result = await Queries.invites.delete({ id: body.id });
+			const result = await Queries.invites.delete(body);
 
 			if (result === undefined) {
 				return error("Not Found", "Deletion failed. User not found");
@@ -29,7 +29,8 @@ export const invitesApi = new Elysia({ prefix: "invites" })
 		},
 		{
 			body: t.Object({
-				id: t.String(),
+				email: t.String(),
+				organization_id: t.String(),
 			}),
 			isOrganizationAdmin: true,
 		},
