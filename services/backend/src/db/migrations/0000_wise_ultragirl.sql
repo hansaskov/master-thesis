@@ -8,10 +8,11 @@ CREATE TABLE "factory_areas" (
 );
 --> statement-breakpoint
 CREATE TABLE "invites" (
-	"email" text PRIMARY KEY NOT NULL,
+	"email" text NOT NULL,
 	"organization_id" text NOT NULL,
 	"inviter_id" text NOT NULL,
-	"role" "users_to_provider_roles" DEFAULT 'User' NOT NULL
+	"role" "users_to_provider_roles" DEFAULT 'User' NOT NULL,
+	CONSTRAINT "invites_email_organization_id_pk" PRIMARY KEY("email","organization_id")
 );
 --> statement-breakpoint
 CREATE TABLE "keys" (
@@ -106,7 +107,6 @@ CREATE TABLE "users" (
 );
 --> statement-breakpoint
 ALTER TABLE "factory_areas" ADD CONSTRAINT "factory_areas_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "invites" ADD CONSTRAINT "invites_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "invites" ADD CONSTRAINT "invites_inviter_id_users_id_fk" FOREIGN KEY ("inviter_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "keys" ADD CONSTRAINT "keys_private_key_systems_id_fk" FOREIGN KEY ("private_key") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "parts_to_system_models" ADD CONSTRAINT "parts_to_system_models_part_id_parts_id_fk" FOREIGN KEY ("part_id") REFERENCES "public"."parts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

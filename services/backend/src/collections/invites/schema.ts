@@ -11,8 +11,7 @@ export const invites = pgTable(
 	{
 		email: text().notNull(),
 		organization_id: text()
-			.notNull()
-			.references(() => organizations.id, { onDelete: "cascade" }),
+			.notNull(),
 		inviter_id: text()
 			.notNull()
 			.references(() => users.id),
