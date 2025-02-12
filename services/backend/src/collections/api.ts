@@ -7,6 +7,7 @@ import { readingsApi } from "./readings/api";
 import { systemsApi } from "./systems/api";
 import { usersToOrganizationsApi } from "./users_to_organizations/api";
 import { systemModelsApi } from "./system_models/api";
+import { usersApi } from "./users/api";
 
 export const api = new Elysia({ prefix: "/api" })
 	.use(authApi)
@@ -17,3 +18,4 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(systemsApi)
 	.use(usersToOrganizationsApi)
 	.use(systemModelsApi)
+	.use(usersApi)

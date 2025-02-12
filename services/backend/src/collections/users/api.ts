@@ -2,10 +2,10 @@ import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import Elysia, { error, t } from "elysia";
 
-export const organizationsApi = new Elysia({ prefix: "users" })
+export const usersApi = new Elysia({ prefix: "users" })
 	.use(authMiddleware)
 	.get(
-		"/on-organization",
+		"/onOrganization",
 		async ({ relation }) => {
 			return await Queries.users.selectAllOnOrganization({
 				id: relation.organization_id,

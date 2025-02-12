@@ -4,81 +4,15 @@
 	import { Label } from '$lib/components/ui/label';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import * as Avatar from '$lib/components/ui/avatar';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Alert from '$lib/components/ui/alert';
 	import { systemStore } from '$lib/stores/systems.svelte';
 	import OrganizationSettings from './OrganizationSettings.svelte';
 
-	import Ellipsis from 'lucide-svelte/icons/ellipsis';
-	import Copy from 'lucide-svelte/icons/copy';
-	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 	import type { Types } from 'backend';
+	import UserSettings from './UserSettings.svelte';
 
 	let newSystem = $state<Types.SystemNew>();
 
-	let users = [
-		{ id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', avatarUrl: '' },
-		{ id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', avatarUrl: '' }
-	];
-	let newUserEmail = $state('');
 	let newSystemName = $state('');
-	let generatedOnboardingUrl = $state('');
-	let showOnboardingUrl = $state(false);
-
-	let onboardingInvitations = [
-		{ email: 'pendinguser@example.com', status: 'pending' },
-		{ email: 'completeduser@example.com', status: 'completed' }
-	];
-
-	const usersAndInvites = users.map((user) => ({
-		...user,
-		onboardingStatus:
-			onboardingInvitations.find((invite) => invite.email === user.email)?.status || 'Not Invited'
-	}));
-
-	function addUser() {
-		if (newUserEmail) {
-			users = [
-				...users,
-				{ id: users.length + 1, name: '', email: newUserEmail, role: 'User', avatarUrl: '' }
-			];
-			onboardingInvitations = [
-				...onboardingInvitations,
-				{ email: newUserEmail, status: 'pending' }
-			];
-			console.log('New user invited:', newUserEmail);
-			newUserEmail = '';
-		}
-	}
-
-	function updateUserRole(userId: number, newRole: string) {
-		users = users.map((user) => (user.id === userId ? { ...user, role: newRole } : user));
-		console.log('User role updated:', userId, newRole);
-	}
-
-	function removeUser(userId: number) {
-		users = users.filter((user) => user.id !== userId);
-		console.log('User removed:', userId);
-	}
-
-	function generateOnboardingUrl() {
-		generatedOnboardingUrl = `https://example.com/onboard/${Math.random().toString(36).substring(7)}`;
-		showOnboardingUrl = true;
-		console.log('Onboarding URL generated:', generatedOnboardingUrl);
-	}
-
-	function resendOnboardingEmail(email: string) {
-		console.log('Resend onboarding email to:', email);
-		// TODO: Implement email resend functionality
-	}
-
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text).then(() => {
-			console.log('Copied to clipboard');
-			// You could add a toast notification here
-		});
-	}
 
 	$effect.pre(() => {
 		systemStore.selectAll();
@@ -89,104 +23,8 @@
 	<h1 class="mb-6 text-3xl font-bold">Settings</h1>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-		<Card.Root class="col-span-1 md:col-span-2">
-			<Card.Header>
-				<Card.Title>User Management</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				<div class="mb-6">
-					<Label for="new-user">Invite New User</Label>
-					<div class="flex gap-2">
-						<Input id="new-user" type="email" placeholder="Enter email" bind:value={newUserEmail} />
-						<Button onclick={addUser}>Invite & Onboard</Button>
-					</div>
-				</div>
-
-				{#if showOnboardingUrl}
-					<Alert.Root class="mb-4">
-						<AlertCircle class="h-4 w-4" />
-						<Alert.Title>Onboarding URL Generated</Alert.Title>
-						<Alert.Description>
-							<div class="flex items-center gap-2">
-								<Input value={generatedOnboardingUrl} readonly />
-								<Button size="sm" onclick={() => copyToClipboard(generatedOnboardingUrl)}>
-									<Copy class="mr-2 h-4 w-4" />
-									Copy
-								</Button>
-							</div>
-						</Alert.Description>
-					</Alert.Root>
-				{/if}
-
-				<Table.Root>
-					<Table.Caption>Users and Onboarding Status</Table.Caption>
-					<Table.Header>
-						<Table.Row>
-							<Table.Head class="w-[300px]">User</Table.Head>
-							<Table.Head>Role</Table.Head>
-							<Table.Head>Onboarding Status</Table.Head>
-							<Table.Head class="text-right">Actions</Table.Head>
-						</Table.Row>
-					</Table.Header>
-					<Table.Body>
-						{#each usersAndInvites as person}
-							<Table.Row>
-								<Table.Cell>
-									<div class="flex items-center space-x-4">
-										<Avatar.Root>
-											<Avatar.Image src={person.avatarUrl} alt={person.name} />
-											<Avatar.Fallback class="font-semibold uppercase">
-												{person.name.slice(0, 2)}
-											</Avatar.Fallback>
-										</Avatar.Root>
-										<div>
-											<div class="font-bold">{person.name}</div>
-											<div class="text-sm text-muted-foreground">{person.email}</div>
-										</div>
-									</div>
-								</Table.Cell>
-								<Table.Cell>{person.role}</Table.Cell>
-								<Table.Cell>{person.onboardingStatus}</Table.Cell>
-								<Table.Cell class="text-right">
-									<DropdownMenu.Root>
-										<DropdownMenu.Trigger>
-											<Button variant="ghost" size="icon">
-												<Ellipsis class="h-4 w-4" />
-												<span class="sr-only">Open menu</span>
-											</Button>
-										</DropdownMenu.Trigger>
-										<DropdownMenu.Content align="end">
-											<DropdownMenu.Label>Actions</DropdownMenu.Label>
-											<DropdownMenu.Separator />
-											<DropdownMenu.Item
-												onclick={() =>
-													updateUserRole(person.id, person.role === 'Admin' ? 'User' : 'Admin')}
-											>
-												{person.role === 'Admin' ? 'Demote to User' : 'Promote to Admin'}
-											</DropdownMenu.Item>
-											{#if person.onboardingStatus === 'pending'}
-												<DropdownMenu.Item onclick={() => resendOnboardingEmail(person.email)}>
-													Resend Onboarding Email
-												</DropdownMenu.Item>
-											{:else if person.onboardingStatus === 'Not Invited'}
-												<DropdownMenu.Item onclick={generateOnboardingUrl}>
-													Generate Onboarding URL
-												</DropdownMenu.Item>
-											{/if}
-											<DropdownMenu.Separator />
-											<DropdownMenu.Item onclick={() => removeUser(person.id)} class="text-red-600">
-												Remove User
-											</DropdownMenu.Item>
-										</DropdownMenu.Content>
-									</DropdownMenu.Root>
-								</Table.Cell>
-							</Table.Row>
-						{/each}
-					</Table.Body>
-				</Table.Root>
-			</Card.Content>
-		</Card.Root>
-
+		
+		<UserSettings />
 		<OrganizationSettings />
 
 		<Card.Root>

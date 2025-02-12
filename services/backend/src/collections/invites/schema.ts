@@ -1,5 +1,5 @@
-import type { PartialExcept } from "$types/strict";
-import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import type { PartialExcept, StrictPick } from "$types/strict";
+import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { organizations } from "../organizations/schema";
 import { users } from "../users/schema";
@@ -7,17 +7,15 @@ import { rolesEnum } from "$collections/users_to_organizations/schema";
 import { t } from "elysia";
 
 export const invites = pgTable("invites", {
+		email: text().notNull().primaryKey(),
 		organization_id: text()
 			.notNull()
 			.references(() => organizations.id, { onDelete: "cascade" }),
         inviter_id: text()
 			.notNull()
 			.references(() => users.id),
-		email: text()
-			.notNull(),
-		role: rolesEnum().notNull(),
-	},
-	(table) => [primaryKey({ columns: [table.organization_id, table.inviter_id] })],
+		role: rolesEnum().notNull().default("User"),
+	}
 );
 
 export const insertInvitesSchema = createInsertSchema(invites, {
@@ -32,3 +30,4 @@ export const selectInvitesSchema = createSelectSchema(invites, {
 export type Invites = typeof invites.$inferSelect;
 export type InvitesNew = typeof invites.$inferInsert;
 export type InvitesUpdate = PartialExcept<Invites,"organization_id" | "inviter_id">;
+export type InvitesUnique = StrictPick<Invites,"organization_id" | "inviter_id">;

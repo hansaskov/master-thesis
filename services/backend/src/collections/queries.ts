@@ -7,6 +7,7 @@ import { systemQueries } from "./systems/queries";
 import { usersQueries } from "./users/queries";
 import { usersToOrganizationsQueries } from "./users_to_organizations/queries";
 import { systemModelQueries } from "./system_models/queries";
+import { invitesQueries } from "./invites/queries";
 
 export const Queries = {
 	keys: keysQueries,
@@ -17,5 +18,6 @@ export const Queries = {
 	usersToOrganizations: usersToOrganizationsQueries,
 	systems: systemQueries,
 	part: partQueries,
-	systemModels: systemModelQueries
+	systemModels: systemModelQueries,
+	invites: invitesQueries
 };
