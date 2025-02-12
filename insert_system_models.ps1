@@ -1,1 +1,0 @@
-cat insert_system_models.sql | docker exec -i thesis-timescaledb-1 psql -U username -d database
