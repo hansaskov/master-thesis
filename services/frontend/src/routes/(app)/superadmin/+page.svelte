@@ -95,6 +95,16 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<Card.Root class="col-span-1 md:col-span-2">
 			<Card.Header>
+				<Card.Title>List of Superadmins</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				
+			</Card.Content>
+		</Card.Root>
+
+
+		<Card.Root class="col-span-1 md:col-span-2">
+			<Card.Header>
 				<Card.Title>Organization Management</Card.Title>
 			</Card.Header>
 			<Card.Content>
