@@ -57,6 +57,13 @@
       "when": 1739352961176,
       "tag": "0007_salty_lilandra",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1739361435886,
+      "tag": "0008_steep_kylun",
+      "breakpoints": true
     }
   ]
 }

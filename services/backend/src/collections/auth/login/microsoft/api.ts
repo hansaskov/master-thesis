@@ -30,7 +30,8 @@ export const microsoftApi = new Elysia()
 		({ cookie }) => {
 			const state = generateState();
 			const codeVerifier = generateCodeVerifier();
-			const scopes = ["openid", "profile"];
+			const scopes = ["openid", "profile", "email"];
+
 
 			const url = entraId.createAuthorizationURL(state, codeVerifier, scopes);
 
@@ -68,6 +69,7 @@ export const microsoftApi = new Elysia()
 				{
 					headers: {
 						Authorization: `Bearer ${tokens.accessToken()}`,
+						Scope: "email profile openid",
 					},
 				},
 			).then((r) => r.json());
@@ -108,6 +110,9 @@ export const microsoftApi = new Elysia()
 			const user = await Queries.users.create({
 				provider_name: "Microsoft",
 				provider_id: userParsed.sub,
+				name: userParsed.familyname,
+				email: userParsed.email,
+				image: userParsed.picture,
 			});
 
 			const sessionToken = generateSessionToken();
@@ -130,10 +135,11 @@ export const microsoftApi = new Elysia()
 
 const UserSchema = t.Object({
 	sub: t.String(),
-	familyname: t.Optional(t.String()),
+	familyname: t.String(),
 	givenname: t.Optional(t.String()),
 	locale: t.Optional(t.String()),
 	picture: t.Optional(t.String()),
+	email: t.Optional(t.String()),
 });
 
 const validateUser = TypeCompiler.Compile(UserSchema);

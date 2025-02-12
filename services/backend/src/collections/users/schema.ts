@@ -12,6 +12,10 @@ export const users = pgTable("users", {
 		.notNull()
 		.$default(() => generateRandomString(12)),
 	is_superadmin: boolean().notNull().default(false),
+	name: text().notNull(),
+	email: text(),
+	email_verified: boolean().notNull().default(false),
+	image: text(),
 	provider_name: providerEnum().notNull(),
 	provider_id: text().notNull(),
 });
