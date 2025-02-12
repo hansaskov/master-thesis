@@ -23,7 +23,6 @@
 	<h1 class="mb-6 text-3xl font-bold">Settings</h1>
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-		
 		<UserSettings />
 		<OrganizationSettings />
 
@@ -60,13 +59,7 @@
 								<Table.Row>
 									<Table.Cell>{system.name}</Table.Cell>
 									<Table.Cell class="text-right">
-										<Button
-											variant="destructive"
-											size="sm"
-											onclick={() => systemStore.delete(system.id)}
-										>
-											Remove
-										</Button>
+										<Button variant="destructive" size="sm">Remove</Button>
 									</Table.Cell>
 								</Table.Row>
 							{/each}

@@ -10,7 +10,7 @@ export const invitesQueries = {
 			.where(
 				and(
 					eq(Table.invites.organization_id, values.organization_id),
-					eq(Table.invites.inviter_id, values.email),
+					eq(Table.invites.email, values.email),
 				),
 			)
 			.returning()
@@ -28,7 +28,7 @@ export const invitesQueries = {
 			.where(
 				and(
 					eq(Table.invites.organization_id, values.organization_id),
-					eq(Table.invites.inviter_id, values.email),
+					eq(Table.invites.email, values.email),
 				),
 			)
 			.returning()
