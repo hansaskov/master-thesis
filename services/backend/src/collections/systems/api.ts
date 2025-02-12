@@ -1,4 +1,4 @@
-import { authMiddleware, AuthService } from "$auth/middleware";
+import { AuthService, authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
@@ -8,11 +8,15 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 	.get("/", async () => {
 		return await Queries.systems.selectAll();
 	})
-	.get("/get_on_org_id", async ({ user, body, relation }) => {
-			return await Queries.systems.selectAllOnOrgId({ id: relation.organization_id });
+	.get(
+		"/get_on_org_id",
+		async ({ user, body, relation }) => {
+			return await Queries.systems.selectAllOnOrgId({
+				id: relation.organization_id,
+			});
 		},
 		{
-			isOrganization: true
+			isOrganization: true,
 		},
 	)
 	.post(
@@ -30,7 +34,7 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 				organization_id: Schema.insert.systems.organization_id,
 				system_model: Schema.insert.systems.system_model,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	)
 	.delete(
@@ -51,6 +55,6 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 			body: t.Object({
 				id: Schema.select.systems.id,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	);

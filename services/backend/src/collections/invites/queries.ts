@@ -1,17 +1,18 @@
 import { Table } from "$collections/table";
 import { db } from "$db/postgres";
-import { Types } from "$types/collection";
+import type { Types } from "$types/collection";
 import { and, eq } from "drizzle-orm";
 
 export const invitesQueries = {
 	delete: async (values: Types.InvitesUnique) =>
 		await db
 			.delete(Table.invites)
-            .where(
-                and(
-                    eq(Table.invites.organization_id, values.organization_id), 
-                    eq(Table.invites.inviter_id, values.inviter_id))
-                )
+			.where(
+				and(
+					eq(Table.invites.organization_id, values.organization_id),
+					eq(Table.invites.inviter_id, values.inviter_id),
+				),
+			)
 			.returning()
 			.then((v) => v.at(0)),
 	create: async (values: Types.InvitesNew) =>
@@ -25,15 +26,17 @@ export const invitesQueries = {
 			.update(Table.invites)
 			.set(values)
 			.where(
-                and(
-                    eq(Table.invites.organization_id, values.organization_id), 
-                    eq(Table.invites.inviter_id, values.inviter_id))
-                )
+				and(
+					eq(Table.invites.organization_id, values.organization_id),
+					eq(Table.invites.inviter_id, values.inviter_id),
+				),
+			)
 			.returning()
 			.then((v) => v.at(0)),
 	selectAll: async () => await db.select().from(Table.invites),
-    selectInvitesOnOrganization: async (organization: Types.OrganizationUnique) =>
-        await db.select()
-        .from(Table.invites)
-        .where(eq(Table.invites.organization_id, organization.id))
-}
+	selectInvitesOnOrganization: async (organization: Types.OrganizationUnique) =>
+		await db
+			.select()
+			.from(Table.invites)
+			.where(eq(Table.invites.organization_id, organization.id)),
+};

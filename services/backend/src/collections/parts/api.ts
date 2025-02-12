@@ -1,16 +1,18 @@
+import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
-import { authMiddleware } from "$auth/middleware";
 
 export const partsApi = new Elysia({ prefix: "parts" })
 	.use(authMiddleware)
-	.get("/", async ({ user }) => {
-		return await Queries.part.selectAll();
-	},
-	{
-		isSuperAdmin: true
-	},
+	.get(
+		"/",
+		async ({ user }) => {
+			return await Queries.part.selectAll();
+		},
+		{
+			isSuperAdmin: true,
+		},
 	)
 	.patch(
 		"/",
@@ -28,7 +30,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 				name: t.Optional(Schema.insert.organizations.name),
 				id: Schema.select.organizations.id,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	)
 	.post(
@@ -40,7 +42,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			body: t.Object({
 				name: Schema.insert.parts.name,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	)
 	.post(
@@ -48,24 +50,24 @@ export const partsApi = new Elysia({ prefix: "parts" })
 		async ({ user, body }) => {
 			try {
 				return await Queries.part.assignToSystemModel(body);
-			  } catch (err) {
-				if (err && typeof err === 'object' && 'code' in err) {
-					if (err.code === '23505') {
-					  return error(
-						"Conflict",
-						"This part is already assigned to this system model"
-					  );
+			} catch (err) {
+				if (err && typeof err === "object" && "code" in err) {
+					if (err.code === "23505") {
+						return error(
+							"Conflict",
+							"This part is already assigned to this system model",
+						);
 					}
 				}
 				throw err;
-			  }
+			}
 		},
 		{
 			body: t.Object({
 				part_id: Schema.select.part.id,
-				system_model_id: Schema.select.part.id
+				system_model_id: Schema.select.part.id,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	)
 	.delete(
@@ -93,6 +95,6 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			body: t.Object({
 				id: Schema.select.part.id,
 			}),
-			isSuperAdmin: true
+			isSuperAdmin: true,
 		},
 	);

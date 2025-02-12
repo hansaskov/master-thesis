@@ -32,7 +32,6 @@ export const microsoftApi = new Elysia()
 			const codeVerifier = generateCodeVerifier();
 			const scopes = ["openid", "profile", "email"];
 
-
 			const url = entraId.createAuthorizationURL(state, codeVerifier, scopes);
 
 			cookie.microsoftState.value = state;

@@ -31,5 +31,5 @@ export const Table = {
 	usersToOrganizations,
 	usersToFactoryAreas,
 	systemsToParts,
-	invites
+	invites,
 } as const;
