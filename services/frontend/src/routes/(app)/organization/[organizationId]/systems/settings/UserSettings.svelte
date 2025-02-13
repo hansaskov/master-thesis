@@ -3,11 +3,8 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import * as Alert from '$lib/components/ui/alert';
 	import * as Table from '$lib/components/ui/table';
 	import Ellipsis from 'lucide-svelte/icons/ellipsis';
-	import Copy from 'lucide-svelte/icons/copy';
-	import AlertCircle from 'lucide-svelte/icons/circle-alert';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { api } from '@/api';
@@ -34,7 +31,7 @@
 	}
 
 	async function removeUser(id: string) {
-		let { data, error } = await api.users.index.delete({ id });
+		await api.users.index.delete({ id });
 
 		getUsers();
 	}
@@ -66,21 +63,9 @@
 	}
 
 	async function removeInvite(email: string) {
-		let { data, error } = await api.invites.index.delete({ email });
+		await api.invites.index.delete({ email });
 
 		getInvites();
-	}
-
-	function resendOnboardingEmail(email: string) {
-		console.log('Resend onboarding email to:', email);
-		// TODO: Implement email resend functionality
-	}
-
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text).then(() => {
-			console.log('Copied to clipboard');
-			// You could add a toast notification here
-		});
 	}
 
 	getUsers();
