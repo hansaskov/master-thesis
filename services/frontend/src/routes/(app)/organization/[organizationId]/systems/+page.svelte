@@ -6,52 +6,9 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
-	import { writable } from 'svelte/store';
+
 	// import { systems } from '$lib/stores/systems';
 	import { systemStore } from '$lib/stores/systems.svelte';
-
-	type System = {
-		id: string;
-		name: string;
-		health: 'Healthy' | 'At Risk' | 'Critical';
-		status: 'Active' | 'Offline' | 'Paused';
-		type: string;
-		lastCheck: string;
-		image: string;
-	};
-
-	function getStatusVariant(status: System['status']) {
-		switch (status) {
-			case 'Active':
-				return 'outline';
-			case 'Offline':
-				return 'outline';
-			case 'Paused':
-				return 'secondary';
-		}
-	}
-
-	function getHealthVariant(health: System['health']) {
-		switch (health) {
-			case 'Healthy':
-				return 'outline';
-			case 'At Risk':
-				return 'default';
-			case 'Critical':
-				return 'destructive';
-		}
-	}
-
-	const parseTime = (timeStr: string): number => {
-		const [value, unit] = timeStr.split(' ');
-		const multipliers = { minute: 1, hour: 60, day: 1440 };
-		return parseInt(value) * (multipliers[unit.replace(/s$/, '') as keyof typeof multipliers] || 0);
-	};
-
-	// const sortedSystems = writable<System[]>(systems);
-	let currentOrder = 1;
-
-	type SortKey = 'image' | 'name' | 'health' | 'status' | 'type' | 'lastCheck';
 
 	// const sortSystems = (key: SortKey) => {
 	// 	sortedSystems.update((systems) => {
@@ -68,13 +25,13 @@
 
 	let name = 'User'; // Replace with actual user name
 
-	const headers: { label: string; key: SortKey }[] = [
-		{ label: 'Image', key: 'image' },
-		{ label: 'Name', key: 'name' },
-		{ label: 'Health', key: 'health' },
-		{ label: 'Status', key: 'status' },
-		{ label: 'Location', key: 'type' },
-		{ label: 'Last Check', key: 'lastCheck' }
+	const headers: { label: string }[] = [
+		{ label: 'Image' },
+		{ label: 'Name' },
+		{ label: 'Health' },
+		{ label: 'Status' },
+		{ label: 'Location' },
+		{ label: 'Last Check' }
 	];
 
 	systemStore.refresh();
@@ -95,7 +52,7 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							{#each headers as { label, key }, i}
+							{#each headers as { label }, i}
 								<Table.Head class={i > 3 ? 'hidden md:table-cell' : ''}>
 									<button>
 										{label}

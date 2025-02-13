@@ -8,7 +8,6 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import { Check } from 'svelte-radix';
 	import { cn } from '$lib/utils';
-	import ChevronsUpDown from 'lucide-svelte/icons/chevrons-up-down';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import PartSelector from './(components)/part-selector.svelte';
 	import { type Part, partsStore } from '$lib/stores/parts.svelte';
@@ -19,7 +18,6 @@
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 	import type { Types } from 'backend';
 	import { systemStore } from '$lib/stores/systems.svelte';
-	import * as Select from '$lib/components/ui/select/index.js';
 	import SpareParts from './SpareParts.svelte';
 	import { systemModelStore } from '$lib/stores/system-models.svelte';
 	import CaretSort from 'svelte-radix/CaretSort.svelte';
@@ -47,7 +45,6 @@
 	]);
 
 	let selectedModel: number | null = $state(null);
-	let openCombobox = $state(false);
 	let selectedOrg = $state('');
 
 	$inspect(selectedOrg);
@@ -77,16 +74,11 @@
 		models = models.filter((_, i) => i !== index);
 	}
 
-	function removePartFromModel(modelIndex: number, partIndex: number) {
-		models[modelIndex].parts = models[modelIndex].parts.filter((_, i) => i !== partIndex);
-	}
-
 	function toggleModel(index: number) {
 		selectedModel = selectedModel === index ? null : index;
 	}
 
 	organizationStore.refresh();
-	let currentOrg = organizationStore.currentOrganization;
 	systemModelStore.refresh();
 </script>
 
@@ -97,11 +89,8 @@
 			<Card.Header>
 				<Card.Title>List of Superadmins</Card.Title>
 			</Card.Header>
-			<Card.Content>
-				
-			</Card.Content>
+			<Card.Content></Card.Content>
 		</Card.Root>
-
 
 		<Card.Root class="col-span-1 md:col-span-2">
 			<Card.Header>
