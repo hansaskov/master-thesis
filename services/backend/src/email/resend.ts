@@ -11,19 +11,19 @@ if (!RESEND_CLIENT_SECRET || RESEND_CLIENT_SECRET.length < 1)
 export class ResendClient implements IEmailSecrvice {
 	private resend = new Resend(RESEND_CLIENT_SECRET);
 
-	async send(
-		from: string,
-		to: string,
-		subject: string,
-		html: string,
-	): Promise<boolean> {
-		const response = await this.resend.emails.send({
-			from,
-			to,
-			subject,
-			html,
-		});
+	async send(props: {
+		from: string;
+		to: string;
+		subject: string;
+		html: string;
+	}): Promise<boolean> {
+		const response = await this.resend.emails.send(props);
 
-		return response.error === null;
+		if (response.error) {
+			console.log(response.error);
+			return false;
+		}
+
+		return true;
 	}
 }

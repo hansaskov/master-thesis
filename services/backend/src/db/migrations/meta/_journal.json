@@ -15,6 +15,13 @@
 			"when": 1739367258116,
 			"tag": "0001_migrate_system_models",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1739879321894,
+			"tag": "0002_burly_zaladane",
+			"breakpoints": true
 		}
 	]
 }

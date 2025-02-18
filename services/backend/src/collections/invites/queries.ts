@@ -39,4 +39,26 @@ export const invitesQueries = {
 			.select()
 			.from(Table.invites)
 			.where(eq(Table.invites.organization_id, organization.id)),
+	selectOnEmailAndOrganization: async ({
+		organization_id,
+		email,
+	}: { organization_id: string; email: string }) =>
+		await db
+			.select()
+			.from(Table.invites)
+			.where(
+				and(
+					eq(Table.invites.organization_id, organization_id),
+					eq(Table.invites.email, email),
+				),
+			)
+			.limit(1)
+			.then((v) => v.at(0)),
+	selectOnPrimaryId: async ({ id }: { id: string }) =>
+		await db
+			.select()
+			.from(Table.invites)
+			.where(eq(Table.invites.id, id))
+			.limit(1)
+			.then((v) => v.at(0)),
 };

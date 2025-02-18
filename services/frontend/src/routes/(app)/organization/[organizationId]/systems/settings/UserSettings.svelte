@@ -8,6 +8,8 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { api } from '@/api';
+	import { onError } from '@/error';
+	import { toast } from 'svelte-sonner';
 
 	type User = NonNullable<Awaited<ReturnType<typeof api.users.onOrganization.get>>['data']>[number];
 	type Invite = NonNullable<
@@ -44,30 +46,38 @@
 		}
 
 		if (error) {
-			console.error(error);
+			onError(error);
 		}
 	}
 
 	async function inviteUser(e: SubmitEvent) {
 		e.preventDefault();
-		let { data, error } = await api.invites.index.post({ email: newUserEmail });
 
-		if (error || data == null) {
-			console.error(error);
-			return;
+		toast.info(`Starting invite to ${newUserEmail}`);
+
+		let { error } = await api.invites.index.post({ email: newUserEmail });
+
+		if (error) {
+			return onError(error);
 		}
 
-		console.log(`Successfully invited ${data.email}`);
+		toast.success(`Successfully invited ${newUserEmail}`);
+
 		newUserEmail = '';
 		getInvites();
 	}
 
 	async function removeInvite(email: string) {
-		await api.invites.index.delete({ email });
+		const { data, error } = await api.invites.index.delete({ email });
+
+		if (error) {
+			return onError(error);
+		}
+
+		toast.success(`Deleted invite to ${data.email}`);
 
 		getInvites();
 	}
-
 	getUsers();
 	getInvites();
 </script>

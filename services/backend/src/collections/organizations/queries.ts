@@ -26,6 +26,13 @@ export const organizationQueries = {
 			.returning()
 			.then((v) => v.at(0)),
 	selectAll: async () => await db.select().from(organizations),
+	selectUnique: async (organization_id: string) =>
+		await db
+			.select()
+			.from(organizations)
+			.where(eq(organizations.id, organization_id))
+			.limit(1)
+			.then((v) => v.at(0)),
 	selectOrganizationsOnUser: async (user: StrictPick<Types.User, "id">) =>
 		await db
 			.select({
