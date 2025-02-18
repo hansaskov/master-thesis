@@ -30,7 +30,8 @@
     "drizzle-typebox": "0.1.1",
     "elysia": "^1.2.10",
     "nanoid": "^5.0.9",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "resend": "^4.1.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
