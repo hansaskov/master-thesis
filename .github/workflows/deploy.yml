@@ -23,6 +23,7 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
+      RESEND_CLIENT_SECRET: ${{ secrets.RESEND_CLIENT_SECRET }} 
       PORTAINER_FQDN: ${{ vars.PORTAINER_FQDN }}
     
     steps:
