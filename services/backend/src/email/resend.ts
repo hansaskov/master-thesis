@@ -27,5 +27,3 @@ export class ResendClient implements IEmailSecrvice {
 		return response.error === null;
 	}
 }
-
-export const resendClient = new ResendClient();
