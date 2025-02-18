@@ -106,9 +106,10 @@ export const microsoftApi = new Elysia()
 				return redirect("/organization", 302);
 			}
 
-			const name = userParsed.name || userParsed.familyname || userParsed.givenname;
+			const name =
+				userParsed.name || userParsed.familyname || userParsed.givenname;
 			if (!name) {
-				const errorMessage = `No name found for user`
+				const errorMessage = "No name found for user";
 
 				console.error(errorMessage);
 				return error(500, errorMessage);
