@@ -106,10 +106,18 @@ export const microsoftApi = new Elysia()
 				return redirect("/organization", 302);
 			}
 
+			const name = userParsed.name || userParsed.familyname || userParsed.givenname;
+			if (!name) {
+				const errorMessage = `No name found for user`
+
+				console.error(errorMessage);
+				return error(500, errorMessage);
+			}
+
 			const user = await Queries.users.create({
 				provider_name: "Microsoft",
 				provider_id: userParsed.sub,
-				name: userParsed.familyname,
+				name: name,
 				email: userParsed.email,
 				image: userParsed.picture,
 			});
@@ -134,7 +142,8 @@ export const microsoftApi = new Elysia()
 
 const UserSchema = t.Object({
 	sub: t.String(),
-	familyname: t.String(),
+	name: t.Optional(t.String()),
+	familyname: t.Optional(t.String()),
 	givenname: t.Optional(t.String()),
 	locale: t.Optional(t.String()),
 	picture: t.Optional(t.String()),
