@@ -10,6 +10,7 @@
 	import { api } from '@/api';
 	import { onError } from '@/error';
 	import { toast } from 'svelte-sonner';
+	import type { Types } from 'backend';
 
 	type User = NonNullable<Awaited<ReturnType<typeof api.users.onOrganization.get>>['data']>[number];
 	type Invite = NonNullable<
@@ -78,6 +79,23 @@
 
 		getInvites();
 	}
+
+	async function promoteUser({
+		user_id,
+		role
+	}: {
+		user_id: string;
+		role: Types.UserToOrganization['role'];
+	}) {
+		const { error } = await api.usersToOrganization.index.patch({ user_id, role });
+
+		if (error) {
+			return onError(error);
+		}
+
+		getUsers();
+	}
+
 	getUsers();
 	getInvites();
 </script>
@@ -135,6 +153,20 @@
 								<DropdownMenu.Content align="end">
 									<DropdownMenu.Label>Actions</DropdownMenu.Label>
 									<DropdownMenu.Separator />
+									{#if person.role === 'Admin'}
+										<DropdownMenu.Item
+											onclick={() => promoteUser({ user_id: person.id, role: 'User' })}
+										>
+											Demote to User
+										</DropdownMenu.Item>
+									{:else if person.role === 'User'}
+										<DropdownMenu.Item
+											onclick={() => promoteUser({ user_id: person.id, role: 'Admin' })}
+										>
+											Promote to Admin
+										</DropdownMenu.Item>
+									{/if}
+
 									<DropdownMenu.Item onclick={() => removeUser(person.id)} class="text-red-600">
 										Remove User
 									</DropdownMenu.Item>

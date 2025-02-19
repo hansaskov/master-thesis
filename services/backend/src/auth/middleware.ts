@@ -85,33 +85,38 @@ export const authMiddleware = new Elysia()
 			},
 		},
 		isOrganizationAdmin: {
-			async resolve({ cookie: { sessionId, organizationId } }) {
-				if (sessionId.value === undefined) {
+			async resolve({
+				cookie: {
+					sessionId: { value: sessionId },
+					organizationId: { value: organizationId },
+				},
+			}) {
+				if (sessionId === undefined) {
 					return error("Bad Request", "sessionId is required in your cookies");
 				}
 
-				if (organizationId.value === undefined) {
+				if (organizationId === undefined) {
 					return error(
 						"Bad Request",
 						"organizationId is required in your cookies",
 					);
 				}
 
-				const { user, session } = await validateSessionToken(sessionId.value);
+				const { user, session } = await validateSessionToken(sessionId);
 
 				if (!session) {
 					return error("Unauthorized", "You session has expired");
 				}
 
 				let relation: UserToOrganizationUpdate = {
-					organization_id: organizationId.value,
+					organization_id: organizationId,
 					user_id: user.id,
 				};
 
 				if (user.is_superadmin === false) {
 					const r = await Queries.usersToOrganizations.select({
 						user_id: user.id,
-						organization_id: organizationId.value,
+						organization_id: organizationId,
 					});
 
 					if (!r) {
@@ -121,7 +126,7 @@ export const authMiddleware = new Elysia()
 						);
 					}
 
-					if (relation.role !== "Admin") {
+					if (r.role !== "Admin") {
 						return error(
 							"Unauthorized",
 							"Only organization admins are allowed to edit this organization",

@@ -1,15 +1,16 @@
-import { AuthService } from "$auth/middleware";
+import { AuthService, authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
+import { insertUserToOrganizationSchema } from "./schema";
 
 export const usersToOrganizationsApi = new Elysia({
 	prefix: "/usersToOrganization",
 })
-	.use(AuthService)
+	.use(authMiddleware)
 	.post(
 		"/",
-		async ({ user, body }) => {
+		async ({ body, user }) => {
 			if (!user.is_superadmin) {
 				const organizationAccess = await Queries.usersToOrganizations.select({
 					user_id: user.id,
@@ -41,6 +42,30 @@ export const usersToOrganizationsApi = new Elysia({
 				user_id: Schema.insert.usersToOrganizations.user_id,
 				role: Schema.insert.usersToOrganizations.role,
 			}),
+			isOrganizationAdmin: true,
+		},
+	)
+	.patch(
+		"/",
+		async ({ user, body, relation }) => {
+			if (!user.is_superadmin && user.id === body.user_id) {
+				return error(
+					"Unauthorized",
+					"You cannot demote yourself. Another admin or a superadmin must do this",
+				);
+			}
+
+			return Queries.usersToOrganizations.update({
+				organization_id: relation.organization_id,
+				...body,
+			});
+		},
+		{
+			body: t.Object({
+				user_id: Schema.insert.usersToOrganizations.user_id,
+				role: Schema.insert.usersToOrganizations.role,
+			}),
+			isOrganizationAdmin: true,
 		},
 	)
 	.delete(
@@ -55,6 +80,13 @@ export const usersToOrganizationsApi = new Elysia({
 
 			// Authorization check
 			if (!user.is_superadmin) {
+				if (user.id === body.user_id) {
+					return error(
+						"Unauthorized",
+						"You cannot remove yourself. An Admin must do this action",
+					);
+				}
+
 				const requesterAccess = await Queries.usersToOrganizations.select({
 					user_id: user.id,
 					organization_id: body.organization_id,
@@ -83,5 +115,6 @@ export const usersToOrganizationsApi = new Elysia({
 				organization_id: Schema.insert.usersToOrganizations.organization_id,
 				user_id: Schema.insert.usersToOrganizations.user_id,
 			}),
+			isAuth: true,
 		},
 	);
