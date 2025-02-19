@@ -11,6 +11,7 @@
 	import { systemStore } from '$lib/stores/systems.svelte';
 	import { api } from '@/api';
 	import { Previous } from 'runed';
+	import { userStore } from '@/stores/user.svelte';
 
 	let openCombobox = $state(false);
 	let selectedOrg = $state('');
@@ -29,6 +30,7 @@
 				})
 				.then(() => {
 					systemStore.refresh();
+					userStore.refresh();
 					console.log('system store refreshed');
 				});
 		}
