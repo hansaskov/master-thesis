@@ -1,6 +1,6 @@
 import type { PartialExcept } from "$types/strict";
 import { pgEnum, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-typebox";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { organizations } from "../organizations/schema";
 import { users } from "../users/schema";
 
@@ -24,6 +24,8 @@ export const usersToOrganizations = pgTable(
 
 export const insertUserToOrganizationSchema =
 	createInsertSchema(usersToOrganizations);
+export const selectUserToOrganizationSchema =
+	createSelectSchema(usersToOrganizations);
 
 export type UserToOrganization = typeof usersToOrganizations.$inferSelect;
 export type UserToOrganizationNew = typeof usersToOrganizations.$inferInsert;

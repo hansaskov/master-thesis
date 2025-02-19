@@ -22,8 +22,6 @@ export const statusApi = new Elysia({ prefix: "status" })
 					user_id: user.id,
 				});
 
-				console.log("HELLO IT'S ME", relation);
-
 				return { relation, user };
 			}
 
