@@ -18,8 +18,7 @@ class UserStore {
 		const { data, error } = await api.status.refresh.get();
 
 		if (error) {
-			onError(`Authentication failed. Redirecting to ${this.nonAuthorizedRedirectUrl}`);
-			return goto(this.nonAuthorizedRedirectUrl);
+			return;
 		}
 
 		this.user = data.user;
