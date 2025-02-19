@@ -7,10 +7,10 @@
 
 	let pathname = $derived(page.url.pathname);
 	let lastPathname = $derived(page.url.pathname.split('/').filter(Boolean).at(-1));
-	let showSystem = $derived(page.params.id === lastPathname);
+	let showSystem = $derived(page.params.systemId === lastPathname);
 	let showOrganization = $derived(
-		(page.params.organizationId === lastPathname && userStore.userRelation?.role === 'Admin') ||
-			userStore.isAdmin
+		page.params.organizationId === lastPathname &&
+			(userStore.userRelation?.role === 'Admin' || userStore.isAdmin)
 	);
 
 	function handleSettingsClick() {
