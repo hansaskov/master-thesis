@@ -18,7 +18,7 @@
 		name: ''
 	});
 
-	function remove(e: SubmitEvent) {
+	function add(e: SubmitEvent) {
 		e.preventDefault();
 		partsStore.add(newPart);
 		newPart = {
@@ -33,8 +33,8 @@
 	</Card.Header>
 	<Card.Content>
 		<div class="mb-6">
-			<Label for="new-organization">Add New Spare Part</Label>
-			<form class="flex gap-2" onsubmit={remove}>
+			<Label for="new-part">Add New Spare Part</Label>
+			<form class="flex gap-2" onsubmit={add}>
 				<Input placeholder="Enter spare part name" bind:value={newPart.name} />
 				<Button type="submit">Add Part</Button>
 			</form>

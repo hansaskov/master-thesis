@@ -1,26 +1,37 @@
 import { api } from '$lib/api';
-//import { onError } from '$lib/error';
 import type { Types } from 'backend';
 import { PersistedState } from 'runed';
-//import { toast } from 'svelte-sonner';
+
+interface SystemModelWithParts extends Types.SystemModel {
+    parts: Array<{
+        id: string;
+        name: string;
+        image: string | null;
+    }>;
+}
 
 export class SystemModelStore {
-	#systemModels = new PersistedState<Types.SystemModel[]>('systemModels', [], {
+	#systemModels = new PersistedState<SystemModelWithParts[]>('systemModels', [], {
 		storage: 'session',
 		syncTabs: false
 	});
 
 	async refresh() {
 		const { data, error } = await api.system_models.index.get();
-
+	
 		if (error) {
-			return console.log(error);
+		  console.error('API Error:', error);
+		  return;
 		}
-
-		console.log('retrieved ' + data.length + ' things');
-		console.log('data is ' + JSON.stringify(data))
-
-		this.#systemModels.current = data;
+	
+		console.log('Raw API response:', data);
+		
+		try {
+		  this.#systemModels.current = data;
+		  console.log('Successfully updated store with', data.length, 'models');
+		} catch (err) {
+		  console.error('Error updating store:', err);
+		}
 	}
 
 	get systemModels() {

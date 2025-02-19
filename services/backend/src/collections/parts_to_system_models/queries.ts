@@ -13,4 +13,10 @@ export const partsToSystemModelsQueries = {
             .values(values)
             .returning()
 			.then((v) => v[0]),
+    delete: async (values: Types.PartToSystemModel) =>
+        await db
+            .delete(partsToSystemModels)
+            .where(eq(partsToSystemModels.part_id, values.part_id))
+            .returning()
+            .then((v) => v.at(0)),
 };

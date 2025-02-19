@@ -17,26 +17,9 @@ describe("system model queries", async () => {
         const firstSystemModel = all_models_with_all_parts[0]
 
         expect(system_model.length).toEqual(1)
-
         expect(all_models_with_all_parts.length).toEqual(7)
         expect(firstSystemModel.id).toBeDefined()
         expect(firstSystemModel.name).toBeDefined()
         expect(firstSystemModel.parts).toBeArray()
-
-
-
-        /*
-            [
-                {
-                id: "Dgw8Rvd4QoeC", 
-                name: "VisioLine", 
-                parts: [
-                    {id: "...", name: "Frozen Pizza", image: null},
-                    {id: "...", name: "Some Camera", image: null}
-                ]
-                }
-        
-            ]
-        */
     })
 })

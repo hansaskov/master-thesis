@@ -26,11 +26,44 @@
 	import { Description } from '$lib/components/ui/alert';
 	import { toast } from "svelte-sonner";
 	import { page } from "$app/state";
+	import { partsToSystemModelStore } from '$lib/stores/parts-to-system-models.svelte';
 
-	let selectedParts: Types.Parts[] = []
+	let selectedParts = $state<Types.Part[]>([]);
+	let removedParts = $state<Types.Part[]>([]);
+	$inspect(selectedParts);
 
-	let partChecked = $state(false);
+	$inspect(removedParts);
 
+	async function updateAllRelations(system_model_id: string) {
+		for (const part of selectedParts) {
+       		await partsToSystemModelStore.add({part_id: part.id, system_model_id});
+    	}
+		for (const part of removedParts) {
+        	await partsToSystemModelStore.delete({part_id: part.id, system_model_id});
+    	}
+		selectedParts = [];
+		removedParts = [];
+		await systemModelStore.refresh();
+		await partsStore.refresh();
+	}
+
+	function togglePartSelection(part: Types.Part, checked: boolean) {
+		if (checked) {
+			selectedParts = [...selectedParts, part];
+			removedParts = removedParts.filter(p => p !== part);
+		} else {
+			removedParts = [...removedParts, part];
+			selectedParts = selectedParts.filter(p => p !== part);
+		}
+    }
+
+	function isPartInSystemModel(part: Types.Part, model_parts: Types.Part[]): boolean {
+		return model_parts.some(modelPart => modelPart.id === part.id);
+    }
+
+	function getUniqueParts(dataParts: Types.Part[], allParts: Types.Part[]) {
+		return allParts.filter((part) => !dataParts.some((dp) => dp.id === part.id));
+	}
 
 	let newOrganization = $state<Types.OrganizationNew>({
 		name: ''
@@ -47,7 +80,6 @@
 
 	$inspect(selectedType);
 
-	// TODO:
 	let newSystem = $state<Types.SystemNew>({
 		name: '',
 		organization_id: '',
@@ -185,12 +217,12 @@
 								</Table.Header>
 								<Table.Body>
 									{#each systemModelStore.systemModels as data, index}
-										<Table.Row onclick={() => (selectedType = data.systemModels.name)}>
-											<Table.Cell>{data.systemModels.name}</Table.Cell>
+										<Table.Row onclick={() => (selectedType = data.name)}>
+											<Table.Cell>{data.name}</Table.Cell>
 											<Table.Cell></Table.Cell>
 											<Table.Cell class="justify-end flex gap-4">
 												<Button variant="outline" size="sm" onclick={() => toggleEdit(index)}>
-													Edit
+													{selectedEdit === index ? 'Save' : 'Edit'}
 												</Button>
 												<Button variant="outline" size="sm" onclick={() => toggleModel(index)}>
 													{selectedModel === index ? 'Hide Parts' : 'Show Parts'}
@@ -199,56 +231,69 @@
 										</Table.Row>
 										<!-- Parts List (Visible when model is selected) -->
 										{#if selectedModel === index}
-											<Table.Row class="bg-muted justify-between">
-												<Table.Cell class="text-muted-foreground">Image</Table.Cell>
-												<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
-												<Table.Cell class="text-muted-foreground text-right">Actions</Table.Cell>
-											</Table.Row>
-											<Table.Row>
-												<Table.Cell>{data.parts.image}</Table.Cell>
-												<Table.Cell>{data.parts.name}</Table.Cell>
-												<Table.Cell class="text-right w-[80px]">
-													<Button variant="destructive" size="sm" onclick={() => dialogStore.open({
-														title: "remove part from model",
-														description: "not implemented yet :)",
-														component: AlertDialogBody,
-														props: data,
-													})}>
-														Remove
-													</Button>
-												</Table.Cell>
-											</Table.Row>
-										{/if}
-										{#if selectedEdit === index}
-										<Table.Root>
-											<Table.Header>
-												<Table.Row class="justify-between">
-													<Table.Head>Part Name</Table.Head>
+											{#if data.parts && data.parts.length > 0}
+												<Table.Row class="bg-muted justify-between">
+													<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
+													<Table.Cell class="text-muted-foreground"></Table.Cell>
+													<Table.Cell class="text-muted-foreground text-right">Image</Table.Cell>
 												</Table.Row>
-											</Table.Header>
-											<Table.Body>
-											{#each data.parts as part}
+												{#each data.parts as part}
+													<Table.Row>
+														<Table.Cell class="text-left">
+															{#if selectedEdit === index}
+																<Checkbox checked={selectedParts.includes(part) || isPartInSystemModel(part, data.parts)}
+																onCheckedChange= {(value) => togglePartSelection(part, value)}/>
+															{/if}
+															{part.name}
+														</Table.Cell>
+														<Table.Cell></Table.Cell>
+														<Table.Cell>{part.image}</Table.Cell>
+													</Table.Row>
+												{/each}
+												{#if selectedEdit === index}
+													{#each getUniqueParts(data.parts, partsStore.parts) as part}
+														<Table.Row>
+															<Table.Cell>
+																<Checkbox checked={selectedParts.includes(part) || isPartInSystemModel(part, data.parts)}
+																onCheckedChange= {(value) => togglePartSelection(part, value)}/>
+																{part.name}
+															</Table.Cell>
+															<Table.Cell>
+																{part.image}
+															</Table.Cell>
+														</Table.Row>
+													{/each}
+												{/if}
+											{/if}
+										{/if}
+										<!-- {#if selectedEdit === index}
+											<Table.Root>
+												<Table.Header>
+													<Table.Row class="justify-between">
+														<Table.Head>Part Name</Table.Head>
+													</Table.Row>
+												</Table.Header>
+												<Table.Body>
+												{#each partsStore.parts as part}
+													<Table.Row>
+														<Table.Cell>
+															<Checkbox 
+																checked={selectedParts.includes(part) || isPartInSystemModel(part, data.parts)}
+																onCheckedChange= {(value) => togglePartSelection(part, value)}/>
+															{part.name}
+														</Table.Cell>
+													</Table.Row>
+												{/each}
 												<Table.Row>
 													<Table.Cell>
-														<Checkbox 
-															checked={partChecked}
-															onCheckedChange= {(value) => {
-																partChecked = value;
-																if (value === true) {
-																	selectedParts.push(part);
-																} else {
-																	selectedParts = selectedParts.filter(p => p !== part);
-																}
-																console.log(selectedParts);
-															}}
-														/>
-														{part.name}
+														<Button variant="default" size="sm" onclick={() => updateAllRelations(data.id)}>
+															Update Parts
+														</Button>
 													</Table.Cell>
 												</Table.Row>
-											{/each}
-											</Table.Body>
-										</Table.Root>
-										{/if}
+												</Table.Body>
+											</Table.Root>
+										{/if} -->
 									{/each}
 								</Table.Body>
 							</Table.Root>

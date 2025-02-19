@@ -45,7 +45,8 @@ export class PartsStore {
 	async add(part: Types.PartNew) {
 		const temporaryPart = this.#add({
 			id: 'temp_id_abcdefghijklmnop',
-			...part
+			...part,
+			image: part.image || null
 		});
 
 		const { data, error } = await api.parts.index.post(part);
