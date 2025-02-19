@@ -6,7 +6,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import type { Types } from 'backend';
-	import { partsStore } from '$lib/stores/new-parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 	import { Ellipsis } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
@@ -74,7 +74,7 @@
 											});
 										}}
 									>
-										Edit Organization
+										Edit Part
 									</DropdownMenu.Item>
 									<DropdownMenu.Separator />
 									<DropdownMenu.Item
@@ -88,7 +88,7 @@
 										}}
 										class="text-red-600"
 									>
-										Remove Organization
+										Remove Part
 									</DropdownMenu.Item>
 								</DropdownMenu.Content>
 							</DropdownMenu.Root>

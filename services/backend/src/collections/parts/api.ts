@@ -8,7 +8,8 @@ export const partsApi = new Elysia({ prefix: "parts" })
 	.get(
 		"/",
 		async ({ user }) => {
-			return await Queries.part.selectAll();
+			const result = await Queries.part.selectAll();
+			return result;
 		},
 		{
 			isSuperAdmin: true,

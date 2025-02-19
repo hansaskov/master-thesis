@@ -4,13 +4,14 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
+	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import * as Command from '$lib/components/ui/command';
 	import * as Popover from '$lib/components/ui/popover';
 	import { Check } from 'svelte-radix';
 	import { cn } from '$lib/utils';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import PartSelector from './(components)/part-selector.svelte';
-	import { type Part, partsStore } from '$lib/stores/parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Ellipsis } from 'lucide-svelte';
@@ -21,28 +22,19 @@
 	import SpareParts from './SpareParts.svelte';
 	import { systemModelStore } from '$lib/stores/system-models.svelte';
 	import CaretSort from 'svelte-radix/CaretSort.svelte';
+	import { Title } from 'chart.js';
+	import { Description } from '$lib/components/ui/alert';
+	import { toast } from "svelte-sonner";
+	import { page } from "$app/state";
 
-	let isOpen = $state(false);
+	let selectedParts: Types.Parts[] = []
+
+	let partChecked = $state(false);
+
 
 	let newOrganization = $state<Types.OrganizationNew>({
 		name: ''
 	});
-
-	interface Model {
-		name: string;
-		parts: Part[];
-	}
-
-	let models: Model[] = $state([
-		{
-			name: 'VisioCompact® 1',
-			parts: [partsStore.parts[0], partsStore.parts[1], partsStore.parts[2]]
-		},
-		{
-			name: 'VisioPointer® 1',
-			parts: [partsStore.parts[3], partsStore.parts[0]]
-		}
-	]);
 
 	let selectedModel: number | null = $state(null);
 	let selectedOrg = $state('');
@@ -70,12 +62,13 @@
 		newSystem.system_model = selectedType;
 	});
 
-	function removeModel(index: number) {
-		models = models.filter((_, i) => i !== index);
-	}
-
 	function toggleModel(index: number) {
 		selectedModel = selectedModel === index ? null : index;
+	}
+
+	let selectedEdit: number | null = $state(null);
+	function toggleEdit(index: number) {
+		selectedEdit = selectedEdit === index ? null : index;
 	}
 
 	organizationStore.refresh();
@@ -179,121 +172,87 @@
 			</Card.Header>
 			<Card.Content>
 				<div class="mb-6">
-					<Label for="new-model">Name of new Vision System</Label>
-					<form
-						onsubmit={(e) => {
-							e.preventDefault();
-							systemStore.add(newSystem);
-						}}
-					>
+					<Label for="new-model">Name of Vision Systems</Label>
 						<div class="space-y-4">
-							<div class="flex gap-2">
-								<Input placeholder="Enter name" bind:value={newSystem.name} />
-								<Popover.Root>
-									<Popover.Trigger>
-										<Button
-											variant="outline"
-											role="combobox"
-											aria-expanded={isOpen}
-											class="flex-1 justify-between md:max-w-[200px] lg:max-w-[300px]"
-										>
-											{organizationStore.currentOrganization}
-											<CaretSort class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-										</Button>
-									</Popover.Trigger>
-									<Popover.Content class="w-[170px] p-0">
-										<Command.Root>
-											<Command.Input placeholder="Search organizations..." />
-											<Command.Empty>No organization found.</Command.Empty>
-											<Command.Group>
-												{#each organizationStore.organizations as org}
-													<Command.Item
-														onSelect={() => {
-															isOpen = !isOpen;
-															selectedOrg = org.id;
-														}}
-													>
-														<Check
-															class={cn(
-																'mr-2 h-4 w-4',
-																selectedOrg !== org.id && 'text-transparent'
-															)}
-														/>
-														{org.name}
-													</Command.Item>
-												{/each}
-											</Command.Group>
-										</Command.Root>
-									</Popover.Content>
-								</Popover.Root>
-								<PartSelector />
-							</div>
 							<Table.Root>
 								<Table.Caption>List of Vision Systems</Table.Caption>
 								<Table.Header>
 									<Table.Row class="justify-between">
 										<Table.Head>Name</Table.Head>
+										<Table.Head></Table.Head>
 										<Table.Head class="text-right">Actions</Table.Head>
 									</Table.Row>
 								</Table.Header>
 								<Table.Body>
-									{#each systemModelStore.systemModels as model, modelIndex}
-										<Table.Row onclick={() => (selectedType = model.name)}>
-											<Table.Cell>{model.name}</Table.Cell>
-											<Table.Cell class="text-right">
-												<Button variant="outline" size="sm" onclick={() => toggleModel(modelIndex)}>
-													{selectedModel === modelIndex ? 'Hide Parts' : 'Show Parts'}
+									{#each systemModelStore.systemModels as data, index}
+										<Table.Row onclick={() => (selectedType = data.systemModels.name)}>
+											<Table.Cell>{data.systemModels.name}</Table.Cell>
+											<Table.Cell></Table.Cell>
+											<Table.Cell class="justify-end flex gap-4">
+												<Button variant="outline" size="sm" onclick={() => toggleEdit(index)}>
+													Edit
 												</Button>
-											</Table.Cell>
-											<Table.Cell class="text-right w-[80px]">
-												<Button
-													variant="destructive"
-													size="sm"
-													onclick={() => removeModel(modelIndex)}
-												>
-													Remove
+												<Button variant="outline" size="sm" onclick={() => toggleModel(index)}>
+													{selectedModel === index ? 'Hide Parts' : 'Show Parts'}
 												</Button>
 											</Table.Cell>
 										</Table.Row>
 										<!-- Parts List (Visible when model is selected) -->
-										{#if selectedModel === modelIndex}
+										{#if selectedModel === index}
 											<Table.Row class="bg-muted justify-between">
 												<Table.Cell class="text-muted-foreground">Image</Table.Cell>
 												<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
-												<Table.Cell class="text-muted-foreground">Actions</Table.Cell>
+												<Table.Cell class="text-muted-foreground text-right">Actions</Table.Cell>
 											</Table.Row>
-											<!-- {#each model.parts as part, partIndex}
+											<Table.Row>
+												<Table.Cell>{data.parts.image}</Table.Cell>
+												<Table.Cell>{data.parts.name}</Table.Cell>
+												<Table.Cell class="text-right w-[80px]">
+													<Button variant="destructive" size="sm" onclick={() => dialogStore.open({
+														title: "remove part from model",
+														description: "not implemented yet :)",
+														component: AlertDialogBody,
+														props: data,
+													})}>
+														Remove
+													</Button>
+												</Table.Cell>
+											</Table.Row>
+										{/if}
+										{#if selectedEdit === index}
+										<Table.Root>
+											<Table.Header>
+												<Table.Row class="justify-between">
+													<Table.Head>Part Name</Table.Head>
+												</Table.Row>
+											</Table.Header>
+											<Table.Body>
+											{#each data.parts as part}
 												<Table.Row>
 													<Table.Cell>
-														<img
-															src={part.image}
-															alt={part.name}
-															class="w-12 h-12 rounded-md object-cover"
+														<Checkbox 
+															checked={partChecked}
+															onCheckedChange= {(value) => {
+																partChecked = value;
+																if (value === true) {
+																	selectedParts.push(part);
+																} else {
+																	selectedParts = selectedParts.filter(p => p !== part);
+																}
+																console.log(selectedParts);
+															}}
 														/>
-													</Table.Cell>
-													<Table.Cell>
 														{part.name}
 													</Table.Cell>
-													<Table.Cell>
-														<Button
-															variant="destructive"
-															size="sm"
-															onclick={() => removePartFromModel(modelIndex, partIndex)}
-														>
-															Remove
-														</Button>
-													</Table.Cell>
 												</Table.Row>
-											{/each} -->
+											{/each}
+											</Table.Body>
+										</Table.Root>
 										{/if}
 									{/each}
 								</Table.Body>
 							</Table.Root>
-							<div>
-								<Button type="submit">Create Vision System</Button>
-							</div>
 						</div>
-					</form>
 				</div>
 			</Card.Content>
 		</Card.Root>

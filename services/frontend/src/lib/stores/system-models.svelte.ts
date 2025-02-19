@@ -18,6 +18,7 @@ export class SystemModelStore {
 		}
 
 		console.log('retrieved ' + data.length + ' things');
+		console.log('data is ' + JSON.stringify(data))
 
 		this.#systemModels.current = data;
 	}

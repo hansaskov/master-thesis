@@ -14,7 +14,7 @@
 	import { Value } from '@sinclair/typebox/value';
 	import { partSchema } from '../(data)/schema';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
-	import { partsStore } from '$lib/stores/new-parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 
 	let { row }: { row: Row<TData> } = $props();
 

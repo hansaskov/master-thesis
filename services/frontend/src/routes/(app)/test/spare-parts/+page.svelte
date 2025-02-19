@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DataTable from './(components)/data-table.svelte';
 	import { columns } from './(components)/columns';
-	import { partsStore } from '$lib/stores/new-parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 
 	partsStore.refresh();
 </script>

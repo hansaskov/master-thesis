@@ -1,0 +1,1 @@
+ALTER TABLE "system_models" ADD CONSTRAINT "system_models_name_unique" UNIQUE("name");
