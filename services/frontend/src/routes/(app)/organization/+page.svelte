@@ -12,7 +12,7 @@
 		const target =
 			organizationStore.currentOrganization?.id || organizationStore.organizations[0]?.id;
 		if (target) {
-			goto(`/organization/${target}/systems`);
+			goto(`/organization/${target}`);
 		}
 	});
 </script>

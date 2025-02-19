@@ -24,9 +24,9 @@
 
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
-			goto(`/organization/${organizationStore.currentOrganization.id}/systems`);
+			goto(`/organization/${organizationStore.currentOrganization.id}`);
 		} else if (organizationStore.organizations.length > 0) {
-			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
+			goto(`/organization/${organizationStore.organizations[0].id}`);
 		} else {
 			goto(`/organization`);
 		}
@@ -72,14 +72,15 @@
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<a
-					href="/superadmin"
-					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
-				>
-					<UserRoundCog class="w-5 h-5" />
-				</a>
-			</nav>
-			<nav class="flex flex-col items-center gap-4 px-2 py-4">
+				{#if userStore.user?.is_superadmin}
+					<a
+						href="/superadmin"
+						class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+					>
+						<UserRoundCog class="w-5 h-5" />
+					</a>
+				{/if}
+
 				<a
 					href="/support"
 					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
