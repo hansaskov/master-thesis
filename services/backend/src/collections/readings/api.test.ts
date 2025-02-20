@@ -18,7 +18,10 @@ async function seedDatabase() {
 	});
 
 	// Insert key
-	const key = await Queries.keys.create({ private_key: system.id });
+	const key = await Queries.keys.create({ 
+		system_id: system.id,
+		name: "Test key 1",
+	});
 
 	// Insert readings.
 	const readings = await Queries.readings.createMany([
@@ -81,7 +84,6 @@ describe("Reading Post", async () => {
 
 		const { status, error } = await api.reading.post(testReadings, {
 			headers: {
-				public_key: seedData.key.public_key,
 				private_key: seedData.key.private_key,
 			},
 		});
@@ -102,7 +104,6 @@ describe("Reading Post", async () => {
 
 		const { status, error } = await api.reading.post(testReadings, {
 			headers: {
-				public_key: "invalid-public-key",
 				private_key: "invalid-private-key",
 			},
 		});
@@ -126,7 +127,6 @@ describe("Reading Post", async () => {
 			invalidReading,
 			{
 				headers: {
-					public_key: seedData.key.public_key,
 					private_key: seedData.key.private_key,
 				},
 			},
@@ -139,7 +139,6 @@ describe("Reading Post", async () => {
 	it("empty data", async () => {
 		const { status, error } = await api.reading.post([], {
 			headers: {
-				public_key: seedData.key.public_key,
 				private_key: seedData.key.private_key,
 			},
 		});
@@ -158,7 +157,6 @@ describe("Reading Post", async () => {
 
 		const { status, error } = await api.reading.post(manyReadings, {
 			headers: {
-				public_key: seedData.key.public_key,
 				private_key: seedData.key.private_key,
 			},
 		});
