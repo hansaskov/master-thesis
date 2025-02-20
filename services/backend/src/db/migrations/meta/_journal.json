@@ -1,27 +1,41 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1739365159155,
-			"tag": "0000_wise_ultragirl",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1739367258116,
-			"tag": "0001_migrate_system_models",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
-			"when": 1739879321894,
-			"tag": "0002_burly_zaladane",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1739365159155,
+      "tag": "0000_wise_ultragirl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1739367258116,
+      "tag": "0001_migrate_system_models",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739879321894,
+      "tag": "0002_burly_zaladane",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1740049358617,
+      "tag": "0003_cool_bastion",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1740049549745,
+      "tag": "0004_wise_zombie",
+      "breakpoints": true
+    }
+  ]
 }
