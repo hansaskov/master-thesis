@@ -33,6 +33,8 @@ class KeysStore {
 	}
 
 	async create() {
+		if (systemId) this.newKey.system_id = systemId;
+
 		const { data, error } = await api.keys.index.post(this.newKey);
 
 		if (error) {
@@ -40,10 +42,7 @@ class KeysStore {
 			return null;
 		}
 
-		this.newKey = {
-			name: '',
-			system_id: systemId
-		};
+		this.newKey.name = '';
 		this.fetch();
 		return data;
 	}

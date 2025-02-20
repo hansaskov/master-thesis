@@ -14,7 +14,7 @@ export const keysApi = new Elysia({ prefix: "keys", name: "API-KEYS" })
 			query: t.Object({
 				system_id: t.String(),
 			}),
-			isOrganizationAdmin: true,
+			isSuperAdmin: true,
 		},
 	)
 	.post(
@@ -24,7 +24,7 @@ export const keysApi = new Elysia({ prefix: "keys", name: "API-KEYS" })
 		},
 		{
 			body: insertKeysSchema,
-			isOrganizationAdmin: true,
+			isSuperAdmin: true,
 		},
 	)
 	.delete(
@@ -36,6 +36,6 @@ export const keysApi = new Elysia({ prefix: "keys", name: "API-KEYS" })
 			body: t.Object({
 				id: t.String({ minLength: 1 }),
 			}),
-			isOrganizationAdmin: true,
+			isSuperAdmin: true,
 		},
 	);

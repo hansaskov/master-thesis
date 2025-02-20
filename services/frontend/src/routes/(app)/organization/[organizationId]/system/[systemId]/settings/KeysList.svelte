@@ -10,7 +10,7 @@
 	import KeysForm from './KeysForm.svelte';
 	import { getRelativeTimeString } from '@/dates';
 
-	$inspect(keysStore.keys);
+	keysStore.fetch();
 </script>
 
 <Card.Root class="md:col-span-2">
@@ -24,16 +24,14 @@
 				<Table.Header>
 					<Table.Row>
 						<Table.Head>Name</Table.Head>
-						<Table.Head>Token</Table.Head>
 						<Table.Head>Created</Table.Head>
 						<Table.Head class="text-right">actions</Table.Head>
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{#each keysStore.keys as { id, name, public_key, created_at }}
+					{#each keysStore.keys as { id, name, created_at }}
 						<Table.Row>
 							<Table.Cell>{name}</Table.Cell>
-							<Table.Cell>{public_key}</Table.Cell>
 							<Table.Cell>{getRelativeTimeString(created_at)}</Table.Cell>
 							<Table.Cell class="text-right">
 								<DropdownMenu.Root>
