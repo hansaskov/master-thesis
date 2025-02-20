@@ -103,6 +103,9 @@
 <Card.Root class="col-span-1 md:col-span-2">
 	<Card.Header>
 		<Card.Title>User Management</Card.Title>
+		<Card.Description
+			>Invite new users to your organization or remove them from the list
+		</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<form onsubmit={inviteUser} class="mb-6">

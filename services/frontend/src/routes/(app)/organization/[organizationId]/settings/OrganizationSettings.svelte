@@ -26,6 +26,7 @@
 <Card.Root>
 	<Card.Header>
 		<Card.Title>Organization Settings</Card.Title>
+		<Card.Description>Change the settings for this organization</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<form {onsubmit}>

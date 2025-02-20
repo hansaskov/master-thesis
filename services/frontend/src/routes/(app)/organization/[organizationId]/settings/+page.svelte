@@ -1,8 +1,9 @@
 <script lang="ts">
 	import OrganizationSettings from './OrganizationSettings.svelte';
 	import UserSettings from './UserSettings.svelte';
-	import ProductionSettings from './ProductionSettings.svelte';
+	import SystemsForm from './SystemsForm.svelte';
 	import { userStore } from '@/stores/user.svelte';
+	import SystemsList from './SystemsList.svelte';
 
 	userStore.refresh();
 </script>
@@ -14,7 +15,8 @@
 		<UserSettings />
 		<OrganizationSettings />
 		{#if userStore.isAdmin}
-			<ProductionSettings />
+			<SystemsForm />
+			<SystemsList />
 		{/if}
 	</div>
 </div>
