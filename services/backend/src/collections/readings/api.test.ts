@@ -18,7 +18,7 @@ async function seedDatabase() {
 	});
 
 	// Insert key
-	const key = await Queries.keys.create({ 
+	const key = await Queries.keys.create({
 		system_id: system.id,
 		name: "Test key 1",
 	});
