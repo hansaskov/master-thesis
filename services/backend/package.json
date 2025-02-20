@@ -9,9 +9,9 @@
     "compile": "bun build src/index.ts --compile --minify --sourcemap --target bun --outfile backend",
     "check": "tsc --noEmit",
     "preview": "NODE_ENV=production bun dist/index.js",
-    "format": "bunx @biomejs/biome format --write src",
-    "lint": "bunx @biomejs/biome check src",
-    "lint:fix": "bunx @biomejs/biome check src --write",
+    "format": "bun x @biomejs/biome format --write src",
+    "lint": "bun x @biomejs/biome check src",
+    "lint:fix": "bun x @biomejs/biome check src --write",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push --verbose --strict",
     "db:migrate": "drizzle-kit migrate",
@@ -30,7 +30,8 @@
     "drizzle-typebox": "0.1.1",
     "elysia": "^1.2.10",
     "nanoid": "^5.0.9",
-    "postgres": "^3.4.5"
+    "postgres": "^3.4.5",
+    "resend": "^4.1.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

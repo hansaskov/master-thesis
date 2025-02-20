@@ -5,13 +5,11 @@
 	import User from 'lucide-svelte/icons/user';
 	import Search from 'lucide-svelte/icons/search';
 
-	import * as Breadcrumb from '$lib/components/ui/breadcrumb';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import NotificationBell from '$lib/components/NotificationBell.svelte';
 	import Settings from '$lib/components/Settings.svelte';
 
-	import OrgCombobox from './OrgCombobox.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { toggleMode } from 'mode-watcher';
@@ -19,31 +17,20 @@
 	import UserRoundCog from 'lucide-svelte/icons/user-round-cog';
 	import { userStore } from '$lib/stores/user.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
-	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
+	import BreadCrumb from './BreadCrumb.svelte';
 
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
-			goto(`/organization/${organizationStore.currentOrganization.id}/systems`);
+			goto(`/organization/${organizationStore.currentOrganization.id}`);
 		} else if (organizationStore.organizations.length > 0) {
-			goto(`/organization/${organizationStore.organizations[0].id}/systems`);
+			goto(`/organization/${organizationStore.organizations[0].id}`);
 		} else {
 			goto(`/organization`);
 		}
 	}
 
 	const { children } = $props();
-
-	let breadcrumbs = $derived.by(() =>
-		page.url.pathname
-			.split('/')
-			.filter(Boolean)
-			.map((segment, index, array) => ({
-				href: `/${array.slice(0, index + 1).join('/')}`,
-				label: segment.charAt(0).toUpperCase() + segment.slice(1),
-				isLast: index === array.length - 1
-			}))
-	);
 </script>
 
 <div class="flex min-h-screen w-full flex-col bg-background/40 text-foreground">
@@ -72,14 +59,15 @@
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
-				<a
-					href="/superadmin"
-					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
-				>
-					<UserRoundCog class="w-5 h-5" />
-				</a>
-			</nav>
-			<nav class="flex flex-col items-center gap-4 px-2 py-4">
+				{#if userStore.user?.is_superadmin}
+					<a
+						href="/superadmin"
+						class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
+					>
+						<UserRoundCog class="w-5 h-5" />
+					</a>
+				{/if}
+
 				<a
 					href="/support"
 					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
@@ -97,27 +85,7 @@
 		>
 			<!-- Breadcrumb and other header elements -->
 
-			<Breadcrumb.Root>
-				<Breadcrumb.List>
-					<Breadcrumb.Page>
-						<OrgCombobox></OrgCombobox>
-					</Breadcrumb.Page>
-					{#if organizationStore.currentOrganization}
-						<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
-					{/if}
-					{#each breadcrumbs.slice(2) as crumb}
-						{#if !crumb.isLast}
-							<Breadcrumb.Link class="hidden sm:flex" href={crumb.href}>
-								{crumb.label}
-							</Breadcrumb.Link>
-
-							<Breadcrumb.Separator class="hidden sm:flex"></Breadcrumb.Separator>
-						{:else}
-							<Breadcrumb.Page class="hidden sm:flex">{crumb.label}</Breadcrumb.Page>
-						{/if}
-					{/each}
-				</Breadcrumb.List>
-			</Breadcrumb.Root>
+			<BreadCrumb></BreadCrumb>
 
 			<nav class="flex items-center space-x-2 ml-auto">
 				<!-- TODO: Hide settings for user without permissions to change settings of the page-->

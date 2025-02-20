@@ -10,7 +10,6 @@ export const readingsApi = new Elysia()
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");
 			}
-
 			const values = body.map((reading) => ({
 				time: new Date(reading.time),
 				name: reading.name,
@@ -18,11 +17,12 @@ export const readingsApi = new Elysia()
 				unit: reading.unit,
 			}));
 
-			await Queries.readings.insertWithSystemId(values, key.private_key);
+			await Queries.readings.insertWithSystemId(values, {
+				system_id: key.system_id,
+			});
 		},
 		{
 			headers: t.Object({
-				public_key: Schema.select.keys.public_key,
 				private_key: Schema.select.keys.private_key,
 			}),
 			body: t.Array(

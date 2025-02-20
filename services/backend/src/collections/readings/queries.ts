@@ -16,8 +16,8 @@ export const readingsQueries = {
 	insert: async (values: Types.Reading[]) =>
 		await db.insert(readings).values(values),
 	insertWithSystemId: async (
-		values: StrictOmit<Types.Reading, "system_id">[],
-		system_id: string,
+		values: StrictOmit<Types.ReadingNew, "system_id">[],
+		{ system_id }: StrictPick<Types.ReadingNew, "system_id">,
 	) => {
 		const newValues = values.map((reading) => ({
 			...reading,

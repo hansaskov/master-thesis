@@ -66,7 +66,7 @@ end=$((SECONDS + 300))
 while [ $SECONDS -lt $end ]; do
     if ssh -o StrictHostKeyChecking=no "root@${SERVER_IP}" "systemctl is-system-running" >/dev/null 2>&1; then
         echo "🔄 Updating NixOS configuration..."
-        export SSH_KEYS=$(hcloud ssh-key describe deploy-key -o format='{{.PublicKey}}')
+        export SSH_PUBLIC_KEYS=$(hcloud ssh-key describe deploy-key -o format='{{.PublicKey}}')
         bash ./remote-update.sh
         echo "🎉 NixOS ready! Connect with: ssh root@$SERVER_IP or admin@$SERVER_IP" 
         exit 0

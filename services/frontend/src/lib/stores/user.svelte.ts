@@ -6,26 +6,23 @@ import { toast } from 'svelte-sonner';
 
 class UserStore {
 	public user: Types.User | null = $state(null);
-	public isLoading = $state(false);
-
+	public userRelation: Types.UserToOrganization | undefined = $state(undefined);
+	public isAdmin = $derived(this.user?.is_superadmin ?? false);
 	private nonAuthorizedRedirectUrl = '/';
-	private authorizedRedirectUrl = '/systems';
 
-	public async login(provider: Types.User['provider_name']) {
-		// We only support one provider of microsoft as of now.
-		// Hardcode to use microsoft. But can be updated to use more that one.
-		if (provider === 'Github') {
-			return onError(`Authentication with ${provider} is currently not supported`);
-		}
+	constructor() {
+		this.refresh();
+	}
 
-		const { error } = await api.login['microsoft'].get();
+	public async refresh() {
+		const { data, error } = await api.status.refresh.get();
 
 		if (error) {
-			return onError(error);
+			return;
 		}
 
-		toast.success('Redirecting to Microsoft');
-		goto(this.authorizedRedirectUrl);
+		this.user = data.user;
+		this.userRelation = data.relation;
 	}
 
 	public async logout() {
@@ -37,19 +34,6 @@ class UserStore {
 
 		toast.success('Successfully logged out');
 		goto(this.nonAuthorizedRedirectUrl);
-	}
-
-	public async refresh() {
-		this.isLoading = true;
-		const { data, error } = await api.refresh.get();
-		this.isLoading = false;
-
-		if (error) {
-			onError(`Authentication failed. Redirecting to ${this.nonAuthorizedRedirectUrl}`);
-			goto(this.nonAuthorizedRedirectUrl);
-		}
-
-		this.user = data;
 	}
 }
 

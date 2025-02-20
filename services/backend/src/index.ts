@@ -1,25 +1,30 @@
 import cluster from "node:cluster";
 import { availableParallelism } from "node:os";
 import process from "node:process";
+import { env } from "elysia";
 import { app } from "./server";
 
 export type App = typeof app;
 export type * as Types from "$collections/types";
 
-if (cluster.isPrimary) {
-	console.log(`Primary ${process.pid} is running`);
+const signals = ["SIGINT", "SIGTERM"];
 
-	// Start N workers for the number of CPUs
-	const numberOfThreads = Math.ceil(availableParallelism() / 2);
-	for (let i = 0; i < numberOfThreads; i++) {
-		cluster.fork();
-	}
-
-	cluster.on("exit", (worker) => {
-		console.log(`worker ${worker.process.pid} died`);
-		process.exit(1);
+for (const signal of signals) {
+	process.on(signal, async () => {
+		console.log(`Received ${signal}. Initiating graceful shutdown...`);
+		await app.stop();
+		process.exit(0);
 	});
-} else {
-	app.listen(process.env.PORT as string);
-	console.log(`🦊 Worker ${process.pid} started at ${app.server?.url.origin}`);
 }
+
+process.on("uncaughtException", (error) => {
+	console.error(error);
+});
+
+process.on("unhandledRejection", (error) => {
+	console.error(error);
+});
+
+app.listen(env.PORT ?? 3000, () =>
+	console.info("🚀 Server started at http://127.0.0.1:3000/"),
+);

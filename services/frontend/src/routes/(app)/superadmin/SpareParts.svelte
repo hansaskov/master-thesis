@@ -6,7 +6,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import type { Types } from 'backend';
-	import { partsStore } from '$lib/stores/new-parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 	import { Ellipsis } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
@@ -18,7 +18,7 @@
 		name: ''
 	});
 
-	function remove(e: SubmitEvent) {
+	function add(e: SubmitEvent) {
 		e.preventDefault();
 		partsStore.add(newPart);
 		newPart = {
@@ -33,8 +33,8 @@
 	</Card.Header>
 	<Card.Content>
 		<div class="mb-6">
-			<Label for="new-organization">Add New Spare Part</Label>
-			<form class="flex gap-2" onsubmit={remove}>
+			<Label for="new-part">Add New Spare Part</Label>
+			<form class="flex gap-2" onsubmit={add}>
 				<Input placeholder="Enter spare part name" bind:value={newPart.name} />
 				<Button type="submit">Add Part</Button>
 			</form>
@@ -44,6 +44,7 @@
 			<Table.Caption>List of Spare Parts</Table.Caption>
 			<Table.Header>
 				<Table.Row>
+					<Table.Head>Image</Table.Head>
 					<Table.Head>Name</Table.Head>
 					<Table.Head class="text-right">Actions</Table.Head>
 				</Table.Row>
@@ -51,6 +52,7 @@
 			<Table.Body>
 				{#each partsStore.parts as part}
 					<Table.Row>
+						<Table.Cell>{part.image}</Table.Cell>
 						<Table.Cell>{part.name}</Table.Cell>
 						<Table.Cell class="text-right">
 							<DropdownMenu.Root>
@@ -67,14 +69,13 @@
 										onclick={() => {
 											dialogStore.open({
 												title: `Update ${part.name}`,
-												description:
-													'This action will update the name of the selected organization',
+												description: 'This action will update the name of the selected part',
 												component: EditPartDialogBody,
 												props: part
 											});
 										}}
 									>
-										Edit Organization
+										Edit Part
 									</DropdownMenu.Item>
 									<DropdownMenu.Separator />
 									<DropdownMenu.Item
@@ -88,7 +89,7 @@
 										}}
 										class="text-red-600"
 									>
-										Remove Organization
+										Remove Part
 									</DropdownMenu.Item>
 								</DropdownMenu.Content>
 							</DropdownMenu.Root>

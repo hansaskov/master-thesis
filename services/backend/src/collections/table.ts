@@ -1,4 +1,5 @@
 import { factoryAreas } from "./factory_areas/schema";
+import { invites } from "./invites/schema";
 import { keys } from "./keys/schema";
 import { organizations } from "./organizations/schema";
 import { parts } from "./parts/schema";
@@ -30,4 +31,5 @@ export const Table = {
 	usersToOrganizations,
 	usersToFactoryAreas,
 	systemsToParts,
+	invites,
 } as const;

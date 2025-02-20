@@ -21,7 +21,7 @@
 				<Sun class="absolute h-4 w-4 rotate-0 scale-100 dark:scale-0" />
 				<Moon class="absolute h-4 w-4 rotate-90 scale-0 dark:scale-100 " />
 			</Button>
-			<Button href="/" variant="outline">Login</Button>
+			<Button href="/api/login/microsoft" variant="outline">Login</Button>
 		</nav>
 	</header>
 

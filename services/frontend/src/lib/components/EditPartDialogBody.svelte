@@ -4,7 +4,7 @@
 	import { Button } from './ui/button';
 	import { Input } from './ui/input';
 	import { Label } from './ui/label';
-	import { partsStore } from '$lib/stores/new-parts.svelte';
+	import { partsStore } from '$lib/stores/parts.svelte';
 
 	let props: Types.Part = $props();
 

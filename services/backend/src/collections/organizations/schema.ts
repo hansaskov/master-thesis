@@ -1,4 +1,4 @@
-import type { PartialExcept } from "$types/strict";
+import type { PartialExcept, StrictPick } from "$types/strict";
 import { generateRandomString } from "$utils/random";
 import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
@@ -24,3 +24,4 @@ export const updateOrganizationsSchema = createSelectSchema(organizations, {
 export type Organization = typeof organizations.$inferSelect;
 export type OrganizationNew = typeof organizations.$inferInsert;
 export type OrganizationUpdate = PartialExcept<Organization, "id">;
+export type OrganizationUnique = StrictPick<Organization, "id">;
