@@ -3,11 +3,11 @@ import type { Types } from 'backend';
 import { PersistedState } from 'runed';
 
 interface SystemModelWithParts extends Types.SystemModel {
-    parts: Array<{
-        id: string;
-        name: string;
-        image: string | null;
-    }>;
+	parts: Array<{
+		id: string;
+		name: string;
+		image: string | null;
+	}>;
 }
 
 export class SystemModelStore {
@@ -18,19 +18,19 @@ export class SystemModelStore {
 
 	async refresh() {
 		const { data, error } = await api.system_models.index.get();
-	
+
 		if (error) {
-		  console.error('API Error:', error);
-		  return;
+			console.error('API Error:', error);
+			return;
 		}
-	
+
 		console.log('Raw API response:', data);
-		
+
 		try {
-		  this.#systemModels.current = data;
-		  console.log('Successfully updated store with', data.length, 'models');
+			this.#systemModels.current = data;
+			console.log('Successfully updated store with', data.length, 'models');
 		} catch (err) {
-		  console.error('Error updating store:', err);
+			console.error('Error updating store:', err);
 		}
 	}
 

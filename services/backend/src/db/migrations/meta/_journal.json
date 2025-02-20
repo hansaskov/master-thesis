@@ -1,34 +1,34 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1739365159155,
-      "tag": "0000_wise_ultragirl",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1739367258116,
-      "tag": "0001_migrate_system_models",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1739881873282,
-      "tag": "0002_luxuriant_moira_mactaggert",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1739886221304,
-      "tag": "0003_nervous_rachel_grey",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1739365159155,
+			"tag": "0000_wise_ultragirl",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1739367258116,
+			"tag": "0001_migrate_system_models",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1739881873282,
+			"tag": "0002_luxuriant_moira_mactaggert",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1739886221304,
+			"tag": "0003_nervous_rachel_grey",
+			"breakpoints": true
+		}
+	]
 }

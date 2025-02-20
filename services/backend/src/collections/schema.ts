@@ -8,6 +8,7 @@ import {
 	selectOrganizationsSchema,
 } from "./organizations/schema";
 import { insertPartsSchema, selectPartsSchema } from "./parts/schema";
+import { insertPartsToSystemModelsSchema } from "./parts_to_system_models/schema";
 import { insertReadingsSchema, selectReadingsSchema } from "./readings/schema";
 import { insertSessionsSchema } from "./sessions/schema";
 import { insertSystemModelsSchema } from "./system_models/schema";
@@ -15,7 +16,6 @@ import { insertSystemsSchema, selectSystemsSchema } from "./systems/schema";
 import { insertUserSettingsSchema } from "./user_settings/schema";
 import { insertUserSchema, selectUserSchema } from "./users/schema";
 import { insertUserToOrganizationSchema } from "./users_to_organizations/schema";
-import { insertPartsToSystemModelsSchema } from "./parts_to_system_models/schema";
 
 export const Schema = {
 	insert: spreads(
@@ -32,7 +32,7 @@ export const Schema = {
 			keys: insertKeysSchema,
 			usersToOrganizations: insertUserToOrganizationSchema,
 			invites: insertInvitesSchema,
-			partsToSystemModels: insertPartsToSystemModelsSchema
+			partsToSystemModels: insertPartsToSystemModelsSchema,
 		},
 		"insert",
 	),

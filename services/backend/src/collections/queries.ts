@@ -21,6 +21,5 @@ export const Queries = {
 	part: partQueries,
 	systemModels: systemModelQueries,
 	invites: invitesQueries,
-	partsToSystemModels: partsToSystemModelsQueries
+	partsToSystemModels: partsToSystemModelsQueries,
 };
-

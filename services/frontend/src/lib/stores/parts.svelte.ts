@@ -64,16 +64,16 @@ export class PartsStore {
 	async remove({ id }: StrictPick<Types.Part, 'id'>) {
 		const removed = this.#remove({ id });
 
-		const { data, error } = await api.parts.index.delete({ id });
+		const { data: partData, error: partError } = await api.parts.index.delete({ id });
 
-		if (data) {
-			toast.success(`Part ${data.name} has been removed`);
+		if (partData) {
+			toast.success(`Part ${partData.name} has been removed`);
 			return;
 		}
 
-		if (error && removed) {
+		if (partError && removed) {
 			this.#add(removed);
-			return onError(error);
+			return onError(partError);
 		}
 
 		console.log('Unreachable branch in Parts.remove');

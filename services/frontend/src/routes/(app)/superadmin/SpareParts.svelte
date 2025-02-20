@@ -44,6 +44,7 @@
 			<Table.Caption>List of Spare Parts</Table.Caption>
 			<Table.Header>
 				<Table.Row>
+					<Table.Head>Image</Table.Head>
 					<Table.Head>Name</Table.Head>
 					<Table.Head class="text-right">Actions</Table.Head>
 				</Table.Row>
@@ -51,6 +52,7 @@
 			<Table.Body>
 				{#each partsStore.parts as part}
 					<Table.Row>
+						<Table.Cell>{part.image}</Table.Cell>
 						<Table.Cell>{part.name}</Table.Cell>
 						<Table.Cell class="text-right">
 							<DropdownMenu.Root>
@@ -67,8 +69,7 @@
 										onclick={() => {
 											dialogStore.open({
 												title: `Update ${part.name}`,
-												description:
-													'This action will update the name of the selected organization',
+												description: 'This action will update the name of the selected part',
 												component: EditPartDialogBody,
 												props: part
 											});
