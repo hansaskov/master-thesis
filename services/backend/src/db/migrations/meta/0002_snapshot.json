@@ -1,5 +1,5 @@
 {
-	"id": "fdcaaa07-8c31-4e84-a70f-6af21a3a5a2f",
+	"id": "f2151a84-4fb7-42ce-a69a-cade0f1a5fcc",
 	"prevId": "b0a3a225-a0f9-4623-9b8a-06af60d4c230",
 	"version": "7",
 	"dialect": "postgresql",
@@ -49,6 +49,12 @@
 			"name": "invites",
 			"schema": "",
 			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true
+				},
 				"email": {
 					"name": "email",
 					"type": "text",
@@ -67,6 +73,19 @@
 					"primaryKey": false,
 					"notNull": true
 				},
+				"is_accepted": {
+					"name": "is_accepted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true
+				},
 				"role": {
 					"name": "role",
 					"type": "users_to_provider_roles",
@@ -76,7 +95,29 @@
 					"default": "'User'"
 				}
 			},
-			"indexes": {},
+			"indexes": {
+				"invites_email_organization_id_index": {
+					"name": "invites_email_organization_id_index",
+					"columns": [
+						{
+							"expression": "email",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						},
+						{
+							"expression": "organization_id",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"concurrently": false,
+					"method": "btree",
+					"with": {}
+				}
+			},
 			"foreignKeys": {
 				"invites_inviter_id_users_id_fk": {
 					"name": "invites_inviter_id_users_id_fk",
@@ -88,12 +129,7 @@
 					"onUpdate": "no action"
 				}
 			},
-			"compositePrimaryKeys": {
-				"invites_email_organization_id_pk": {
-					"name": "invites_email_organization_id_pk",
-					"columns": ["email", "organization_id"]
-				}
-			},
+			"compositePrimaryKeys": {},
 			"uniqueConstraints": {},
 			"policies": {},
 			"checkConstraints": {},
@@ -223,12 +259,6 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
-				},
-				"image": {
-					"name": "image",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false
 				}
 			},
 			"indexes": {},

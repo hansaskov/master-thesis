@@ -7,21 +7,9 @@
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
 
-	// import { systems } from '$lib/stores/systems';
 	import { systemStore } from '$lib/stores/systems.svelte';
 
-	// const sortSystems = (key: SortKey) => {
-	// 	sortedSystems.update((systems) => {
-	// 		const sorted = [...systems].sort((a, b) => {
-	// 			if (key === 'lastCheck') {
-	// 				return (parseTime(a[key]) - parseTime(b[key])) * currentOrder;
-	// 			}
-	// 			return (a[key] > b[key] ? 1 : -1) * currentOrder;
-	// 		});
-	// 		currentOrder *= -1;
-	// 		return sorted;
-	// 	});
-	// };
+	import { organizationStore } from '$lib/stores/organization.svelte';
 
 	let name = 'User'; // Replace with actual user name
 
@@ -66,7 +54,8 @@
 						{#each systemStore.systems as system (system.id)}
 							<!-- TODO: Load image matching the system model type. Get status based on recent readings  -->
 							<Table.Row
-								onclick={() => goto(`./systems/${system.id}`)}
+								onclick={() =>
+									goto(`./${organizationStore.currentOrganization?.id}/system/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
 								<Table.Cell>Placeholder Image</Table.Cell>

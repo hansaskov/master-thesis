@@ -44,6 +44,25 @@ export const usersQueries = {
 	},
 	delete: async (user: StrictPick<Types.User, "id">) =>
 		await db.delete(Table.users).where(eq(Table.users.id, user.id)).returning(),
+	selectOneOnOrganization: async (
+		organization: Types.OrganizationUnique,
+		user: Types.UserUnique,
+	) =>
+		await db
+			.select({
+				...getTableColumns(Table.users),
+			})
+			.from(Table.users)
+			.innerJoin(
+				Table.usersToOrganizations,
+				and(
+					eq(Table.users.id, Table.usersToOrganizations.user_id),
+					eq(Table.usersToOrganizations.organization_id, organization.id),
+					eq(Table.users.id, user.id),
+				),
+			)
+			.limit(1)
+			.then((v) => v.at(0)),
 	selectAllOnOrganization: async (
 		organization: StrictPick<Types.Organization, "id">,
 	) =>

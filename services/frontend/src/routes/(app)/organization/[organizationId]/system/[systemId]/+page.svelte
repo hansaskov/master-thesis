@@ -12,13 +12,13 @@
 	import BarChart from 'lucide-svelte/icons/chart-bar';
 	import Package2 from 'lucide-svelte/icons/package-2';
 	import Cog from 'lucide-svelte/icons/cog';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	// Placeholder data
 	import { systems } from '@/stores/systems-mocked';
 
 	// Get the system ID from the route parameters
-	let systemId = $derived($page.params.id);
+	let systemId = $derived(page.params.systemId);
 
 	const navigationOptions = [
 		{
