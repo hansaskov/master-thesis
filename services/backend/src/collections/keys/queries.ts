@@ -6,9 +6,7 @@ import { keys } from "./schema";
 const PreparedselectUnique = db
 	.select()
 	.from(keys)
-	.where(
-		eq(keys.private_key, sql.placeholder("private_key")),
-	)
+	.where(eq(keys.private_key, sql.placeholder("private_key")))
 	.limit(1)
 	.prepare("select_unique_Key");
 

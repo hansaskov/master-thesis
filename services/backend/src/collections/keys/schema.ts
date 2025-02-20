@@ -1,9 +1,9 @@
+import type { StrictPick } from "$types/strict";
 import { generateRandomString } from "$utils/random";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";
 import { systems } from "../systems/schema";
-import { StrictPick } from "$types/strict";
 
 export const keys = pgTable("keys", {
 	private_key: text()

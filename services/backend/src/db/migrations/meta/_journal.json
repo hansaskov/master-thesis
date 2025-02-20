@@ -1,27 +1,27 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1740052382635,
-      "tag": "0000_zippy_red_ghost",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1740052854272,
-      "tag": "0001_broken_stryfe",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1740054039068,
-      "tag": "0002_young_calypso",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1740052382635,
+			"tag": "0000_zippy_red_ghost",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1740052854272,
+			"tag": "0001_broken_stryfe",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1740054039068,
+			"tag": "0002_young_calypso",
+			"breakpoints": true
+		}
+	]
 }
