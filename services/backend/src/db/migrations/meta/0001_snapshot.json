@@ -1,6 +1,6 @@
 {
-	"id": "b0a3a225-a0f9-4623-9b8a-06af60d4c230",
-	"prevId": "b7499e92-6275-46ca-85f0-4cf00b43ed88",
+	"id": "dce71609-889a-4476-8efa-987664f51886",
+	"prevId": "2b5428f4-5e52-4178-8045-ebdaeb1be245",
 	"version": "7",
 	"dialect": "postgresql",
 	"tables": {
@@ -49,6 +49,12 @@
 			"name": "invites",
 			"schema": "",
 			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true
+				},
 				"email": {
 					"name": "email",
 					"type": "text",
@@ -67,6 +73,19 @@
 					"primaryKey": false,
 					"notNull": true
 				},
+				"is_accepted": {
+					"name": "is_accepted",
+					"type": "boolean",
+					"primaryKey": false,
+					"notNull": true,
+					"default": false
+				},
+				"expires_at": {
+					"name": "expires_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true
+				},
 				"role": {
 					"name": "role",
 					"type": "users_to_provider_roles",
@@ -76,7 +95,29 @@
 					"default": "'User'"
 				}
 			},
-			"indexes": {},
+			"indexes": {
+				"invites_email_organization_id_index": {
+					"name": "invites_email_organization_id_index",
+					"columns": [
+						{
+							"expression": "email",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						},
+						{
+							"expression": "organization_id",
+							"isExpression": false,
+							"asc": true,
+							"nulls": "last"
+						}
+					],
+					"isUnique": false,
+					"with": {},
+					"method": "btree",
+					"concurrently": false
+				}
+			},
 			"foreignKeys": {
 				"invites_inviter_id_users_id_fk": {
 					"name": "invites_inviter_id_users_id_fk",
@@ -88,12 +129,7 @@
 					"onDelete": "no action"
 				}
 			},
-			"compositePrimaryKeys": {
-				"invites_email_organization_id_pk": {
-					"name": "invites_email_organization_id_pk",
-					"columns": ["email", "organization_id"]
-				}
-			},
+			"compositePrimaryKeys": {},
 			"uniqueConstraints": {},
 			"policies": {},
 			"checkConstraints": {},
@@ -223,6 +259,12 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
+				},
+				"image": {
+					"name": "image",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},
@@ -353,7 +395,13 @@
 			"indexes": {},
 			"foreignKeys": {},
 			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
+			"uniqueConstraints": {
+				"system_models_name_unique": {
+					"name": "system_models_name_unique",
+					"columns": ["name"],
+					"nullsNotDistinct": false
+				}
+			},
 			"policies": {},
 			"checkConstraints": {},
 			"isRLSEnabled": false

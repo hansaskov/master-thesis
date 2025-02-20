@@ -15,7 +15,7 @@
 	import { page } from '$app/state';
 
 	// Placeholder data
-	import { systems } from '$lib/stores/systems';
+	import { systems } from '@/stores/systems-mocked';
 
 	// Get the system ID from the route parameters
 	let systemId = $derived(page.params.systemId);
