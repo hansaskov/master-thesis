@@ -8,11 +8,13 @@ CREATE TABLE "factory_areas" (
 );
 --> statement-breakpoint
 CREATE TABLE "invites" (
+	"id" text PRIMARY KEY NOT NULL,
 	"email" text NOT NULL,
 	"organization_id" text NOT NULL,
 	"inviter_id" text NOT NULL,
-	"role" "users_to_provider_roles" DEFAULT 'User' NOT NULL,
-	CONSTRAINT "invites_email_organization_id_pk" PRIMARY KEY("email","organization_id")
+	"is_accepted" boolean DEFAULT false NOT NULL,
+	"expires_at" timestamp NOT NULL,
+	"role" "users_to_provider_roles" DEFAULT 'User' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "keys" (
@@ -33,7 +35,8 @@ CREATE TABLE "parts_to_system_models" (
 --> statement-breakpoint
 CREATE TABLE "parts" (
 	"id" text PRIMARY KEY NOT NULL,
-	"name" text NOT NULL
+	"name" text NOT NULL,
+	"image" text
 );
 --> statement-breakpoint
 CREATE TABLE "readings" (
@@ -53,7 +56,8 @@ CREATE TABLE "sessions" (
 --> statement-breakpoint
 CREATE TABLE "system_models" (
 	"id" text PRIMARY KEY NOT NULL,
-	"name" "system_models_enum" NOT NULL
+	"name" "system_models_enum" NOT NULL,
+	CONSTRAINT "system_models_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
 CREATE TABLE "systems_to_factory_areas" (
@@ -122,4 +126,5 @@ ALTER TABLE "user_settings" ADD CONSTRAINT "user_settings_user_id_users_id_fk" F
 ALTER TABLE "users_to_factory_areas" ADD CONSTRAINT "users_to_factory_areas_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users_to_factory_areas" ADD CONSTRAINT "users_to_factory_areas_factory_area_id_factory_areas_id_fk" FOREIGN KEY ("factory_area_id") REFERENCES "public"."factory_areas"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "users_to_organizations" ADD CONSTRAINT "users_to_organizations_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "users_to_organizations" ADD CONSTRAINT "users_to_organizations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "users_to_organizations" ADD CONSTRAINT "users_to_organizations_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "invites_email_organization_id_index" ON "invites" USING btree ("email","organization_id");

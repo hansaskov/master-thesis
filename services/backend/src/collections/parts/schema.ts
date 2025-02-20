@@ -10,6 +10,7 @@ export const parts = pgTable("parts", {
 		.notNull()
 		.$default(() => generateRandomString(12)),
 	name: text().notNull(),
+	image: text(),
 });
 
 export const selectPartsSchema = createSelectSchema(parts);

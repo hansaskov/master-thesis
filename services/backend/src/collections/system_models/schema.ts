@@ -9,7 +9,7 @@ export const systemModels = pgTable("system_models", {
 		.primaryKey()
 		.notNull()
 		.$default(() => generateRandomString(12)),
-	name: systemModelEnum().notNull(),
+	name: systemModelEnum().notNull().unique(),
 });
 
 export const insertSystemModelsSchema = createInsertSchema(systemModels, {

@@ -8,7 +8,8 @@ export const partsApi = new Elysia({ prefix: "parts" })
 	.get(
 		"/",
 		async ({ user }) => {
-			return await Queries.part.selectAll();
+			const result = await Queries.part.selectAll();
+			return result;
 		},
 		{
 			isSuperAdmin: true,
@@ -27,8 +28,8 @@ export const partsApi = new Elysia({ prefix: "parts" })
 		},
 		{
 			body: t.Object({
-				name: t.Optional(Schema.insert.organizations.name),
-				id: Schema.select.organizations.id,
+				name: t.Optional(Schema.insert.parts.name),
+				id: Schema.select.part.id,
 			}),
 			isSuperAdmin: true,
 		},
