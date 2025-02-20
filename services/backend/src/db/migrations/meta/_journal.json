@@ -22,6 +22,13 @@
 			"when": 1740054039068,
 			"tag": "0002_young_calypso",
 			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1740064731542,
+			"tag": "0003_brief_cable",
+			"breakpoints": true
 		}
 	]
 }
