@@ -1,4 +1,6 @@
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-typebox";
+import { t } from "elysia";
 import { parts } from "../parts/schema";
 import { systemModels } from "../system_models/schema";
 
@@ -14,6 +16,9 @@ export const partsToSystemModels = pgTable(
 	},
 	(table) => [primaryKey({ columns: [table.part_id, table.system_model_id] })],
 );
+
+export const insertPartsToSystemModelsSchema =
+	createInsertSchema(partsToSystemModels);
 
 export type PartToSystemModel = typeof partsToSystemModels.$inferSelect;
 export type PartToSystemModelNew = typeof partsToSystemModels.$inferInsert;

@@ -16,3 +16,4 @@ export type * from "./user_settings/schema";
 export type * from "./users/schema";
 export type * from "./users_to_factory_areas/schema";
 export type * from "./users_to_organizations/schema";
+export type * from "./invites/schema";

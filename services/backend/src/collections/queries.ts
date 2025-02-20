@@ -1,8 +1,11 @@
+import { invitesQueries } from "./invites/queries";
 import { keysQueries } from "./keys/queries";
 import { organizationQueries } from "./organizations/queries";
 import { partQueries } from "./parts/queries";
+import { partsToSystemModelsQueries } from "./parts_to_system_models/queries";
 import { readingsQueries } from "./readings/queries";
 import { sessionQueries } from "./sessions/queries";
+import { systemModelQueries } from "./system_models/queries";
 import { systemQueries } from "./systems/queries";
 import { usersQueries } from "./users/queries";
 import { usersToOrganizationsQueries } from "./users_to_organizations/queries";
@@ -16,4 +19,7 @@ export const Queries = {
 	usersToOrganizations: usersToOrganizationsQueries,
 	systems: systemQueries,
 	part: partQueries,
+	systemModels: systemModelQueries,
+	invites: invitesQueries,
+	partsToSystemModels: partsToSystemModelsQueries,
 };

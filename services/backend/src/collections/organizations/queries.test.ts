@@ -8,6 +8,7 @@ describe("Organization Queries", async () => {
 		});
 
 		const user = await Queries.users.create({
+			name: "Test User",
 			provider_id: "kgæajvpajnbir",
 			provider_name: "Microsoft",
 			is_superadmin: true,
@@ -38,6 +39,7 @@ describe("Organization Queries", async () => {
 		});
 
 		const user = await Queries.users.create({
+			name: "Test User",
 			provider_id: "kgæajvpajnbir",
 			provider_name: "Microsoft",
 			is_superadmin: true,

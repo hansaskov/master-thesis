@@ -6,18 +6,22 @@ import { keys } from "./schema";
 const PreparedselectUnique = db
 	.select()
 	.from(keys)
-	.where(
-		and(
-			eq(keys.public_key, sql.placeholder("public_key")),
-			eq(keys.private_key, sql.placeholder("private_key")),
-		),
-	)
+	.where(eq(keys.private_key, sql.placeholder("private_key")))
 	.limit(1)
 	.prepare("select_unique_Key");
 
 export const keysQueries = {
-	select: async (values: Types.Keys) =>
+	select: async (values: Types.KeysUnique) =>
 		await PreparedselectUnique.execute(values).then((v) => v.at(0)),
+	selectAllOnSystem: async (system: Types.SystemUnique) =>
+		await db
+			.select({
+				name: keys.name,
+				created_at: keys.created_at,
+				public_key: keys.system_id,
+			})
+			.from(keys)
+			.where(eq(keys.system_id, system.id)),
 	create: async (values: Types.KeysNew) =>
 		await db
 			.insert(keys)

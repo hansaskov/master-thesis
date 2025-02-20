@@ -30,7 +30,7 @@ export const microsoftApi = new Elysia()
 		({ cookie }) => {
 			const state = generateState();
 			const codeVerifier = generateCodeVerifier();
-			const scopes = ["openid", "profile"];
+			const scopes = ["openid", "profile", "email"];
 
 			const url = entraId.createAuthorizationURL(state, codeVerifier, scopes);
 
@@ -68,6 +68,7 @@ export const microsoftApi = new Elysia()
 				{
 					headers: {
 						Authorization: `Bearer ${tokens.accessToken()}`,
+						Scope: "email profile openid",
 					},
 				},
 			).then((r) => r.json());
@@ -105,9 +106,21 @@ export const microsoftApi = new Elysia()
 				return redirect("/organization", 302);
 			}
 
+			const name =
+				userParsed.name || userParsed.familyname || userParsed.givenname;
+			if (!name) {
+				const errorMessage = "No name found for user";
+
+				console.error(errorMessage);
+				return error(500, errorMessage);
+			}
+
 			const user = await Queries.users.create({
 				provider_name: "Microsoft",
 				provider_id: userParsed.sub,
+				name: name,
+				email: userParsed.email,
+				image: userParsed.picture,
 			});
 
 			const sessionToken = generateSessionToken();
@@ -130,10 +143,12 @@ export const microsoftApi = new Elysia()
 
 const UserSchema = t.Object({
 	sub: t.String(),
+	name: t.Optional(t.String()),
 	familyname: t.Optional(t.String()),
 	givenname: t.Optional(t.String()),
 	locale: t.Optional(t.String()),
 	picture: t.Optional(t.String()),
+	email: t.Optional(t.String()),
 });
 
 const validateUser = TypeCompiler.Compile(UserSchema);
