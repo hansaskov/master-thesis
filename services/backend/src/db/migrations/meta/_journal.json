@@ -19,22 +19,8 @@
     {
       "idx": 2,
       "version": "7",
-      "when": 1739879321894,
-      "tag": "0002_burly_zaladane",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1740049358617,
-      "tag": "0003_cool_bastion",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1740049549745,
-      "tag": "0004_wise_zombie",
+      "when": 1740050817173,
+      "tag": "0002_abnormal_slayback",
       "breakpoints": true
     }
   ]
