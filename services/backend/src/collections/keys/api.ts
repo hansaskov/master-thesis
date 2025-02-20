@@ -26,4 +26,16 @@ export const keysApi = new Elysia({ prefix: "keys", name: "API-KEYS" })
 			body: insertKeysSchema,
 			isOrganizationAdmin: true,
 		},
+	)
+	.delete(
+		"/",
+		async ({ body }) => {
+			return await Queries.keys.delete(body);
+		},
+		{
+			body: t.Object({
+				id: t.String({ minLength: 1 }),
+			}),
+			isOrganizationAdmin: true,
+		},
 	);
