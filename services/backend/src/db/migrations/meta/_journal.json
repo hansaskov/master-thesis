@@ -15,6 +15,13 @@
 			"when": 1740052854272,
 			"tag": "0001_broken_stryfe",
 			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1740054039068,
+			"tag": "0002_young_calypso",
+			"breakpoints": true
 		}
 	]
 }
