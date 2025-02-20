@@ -1,4 +1,4 @@
-import type { StrictPick, PartialExcept } from "$types/strict";
+import type { PartialExcept, StrictPick } from "$types/strict";
 import { generateRandomString } from "$utils/random";
 import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";

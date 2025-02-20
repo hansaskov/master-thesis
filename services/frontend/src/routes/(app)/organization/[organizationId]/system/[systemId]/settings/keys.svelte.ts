@@ -6,10 +6,6 @@ type Keys = NonNullable<Awaited<ReturnType<typeof api.keys.index.get>>['data']>;
 type KeysNew = Parameters<typeof api.keys.index.post>['0'];
 type KeysDelete = Parameters<typeof api.keys.index.delete>['0'];
 const systemId = $derived(page.params.systemId);
-const defaultKey = $derived<KeysNew>({
-	name: '',
-	system_id: systemId
-});
 
 class KeysStore {
 	constructor() {
@@ -17,7 +13,10 @@ class KeysStore {
 	}
 
 	#keys = $state<Keys>([]);
-	newKey = $state<KeysNew>(defaultKey);
+	newKey = $state<KeysNew>({
+		name: '',
+		system_id: systemId
+	});
 
 	async fetch() {
 		const { data, error } = await api.keys.index.get({
@@ -37,24 +36,31 @@ class KeysStore {
 		const { data, error } = await api.keys.index.post(this.newKey);
 
 		if (error) {
-			return onError(error);
+			onError(error);
+			return null;
 		}
 
-		this.newKey = defaultKey;
+		this.newKey = {
+			name: '',
+			system_id: systemId
+		};
 		this.fetch();
 		return data;
 	}
 
 	async delete(key: KeysDelete) {
-		const { error } = await api.keys.index.delete(key)
+		const { error } = await api.keys.index.delete(key);
 
 		if (error) {
 			return onError(error);
 		}
 
-		this.fetch()
+		this.fetch();
 	}
 
+	public get isEmpty() {
+		return this.#keys.length === 0;
+	}
 
 	public get keys() {
 		return this.#keys;
