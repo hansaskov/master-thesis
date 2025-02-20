@@ -28,7 +28,9 @@ export const statusApi = new Elysia({ prefix: "status" })
 			return { user };
 		},
 		{
-			cookie: t.Optional(Schema.cookie.organization),
+			cookie: t.Cookie({
+				organizationId: t.Optional(t.String()),
+			}),
 			isAuth: true,
 		},
 	);
