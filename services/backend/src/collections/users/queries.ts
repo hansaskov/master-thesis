@@ -44,6 +44,8 @@ export const usersQueries = {
 	},
 	delete: async (user: StrictPick<Types.User, "id">) =>
 		await db.delete(Table.users).where(eq(Table.users.id, user.id)).returning(),
+	getAllSuperAdmins: async () =>
+		await db.select().from(Table.users).where(eq(Table.users.is_superadmin, true)),
 	selectOneOnOrganization: async (
 		organization: Types.OrganizationUnique,
 		user: Types.UserUnique,

@@ -16,6 +16,30 @@
 	import SpareParts from './SpareParts.svelte';
 	import { systemModelStore } from '$lib/stores/system-models.svelte';
 	import { partsToSystemModelStore } from '$lib/stores/parts-to-system-models.svelte';
+	import { userStore } from '$lib/stores/user.svelte'
+
+	let searchTerm = $state('');
+	let page = $state(1);
+	const itemsPerPage = 10;
+
+	let filteredSuperAdmins = $derived(userStore.superAdminUsers.current.filter(user => 
+		user.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+		user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  	));
+
+	let visibleSuperadmins = $derived(filteredSuperAdmins.slice(0, page * itemsPerPage));
+	let totalFiltered = $derived(filteredSuperAdmins.length);
+	let showingCount = $derived(Math.min(visibleSuperadmins.length, totalFiltered));
+
+	// Reset pagination when search changes
+	$effect(() => {
+		searchTerm; // Track search term dependency
+		page = 1;
+	});
+
+	function showMore() {
+		page += 1;
+	}
 
 	let selectedParts = $state<Types.Part[]>([]);
 	let removedParts = $state<Types.Part[]>([]);
@@ -102,16 +126,67 @@
 
 	organizationStore.refresh();
 	systemModelStore.refresh();
+	userStore.loadSuperAdmins();
 </script>
 
 <div class="md:container">
-	<h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
+	<h1 class="mb-6 text-3xl font-bold">Manage Superadmins</h1>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<Card.Root class="col-span-1 md:col-span-2">
 			<Card.Header>
 				<Card.Title>List of Superadmins</Card.Title>
 			</Card.Header>
-			<Card.Content></Card.Content>
+			<Card.Content>
+				<div class="space-y-2">
+					<Label>Search Superadmins</Label>
+					<Input 
+					  bind:value={searchTerm}
+					  placeholder="Search by name or email..."
+					  class="max-w-[400px]"
+					/>
+				</div>
+
+				<div class="text-sm text-muted-foreground">
+					Showing {showingCount} of {totalFiltered} results
+				</div>
+
+				<Table.Root>
+					<Table.Caption>List of Superadmins</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head>
+								Name
+							</Table.Head>
+							<Table.Head>Email</Table.Head>
+							<Table.Head class="text-right">
+								Image
+							</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					{#each visibleSuperadmins as superAdmin}
+						<Table.Row>
+							<Table.Cell>
+								{superAdmin.name}
+							</Table.Cell>
+							<Table.Cell>
+								{superAdmin.email}
+							</Table.Cell>
+							<Table.Cell class="text-right">
+								{superAdmin.image}
+							</Table.Cell>
+						</Table.Row>
+					{:else}
+						<Table.Row>
+							<Table.Cell class="h-24 text-center col-span-3">
+								{searchTerm ? 
+								  `No superadmins found matching "${searchTerm}"` : 
+								  'No superadmins found'
+								}
+							  </Table.Cell>
+						</Table.Row>
+					{/each}
+				</Table.Root>
+			</Card.Content>
 		</Card.Root>
 
 		<Card.Root class="col-span-1 md:col-span-2">
@@ -275,34 +350,6 @@
 											{/if}
 										{/if}
 									{/if}
-									<!-- {#if selectedEdit === index}
-											<Table.Root>
-												<Table.Header>
-													<Table.Row class="justify-between">
-														<Table.Head>Part Name</Table.Head>
-													</Table.Row>
-												</Table.Header>
-												<Table.Body>
-												{#each partsStore.parts as part}
-													<Table.Row>
-														<Table.Cell>
-															<Checkbox 
-																checked={selectedParts.includes(part) || isPartInSystemModel(part, data.parts)}
-																onCheckedChange= {(value) => togglePartSelection(part, value)}/>
-															{part.name}
-														</Table.Cell>
-													</Table.Row>
-												{/each}
-												<Table.Row>
-													<Table.Cell>
-														<Button variant="default" size="sm" onclick={() => updateAllRelations(data.id)}>
-															Update Parts
-														</Button>
-													</Table.Cell>
-												</Table.Row>
-												</Table.Body>
-											</Table.Root>
-										{/if} -->
 								{/each}
 							</Table.Body>
 						</Table.Root>

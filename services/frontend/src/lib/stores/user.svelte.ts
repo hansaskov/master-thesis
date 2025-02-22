@@ -3,12 +3,14 @@ import { api } from '$lib/api';
 import { onError } from '$lib/error';
 import type { Types } from 'backend';
 import { toast } from 'svelte-sonner';
+import { PersistedState } from 'runed';
 
 class UserStore {
 	public user: Types.User | null = $state(null);
 	public userRelation: Types.UserToOrganization | undefined = $state(undefined);
 	public isAdmin = $derived(this.user?.is_superadmin ?? false);
 	private nonAuthorizedRedirectUrl = '/';
+	public superAdminUsers = new PersistedState<Types.User[]>('superadmins', []);
 
 	constructor() {
 		this.refresh();
@@ -35,6 +37,21 @@ class UserStore {
 		toast.success('Successfully logged out');
 		goto(this.nonAuthorizedRedirectUrl);
 	}
+
+	public async loadSuperAdmins() {
+        const { data, error } = await api.users.superAdmins.get();
+        
+		console.log(data);
+
+        if (error) {
+            onError(error);
+            return;
+        }
+
+        if (data) {
+            this.superAdminUsers.current = data;
+        }
+    }
 }
 
 export const userStore = new UserStore();

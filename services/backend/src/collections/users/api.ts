@@ -47,4 +47,14 @@ export const usersApi = new Elysia({ prefix: "users" })
 			}),
 			isOrganizationAdmin: true,
 		},
+	)
+	.get(
+		"/superAdmins",
+		async ({ user }) => {
+			const result = await Queries.users.getAllSuperAdmins();
+			return result;
+		},
+		{
+			isSuperAdmin: true
+		}
 	);
