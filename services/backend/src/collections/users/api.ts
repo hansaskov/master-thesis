@@ -5,6 +5,15 @@ import Elysia, { error, t } from "elysia";
 export const usersApi = new Elysia({ prefix: "users" })
 	.use(authMiddleware)
 	.get(
+		"/",
+		async ({ user }) => {
+			return await Queries.users.selectAll();
+		},
+		{
+			isSuperAdmin: true
+		}
+	)
+	.get(
 		"/onOrganization",
 		async ({ relation }) => {
 			return await Queries.users.selectAllOnOrganization({
@@ -55,6 +64,19 @@ export const usersApi = new Elysia({ prefix: "users" })
 			return result;
 		},
 		{
+			isSuperAdmin: true
+		}
+	)
+	.patch(
+		"/",
+		async ({ user, body }) => {
+			const result = await Queries.users.updateSuperadminField(body.id, body.newValue)
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				newValue: t.Boolean()
+			}),
 			isSuperAdmin: true
 		}
 	);

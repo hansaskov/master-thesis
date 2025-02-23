@@ -12,6 +12,9 @@ class UserStore {
 	private nonAuthorizedRedirectUrl = '/';
 	public superAdminUsers = new PersistedState<Types.User[]>('superadmins', []);
 
+	// Weird name to not mix it up with user by accident
+	public allUsers = new PersistedState<Types.User[]>('allUsers', []);
+
 	constructor() {
 		this.refresh();
 	}
@@ -38,6 +41,23 @@ class UserStore {
 		goto(this.nonAuthorizedRedirectUrl);
 	}
 
+	public async loadAllUser() {
+		const { data, error } = await api.users.index.get();
+
+		console.log(data);
+		if (error) {
+			onError(error);
+			return;
+		}
+
+		// sort them based on superadmin value
+		data.sort((a, b) => (b.is_superadmin === a.is_superadmin ? 0 : b.is_superadmin ? 1 : -1));
+
+		if (data) {
+			this.allUsers.current = data;
+		}
+	}
+
 	public async loadSuperAdmins() {
         const { data, error } = await api.users.superAdmins.get();
         
@@ -52,6 +72,30 @@ class UserStore {
             this.superAdminUsers.current = data;
         }
     }
+
+	public async edit(id: string, newValue:boolean) {
+		const { error } = await api.users.index.patch({id, newValue});
+
+		if (error) {
+			onError(error);
+			return;
+		}
+
+		this.allUsers.current = this.allUsers.current.map(user => {
+			if (user.id === id) {
+				return { ...user, is_superadmin: newValue };
+			}
+			return user;
+    	});
+
+		if (newValue) {
+			toast.success(`User has been updated to superadmin`);
+		} else {
+			toast.success("User has been downgraded from superadmin")
+		}
+
+		console.log('Unreachable branch in User.edit');
+	}
 }
 
 export const userStore = new UserStore();

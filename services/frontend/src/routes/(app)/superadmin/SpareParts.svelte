@@ -13,6 +13,22 @@
 	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
 
 	partsStore.refresh();
+	
+	// parts pagination
+	const itemsPerPage = 10;
+	let partsPage = $state(1);
+	let visibleParts = $derived(partsStore.parts.slice(0, partsPage * itemsPerPage));
+	let totalParts = $derived(partsStore.parts.length);
+	let partsShowingCount = $derived(Math.min(visibleParts.length, totalParts));
+
+	function showMore() {
+		partsPage += 1;
+	}
+
+	function showLess() {
+		if (partsPage > 1)
+			partsPage -= 1;
+	}
 
 	let newPart = $state<Types.PartNew>({
 		name: ''
@@ -41,7 +57,24 @@
 		</div>
 
 		<Table.Root>
-			<Table.Caption>List of Spare Parts</Table.Caption>
+			<Table.Caption>
+				{#if partsShowingCount < totalParts}
+					<Button
+						variant="outline"
+						onclick={() => showMore()}
+					>
+						Show more
+					</Button>
+				{:else if partsShowingCount > totalParts}
+					<Button
+						variant="outline"
+						onclick={() => showLess()}
+					>
+						Show less
+					</Button>
+				{/if}
+				<br> Showing {partsShowingCount} of {totalParts} results
+			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Image</Table.Head>
@@ -50,7 +83,7 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each partsStore.parts as part}
+				{#each visibleParts as part}
 					<Table.Row>
 						<Table.Cell>{part.image}</Table.Cell>
 						<Table.Cell>{part.name}</Table.Cell>

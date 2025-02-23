@@ -9,7 +9,7 @@
 	import { partsStore } from '$lib/stores/parts.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { Ellipsis } from 'lucide-svelte';
+	import { ChevronDown, Ellipsis, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import EditOrganizationDialogBody from '$lib/components/EditOrganizationDialogBody.svelte';
 	import type { Types } from 'backend';
@@ -18,27 +18,90 @@
 	import { partsToSystemModelStore } from '$lib/stores/parts-to-system-models.svelte';
 	import { userStore } from '$lib/stores/user.svelte'
 
+	async function handleRoleChange(id: string, newValue: boolean) {
+		await userStore.edit(id, newValue);
+	}
+
+	let totalItems = userStore.allUsers.current.length;
+	let pageSize = 10;
+	let currentPage = $state(1);
+
+	// Computed values
+	let totalPages = $derived(Math.ceil(totalItems / pageSize));
+
+	function prevPage() {
+		if (currentPage > 1) {
+			currentPage--;
+		}
+	}
+
+	function nextPage() {
+		if (currentPage < totalPages) {
+			currentPage++;
+		}
+	}
+
 	let searchTerm = $state('');
-	let page = $state(1);
 	const itemsPerPage = 10;
+	
+	// user pagination
+	let userPage = $state(1);
+	// let filteredUsers = $derived(userStore.allUsers.current.filter(user => 
+	// 	user.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+	// 	user.email?.toLowerCase().includes(searchTerm.toLowerCase())));
+	// let visibleUsers = $derived(filteredUsers.slice(0, userPage * itemsPerPage));
+	// let totalFilteredUsers = $derived(filteredUsers.length);
+	// let userShowingCount = $derived(Math.min(visibleUsers.length, totalFilteredUsers));
 
-	let filteredSuperAdmins = $derived(userStore.superAdminUsers.current.filter(user => 
+	let filteredUsers = $derived(userStore.allUsers.current.filter(user => 
 		user.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-		user.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  	));
+		user.email?.toLowerCase().includes(searchTerm.toLowerCase())));
+	let totalFilteredUsers = $derived(filteredUsers.length);
+	let startIndex = $derived((currentPage-1) * pageSize);
+	let endIndex = $derived(currentPage * pageSize);
+	let visibleUsers = $derived(filteredUsers.slice(startIndex, endIndex));
 
-	let visibleSuperadmins = $derived(filteredSuperAdmins.slice(0, page * itemsPerPage));
-	let totalFiltered = $derived(filteredSuperAdmins.length);
-	let showingCount = $derived(Math.min(visibleSuperadmins.length, totalFiltered));
+	
+	// organization pagination
+	let organizationPage = $state(1);
+	let visibleOrganizations = $derived(organizationStore.organizations.slice(0, organizationPage * itemsPerPage));
+	let totalOrganizations = $derived(organizationStore.organizations.length);
+	let organizationShowingCount = $derived(Math.min(visibleOrganizations.length, totalOrganizations));
 
 	// Reset pagination when search changes
 	$effect(() => {
 		searchTerm; // Track search term dependency
-		page = 1;
+		userPage = 1;
 	});
 
-	function showMore() {
-		page += 1;
+	function showMore(card: string) {
+		switch (card) {
+			case 'users':
+				userPage += 1;
+				break;
+			case 'organizations':
+				organizationPage += 1;
+				break;
+			default:
+				console.log("could not find which pagination to update");
+				break;
+		}
+	}
+	
+	function showLess(card: string) {
+		switch (card) {
+			case 'users':
+				if (userPage > 1)
+					userPage -= 1;
+				break;
+			case 'organizations':
+				if (organizationPage > 1)
+					organizationPage -= 1;
+				break;
+			default:
+				console.log("could not find which pagination to update");
+				break;
+		}
 	}
 
 	let selectedParts = $state<Types.Part[]>([]);
@@ -126,19 +189,19 @@
 
 	organizationStore.refresh();
 	systemModelStore.refresh();
-	userStore.loadSuperAdmins();
+	userStore.loadAllUser();
 </script>
 
 <div class="md:container">
-	<h1 class="mb-6 text-3xl font-bold">Manage Superadmins</h1>
+	<h1 class="mb-6 text-3xl font-bold">Superadmin Settings</h1>
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<Card.Root class="col-span-1 md:col-span-2">
 			<Card.Header>
-				<Card.Title>List of Superadmins</Card.Title>
+				<Card.Title>User Management</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<div class="space-y-2">
-					<Label>Search Superadmins</Label>
+					<Label>Search Users</Label>
 					<Input 
 					  bind:value={searchTerm}
 					  placeholder="Search by name or email..."
@@ -146,43 +209,93 @@
 					/>
 				</div>
 
-				<div class="text-sm text-muted-foreground">
-					Showing {showingCount} of {totalFiltered} results
-				</div>
-
-				<Table.Root>
-					<Table.Caption>List of Superadmins</Table.Caption>
+				<Table.Root class="table-fixed">
+					<Table.Caption>
+						<!-- {#if userShowingCount < totalFilteredUsers}
+							<Button
+								variant="outline"
+								onclick={() => showMore("users")}
+							>
+								Show more
+							</Button>
+						{:else}
+							{#if userShowingCount > 10}
+								<Button
+									variant="outline"
+									onclick={() => showLess("users")}
+								>
+									Show less
+								</Button>
+							{/if}
+						{/if} -->
+						<Button
+								variant="outline"
+								onclick={() => prevPage()}
+								disabled={currentPage === 1}
+							>
+							<ChevronLeft class="w-2 h-2" />
+						</Button>
+						Showing {startIndex + 1}–{startIndex + visibleUsers.length}
+          				of {totalFilteredUsers} results
+						<Button
+								variant="outline"
+								onclick={() => nextPage()}
+								disabled={currentPage === totalPages}
+							>
+							<ChevronRight class="w-2 h-2" />
+						</Button>
+					</Table.Caption>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head>
+							<Table.Head class="text-left w-28">
 								Name
+							</Table.Head> 
+							<Table.Head class="hidden md:table-cell text-left">
+								Email
 							</Table.Head>
-							<Table.Head>Email</Table.Head>
 							<Table.Head class="text-right">
-								Image
+								Role
 							</Table.Head>
 						</Table.Row>
 					</Table.Header>
-					{#each visibleSuperadmins as superAdmin}
+					{#each visibleUsers as user}
 						<Table.Row>
 							<Table.Cell>
-								{superAdmin.name}
+								{user.name}
 							</Table.Cell>
-							<Table.Cell>
-								{superAdmin.email}
+							<Table.Cell class="hidden md:table-cell">
+								{user.email}
 							</Table.Cell>
 							<Table.Cell class="text-right">
-								{superAdmin.image}
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger class="">
+										<Button variant="ghost" class="">
+											<span>{user.is_superadmin ? 'Superadmin' : 'User'}</span>
+											<ChevronDown class="h-4 w-4" />
+										</Button>
+									</DropdownMenu.Trigger>
+									<DropdownMenu.Content align="end">
+										<DropdownMenu.Label>Change Role</DropdownMenu.Label>
+										<DropdownMenu.Separator />
+										<DropdownMenu.Item
+											onclick={() => handleRoleChange(user.id, true)}
+										>
+											Superadmin
+										</DropdownMenu.Item>
+										<DropdownMenu.Item
+											onclick={() => handleRoleChange(user.id, false)}
+										>
+											User
+										</DropdownMenu.Item>
+										</DropdownMenu.Content>
+								</DropdownMenu.Root>
 							</Table.Cell>
 						</Table.Row>
 					{:else}
 						<Table.Row>
-							<Table.Cell class="h-24 text-center col-span-3">
-								{searchTerm ? 
-								  `No superadmins found matching "${searchTerm}"` : 
-								  'No superadmins found'
-								}
-							  </Table.Cell>
+							<Table.Cell colspan={3} class="text-center">
+								{searchTerm ? `No users found matching "${searchTerm}"` : 'No users found'}
+							</Table.Cell>
 						</Table.Row>
 					{/each}
 				</Table.Root>
@@ -210,7 +323,24 @@
 				</div>
 
 				<Table.Root>
-					<Table.Caption>List of Organizations</Table.Caption>
+					<Table.Caption>
+						{#if organizationShowingCount < totalOrganizations}
+							<Button
+								variant="outline"
+								onclick={() => showMore("organizations")}
+							>
+								Show more
+							</Button>
+						{:else if organizationShowingCount > totalOrganizations}
+							<Button
+								variant="outline"
+								onclick={() => showLess("organizations")}
+							>
+								Show less
+							</Button>
+						{/if}
+						<br> Showing {organizationShowingCount} of {totalOrganizations} results
+					</Table.Caption>
 					<Table.Header>
 						<Table.Row>
 							<Table.Head>Name</Table.Head>
@@ -218,7 +348,7 @@
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#each organizationStore.organizations as organization}
+						{#each visibleOrganizations as organization}
 							<Table.Row>
 								<Table.Cell>{organization.name}</Table.Cell>
 								<Table.Cell class="text-right">
