@@ -173,7 +173,6 @@ describe("Readings", async () => {
 	beforeAll(async () => {
 		seedData = await seedDatabase();
 	});
-
 });
 
 describe("Latest Readings", async () => {
