@@ -41,17 +41,14 @@ export const readingsApi = new Elysia()
 	.get(
 		"/readings",
 		async ({ query }) => {
-			const readings = await Queries.readings.selectAll({
-				system_id: query.system_id,
-			});
+			const readings = await Queries.readings.selectAll(query);
 			return readings;
 		},
 		{
 			query: t.Object({
 				system_id: Schema.insert.readings.system_id,
-				startDate: Schema.insert.readings.time,
-				endDate: t.Optional(Schema.insert.readings.time),
-				name: t.Optional(Schema.insert.readings.name),
+				start: t.Date(),
+				end: t.Date(),
 				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
 			}),
 		},
