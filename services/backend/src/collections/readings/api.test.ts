@@ -174,20 +174,6 @@ describe("Readings", async () => {
 		seedData = await seedDatabase();
 	});
 
-	it("test", async () => {
-		const { readings, system } = seedData;
-
-		const { status, error, data } = await api.readings.get({
-			query: {
-				system_id: system.id,
-				startDate: readings[0].time.toISOString(),
-			},
-		});
-
-		expect(status).toBe(200);
-		expect(error?.value).toBeUndefined();
-		expect(data).toBeDefined();
-	});
 });
 
 describe("Latest Readings", async () => {

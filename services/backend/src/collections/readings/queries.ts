@@ -1,9 +1,9 @@
+import { start } from "node:repl";
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import { and, desc, eq, sql, between } from "drizzle-orm/sql";
+import { and, between, desc, eq, sql } from "drizzle-orm/sql";
 import { readings } from "./schema";
-import { start } from "node:repl";
 
 export const readingsQueries = {
 	createMany: async (values: Types.ReadingNew[]) =>
