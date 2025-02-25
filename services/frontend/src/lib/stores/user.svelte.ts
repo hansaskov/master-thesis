@@ -59,39 +59,39 @@ class UserStore {
 	}
 
 	public async loadSuperAdmins() {
-        const { data, error } = await api.users.superAdmins.get();
-        
+		const { data, error } = await api.users.superAdmins.get();
+
 		console.log(data);
-
-        if (error) {
-            onError(error);
-            return;
-        }
-
-        if (data) {
-            this.superAdminUsers.current = data;
-        }
-    }
-
-	public async edit(id: string, newValue:boolean) {
-		const { error } = await api.users.index.patch({id, newValue});
 
 		if (error) {
 			onError(error);
 			return;
 		}
 
-		this.allUsers.current = this.allUsers.current.map(user => {
+		if (data) {
+			this.superAdminUsers.current = data;
+		}
+	}
+
+	public async edit(id: string, newValue: boolean) {
+		const { error } = await api.users.index.patch({ id, newValue });
+
+		if (error) {
+			onError(error);
+			return;
+		}
+
+		this.allUsers.current = this.allUsers.current.map((user) => {
 			if (user.id === id) {
 				return { ...user, is_superadmin: newValue };
 			}
 			return user;
-    	});
+		});
 
 		if (newValue) {
 			toast.success(`User has been updated to superadmin`);
 		} else {
-			toast.success("User has been downgraded from superadmin")
+			toast.success('User has been downgraded from superadmin');
 		}
 
 		console.log('Unreachable branch in User.edit');

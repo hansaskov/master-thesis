@@ -46,7 +46,10 @@ export const usersQueries = {
 	delete: async (user: StrictPick<Types.User, "id">) =>
 		await db.delete(Table.users).where(eq(Table.users.id, user.id)).returning(),
 	getAllSuperAdmins: async () =>
-		await db.select().from(Table.users).where(eq(Table.users.is_superadmin, true)),
+		await db
+			.select()
+			.from(Table.users)
+			.where(eq(Table.users.is_superadmin, true)),
 	selectOneOnOrganization: async (
 		organization: Types.OrganizationUnique,
 		user: Types.UserUnique,
@@ -83,16 +86,11 @@ export const usersQueries = {
 				),
 			),
 	selectAll: async () => db.select().from(users),
-	updateSuperadminField: async(
-		id: string,
-		newValue: boolean
-	) =>
+	updateSuperadminField: async (id: string, newValue: boolean) =>
 		await db
 			.update(Table.users)
 			.set({
-				is_superadmin: newValue
+				is_superadmin: newValue,
 			})
-			.where(
-				eq(Table.users.id, id)
-			),
+			.where(eq(Table.users.id, id)),
 };

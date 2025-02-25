@@ -13,15 +13,15 @@
 	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
 
 	partsStore.refresh();
-	
+
 	// parts pagination
 	let pageSize = 10;
 	let currentPage = $state(0);
-    let startIndex = $derived(currentPage * pageSize);
-	let endIndex = $derived((currentPage+1) * pageSize);
+	let startIndex = $derived(currentPage * pageSize);
+	let endIndex = $derived((currentPage + 1) * pageSize);
 	let visibleParts = $derived(partsStore.parts.slice(startIndex, endIndex));
-    let totalItems = $derived(partsStore.parts.length);
-    let totalPages = $derived(Math.ceil(totalItems / pageSize));
+	let totalItems = $derived(partsStore.parts.length);
+	let totalPages = $derived(Math.ceil(totalItems / pageSize));
 
 	function prevPage() {
 		if (currentPage > 0) {
@@ -63,22 +63,18 @@
 
 		<Table.Root>
 			<Table.Caption>
+				<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
+					<ChevronLeft class="w-2 h-2" />
+				</Button>
+				Showing {startIndex + 1}–{startIndex + visibleParts.length}
+				of {totalItems} results
 				<Button
-                        variant="outline"
-                        onclick={() => prevPage()}
-                        disabled={currentPage === 0}
-                    >
-                    <ChevronLeft class="w-2 h-2" />
-                </Button>
-                Showing {startIndex+1}–{startIndex + visibleParts.length}
-                  of {totalItems} results
-                <Button
-                        variant="outline"
-                        onclick={() => nextPage()}
-                        disabled={currentPage+1 === totalPages}
-                    >
-                    <ChevronRight class="w-2 h-2" />
-                </Button>
+					variant="outline"
+					onclick={() => nextPage()}
+					disabled={currentPage + 1 === totalPages}
+				>
+					<ChevronRight class="w-2 h-2" />
+				</Button>
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>

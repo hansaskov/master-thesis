@@ -10,8 +10,8 @@ export const usersApi = new Elysia({ prefix: "users" })
 			return await Queries.users.selectAll();
 		},
 		{
-			isSuperAdmin: true
-		}
+			isSuperAdmin: true,
+		},
 	)
 	.get(
 		"/onOrganization",
@@ -64,19 +64,22 @@ export const usersApi = new Elysia({ prefix: "users" })
 			return result;
 		},
 		{
-			isSuperAdmin: true
-		}
+			isSuperAdmin: true,
+		},
 	)
 	.patch(
 		"/",
 		async ({ user, body }) => {
-			const result = await Queries.users.updateSuperadminField(body.id, body.newValue)
+			const result = await Queries.users.updateSuperadminField(
+				body.id,
+				body.newValue,
+			);
 		},
 		{
 			body: t.Object({
 				id: t.String(),
-				newValue: t.Boolean()
+				newValue: t.Boolean(),
 			}),
-			isSuperAdmin: true
-		}
+			isSuperAdmin: true,
+		},
 	);
