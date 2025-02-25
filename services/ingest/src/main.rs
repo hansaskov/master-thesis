@@ -55,12 +55,11 @@ impl From<Reading> for APIReading {
 struct APIClient {
     client: Client,
     endpoint: String,
-    public_key: String,
     private_key: String,
 }
 
 impl APIClient {
-    fn new(endpoint: String, public_key: String, private_key: String) -> Self {
+    fn new(endpoint: String, private_key: String) -> Self {
         let client = Client::builder()
             .timeout(Duration::from_secs(30))
             .build()
@@ -69,7 +68,6 @@ impl APIClient {
         Self {
             client,
             endpoint,
-            public_key,
             private_key,
         }
     }
@@ -81,7 +79,6 @@ impl APIClient {
 
         let response = self.client
             .post(&self.endpoint)
-            .header("public_key", &self.public_key)
             .header("private_key", &self.private_key)
             .json(&api_readings)
             .send()
@@ -106,7 +103,6 @@ async fn main() -> Result<()> {
     // Initialize API client
     let api_client = APIClient::new(
         args.api_endpoint.clone(),
-        args.public_key.clone(),
         args.private_key.clone(),
     );
 

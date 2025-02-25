@@ -12,9 +12,6 @@ pub struct Args {
 
     #[clap(long, env = "API_ENDPOINT")]
     pub api_endpoint: String,
-
-    #[clap(long, env = "PUBLIC_KEY")]
-    pub public_key: String,
     
     #[clap(long, env = "PRIVATE_KEY")]
     pub private_key: String,
