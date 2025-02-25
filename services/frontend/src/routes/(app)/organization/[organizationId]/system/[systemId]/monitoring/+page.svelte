@@ -139,7 +139,6 @@
 			description: 'Available and used disk space percentage over the last 12 hours'
 		}
 	];
-
 </script>
 
 <!-- Charts Section -->
