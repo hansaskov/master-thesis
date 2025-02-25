@@ -7,7 +7,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import type { Types } from 'backend';
 	import { partsStore } from '$lib/stores/parts.svelte';
-	import { Ellipsis } from 'lucide-svelte';
+	import { Ellipsis, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
@@ -15,19 +15,24 @@
 	partsStore.refresh();
 	
 	// parts pagination
-	const itemsPerPage = 10;
-	let partsPage = $state(1);
-	let visibleParts = $derived(partsStore.parts.slice(0, partsPage * itemsPerPage));
-	let totalParts = $derived(partsStore.parts.length);
-	let partsShowingCount = $derived(Math.min(visibleParts.length, totalParts));
+	let pageSize = 10;
+	let currentPage = $state(0);
+    let startIndex = $derived(currentPage * pageSize);
+	let endIndex = $derived((currentPage+1) * pageSize);
+	let visibleParts = $derived(partsStore.parts.slice(startIndex, endIndex));
+    let totalItems = $derived(partsStore.parts.length);
+    let totalPages = $derived(Math.ceil(totalItems / pageSize));
 
-	function showMore() {
-		partsPage += 1;
+	function prevPage() {
+		if (currentPage > 0) {
+			currentPage--;
+		}
 	}
 
-	function showLess() {
-		if (partsPage > 1)
-			partsPage -= 1;
+	function nextPage() {
+		if (currentPage < totalPages) {
+			currentPage++;
+		}
 	}
 
 	let newPart = $state<Types.PartNew>({
@@ -58,22 +63,22 @@
 
 		<Table.Root>
 			<Table.Caption>
-				{#if partsShowingCount < totalParts}
-					<Button
-						variant="outline"
-						onclick={() => showMore()}
-					>
-						Show more
-					</Button>
-				{:else if partsShowingCount > totalParts}
-					<Button
-						variant="outline"
-						onclick={() => showLess()}
-					>
-						Show less
-					</Button>
-				{/if}
-				<br> Showing {partsShowingCount} of {totalParts} results
+				<Button
+                        variant="outline"
+                        onclick={() => prevPage()}
+                        disabled={currentPage === 0}
+                    >
+                    <ChevronLeft class="w-2 h-2" />
+                </Button>
+                Showing {startIndex+1}–{startIndex + visibleParts.length}
+                  of {totalItems} results
+                <Button
+                        variant="outline"
+                        onclick={() => nextPage()}
+                        disabled={currentPage+1 === totalPages}
+                    >
+                    <ChevronRight class="w-2 h-2" />
+                </Button>
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
