@@ -15,15 +15,13 @@
 	import { onError } from '@/error';
 	import * as Avatar from '$lib/components/ui/avatar';
 
-	partsStore.refresh();
-
 	// parts pagination
 	let pageSize = 10;
 	let currentPage = $state(0);
 	let startIndex = $derived(currentPage * pageSize);
 	let endIndex = $derived((currentPage + 1) * pageSize);
-	let visibleParts = $derived(partsStore.parts.slice(startIndex, endIndex));
-	let totalItems = $derived(partsStore.parts.length);
+	let visibleParts = $derived(partsStore.parts.current.slice(startIndex, endIndex));
+	let totalItems = $derived(partsStore.parts.current.length);
 	let totalPages = $derived(Math.ceil(totalItems / pageSize));
 
 	function prevPage() {
@@ -56,12 +54,14 @@
 		const images = document.getElementById('file-upload') as HTMLInputElement
 		if (images) {
 			let image = images.files![0]
-			// Get the name as the file name is in the format C:\\fake_path\\name.jpg
+			// Get the name as the file
 			const originalFileName = image.name.split('\\').pop();
             const extension = originalFileName?.split('.').pop();
+
+			// Generate unique name for database entry
             const uniqueFileName = generateRandomString(12) + '.' + extension;
 
-			newPart.image = "http://localhost:9000/user-images/"+uniqueFileName;
+			newPart.image = uniqueFileName;
 
 			const { error } = await api.files.index.post({image: image, title: uniqueFileName});
 
@@ -91,7 +91,11 @@
 	<Card.Content>
 		<div class="mb-6">
 			<Label for="new-part">Add New Spare Part</Label>
-			<form class="flex gap-2" onsubmit={add}>
+			<form class="flex gap-2" 
+				onsubmit={(e) => {
+					e.preventDefault();
+					add();
+				}}>
 				<Input placeholder="Enter spare part name" bind:value={newPart.name} />
 				<Button type="submit">Add Part</Button>
 			</form>

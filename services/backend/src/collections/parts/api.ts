@@ -2,6 +2,7 @@ import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
+import { environment } from "../../config/environment";
 
 export const partsApi = new Elysia({ prefix: "parts" })
 	.use(authMiddleware)
@@ -37,7 +38,12 @@ export const partsApi = new Elysia({ prefix: "parts" })
 	.post(
 		"/",
 		async ({ user, body }) => {
-			return await Queries.part.create(body);
+			const part = {
+				name: body.name,
+				//TODO: change this to environment.S3_ENDPOINT
+				image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`
+			}
+			return await Queries.part.create(part);
 		},
 		{
 			body: t.Object({

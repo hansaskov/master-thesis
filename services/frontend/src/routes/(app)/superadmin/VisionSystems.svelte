@@ -145,7 +145,7 @@
 										</Table.Row>
 									{/each}
 									{#if selectedEdit === index}
-										{#each getUniqueParts(data.parts, partsStore.parts) as part}
+										{#each getUniqueParts(data.parts, partsStore.parts.current) as part}
 											<Table.Row class="text-xs">
 												<Table.Cell>
 													<Checkbox

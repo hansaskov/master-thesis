@@ -88,7 +88,7 @@
 					<Table.Cell>
 						<Avatar.Root>
 							<Avatar.Image src={user.image} alt="user-image"/>
-							<Avatar.Fallback>{user.image}</Avatar.Fallback>
+							<Avatar.Fallback>{user.name}</Avatar.Fallback>
 						</Avatar.Root>
 					</Table.Cell>
 					<Table.Cell>

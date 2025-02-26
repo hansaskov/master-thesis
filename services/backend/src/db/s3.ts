@@ -1,4 +1,4 @@
-import { S3Client, write, env, file } from "bun";
+import { S3Client } from "bun";
 import { environment } from "$config/environment";
 
 export const s3 = new S3Client({
