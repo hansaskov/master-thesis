@@ -42,6 +42,7 @@ export const partsApi = new Elysia({ prefix: "parts" })
 		{
 			body: t.Object({
 				name: Schema.insert.parts.name,
+				image: Schema.insert.parts.image
 			}),
 			isSuperAdmin: true,
 		},

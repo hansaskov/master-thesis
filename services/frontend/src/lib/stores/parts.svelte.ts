@@ -49,6 +49,8 @@ export class PartsStore {
 			image: part.image || null
 		});
 
+		console.log("adding part: " + part.image + " " + part.name);
+
 		const { data, error } = await api.parts.index.post(part);
 
 		if (error) {

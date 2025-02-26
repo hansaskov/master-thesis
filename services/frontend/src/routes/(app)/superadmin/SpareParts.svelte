@@ -11,6 +11,9 @@
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import EditPartDialogBody from '$lib/components/EditPartDialogBody.svelte';
+	import { api } from '$lib/api';
+	import { onError } from '@/error';
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	partsStore.refresh();
 
@@ -36,16 +39,49 @@
 	}
 
 	let newPart = $state<Types.PartNew>({
-		name: ''
+		name: '',
+		image: ''
 	});
 
-	function add(e: SubmitEvent) {
-		e.preventDefault();
+	function generateRandomString(length: number) {
+		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let result = '';
+		for (let i = 0; i < length; i++) {
+			result += characters.charAt(Math.floor(Math.random() * characters.length));
+		}
+		return result;
+	}
+
+	async function add() {
+		const images = document.getElementById('file-upload') as HTMLInputElement
+		if (images) {
+			let image = images.files![0]
+			// Get the name as the file name is in the format C:\\fake_path\\name.jpg
+			const originalFileName = image.name.split('\\').pop();
+            const extension = originalFileName?.split('.').pop();
+            const uniqueFileName = generateRandomString(12) + '.' + extension;
+
+			newPart.image = "http://localhost:9000/user-images/"+uniqueFileName;
+
+			const { error } = await api.files.index.post({image: image, title: uniqueFileName});
+
+			if (error) {
+				onError(error);
+			}
+		}
+		
 		partsStore.add(newPart);
 		newPart = {
-			name: ''
+			name: '',
+			image: ''
 		};
 	}
+
+	let fileName = $state('');
+
+	$effect(() => {
+		newPart.image = fileName;
+	})
 </script>
 
 <Card.Root class="col-span-1 md:col-span-2">
@@ -60,8 +96,14 @@
 				<Button type="submit">Add Part</Button>
 			</form>
 		</div>
-
-		<Table.Root>
+		<Label for="new-image">Upload image</Label>
+		<Input
+			id="file-upload"
+			type="file"
+			accept=".jpg, .jpeg, .png, .webp"
+			bind:value={fileName}
+		/>
+		<Table.Root class="table-fixed">
 			<Table.Caption>
 				<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
 					<ChevronLeft class="w-2 h-2" />
@@ -78,7 +120,7 @@
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head>Image</Table.Head>
+					<Table.Head class="w-20">Image</Table.Head>
 					<Table.Head>Name</Table.Head>
 					<Table.Head class="text-right">Actions</Table.Head>
 				</Table.Row>
@@ -86,7 +128,12 @@
 			<Table.Body>
 				{#each visibleParts as part}
 					<Table.Row>
-						<Table.Cell>{part.image}</Table.Cell>
+						<Table.Cell>
+							<Avatar.Root>
+								<Avatar.Image src={part.image} alt="part-image"/>
+								<Avatar.Fallback>{part.name}</Avatar.Fallback>
+							</Avatar.Root>
+						</Table.Cell>
 						<Table.Cell>{part.name}</Table.Cell>
 						<Table.Cell class="text-right">
 							<DropdownMenu.Root>

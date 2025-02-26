@@ -7,6 +7,7 @@
 	import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { userStore } from '$lib/stores/user.svelte';
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	userStore.loadAllUser();
 
@@ -76,6 +77,7 @@
 			</Table.Caption>
 			<Table.Header>
 				<Table.Row>
+					<Table.Head class="text-left w-20">Image</Table.Head>
 					<Table.Head class="text-left w-28">Name</Table.Head>
 					<Table.Head class="hidden md:table-cell text-left">Email</Table.Head>
 					<Table.Head class="text-right">Role</Table.Head>
@@ -83,6 +85,12 @@
 			</Table.Header>
 			{#each visibleUsers as user}
 				<Table.Row>
+					<Table.Cell>
+						<Avatar.Root>
+							<Avatar.Image src={user.image} alt="user-image"/>
+							<Avatar.Fallback>{user.image}</Avatar.Fallback>
+						</Avatar.Root>
+					</Table.Cell>
 					<Table.Cell>
 						{user.name}
 					</Table.Cell>

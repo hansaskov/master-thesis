@@ -13,6 +13,10 @@ const requiredEnvironmentSchema = t.Object({
 	INTERFACE_FQDN: t.String({ minLength: 1 }),
 	DATABASE_URL: t.String({ minLength: 1 }),
 	PROD: t.Boolean(),
+	S3_ACCESS_KEY_ID: t.String({ minLength: 1}),
+	S3_SECRET_ACCESS_KEY: t.String({ minLength: 1}),
+	S3_BUCKET: t.String({ minLength: 1}),
+	S3_ENDPOINT: t.String({ minLength: 1})
 });
 
 const environmentSchema = t.Intersect([
