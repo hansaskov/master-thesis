@@ -18,7 +18,6 @@ services:
       caddy.reverse_proxy: "{{upstreams 5173}}"
 
   backend:
-    mem_limit: 4g
     profiles: [stateless]
     restart: unless-stopped
     build: 
