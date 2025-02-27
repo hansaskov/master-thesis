@@ -43,6 +43,8 @@ services:
     ports:
       - "9000:9000" # MinIO browser UI
       - "9001:9001" # MinIO API
+    networks:
+      - default
     environment:
       MINIO_ACCESS_KEY: ${S3_ACCESS_KEY_ID}
       MINIO_SECRET_KEY: ${S3_SECRET_ACCESS_KEY}
