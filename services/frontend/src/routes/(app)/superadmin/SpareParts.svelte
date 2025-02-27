@@ -51,25 +51,25 @@
 	}
 
 	async function add() {
-		const images = document.getElementById('file-upload') as HTMLInputElement
+		const images = document.getElementById('file-upload') as HTMLInputElement;
 		if (images) {
-			let image = images.files![0]
+			let image = images.files![0];
 			// Get the name as the file
 			const originalFileName = image.name.split('\\').pop();
-            const extension = originalFileName?.split('.').pop();
+			const extension = originalFileName?.split('.').pop();
 
 			// Generate unique name for database entry
-            const uniqueFileName = generateRandomString(12) + '.' + extension;
+			const uniqueFileName = generateRandomString(12) + '.' + extension;
 
 			newPart.image = uniqueFileName;
 
-			const { error } = await api.files.index.post({image: image, title: uniqueFileName});
+			const { error } = await api.files.index.post({ image: image, title: uniqueFileName });
 
 			if (error) {
 				onError(error);
 			}
 		}
-		
+
 		partsStore.add(newPart);
 		newPart = {
 			name: '',
@@ -81,7 +81,7 @@
 
 	$effect(() => {
 		newPart.image = fileName;
-	})
+	});
 </script>
 
 <Card.Root class="col-span-1 md:col-span-2">
@@ -91,22 +91,19 @@
 	<Card.Content>
 		<div class="mb-6">
 			<Label for="new-part">Add New Spare Part</Label>
-			<form class="flex gap-2" 
+			<form
+				class="flex gap-2"
 				onsubmit={(e) => {
 					e.preventDefault();
 					add();
-				}}>
+				}}
+			>
 				<Input placeholder="Enter spare part name" bind:value={newPart.name} />
 				<Button type="submit">Add Part</Button>
 			</form>
 		</div>
 		<Label for="new-image">Upload image</Label>
-		<Input
-			id="file-upload"
-			type="file"
-			accept=".jpg, .jpeg, .png, .webp"
-			bind:value={fileName}
-		/>
+		<Input id="file-upload" type="file" accept=".jpg, .jpeg, .png, .webp" bind:value={fileName} />
 		<Table.Root class="table-fixed">
 			<Table.Caption>
 				<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
@@ -134,7 +131,7 @@
 					<Table.Row>
 						<Table.Cell>
 							<Avatar.Root>
-								<Avatar.Image src={part.image} alt="part-image"/>
+								<Avatar.Image src={part.image} alt="part-image" />
 								<Avatar.Fallback>{part.name}</Avatar.Fallback>
 							</Avatar.Root>
 						</Table.Cell>

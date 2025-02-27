@@ -1,6 +1,7 @@
 import Elysia from "elysia";
 import { authApi } from "./auth/api";
 import { statusApi } from "./auth/status/api";
+import { fileApi } from "./files/api";
 import { healthApi } from "./health/api";
 import { invitesApi } from "./invites/api";
 import { keysApi } from "./keys/api";
@@ -12,7 +13,6 @@ import { systemModelsApi } from "./system_models/api";
 import { systemsApi } from "./systems/api";
 import { usersApi } from "./users/api";
 import { usersToOrganizationsApi } from "./users_to_organizations/api";
-import { fileApi } from "./files/api";
 
 export const api = new Elysia({ prefix: "/api" })
 	.use(authApi)

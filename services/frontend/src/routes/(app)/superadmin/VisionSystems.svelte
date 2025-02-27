@@ -144,7 +144,7 @@
 										<Table.Cell>
 											<div class="flex justify-end w-full">
 												<Avatar.Root>
-													<Avatar.Image src={part.image} alt="part-image"/>
+													<Avatar.Image src={part.image} alt="part-image" />
 													<Avatar.Fallback>No image</Avatar.Fallback>
 												</Avatar.Root>
 											</div>
@@ -166,7 +166,7 @@
 											<Table.Cell class="text-right">
 												<div class="flex justify-end w-full">
 													<Avatar.Root>
-														<Avatar.Image src={part.image} alt="part-image"/>
+														<Avatar.Image src={part.image} alt="part-image" />
 														<Avatar.Fallback>No image</Avatar.Fallback>
 													</Avatar.Root>
 												</div>

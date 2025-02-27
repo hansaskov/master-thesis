@@ -7,14 +7,14 @@ import { environment } from "../../../../config/environment";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import { convertKeys } from "$utils/transform";
+import { write } from "bun";
 import {
 	createSession,
 	generateSessionToken,
 	setSessionTokenCookie,
 } from "../../../../auth/lucia";
+import { s3 } from "../../../../db/s3";
 import { catchError } from "../../../../types/errors";
-import { s3 } from "../../../../db/s3"
-import { write } from 'bun';
 
 export const entraId = new MicrosoftEntraId(
 	environment.MICROSOFT_TENANT_ID,
@@ -33,8 +33,6 @@ export const microsoftApi = new Elysia()
 			const state = generateState();
 			const codeVerifier = generateCodeVerifier();
 			const scopes = ["openid", "profile", "email", "User.Read"];
-
-			console.log("code verifier: "+codeVerifier);
 
 			const url = entraId.createAuthorizationURL(state, codeVerifier, scopes);
 
@@ -97,22 +95,28 @@ export const microsoftApi = new Elysia()
 
 			// Try the v1.0 endpoint first
 			let profilePictureResponse = await fetch(
-				"https://graph.microsoft.com/v1.0/me/photo/$value", {
-				headers: {
-					Authorization: `Bearer ${tokens.accessToken()}`,
+				"https://graph.microsoft.com/v1.0/me/photo/$value",
+				{
+					headers: {
+						Authorization: `Bearer ${tokens.accessToken()}`,
+					},
 				},
-			});
+			);
 
 			// If that fails, try the beta endpoint
 			if (!profilePictureResponse.ok) {
-				console.error(`Failed to fetch profile picture: ${profilePictureResponse.status} ${profilePictureResponse.statusText}`);
-				
+				console.error(
+					`Failed to fetch profile picture: ${profilePictureResponse.status} ${profilePictureResponse.statusText}`,
+				);
+
 				profilePictureResponse = await fetch(
-					"https://graph.microsoft.com/beta/me/photo/$value", {
+					"https://graph.microsoft.com/beta/me/photo/$value",
+					{
 						headers: {
-						Authorization: `Bearer ${tokens.accessToken()}`,
+							Authorization: `Bearer ${tokens.accessToken()}`,
+						},
 					},
-				});
+				);
 			}
 
 			// Process the image if we got a successful response from either endpoint
@@ -120,12 +124,12 @@ export const microsoftApi = new Elysia()
 				const buffer = await profilePictureResponse.arrayBuffer();
 				const metadata = s3.file(fileName);
 				await write(metadata, buffer);
-				
+
 				// Construct the URL to save in database
 				// TODO: change http://localhost:9000/ to environment.s3_endpoint in final version
 				imageUrl = `http://localhost:9000/${environment.S3_BUCKET}/${fileName}`;
 			} else {
-				console.error(`Failed to fetch profile picture from both endpoints`);
+				console.error("Failed to fetch profile picture from both endpoints");
 			}
 
 			const existingUser = await Queries.users.selectUniqueWithProvider({

@@ -41,14 +41,14 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			const part = {
 				name: body.name,
 				//TODO: change this to environment.S3_ENDPOINT
-				image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`
-			}
+				image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`,
+			};
 			return await Queries.part.create(part);
 		},
 		{
 			body: t.Object({
 				name: Schema.insert.parts.name,
-				image: Schema.insert.parts.image
+				image: Schema.insert.parts.image,
 			}),
 			isSuperAdmin: true,
 		},
