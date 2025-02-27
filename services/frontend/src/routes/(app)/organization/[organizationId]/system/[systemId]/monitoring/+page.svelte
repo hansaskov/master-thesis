@@ -21,6 +21,7 @@
 	import Camera from 'lucide-svelte/icons/camera';
 	import Thermometer from 'lucide-svelte/icons/thermometer';
 	import AreaChart from '$lib/components/AreaChart.svelte';
+	import TimeRangeSelector from '../TimeRangeSelector.svelte';
 
 	interface Metric {
 		name: string;
@@ -142,7 +143,11 @@
 
 <!-- Charts Section -->
 <div class="mb-8">
-	<h2 class="mb-4 text-2xl font-bold">Charts</h2>
+	<div class="mb-4 flex flex-col md:flex-row justify-between md:items-center">
+		<h2 class="text-2xl font-bold">Charts</h2>
+		<TimeRangeSelector></TimeRangeSelector>
+	</div>
+
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each chartsData as { dataSets, dataX, title, description }}
 			<Card>

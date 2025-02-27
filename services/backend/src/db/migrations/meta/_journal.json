@@ -29,6 +29,13 @@
 			"when": 1740064731542,
 			"tag": "0003_brief_cable",
 			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1740471467074,
+			"tag": "0004_readings-hypertable",
+			"breakpoints": true
 		}
 	]
 }
