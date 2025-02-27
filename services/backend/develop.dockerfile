@@ -1,5 +1,5 @@
 # Use Bun (JavaScript runtime) image as the base
-FROM oven/bun:1.2 AS build
+FROM oven/bun:1.2.3 AS build
 
 # Set the working directory to /app inside the container
 WORKDIR /app
