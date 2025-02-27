@@ -41,7 +41,8 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			const part = {
 				name: body.name,
 				//TODO: change this to environment.S3_ENDPOINT
-				image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`,
+				//image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`,
+				image: `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${body.image}`
 			};
 			return await Queries.part.create(part);
 		},

@@ -127,7 +127,8 @@ export const microsoftApi = new Elysia()
 
 				// Construct the URL to save in database
 				// TODO: change http://localhost:9000/ to environment.s3_endpoint in final version
-				imageUrl = `http://localhost:9000/${environment.S3_BUCKET}/${fileName}`;
+				//imageUrl = `http://localhost:9000/${environment.S3_BUCKET}/${fileName}`;
+				imageUrl = `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${fileName}`;
 			} else {
 				console.error("Failed to fetch profile picture from both endpoints");
 			}
