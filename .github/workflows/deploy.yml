@@ -25,6 +25,10 @@ jobs:
       DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
       RESEND_CLIENT_SECRET: ${{ secrets.RESEND_CLIENT_SECRET }} 
       PORTAINER_FQDN: ${{ vars.PORTAINER_FQDN }}
+      S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
     
     steps:
       - name: Checkout code
