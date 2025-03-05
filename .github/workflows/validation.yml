@@ -62,9 +62,9 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v4
-      - name: Copy env file
-        run: cp .env.example .env
       - name: Compose up
-        run: docker compose up backend timescaledb migrate --build -d --wait
+        run: docker compose --env-file .env.example up backend timescaledb migrate --build -d --wait
+      - name: Pause
+        run: sleep 2
       - name: Unit test
-        run: docker compose exec backend bun test src/collections/organizations/queries.test.ts --timeout 60000 --bail
+        run: docker compose --env-file .env.example exec backend bun test --coverage
