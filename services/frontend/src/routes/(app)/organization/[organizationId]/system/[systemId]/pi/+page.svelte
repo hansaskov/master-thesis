@@ -12,6 +12,7 @@
 
 	import GaugeChart from '$lib/components/GaugeChart.svelte';
 	import TimeRangeSelector from '../TimeRangeSelector.svelte';
+	import { timeRangeStore } from '../TimeRangeStore.svelte';
 
 	function createTimeRange(hours: number): string[] {
 		const now = new Date();
@@ -20,8 +21,6 @@
 			return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 		});
 	}
-
-	let selectedTimeRange = $state('');
 
 	// Mock data (replace with actual data in a real application)
 	const mockData = {
@@ -83,13 +82,11 @@
 
 	<Card.Root class="md:row-span-3 md:col-span-2">
 		<Card.Header class="flex flex-row items-center justify-between pb-2">
-			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange}</Card.Title>
+			<Card.Title class="text-lg font-medium">Overall Equipment Effectiveness</Card.Title>
 			<Gauge class="text-muted-foreground h-4 w-4" />
 		</Card.Header>
 		<Separator class="mb-4" />
-		<Card.Content>
-			<AreaChart dataSets={chartsData[0].dataSets} dataX={chartsData[0].dataX} min={0} max={100} />
-		</Card.Content>
+		<Card.Content></Card.Content>
 	</Card.Root>
 
 	<AvailabilityCard uptime={mockData.uptime} downtime={mockData.downtime} />
@@ -98,12 +95,10 @@
 
 	<Card.Root class="md:row-span-3 md:col-span-2">
 		<Card.Header class="flex flex-row items-center justify-between pb-2">
-			<Card.Title class="text-lg font-medium">OEE of the {selectedTimeRange}</Card.Title>
+			<Card.Title class="text-lg font-medium">Availability</Card.Title>
 			<Gauge class="text-muted-foreground h-4 w-4" />
 		</Card.Header>
 		<Separator class="mb-4" />
-		<Card.Content>
-			<AreaChart dataSets={chartsData[1].dataSets} dataX={chartsData[1].dataX} min={0} max={100} />
-		</Card.Content>
+		<Card.Content></Card.Content>
 	</Card.Root>
 </div>

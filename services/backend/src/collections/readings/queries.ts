@@ -21,7 +21,7 @@ export const readingsQueries = {
 
 		await db.insert(readings).values(newValues);
 	},
-	selectAll: async ({
+	select: async ({
 		system_id,
 		start,
 		end,
