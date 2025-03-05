@@ -4,49 +4,49 @@
 
 @layer base {
 	:root {
-			--background: 0 0% 100%;
-			--foreground: 240 10% 3.9%;
-			--card: 0 0% 100%;
-			--card-foreground: 240 10% 3.9%;
-			--popover: 0 0% 100%;
-			--popover-foreground: 240 10% 3.9%;
-			--primary: 203 68.18% 17.25%;    /* Dark blue primary */
-			--primary-foreground: 0 0% 100%; /* White text */
-			--secondary: 182.95 67.03% 82.16%; /* Teal secondary */
-			--secondary-foreground: 203 68.18% 17.25%; /* Dark blue text on secondary */
-			--muted: 186.67 60% 94.12%;      /* Lightest teal for muted areas */
-			--muted-foreground: 240 3.8% 46.1%; /* Keeping original muted text color */
-			--accent: 5.73 75.85% 59.41%;    /* Red accent */
-			--accent-foreground: 240 10% 98.9%; /* Dark text on accent for better contrast */
-			--destructive: 0 72.22% 50.59%;
-			--destructive-foreground: 0 0% 98%;
-			--border: 240 5.9% 90%;          /* Subtle gray border */
-			--input: 240 5.9% 90%;           /* Matching input to border */
-			--ring: 203 68.18% 17.25%;       /* Primary for focus rings */
-			--radius: 0.5rem;
-			--warning: 53 98% 77%;
-			--warning-foreground: 0 0% 98%;
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 240 10% 3.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+		--primary: 203 68.18% 17.25%; /* Dark blue primary */
+		--primary-foreground: 0 0% 100%; /* White text */
+		--secondary: 182.95 67.03% 82.16%; /* Teal secondary */
+		--secondary-foreground: 203 68.18% 17.25%; /* Dark blue text on secondary */
+		--muted: 186.67 60% 94.12%; /* Lightest teal for muted areas */
+		--muted-foreground: 240 3.8% 46.1%; /* Keeping original muted text color */
+		--accent: 5.73 75.85% 59.41%; /* Red accent */
+		--accent-foreground: 240 10% 98.9%; /* Dark text on accent for better contrast */
+		--destructive: 0 72.22% 50.59%;
+		--destructive-foreground: 0 0% 98%;
+		--border: 240 5.9% 90%; /* Subtle gray border */
+		--input: 240 5.9% 90%; /* Matching input to border */
+		--ring: 203 68.18% 17.25%; /* Primary for focus rings */
+		--radius: 0.5rem;
+		--warning: 53 98% 77%;
+		--warning-foreground: 0 0% 98%;
 	}
 	.dark {
-			--background: 0 0% 7%;           /* Near black background */
-			--foreground: 0 0% 98%;          /* Off-white text for better readability */
-			--card: 0 0% 10%;                /* Slightly lighter than background */
-			--card-foreground: 0 0% 98%;     /* Off-white text */
-			--popover: 0 0% 9%;              /* Between background and card */
-			--popover-foreground: 0 0% 98%;  /* Off-white text */
-			--primary: 182.95 67.03% 70%;    /* Brightened teal for better visibility */
-			--primary-foreground: 0 0% 5%;  /* Off-white text on primary */
-			--secondary: 203 68.18% 30%;     /* Brightened blue */
-			--secondary-foreground: 0 0% 98%; /* Off-white text on secondary */
-			--muted: 0 0% 15%;               /* Dark gray for muted areas */
-			--muted-foreground: 0 0% 75%;    /* Light gray for muted text */
-			--accent: 5.73 75.85% 65%;       /* Brightened red accent */
-			--accent-foreground: 0 0% 98%;   /* Off-white text on accent */
-			--destructive: 0 70% 50%;        /* Brighter destructive for dark theme */
-			--destructive-foreground: 0 0% 98%; /* Off-white text */
-			--border: 0 0% 20%;              /* Dark gray border */
-			--input: 0 0% 20%;               /* Matching input to border */
-			--ring: 182.95 67.03% 70%;       /* Matching ring to primary */
+		--background: 0 0% 7%; /* Near black background */
+		--foreground: 0 0% 98%; /* Off-white text for better readability */
+		--card: 0 0% 10%; /* Slightly lighter than background */
+		--card-foreground: 0 0% 98%; /* Off-white text */
+		--popover: 0 0% 9%; /* Between background and card */
+		--popover-foreground: 0 0% 98%; /* Off-white text */
+		--primary: 182.95 67.03% 70%; /* Brightened teal for better visibility */
+		--primary-foreground: 0 0% 5%; /* Off-white text on primary */
+		--secondary: 203 68.18% 30%; /* Brightened blue */
+		--secondary-foreground: 0 0% 98%; /* Off-white text on secondary */
+		--muted: 0 0% 15%; /* Dark gray for muted areas */
+		--muted-foreground: 0 0% 75%; /* Light gray for muted text */
+		--accent: 5.73 75.85% 65%; /* Brightened red accent */
+		--accent-foreground: 0 0% 98%; /* Off-white text on accent */
+		--destructive: 0 70% 50%; /* Brighter destructive for dark theme */
+		--destructive-foreground: 0 0% 98%; /* Off-white text */
+		--border: 0 0% 20%; /* Dark gray border */
+		--input: 0 0% 20%; /* Matching input to border */
+		--ring: 182.95 67.03% 70%; /* Matching ring to primary */
 	}
 }
 @layer base {
