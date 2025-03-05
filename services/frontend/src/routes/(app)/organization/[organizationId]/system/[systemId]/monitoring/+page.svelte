@@ -1,11 +1,6 @@
 <script lang="ts">
-	import {
-		Card,
-		CardContent,
-		CardHeader,
-		CardTitle,
-		CardDescription
-	} from '$lib/components/ui/card';
+	import { onMount } from 'svelte';
+	import * as Card from '$lib/components/ui/card';
 	import {
 		Table,
 		TableBody,
@@ -14,8 +9,7 @@
 		TableHeader,
 		TableRow
 	} from '$lib/components/ui/table';
-
-	import AreaChart from '$lib/components/AreaChart.svelte';
+	import { Area, AreaChart, LinearGradient } from 'layerchart';;
 	import TimeRangeSelector from '../TimeRangeSelector.svelte';
 	import { metricGroups } from './monitoringData.svelte';
 	import { Button } from '@/components/ui/button';
@@ -25,6 +19,9 @@
 	import { timeRangeStore } from '../TimeRangeStore.svelte';
 	import { getLocalTimeZone } from '@internationalized/date';
 	import { onError } from '@/error';
+
+	let renderContext: 'svg' | 'canvas' = 'svg';
+	let debug = false;
 
 	type ChartDate = {
 		data: { date: Date; value: number }[];
@@ -102,14 +99,32 @@
 	}
 
 	$inspect(chartsData);
+
+	// Add a reactive statement to fetch readings when time range changes
+    $effect(() => {
+        // Get the values that should trigger a refresh
+        const start = timeRangeStore.range?.start;
+        const end = timeRangeStore.range?.end;
+        
+        // If we have valid start and end dates, fetch readings
+        if (start && end) {
+            fetchReadings();
+        }
+    });
+
+	// Initial fetch on mount
+	onMount(() => {
+		fetchReadings();
+  	});
 </script>
 
 <!-- Charts Section -->
 
 <div class="mb-8">
-	<Button variant="outline" size="icon" onclick={fetchReadings}>
+	<!-- Button to fetch data no longer needed  -->
+	<!-- <Button variant="outline" size="icon" onclick={fetchReadings}>
 		<RotateCcw />
-	</Button>
+	</Button> -->
 	<div class="mb-4 flex flex-col md:flex-row justify-between md:items-center">
 		<h2 class="text-2xl font-bold">Charts</h2>
 
@@ -118,31 +133,37 @@
 
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each chartsData as { data, title, description }}
-			<Card>
-				<CardHeader>
-					<CardTitle class="text-xl font-bold">{title}</CardTitle>
-					<CardDescription>{description}</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<AreaChart {data} />
-				</CardContent>
-			</Card>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title class="text-xl font-bold">{title}</Card.Title>
+				</Card.Header>
+				<Card.Content class="h-64">
+					<AreaChart data={data} x="date" y="value" {renderContext} {debug}>
+					<svelte:fragment slot="marks">
+						<LinearGradient class="from-primary/50 to-primary/0" vertical let:gradient>
+							<Area line={{ class: 'stroke-primary' }} fill={gradient} />
+						</LinearGradient>
+					</svelte:fragment>
+					</AreaChart>
+				</Card.Content>
+			</Card.Root>
 		{/each}
 	</div>
 </div>
 <!-- Metrics Section -->
 <div>
 	<h2 class="mb-4 text-2xl font-bold">Metrics</h2>
-	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	Coming Soon!
+	<!-- <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each metricGroups as group}
-			<Card>
-				<CardHeader>
-					<CardTitle class="flex items-center gap-2">
+			<Card.Root>
+				<Card.Header>
+					<Card.Title class="flex items-center gap-2">
 						<group.icon class="h-4 w-4" />
 						<span>{group.title}</span>
-					</CardTitle>
-				</CardHeader>
-				<CardContent>
+					</Card.Title>
+				</Card.Header>
+				<Card.Content>
 					<Table>
 						<TableHeader>
 							<TableRow>
@@ -159,8 +180,8 @@
 							{/each}
 						</TableBody>
 					</Table>
-				</CardContent>
-			</Card>
+				</Card.Content>
+			</Card.Root>
 		{/each}
-	</div>
+	</div> -->
 </div>
