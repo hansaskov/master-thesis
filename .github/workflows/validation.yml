@@ -64,5 +64,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Compose up
         run: docker compose --env-file .env.example up backend timescaledb migrate --build -d --wait
+      - name: Pause
+        run: sleep 2
       - name: Unit test
-        run: docker compose exec backend bun test --coverage
+        run: docker compose --env-file .env.example exec backend bun test --coverage
