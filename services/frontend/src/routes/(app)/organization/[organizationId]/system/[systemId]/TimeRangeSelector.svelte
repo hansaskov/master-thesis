@@ -2,10 +2,9 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
-	import { DateFormatter, getLocalTimeZone, now, type DateValue } from '@internationalized/date';
+	import { getLocalTimeZone, now } from '@internationalized/date';
 	import { Label } from '@/components/ui/label';
 	import * as Popover from '$lib/components/ui/popover/index.js';
-	import type { DateRange } from 'bits-ui';
 	import { cn } from '@/utils';
 	import { RangeCalendar } from '@/components/ui/range-calendar';
 	import { timeRangeStore } from './TimeRangeStore.svelte';

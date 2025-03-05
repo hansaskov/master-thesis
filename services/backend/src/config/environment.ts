@@ -12,7 +12,7 @@ const optionalEnvironmentSchema = t.Object({
 const requiredEnvironmentSchema = t.Object({
 	INTERFACE_FQDN: t.String({ minLength: 1 }),
 	DATABASE_URL: t.String({ minLength: 1 }),
-	PROD: t.Union([t.Literal("true"), t.Literal("false")])
+	PROD: t.Boolean(),
 });
 
 const environmentSchema = t.Intersect([

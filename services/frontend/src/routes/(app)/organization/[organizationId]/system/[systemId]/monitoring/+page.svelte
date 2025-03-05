@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as Card from '$lib/components/ui/card';
-	import {
-		Table,
-		TableBody,
-		TableCell,
-		TableHead,
-		TableHeader,
-		TableRow
-	} from '$lib/components/ui/table';
-	import { Area, AreaChart, LinearGradient } from 'layerchart';;
+	// import {
+	// 	Table,
+	// 	TableBody,
+	// 	TableCell,
+	// 	TableHead,
+	// 	TableHeader,
+	// 	TableRow
+	// } from '$lib/components/ui/table';
+	// import { metricGroups } from './monitoringData.svelte';
+	// import { Button } from '@/components/ui/button';
+	// import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+	import { Area, AreaChart, LinearGradient } from 'layerchart';
 	import TimeRangeSelector from '../TimeRangeSelector.svelte';
-	import { metricGroups } from './monitoringData.svelte';
-	import { Button } from '@/components/ui/button';
-	import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 	import { api } from '@/api';
 	import { page } from '$app/state';
 	import { timeRangeStore } from '../TimeRangeStore.svelte';
@@ -101,21 +101,21 @@
 	$inspect(chartsData);
 
 	// Add a reactive statement to fetch readings when time range changes
-    $effect(() => {
-        // Get the values that should trigger a refresh
-        const start = timeRangeStore.range?.start;
-        const end = timeRangeStore.range?.end;
-        
-        // If we have valid start and end dates, fetch readings
-        if (start && end) {
-            fetchReadings();
-        }
-    });
+	$effect(() => {
+		// Get the values that should trigger a refresh
+		const start = timeRangeStore.range?.start;
+		const end = timeRangeStore.range?.end;
+
+		// If we have valid start and end dates, fetch readings
+		if (start && end) {
+			fetchReadings();
+		}
+	});
 
 	// Initial fetch on mount
 	onMount(() => {
 		fetchReadings();
-  	});
+	});
 </script>
 
 <!-- Charts Section -->
@@ -132,18 +132,18 @@
 	</div>
 
 	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-		{#each chartsData as { data, title, description }}
+		{#each chartsData as { data, title }}
 			<Card.Root>
 				<Card.Header>
 					<Card.Title class="text-xl font-bold">{title}</Card.Title>
 				</Card.Header>
 				<Card.Content class="h-64">
-					<AreaChart data={data} x="date" y="value" {renderContext} {debug}>
-					<svelte:fragment slot="marks">
-						<LinearGradient class="from-primary/50 to-primary/0" vertical let:gradient>
-							<Area line={{ class: 'stroke-primary' }} fill={gradient} />
-						</LinearGradient>
-					</svelte:fragment>
+					<AreaChart {data} x="date" y="value" {renderContext} {debug}>
+						<svelte:fragment slot="marks">
+							<LinearGradient class="from-primary/50 to-primary/0" vertical let:gradient>
+								<Area line={{ class: 'stroke-primary' }} fill={gradient} />
+							</LinearGradient>
+						</svelte:fragment>
 					</AreaChart>
 				</Card.Content>
 			</Card.Root>
