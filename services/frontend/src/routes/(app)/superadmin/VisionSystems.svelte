@@ -8,6 +8,7 @@
 	import { partsToSystemModelStore } from '$lib/stores/parts-to-system-models.svelte';
 	import Checkbox from '$lib/components/ui/checkbox/checkbox.svelte';
 	import { partsStore } from '$lib/stores/parts.svelte';
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	let selectedParts = $state<Types.Part[]>([]);
 	let removedParts = $state<Types.Part[]>([]);
@@ -122,45 +123,56 @@
 							</Table.Row>
 							<!-- Parts List (Visible when model is selected) -->
 							{#if selectedModel === index}
-								{#if data.parts && data.parts.length > 0}
-									<Table.Row class="bg-muted justify-between">
-										<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
-										<Table.Cell class="text-muted-foreground"></Table.Cell>
-										<Table.Cell class="text-muted-foreground text-right">Image</Table.Cell>
+								<Table.Row class="bg-muted justify-between">
+									<Table.Cell class="text-muted-foreground">Part Name</Table.Cell>
+									<Table.Cell class="text-muted-foreground"></Table.Cell>
+									<Table.Cell class="text-muted-foreground text-right">Image</Table.Cell>
+								</Table.Row>
+								{#each data.parts as part}
+									<Table.Row class="text-xs">
+										<Table.Cell class="text-left">
+											{#if selectedEdit === index}
+												<Checkbox
+													checked={selectedParts.includes(part) ||
+														isPartInSystemModel(part, data.parts)}
+													onCheckedChange={(value) => togglePartSelection(part, value)}
+												/>
+											{/if}
+											{part.name}
+										</Table.Cell>
+										<Table.Cell></Table.Cell>
+										<Table.Cell>
+											<div class="flex justify-end w-full">
+												<Avatar.Root>
+													<Avatar.Image src={part.image} alt="part-image" />
+													<Avatar.Fallback>No image</Avatar.Fallback>
+												</Avatar.Root>
+											</div>
+										</Table.Cell>
 									</Table.Row>
-									{#each data.parts as part}
+								{/each}
+								{#if selectedEdit === index}
+									{#each getUniqueParts(data.parts, partsStore.parts.current) as part}
 										<Table.Row class="text-xs">
-											<Table.Cell class="text-left">
-												{#if selectedEdit === index}
-													<Checkbox
-														checked={selectedParts.includes(part) ||
-															isPartInSystemModel(part, data.parts)}
-														onCheckedChange={(value) => togglePartSelection(part, value)}
-													/>
-												{/if}
+											<Table.Cell>
+												<Checkbox
+													checked={selectedParts.includes(part) ||
+														isPartInSystemModel(part, data.parts)}
+													onCheckedChange={(value) => togglePartSelection(part, value)}
+												/>
 												{part.name}
 											</Table.Cell>
 											<Table.Cell></Table.Cell>
-											<Table.Cell>{part.image}</Table.Cell>
+											<Table.Cell class="text-right">
+												<div class="flex justify-end w-full">
+													<Avatar.Root>
+														<Avatar.Image src={part.image} alt="part-image" />
+														<Avatar.Fallback>No image</Avatar.Fallback>
+													</Avatar.Root>
+												</div>
+											</Table.Cell>
 										</Table.Row>
 									{/each}
-									{#if selectedEdit === index}
-										{#each getUniqueParts(data.parts, partsStore.parts) as part}
-											<Table.Row class="text-xs">
-												<Table.Cell>
-													<Checkbox
-														checked={selectedParts.includes(part) ||
-															isPartInSystemModel(part, data.parts)}
-														onCheckedChange={(value) => togglePartSelection(part, value)}
-													/>
-													{part.name}
-												</Table.Cell>
-												<Table.Cell>
-													{part.image}
-												</Table.Cell>
-											</Table.Row>
-										{/each}
-									{/if}
 								{/if}
 							{/if}
 						{/each}

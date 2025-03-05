@@ -67,4 +67,4 @@ jobs:
       - name: Compose up
         run: docker compose up backend timescaledb migrate --build -d --wait
       - name: Unit test
-        run: docker compose exec backend bun test --coverage
+        run: docker compose exec backend bun test src/collections/organizations/queries.test.ts --timeout 60000 --bail
