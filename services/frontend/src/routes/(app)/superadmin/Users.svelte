@@ -88,7 +88,9 @@
 					<Table.Cell>
 						<Avatar.Root>
 							<Avatar.Image src={user.image} alt="user-image" />
-							<Avatar.Fallback class="font-semibold uppercase">{user.name.slice(0,2)}</Avatar.Fallback>
+							<Avatar.Fallback class="font-semibold uppercase"
+								>{user.name.slice(0, 2)}</Avatar.Fallback
+							>
 						</Avatar.Root>
 					</Table.Cell>
 					<Table.Cell>
