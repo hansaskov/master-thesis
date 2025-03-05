@@ -8,11 +8,11 @@ import { ListManager } from './listmanager.svelte';
 class OrganizationStore extends ListManager<Types.Organization> {
 	constructor() {
 		super();
-        this.refresh();
+		this.refresh();
 	}
 
 	public currentOrganization = $derived(
-		this.items.find(org => org.id === page.params.organizationId)
+		this.items.find((org) => org.id === page.params.organizationId)
 	);
 
 	async refresh() {
@@ -41,47 +41,46 @@ class OrganizationStore extends ListManager<Types.Organization> {
 		toast.success(`Successfully created ${data.name}`);
 	}
 
-        async remove(id: string) {
-            const removedOrganization = super.delete( id );
-    
-            const { data, error } = await api.organizations.index.delete({ id });
-    
-            if (data) {
-                toast.success(`Organization ${data.name} has been removed`);
-                return;
-            }
-    
-            if (error && removedOrganization) {
-                super.insert(removedOrganization);
-                return onError(error);
-            }
-    
-            console.log('Unreachable branch in Organization.remove');
-        }
+	async remove(id: string) {
+		const removedOrganization = super.delete(id);
 
-        async edit(organization: Types.OrganizationUpdate) {
-            const previousOrganization = super.update(organization.id, organization);
-    
-            const { data, error } = await api.organizations.index.patch({ ...organization });
-    
-            if (data) {
-                super.update(organization.id, data);
-                toast.success(`Organization has been updated to ${data.name}`);
-                return;
-            }
-    
-            if (error && previousOrganization) {
-                super.update(organization.id, previousOrganization);
-                return onError(error);
-            }
-    
-            console.log('Unreachable branch in Organization.edit');
-        }
+		const { data, error } = await api.organizations.index.delete({ id });
 
-		get organizations() {
-			return this.items;
+		if (data) {
+			toast.success(`Organization ${data.name} has been removed`);
+			return;
 		}
+
+		if (error && removedOrganization) {
+			super.insert(removedOrganization);
+			return onError(error);
+		}
+
+		console.log('Unreachable branch in Organization.remove');
+	}
+
+	async edit(organization: Types.OrganizationUpdate) {
+		const previousOrganization = super.update(organization.id, organization);
+
+		const { data, error } = await api.organizations.index.patch({ ...organization });
+
+		if (data) {
+			super.update(organization.id, data);
+			toast.success(`Organization has been updated to ${data.name}`);
+			return;
+		}
+
+		if (error && previousOrganization) {
+			super.update(organization.id, previousOrganization);
+			return onError(error);
+		}
+
+		console.log('Unreachable branch in Organization.edit');
+	}
+
+	get organizations() {
+		return this.items;
+	}
 }
 
 export const organizationStore = new OrganizationStore();
-
