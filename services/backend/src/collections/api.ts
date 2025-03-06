@@ -1,6 +1,7 @@
 import Elysia from "elysia";
 import { authApi } from "./auth/api";
 import { statusApi } from "./auth/status/api";
+import { fileApi } from "./files/api";
 import { healthApi } from "./health/api";
 import { invitesApi } from "./invites/api";
 import { keysApi } from "./keys/api";
@@ -26,4 +27,5 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(statusApi)
 	.use(keysApi)
 	.use(invitesApi)
-	.use(partsToSystemModelApi);
+	.use(partsToSystemModelApi)
+	.use(fileApi);

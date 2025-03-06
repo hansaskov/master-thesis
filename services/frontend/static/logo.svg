@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="238.85 81.02 331.02 330.93">
+  <defs>
+    <linearGradient id="linearGradient28" spreadMethod="pad" gradientTransform="matrix(64.647125,0,0,64.647125,269.94836,296.11765)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0">
+      <stop offset="0" style="stop-opacity:1;stop-color:#5ac0cd"/>
+      <stop offset="1" style="stop-opacity:1;stop-color:#2565a3"/>
+    </linearGradient>
+    <linearGradient id="linearGradient48" spreadMethod="pad" gradientTransform="matrix(136.43437,78.770416,-78.770416,136.43437,284.15604,293.06369)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0">
+      <stop offset="0" style="stop-opacity:1;stop-color:#5ac0cd"/>
+      <stop offset="1" style="stop-opacity:1;stop-color:#2565a3"/>
+    </linearGradient>
+    <linearGradient id="linearGradient68" spreadMethod="pad" gradientTransform="matrix(-234.0052,0,0,-234.0052,443.47156,265.24454)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0">
+      <stop offset="0" style="stop-opacity:1;stop-color:#5ac0cd"/>
+      <stop offset="1" style="stop-opacity:1;stop-color:#2565a3"/>
+    </linearGradient>
+    <clipPath id="clipPath78" clipPathUnits="userSpaceOnUse">
+      <path d="m 179.156,295.291 c 0,-67.045 53.158,-121.674 119.625,-124.042 v 0 h 8.992 c 66.466,2.368 119.626,56.997 119.626,124.042 v 0 c 0,68.55 -55.572,124.121 -124.122,124.121 v 0 c -68.551,0 -124.121,-55.571 -124.121,-124.121"/>
+    </clipPath>
+    <linearGradient id="linearGradient104" spreadMethod="pad" gradientTransform="matrix(-136.43437,-78.770416,78.770416,-136.43437,322.02521,298.51147)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0">
+      <stop offset="0" style="stop-opacity:1;stop-color:#5ac0cd"/>
+      <stop offset="1" style="stop-opacity:1;stop-color:#2565a3"/>
+    </linearGradient>
+    <linearGradient id="linearGradient124" spreadMethod="pad" gradientTransform="matrix(142.23402,0,0,142.23402,163.74367,315.61597)" gradientUnits="userSpaceOnUse" y2="0" x2="1" y1="0" x1="0">
+      <stop offset="0" style="stop-opacity:1;stop-color:#5ac0cd"/>
+      <stop offset="1" style="stop-opacity:1;stop-color:#2565a3"/>
+    </linearGradient>
+  </defs>
+  <g transform="matrix(1.3333333,0,0,-1.3333333,0,640.252)">
+    <path style="fill:url(#linearGradient28);stroke:none" d="m 269.949,296.118 c 0,-17.852 14.472,-32.324 32.322,-32.324 v 0 c 17.853,0 32.325,14.472 32.325,32.324 v 0 c 0,17.851 -14.472,32.323 -32.325,32.323 v 0 c -17.85,0 -32.322,-14.472 -32.322,-32.323 m 13.861,0 c 0,10.196 8.266,18.463 18.461,18.463 v 0 c 10.197,0 18.464,-8.267 18.464,-18.463 v 0 c 0,-10.197 -8.267,-18.463 -18.464,-18.463 v 0 c -10.195,0 -18.461,8.266 -18.461,18.463"/>
+    <path style="fill:url(#linearGradient48);stroke:none" d="M 237.983,400.87 C 367.582,365.229 397.241,267.646 404.013,222.759 v 0 c 14.717,20.403 23.386,45.453 23.386,72.532 v 0 c 0,68.55 -55.572,124.121 -124.122,124.121 v 0 c -23.958,0 -46.325,-6.784 -65.294,-18.542"/>
+    <path style="fill:url(#linearGradient68);stroke:none" d="m 229.925,195.152 c 19.421,-14.251 43.141,-22.987 68.854,-23.903 v 0 h 8.994 c 66.466,2.368 119.626,56.997 119.626,124.042 v 0 c 0,23.392 -6.47,45.273 -17.721,63.949 v 0 C 372.924,228.686 273.178,200.998 229.925,195.152"/>
+    <g clip-path="url(#clipPath78)">
+      <path style="fill:#e3881f;fill-opacity:1;fill-rule:nonzero;stroke:none" d="M 414.1148,379.2279 414.1028,379.2169 c 0.003,-0.003 0.005,-0.005 0.008,-0.009 0.001,0.007 0.003,0.013 0.004,0.02"/>
+      <path style="fill:#e3881f;fill-opacity:1;fill-rule:nonzero;stroke:none" d="m 200.9734,192.4674 h 0.018 c -0.002,0.002 -0.006,0.006 -0.009,0.008 z"/>
+    </g>
+    <path style="fill:url(#linearGradient104);stroke:none" d="m 179.156,295.291 c 0,-67.045 53.158,-121.674 119.625,-124.042 v 0 h 8.991 c 21.973,0.782 42.492,7.276 60.116,18.042 v 0 C 237.507,225.836 209.818,325.814 203.973,369.767 v 0 c -15.584,-20.745 -24.817,-46.532 -24.817,-74.476"/>
+    <path style="fill:url(#linearGradient124);stroke:none" d="m 179.156,295.291 c 0,-23.807 6.705,-46.053 18.326,-64.946 v 0 c 22.043,78.506 66.845,119.851 108.495,141.63 v 0 c -19.12,11.895 -41.381,21.657 -67.968,28.911 v 0 c -35.324,-21.88 -58.853,-60.989 -58.853,-105.595"/>
+  </g>
+</svg>

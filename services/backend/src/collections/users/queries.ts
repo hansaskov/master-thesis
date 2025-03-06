@@ -4,6 +4,7 @@ import type { Types } from "$types/collection";
 
 import type { StrictPick } from "$types/strict";
 import { and, eq, getTableColumns } from "drizzle-orm";
+import { users } from "./schema";
 
 export const usersQueries = {
 	selectUniqueWithProvider: async (
@@ -44,6 +45,11 @@ export const usersQueries = {
 	},
 	delete: async (user: StrictPick<Types.User, "id">) =>
 		await db.delete(Table.users).where(eq(Table.users.id, user.id)).returning(),
+	getAllSuperAdmins: async () =>
+		await db
+			.select()
+			.from(Table.users)
+			.where(eq(Table.users.is_superadmin, true)),
 	selectOneOnOrganization: async (
 		organization: Types.OrganizationUnique,
 		user: Types.UserUnique,
@@ -79,4 +85,12 @@ export const usersQueries = {
 					eq(Table.usersToOrganizations.organization_id, organization.id),
 				),
 			),
+	selectAll: async () => db.select().from(users),
+	updateSuperadminField: async (id: string, newValue: boolean) =>
+		await db
+			.update(Table.users)
+			.set({
+				is_superadmin: newValue,
+			})
+			.where(eq(Table.users.id, id)),
 };
