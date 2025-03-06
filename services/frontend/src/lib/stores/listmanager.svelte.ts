@@ -25,6 +25,118 @@ export class ListManager<T extends { id: string }> {
 		return previous;
 	}
 
+	protected optimisticInsert<
+		TData,
+		TError,
+		MutationFn extends (item: T) => Promise<{ data?: TData; error?: TError }>
+	>(options: {
+		mutationFn: MutationFn;
+		onError: (error: NonNullable<Awaited<ReturnType<MutationFn>>['error']>) => void;
+		onSuccess: (data: NonNullable<Awaited<ReturnType<MutationFn>>['data']>) => void;
+	}) {
+		return (item: Parameters<MutationFn>[0]): Promise<TData | void> => {
+			return (async () => {
+				// Optimistically insert the item
+				const tempId = `temp_${Date.now()}_${Math.random()}`;
+				this.insert({ ...item, id: tempId });
+
+				// Actually insert the item in the db
+				const { data, error } = await options.mutationFn(item);
+
+				// Handle Error case
+				if (error) {
+					this.delete(tempId);
+					options.onError(error);
+					return;
+				}
+
+				// Handle Success case
+				if (data) {
+					this.update(tempId, data);
+					options.onSuccess(data);
+					return data;
+				}
+			})();
+		};
+	}
+
+	protected optimisticDelete<
+		TData,
+		TError,
+		MutationFn extends (params: { id: string }) => Promise<{ data?: TData; error?: TError }>
+	>(options: {
+		mutationFn: MutationFn;
+		onError: (error: NonNullable<Awaited<ReturnType<MutationFn>>['error']>) => void;
+		onSuccess: (data: NonNullable<Awaited<ReturnType<MutationFn>>['data']>) => void;
+	}) {
+		return (id: string): Promise<TData | void> => {
+			return (async () => {
+				// Store the item before deletion for potential rollback
+				const removedItem = this.delete(id);
+
+				// If nothing was actually deleted, exit early
+				if (!removedItem) return;
+
+				// Perform the actual deletion in the db
+				const { data, error } = await options.mutationFn({ id });
+
+				// Handle Error case
+				if (error) {
+					// Rollback by reinserting the removed item
+					this.insert(removedItem);
+					options.onError(error);
+					return;
+				}
+
+				// Handle Success case
+				if (data) {
+					options.onSuccess(data);
+					return data;
+				}
+			})();
+		};
+	}
+
+	protected optimisticEdit<
+		TData,
+		TError,
+		TUpdate extends Partial<T>,
+		MutationFn extends (item: TUpdate & { id: string }) => Promise<{ data?: TData; error?: TError }>
+	>(options: {
+		mutationFn: MutationFn;
+		onError: (error: NonNullable<Awaited<ReturnType<MutationFn>>['error']>) => void;
+		onSuccess: (data: NonNullable<Awaited<ReturnType<MutationFn>>['data']>) => void;
+	}) {
+		return (update: TUpdate & { id: string }): Promise<TData | void> => {
+			return (async () => {
+				// Store the previous state before update for potential rollback
+				const previousItem = this.update(update.id, update);
+
+				// If nothing was actually updated, exit early
+				if (!previousItem) return;
+
+				// Perform the actual update in the db
+				const { data, error } = await options.mutationFn(update);
+
+				// Handle Error case
+				if (error) {
+					// Rollback to the previous state
+					this.update(update.id, previousItem);
+					options.onError(error);
+					return;
+				}
+
+				// Handle Success case
+				if (data) {
+					// Update with the returned data from the server
+					this.update(update.id, data);
+					options.onSuccess(data);
+					return data;
+				}
+			})();
+		};
+	}
+
 	// Get the current list of items (useful for reactivity in Svelte)
 	get current(): T[] {
 		return this.items;
