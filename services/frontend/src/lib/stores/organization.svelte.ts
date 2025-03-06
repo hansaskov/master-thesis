@@ -16,13 +16,8 @@ class OrganizationStore extends ListManager<Types.Organization> {
 	);
 
 	async refresh() {
-		const { data, error } = await api.organizations.index.get();
-
-		if (error) {
-			return console.log(error);
-		}
-
-		this.items = data;
+		const { data } = await api.organizations.index.get();
+		this.items = data ?? [];
 	}
 
 	public add = super.optimisticInsert({
