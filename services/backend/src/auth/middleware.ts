@@ -7,7 +7,11 @@ import type {
 	UserToOrganizationUpdate,
 } from "$collections/types";
 import Elysia, { error } from "elysia";
-import { setSessionTokenCookie, validateSessionToken } from "./lucia";
+import {
+	Authenticate,
+	setSessionTokenCookie,
+	validateSessionToken,
+} from "./lucia";
 
 export const AuthService = new Elysia({ name: "Service.Auth" })
 	.guard({
@@ -56,7 +60,7 @@ export const authMiddleware = new Elysia()
 					return error("Bad Request", "You must pass a valid session id");
 				}
 
-				const { user, session } = await validateSessionToken(sessionId.value);
+				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
 					return error("Unauthorized", "Authentication is required");
@@ -71,7 +75,7 @@ export const authMiddleware = new Elysia()
 					return error("Bad Request", "You must pass a valid session id");
 				}
 
-				const { user, session } = await validateSessionToken(sessionId.value);
+				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
 					return error("Unauthorized", "Authentication is required");
@@ -87,11 +91,11 @@ export const authMiddleware = new Elysia()
 		isOrganizationAdmin: {
 			async resolve({
 				cookie: {
-					sessionId: { value: sessionId },
+					sessionId,
 					organizationId: { value: organizationId },
 				},
 			}) {
-				if (sessionId === undefined) {
+				if (sessionId.value === undefined) {
 					return error("Bad Request", "sessionId is required in your cookies");
 				}
 
@@ -102,7 +106,7 @@ export const authMiddleware = new Elysia()
 					);
 				}
 
-				const { user, session } = await validateSessionToken(sessionId);
+				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
 					return error("Unauthorized", "You session has expired");
@@ -152,7 +156,7 @@ export const authMiddleware = new Elysia()
 					);
 				}
 
-				const { user, session } = await validateSessionToken(sessionId.value);
+				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
 					return error("Unauthorized", "You session has expired");

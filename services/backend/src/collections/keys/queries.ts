@@ -16,6 +16,7 @@ export const keysQueries = {
 	selectAllOnSystem: async (system: Types.SystemUnique) =>
 		await db
 			.select({
+				id: keys.id,
 				name: keys.name,
 				created_at: keys.created_at,
 				public_key: keys.system_id,
@@ -30,4 +31,11 @@ export const keysQueries = {
 			.then((v) => v[0]),
 	createMany: async (values: Types.KeysNew[]) =>
 		await db.insert(keys).values(values).returning(),
+	delete: async ({ id }: { id: string }) => {
+		await db
+			.delete(keys)
+			.where(eq(keys.id, id))
+			.returning()
+			.then((t) => t.at(0));
+	},
 } as const;

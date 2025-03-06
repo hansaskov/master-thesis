@@ -1,8 +1,10 @@
+import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
 
 export const readingsApi = new Elysia()
+	.use(authMiddleware)
 	.post(
 		"/reading",
 		async ({ headers, body }) => {
@@ -41,17 +43,22 @@ export const readingsApi = new Elysia()
 	.get(
 		"/readings",
 		async ({ query }) => {
-			const readings = await Queries.readings.selectAll({
+			const start = new Date(query.start);
+			const end = new Date(query.end);
+
+			return await Queries.readings.select({
+				start,
+				end,
 				system_id: query.system_id,
+				limit: query.limit,
 			});
-			return readings;
 		},
 		{
+			isOrganization: true,
 			query: t.Object({
 				system_id: Schema.insert.readings.system_id,
-				startDate: Schema.insert.readings.time,
-				endDate: t.Optional(Schema.insert.readings.time),
-				name: t.Optional(Schema.insert.readings.name),
+				start: t.String({ format: "date-time" }),
+				end: t.String({ format: "date-time" }),
 				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
 			}),
 		},

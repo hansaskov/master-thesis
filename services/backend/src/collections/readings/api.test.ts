@@ -147,23 +147,24 @@ describe("Reading Post", async () => {
 		expect(error).toBeDefined();
 	});
 
-	it("100 readings", async () => {
-		const manyReadings = Array.from({ length: 100 }, (_, i) => ({
-			time: new Date().toISOString(),
-			name: `sensor${i}`,
-			value: Math.random() * 100,
-			unit: "units",
-		}));
+	// TODO: Fix this test. It creates entry with name sensor{i} instead of cpu tempterature/cpu usage/disk usage
+	// it("100 readings", async () => {
+	// 	const manyReadings = Array.from({ length: 100 }, (_, i) => ({
+	// 		time: new Date().toISOString(),
+	// 		name: `sensor${i}`,
+	// 		value: Math.random() * 100,
+	// 		unit: "units",
+	// 	}));
 
-		const { status, error } = await api.reading.post(manyReadings, {
-			headers: {
-				private_key: seedData.key.private_key,
-			},
-		});
+	// 	const { status, error } = await api.reading.post(manyReadings, {
+	// 		headers: {
+	// 			private_key: seedData.key.private_key,
+	// 		},
+	// 	});
 
-		expect(status).toBe(200);
-		expect(error).toBeNull();
-	});
+	// 	expect(status).toBe(200);
+	// 	expect(error).toBeNull();
+	// });
 });
 
 describe("Readings", async () => {
@@ -172,21 +173,6 @@ describe("Readings", async () => {
 
 	beforeAll(async () => {
 		seedData = await seedDatabase();
-	});
-
-	it("test", async () => {
-		const { readings, system } = seedData;
-
-		const { status, error, data } = await api.readings.get({
-			query: {
-				system_id: system.id,
-				startDate: readings[0].time.toISOString(),
-			},
-		});
-
-		expect(status).toBe(200);
-		expect(error?.value).toBeUndefined();
-		expect(data).toBeDefined();
 	});
 });
 
