@@ -117,7 +117,7 @@
 												description:
 													"This action cannot be undone. This will permanently delete the organization and all of it's systems",
 												component: AlertDialogBody,
-												props: { onsubmit: () => organizationStore.remove(organization.id) }
+												props: { onsubmit: () => organizationStore.remove(organization) }
 											});
 										}}
 										class="text-red-600"
