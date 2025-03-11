@@ -43,7 +43,7 @@ export class OrganizationStore {
 		const { data, error } = await api.organizations.index.get();
 
 		if (error) {
-			return console.log(error);
+			return onError(error);
 		}
 
 		this.#organizations.current = data;

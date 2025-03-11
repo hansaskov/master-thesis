@@ -19,7 +19,7 @@ class UserStore {
 		const { data, error } = await api.status.refresh.get();
 
 		if (error) {
-			return;
+			return onError(error);
 		}
 
 		this.user = data.user;
