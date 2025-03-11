@@ -7,10 +7,6 @@ import { toast } from 'svelte-sonner';
 import { page } from '$app/state';
 
 export class OrganizationStore {
-	constructor() {
-		this.refresh();
-	}
-
 	// PersistedState will immidiatly fetch values from localstorage.
 	#organizations = new PersistedState<Types.Organization[]>('organizations', [], {
 		storage: 'session',
