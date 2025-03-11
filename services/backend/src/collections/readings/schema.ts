@@ -20,9 +20,10 @@ export const readings = pgTable(
 		name: text().notNull(),
 		value: real().notNull(),
 		unit: text().notNull(),
+		category: text(),
 	},
 	(table) => [
-		primaryKey({ columns: [table.time, table.system_id, table.name] }),
+		primaryKey({ columns: [table.system_id, table.name, table.time] }),
 	],
 );
 

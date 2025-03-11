@@ -1,14 +1,13 @@
 #[cfg(target_os = "windows")]
 pub mod pc_reader {
+    use crate::reading;
+    use crate::Reader;
     use anyhow::{anyhow, Result};
+    use reading::Reading;
     use serde::Deserialize;
     use std::time::SystemTime;
     use tokio::sync::mpsc::Sender;
     use wmi::{COMLibrary, WMIConnection};
-    use crate::reading;
-    use crate::Reader;
-    use reading::Reading;
-
 
     pub struct PCReader {
         wmi_con: WMIConnection,
@@ -43,6 +42,7 @@ pub mod pc_reader {
         query_name: &'static str,
         exact_match: bool,
         unit: &'static str,
+        category: Option<&'static str>,
     }
 
     // This is the single place to add new readings
@@ -53,6 +53,7 @@ pub mod pc_reader {
             query_name: "Core",
             exact_match: false,
             unit: "C",
+            category: Some("computer"),
         },
         ReadingDefinition {
             name: "CPU Usage",
@@ -60,6 +61,7 @@ pub mod pc_reader {
             query_name: "CPU Total",
             exact_match: true,
             unit: "%",
+            category: Some("computer"),
         },
         ReadingDefinition {
             name: "Memory Usage",
@@ -67,6 +69,7 @@ pub mod pc_reader {
             query_name: "Memory",
             exact_match: true,
             unit: "%",
+            category: Some("computer"),
         },
         // Add more readings here as needed
     ];
@@ -110,10 +113,11 @@ pub mod pc_reader {
             let timestamp = SystemTime::now();
 
             Ok(Reading {
-                timestamp: timestamp,
+                time: timestamp,
                 name: definition.name.to_string(),
                 value: sensor.value,
                 unit: definition.unit.to_string(),
+                category: definition.category.map(str::to_string),
             })
         }
 
