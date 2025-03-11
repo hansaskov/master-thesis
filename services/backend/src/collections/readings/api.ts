@@ -31,11 +31,11 @@ export const readingsApi = new Elysia()
 					name: Schema.insert.readings.name,
 					value: Schema.insert.readings.value,
 					unit: Schema.insert.readings.unit,
-					category: Schema.insert.readings.category
+					category: Schema.insert.readings.category,
 				}),
 				{
 					minItems: 1,
-					maxItems: 10_000
+					maxItems: 10_000,
 				},
 			),
 		},

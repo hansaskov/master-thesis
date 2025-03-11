@@ -20,7 +20,7 @@ export const readings = pgTable(
 		name: text().notNull(),
 		value: real().notNull(),
 		unit: text().notNull(),
-		category: text()
+		category: text(),
 	},
 	(table) => [
 		primaryKey({ columns: [table.system_id, table.name, table.time] }),
