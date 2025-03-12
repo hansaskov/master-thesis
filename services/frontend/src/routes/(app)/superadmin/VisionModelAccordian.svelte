@@ -6,40 +6,36 @@
 	import { type SystemModelWithParts } from '$lib/stores/system-models.svelte';
 	import { Button } from '@/components/ui/button';
 	import type { Types } from 'backend';
+	import { combineArraysAndAddIsCheckedForDublicates } from '@/transformation';
+	import { systemModelStore } from '$lib/stores/system-models.svelte';
 
 	const { model, allParts }: { model: SystemModelWithParts; allParts: Types.Part[] } = $props();
 
-	function combineArrays<T extends { id: string }>(arr1: T[], arr2: T[]) {
-		const idMap = new Map<string, T & { isDuplicate: boolean }>();
+	let derivedParts = $state(combineArraysAndAddIsCheckedForDublicates(model.parts, allParts));
 
-		// Process both arrays
-		for (const item of [...arr1, ...arr2]) {
-			const existing = idMap.get(item.id);
+	$effect(() => {
+		derivedParts = combineArraysAndAddIsCheckedForDublicates(model.parts, allParts);
+	});
 
-			if (existing) {
-				// If this ID already exists, mark both as duplicates
-				existing.isDuplicate = true;
-				// We don't add the new item since we're keeping only one instance per ID
-			} else {
-				// First time seeing this ID
-				idMap.set(item.id, { ...item, isDuplicate: false });
-			}
-		}
-
-		return Array.from(idMap.values());
-	}
-
-	const derivedParts = $derived(combineArrays(model.parts, allParts));
+	$inspect(derivedParts);
 
 	type Mode = 'edit' | 'save';
 
 	let mode = $state<Mode>('edit');
 
-	function toggleMode() {
+	async function toggleMode() {
 		if (mode === 'edit') {
 			mode = 'save';
-		} else {
+			return;
+		}
+
+		if (mode === 'save') {
+			await systemModelStore.assignParts({
+				system_model_id: model.id,
+				part_ids: derivedParts.filter((part) => part.isChecked).map((part) => part.id)
+			});
 			mode = 'edit';
+			return;
 		}
 	}
 </script>
@@ -57,10 +53,10 @@
 			</Table.Header>
 			<Table.Body>
 				{#each derivedParts as part}
-					{#if mode === 'save' || part.isDuplicate === true}
+					{#if mode === 'save' || part.isChecked === true}
 						<Table.Row>
 							<Table.Cell hidden={mode == 'edit'} class="w-[50px]">
-								<Checkbox checked={part.isDuplicate}></Checkbox>
+								<Checkbox bind:checked={part.isChecked}></Checkbox>
 							</Table.Cell>
 							<Table.Cell>{part.name}</Table.Cell>
 							<Table.Cell class="flex justify-end">

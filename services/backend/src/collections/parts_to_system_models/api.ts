@@ -65,4 +65,17 @@ export const partsToSystemModelApi = new Elysia({
 			body: BatchUpdateSchema,
 			isSuperAdmin: true,
 		},
+	)
+	.patch(
+		"/overwrite",
+		async ({ body }) => {
+			return await Queries.partsToSystemModels.overwrite(body);
+		},
+		{
+			body: t.Object({
+				system_model_id: t.String({ minLength: 1 }),
+				part_ids: t.Array(t.String({ minLength: 1 })),
+			}),
+			isSuperAdmin: true,
+		},
 	);

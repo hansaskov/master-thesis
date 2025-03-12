@@ -1,7 +1,7 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
-import { and, eq, or } from "drizzle-orm";
+import { and, eq, inArray, or } from "drizzle-orm";
 import { parts } from "../parts/schema";
 import { partsToSystemModels } from "./schema";
 
@@ -115,11 +115,26 @@ export const partsToSystemModelsQueries = {
 			return results;
 		});
 	},
+	overwrite: async ({
+		system_model_id,
+		part_ids,
+	}: { system_model_id: string; part_ids: string[] }) => {
+		await db.transaction(async (tx) => {
+			// Delete all relations as we will replace them.
+			await tx
+				.delete(partsToSystemModels)
+				.where(and(eq(partsToSystemModels.system_model_id, system_model_id)));
 
-	// old way of doing it as backup
-	// await db
-	//     .delete(partsToSystemModels)
-	//     .where(eq(partsToSystemModels.part_id, values.part_id))
-	//     .returning()
-	//     .then((v) => v.at(0)),
+			// Return early if no parts are specified.
+			if (part_ids.length === 0) {
+				return;
+			}
+
+			// Construct new values for the relation.
+			const values = part_ids.map((part_id) => ({ system_model_id, part_id }));
+
+			// Insert new parts
+			await tx.insert(partsToSystemModels).values(values);
+		});
+	},
 };
