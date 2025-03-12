@@ -37,6 +37,25 @@ export const systemsApi = new Elysia({ prefix: "systems" })
 			isSuperAdmin: true,
 		},
 	)
+	.patch(
+		"/",
+		async ({ body, relation }) => {
+			return await Queries.systems.update({
+				id: body.id,
+				name: body.name,
+				organization_id: relation.organization_id,
+				system_model: body.system_model,
+			});
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				name: t.Optional(t.String()),
+				system_model: t.Optional(Schema.insert.systems.system_model),
+			}),
+			isOrganizationAdmin: true,
+		},
+	)
 	.delete(
 		"/",
 		async ({ user, body }) => {
