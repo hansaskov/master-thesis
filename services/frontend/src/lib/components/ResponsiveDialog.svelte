@@ -23,7 +23,7 @@
 		</Dialog.Root>
 	{:else}
 		<Drawer.Root bind:open={dialogStore.isOpen}>
-			<Dialog.Trigger />
+			<Drawer.Trigger />
 			<Drawer.Content>
 				<Drawer.Header class="text-left">
 					<Drawer.Title>{dialogStore.data.title}</Drawer.Title>
