@@ -18,6 +18,10 @@
 		--muted-foreground: 240 3.8% 46.1%; /* Keeping original muted text color */
 		--accent: 5.73 75.85% 59.41%; /* Red accent */
 		--accent-foreground: 240 10% 98.9%; /* Dark text on accent for better contrast */
+		--healthy: 142.1 76.3% 30%; /* healthy (Vibrant Emerald Green) */
+		--healthy-foreground: 0 0% 100%; /* Warning (Golden Olive Green - less intense than standard yellow) */
+		--warning: 85 75% 40%;
+		--warning-foreground: 0 0% 100%;
 		--destructive: 0 72.22% 50.59%;
 		--destructive-foreground: 0 0% 98%;
 		--border: 240 5.9% 90%; /* Subtle gray border */
@@ -25,7 +29,7 @@
 		--ring: 203 68.18% 17.25%; /* Primary for focus rings */
 		--radius: 0.5rem;
 		--warning: 53 98% 77%;
-		--warning-foreground: 0 0% 98%;
+		--warning-foreground: 0 0% 5%;
 	}
 	.dark {
 		--background: 0 0% 7%; /* Near black background */
@@ -44,6 +48,10 @@
 		--accent-foreground: 0 0% 98%; /* Off-white text on accent */
 		--destructive: 0 70% 50%; /* Brighter destructive for dark theme */
 		--destructive-foreground: 0 0% 98%; /* Off-white text */
+		--healthy: 142.1 76.3% 65%; /* Success (Bright Seafoam Green) */
+		--healthy-foreground: 0 0% 5%;
+		--warning: 85 75% 60%; /* Warning (Soft Chartreuse) */
+		--warning-foreground: 0 0% 5%;
 		--border: 0 0% 20%; /* Dark gray border */
 		--input: 0 0% 20%; /* Matching input to border */
 		--ring: 182.95 67.03% 70%; /* Matching ring to primary */

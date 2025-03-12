@@ -60,7 +60,7 @@
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
 									<!-- TODO: Make dynamic -->
-									<Badge variant="default">Healthy</Badge>
+									<Badge variant="healthy">Healthy</Badge>
 								</Table.Cell>
 								<Table.Cell>
 									<!-- TODO: Make dynamic -->
@@ -71,35 +71,6 @@
 								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
 							</Table.Row>
 						{/each}
-						<!-- {#each $sortedSystems as system (system.id)}
-							<Table.Row
-								onclick={() => goto(`./systems/${system.id}`)}
-								class="hover:bg-muted cursor-pointer"
-							>
-								<Table.Cell class="hidden md:table-cell">
-									<img
-										alt="{system.name} icon"
-										class="aspect-square rounded-md object-cover"
-										height="64"
-										src={system.image}
-										width="64"
-									/>
-								</Table.Cell>
-								<Table.Cell class="font-medium">{system.name}</Table.Cell>
-								<Table.Cell>
-									<Badge variant={getHealthVariant(system.health)}>
-										{system.health}
-									</Badge>
-								</Table.Cell>
-								<Table.Cell>
-									<Badge variant={getStatusVariant(system.status)}>
-										{system.status}
-									</Badge>
-								</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.type}</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
-							</Table.Row>
-						{/each} -->
 					</Table.Body>
 				</Table.Root>
 			</div>
