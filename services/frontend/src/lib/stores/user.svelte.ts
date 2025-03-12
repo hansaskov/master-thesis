@@ -77,12 +77,12 @@ class UserStore {
 		// logic for upgrading a user
 		if (newValue) {
 			const { error } = await api.users.index.patch({ id, newValue });
-	
+
 			if (error) {
 				onError(error);
 				return;
 			}
-	
+
 			this.allUsers.current = this.allUsers.current.map((user) => {
 				if (user.id === id) {
 					return { ...user, is_superadmin: newValue };
@@ -90,24 +90,22 @@ class UserStore {
 				return user;
 			});
 			toast.success(`User has been updated to superadmin`);
-
-		} 
+		}
 
 		//logic for downgrading user
-		if (!newValue) 
-		{
+		if (!newValue) {
 			await this.loadSuperAdmins();
 
 			if (this.superAdminUsers.current.length <= 1) {
-				toast.success('User cannot be downgraded as there is only 1 superadmin')
+				toast.success('User cannot be downgraded as there is only 1 superadmin');
 			} else {
 				const { error } = await api.users.index.patch({ id, newValue });
-	
+
 				if (error) {
 					onError(error);
 					return;
 				}
-		
+
 				this.allUsers.current = this.allUsers.current.map((user) => {
 					if (user.id === id) {
 						return { ...user, is_superadmin: newValue };
@@ -116,7 +114,6 @@ class UserStore {
 				});
 				toast.success('User has been downgraded from superadmin');
 			}
-			
 		}
 
 		console.log('Unreachable branch in User.edit');

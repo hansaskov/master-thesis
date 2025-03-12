@@ -8,20 +8,20 @@
 	let { children }: { children?: Snippet } = $props();
 
 	let canGoBack = $state(false);
-	let pageName = $derived(page.url.pathname)
+	let pageName = $derived(page.url.pathname);
 	let previousSectionDisplay = $state('');
 
 	$effect.pre(() => {
 		canGoBack = window.history.length > 1;
 
-		const pathSegments = pageName.split('/').filter(segment => segment);
+		const pathSegments = pageName.split('/').filter((segment) => segment);
 		if (pathSegments.length >= 2) {
 			// Get the second-to-last segment, which might be a system ID
 			const potentialSystemId = pathSegments[pathSegments.length - 2];
-			
+
 			// Check if this segment matches any system ID
-			const matchingSystem = systemStore.systems.find(system => system.id === potentialSystemId);
-			console.log("found matching system");
+			const matchingSystem = systemStore.systems.find((system) => system.id === potentialSystemId);
+			console.log('found matching system');
 
 			if (matchingSystem) {
 				// We found a matching system - use its name

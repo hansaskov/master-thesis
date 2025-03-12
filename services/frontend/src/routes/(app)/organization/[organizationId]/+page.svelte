@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ArrowRight from 'lucide-svelte/icons/arrow-right';
+	// import ArrowRight from 'lucide-svelte/icons/arrow-right';
 	import ArrowDownUp from 'lucide-svelte/icons/arrow-down-up';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Button } from '$lib/components/ui/button';
@@ -45,8 +45,6 @@
 			currentPage++;
 		}
 	}
-
-	
 </script>
 
 <div class="md:container">
@@ -66,8 +64,10 @@
 						<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
 							<ChevronLeft class="w-2 h-2" />
 						</Button>
-							Showing {visibleSystems.length ? startIndex + 1 : 0}–{visibleSystems.length ? startIndex + visibleSystems.length : 0}
-							of {totalSystems} results
+						Showing {visibleSystems.length ? startIndex + 1 : 0}–{visibleSystems.length
+							? startIndex + visibleSystems.length
+							: 0}
+						of {totalSystems} results
 						<Button
 							variant="outline"
 							onclick={() => nextPage()}

@@ -155,7 +155,7 @@
 				Search
 				<span class="sr-only">Search</span>
 			</a>
-			
+
 			{#if userStore.user?.is_superadmin}
 				<a href="/superadmin" class="flex flex-col items-center justify-center">
 					<UserRoundCog />
