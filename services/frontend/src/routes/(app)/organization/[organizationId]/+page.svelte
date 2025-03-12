@@ -111,10 +111,6 @@
 				Showing <strong>{systemStore.systems.length}</strong> of
 				<strong>{systemStore.systems.length}</strong> systems
 			</div>
-			<Button href="/systems" variant="outline" size="sm">
-				View All Systems
-				<ArrowRight class="ml-2 h-4 w-4" />
-			</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>
