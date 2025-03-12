@@ -1,8 +1,6 @@
 <script lang="ts">
-	import ArrowRight from 'lucide-svelte/icons/arrow-right';
 	import ArrowDownUp from 'lucide-svelte/icons/arrow-down-up';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
@@ -111,10 +109,6 @@
 				Showing <strong>{systemStore.systems.length}</strong> of
 				<strong>{systemStore.systems.length}</strong> systems
 			</div>
-			<Button href="/systems" variant="outline" size="sm">
-				View All Systems
-				<ArrowRight class="ml-2 h-4 w-4" />
-			</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>

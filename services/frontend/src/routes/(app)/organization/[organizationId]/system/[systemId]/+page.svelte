@@ -25,31 +25,36 @@
 			label: 'Monitor',
 			href: 'monitoring',
 			icon: Monitor,
-			description: 'Real-time system monitoring and alerts'
+			description: 'Real-time system monitoring and alerts',
+			disabled: false
 		},
 		{
 			label: 'Service Agreements',
 			href: 'service',
 			icon: Wrench,
-			description: 'Manage and view service contracts'
+			description: 'Manage and view service contracts',
+			disabled: true
 		},
 		{
 			label: 'Production Intelligence',
 			href: 'pi',
 			icon: BarChart,
-			description: 'Analytics and insights for system performance'
+			description: 'Analytics and insights for system performance',
+			disabled: true
 		},
 		{
 			label: 'Spare Parts',
 			href: 'parts',
 			icon: Package2,
-			description: 'Inventory and ordering of spare components'
+			description: 'Inventory and ordering of spare components',
+			disabled: true
 		},
 		{
 			label: 'System Settings',
 			href: 'settings',
 			icon: Cog,
-			description: 'Alter settings such as OEE information, KPIs and more'
+			description: 'Alter settings such as OEE information, KPIs and more',
+			disabled: false
 		}
 	];
 </script>
@@ -69,6 +74,7 @@
 				<a href="./{systemId}/{option.href}" class="no-underline">
 					<Button
 						variant="outline"
+						disabled={option.disabled}
 						class="w-full h-auto py-4 px-6 flex flex-col items-center justify-center text-center hover:bg-secondary/20 hover:text-secondary-foreground"
 					>
 						<option.icon class="w-6 h-6 mb-2" />
