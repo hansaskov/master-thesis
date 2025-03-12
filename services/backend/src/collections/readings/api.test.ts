@@ -31,6 +31,7 @@ async function seedDatabase() {
 			unit: "C",
 			value: 40,
 			system_id: system.id,
+			category: "computer"
 		},
 		{
 			name: "cpu usage",
@@ -38,6 +39,7 @@ async function seedDatabase() {
 			unit: "%",
 			value: 20,
 			system_id: system.id,
+			category: "computer"
 		},
 		{
 			name: "disk usage",
@@ -45,6 +47,7 @@ async function seedDatabase() {
 			unit: "%",
 			value: 95,
 			system_id: system.id,
+			category: "computer"
 		},
 	]);
 
@@ -73,12 +76,14 @@ describe("Reading Post", async () => {
 				name: "temperature",
 				value: 25.5,
 				unit: "celsius",
+				category: "computer"
 			},
 			{
 				time: new Date().toISOString(),
 				name: "humidity",
 				value: 60,
 				unit: "percent",
+				category: "environment"
 			},
 		];
 
@@ -99,6 +104,7 @@ describe("Reading Post", async () => {
 				name: "temperature",
 				value: 25.5,
 				unit: "celsius",
+				category: "computer"
 			},
 		];
 
@@ -119,6 +125,7 @@ describe("Reading Post", async () => {
 				name: "temperature",
 				value: "not-a-number", // Invalid value type
 				unit: "celsius",
+				category: "computer"
 			},
 		];
 

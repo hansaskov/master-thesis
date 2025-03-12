@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as Card from '$lib/components/ui/card';
-	// import {
-	// 	Table,
-	// 	TableBody,
-	// 	TableCell,
-	// 	TableHead,
-	// 	TableHeader,
-	// 	TableRow
-	// } from '$lib/components/ui/table';
-	// import { metricGroups } from './monitoringData.svelte';
-	// import { Button } from '@/components/ui/button';
-	// import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
+	import {
+		Table,
+		TableBody,
+		TableCell,
+		TableHead,
+		TableHeader,
+		TableRow
+	} from '$lib/components/ui/table';
+	import { metricGroups, fetchMetric } from './monitoringData.svelte';
+	import { Button } from '@/components/ui/button';
+	import RotateCcw from 'lucide-svelte/icons/rotate-ccw';
 	import { Area, AreaChart, LinearGradient } from 'layerchart';
 	import TimeRangeSelector from '../TimeRangeSelector.svelte';
 	import { api } from '@/api';
@@ -28,6 +28,8 @@
 		title: string;
 		description: string;
 	}[];
+
+	const systemId = page.params.systemId;
 
 	// API data types
 	type OriginalData = NonNullable<Awaited<ReturnType<typeof api.readings.get>>['data']>;
@@ -55,7 +57,6 @@
 	let chartsData = $state<ChartDate>([]);
 
 	async function fetchReadings() {
-		const systemId = page.params.systemId;
 		const start = timeRangeStore.range.start;
 		const end = timeRangeStore.range.end;
 
@@ -115,6 +116,16 @@
 	// Initial fetch on mount
 	onMount(() => {
 		fetchReadings();
+		fetchMetric(systemId);
+
+		const interval = setInterval(() => {
+			console.log("ran interval");
+			fetchReadings();
+		}, 30000);
+	
+		return () => {
+			clearInterval(interval);
+		};
 	});
 </script>
 
@@ -154,7 +165,7 @@
 <div>
 	<h2 class="mb-4 text-2xl font-bold">Metrics</h2>
 	Coming Soon!
-	<!-- <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+	<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 		{#each metricGroups as group}
 			<Card.Root>
 				<Card.Header>
@@ -183,5 +194,5 @@
 				</Card.Content>
 			</Card.Root>
 		{/each}
-	</div> -->
+	</div>
 </div>
