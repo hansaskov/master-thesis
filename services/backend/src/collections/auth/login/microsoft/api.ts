@@ -121,14 +121,15 @@ export const microsoftApi = new Elysia()
 
 			// Process the image if we got a successful response from either endpoint
 			if (profilePictureResponse.ok) {
-				const buffer = await profilePictureResponse.arrayBuffer();
-				const metadata = s3.file(fileName);
-				await write(metadata, buffer);
-
-				// Construct the URL to save in database
-				// TODO: change http://localhost:9000/ to environment.s3_endpoint in final version
-				//imageUrl = `http://localhost:9000/${environment.S3_BUCKET}/${fileName}`;
-				imageUrl = `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${fileName}`;
+				try {
+					const buffer = await profilePictureResponse.arrayBuffer();
+					const metadata = s3.file(fileName);
+					await write(metadata, buffer);
+					// Construct the URL to save in database
+					imageUrl = `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${fileName}`;
+				} catch (e) {
+					console.log("failed to write to S3 bucket", e);
+				}
 			} else {
 				console.error("Failed to fetch profile picture from both endpoints");
 			}

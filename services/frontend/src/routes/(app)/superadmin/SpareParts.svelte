@@ -109,7 +109,9 @@
 				<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
 					<ChevronLeft class="w-2 h-2" />
 				</Button>
-				Showing {startIndex + 1}–{startIndex + visibleParts.length}
+				Showing {visibleParts.length ? startIndex + 1 : 0}–{visibleParts.length
+					? startIndex + visibleParts.length
+					: 0}
 				of {totalItems} results
 				<Button
 					variant="outline"
