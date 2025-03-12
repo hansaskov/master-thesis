@@ -29,7 +29,7 @@
 		setTimeout(() => (copied = false), 2000);
 	}
 
-	keysStore.fetch()
+	keysStore.fetch();
 </script>
 
 <form onsubmit={handleSubmit}>
