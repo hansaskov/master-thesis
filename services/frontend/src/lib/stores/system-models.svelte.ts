@@ -2,7 +2,7 @@ import { api } from '$lib/api';
 import type { Types } from 'backend';
 import { PersistedState } from 'runed';
 
-interface SystemModelWithParts extends Types.SystemModel {
+export interface SystemModelWithParts extends Types.SystemModel {
 	parts: Array<{
 		id: string;
 		name: string;
