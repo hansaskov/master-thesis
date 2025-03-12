@@ -20,8 +20,7 @@
 	let endIndex = $derived((currentPage + 1) * pageSize);
 	let visibleOrganizations = $derived(organizationStore.organizations.slice(startIndex, endIndex));
 	let totalOrganizations = $derived(organizationStore.organizations.length);
-	let totalItems = organizationStore.organizations.length;
-	let totalPages = $derived(Math.ceil(totalItems / pageSize));
+	let totalPages = $derived(Math.ceil(totalOrganizations / pageSize));
 
 	function prevPage() {
 		if (currentPage > 0) {
