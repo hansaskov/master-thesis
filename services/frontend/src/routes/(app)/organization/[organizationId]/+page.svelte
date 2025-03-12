@@ -10,6 +10,7 @@
 
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import { Button } from '@/components/ui/button';
 
 	systemStore.refresh();
 
