@@ -4,12 +4,15 @@ import type { Types } from 'backend';
 import { toast } from 'svelte-sonner';
 import { PersistedState } from 'runed';
 import type { StrictPick } from 'backend/src/types/strict';
+import { page } from '$app/state';
 
 export class SystemStore {
 	#systems = new PersistedState<Types.System[]>('systems', [], {
 		storage: 'session',
 		syncTabs: false
 	});
+
+	currentSystem = $derived(this.systems.find((system) => system.id === page.params.systemId));
 
 	#add(system: Types.System) {
 		this.#systems.current.push(system);
@@ -77,6 +80,17 @@ export class SystemStore {
 		// toast.success(`Successfully deleted ${data.name}`);
 
 		// this.#systems = this.#systems.#filter((v) => v.id !== id);
+	}
+
+	async update(system: Types.SystemUpdate) {
+		const { data, error } = await api.systems.index.patch(system);
+
+		if (error) {
+			return onError(error);
+		}
+
+		toast.success(`Successfully updated System ${data?.name}`);
+		await this.refresh();
 	}
 
 	get systems() {

@@ -13,11 +13,8 @@
 	import Package2 from 'lucide-svelte/icons/package-2';
 	import Cog from 'lucide-svelte/icons/cog';
 	import { page } from '$app/state';
+	import { systemStore } from '@/stores/systems.svelte';
 
-	// Placeholder data
-	import { systems } from '@/stores/systems-mocked';
-
-	// Get the system ID from the route parameters
 	let systemId = $derived(page.params.systemId);
 
 	const navigationOptions = [
@@ -62,7 +59,7 @@
 <Card class="w-full max-w-4xl mx-auto border-0 shadow-none md:border md:shadow">
 	<CardHeader>
 		<CardTitle class="text-2xl">
-			Vision System: {systems.find((system) => system.id === systemId)?.name || ''}
+			Vision System: {systemStore.currentSystem?.name || ''}
 		</CardTitle>
 		<CardDescription>
 			Select an option to view or manage different aspects of this system.

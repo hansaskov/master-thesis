@@ -28,6 +28,8 @@
 		copied = true;
 		setTimeout(() => (copied = false), 2000);
 	}
+
+	keysStore.fetch();
 </script>
 
 <form onsubmit={handleSubmit}>

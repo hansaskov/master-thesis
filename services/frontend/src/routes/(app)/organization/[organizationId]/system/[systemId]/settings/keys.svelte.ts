@@ -8,10 +8,6 @@ type KeysDelete = Parameters<typeof api.keys.index.delete>['0'];
 const systemId = $derived(page.params.systemId);
 
 class KeysStore {
-	constructor() {
-		this.fetch();
-	}
-
 	#keys = $state<Keys>([]);
 	newKey = $state<KeysNew>({
 		name: '',
