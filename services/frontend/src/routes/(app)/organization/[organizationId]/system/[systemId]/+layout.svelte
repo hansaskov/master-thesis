@@ -14,7 +14,7 @@
 	$effect.pre(() => {
 		canGoBack = window.history.length > 1;
 
-		const pathSegments = pageName.split('/').filter((segment) => segment);
+		const pathSegments = pageName.split('/').filter((segment) => segment.length > 0);
 		if (pathSegments.length >= 2) {
 			// Get the second-to-last segment, which might be a system ID
 			const potentialSystemId = pathSegments[pathSegments.length - 2];
@@ -49,7 +49,7 @@
 <Button onclick={handleGoBack} variant="ghost" class="inline-flex md:hidden -ml-2">
 	<ArrowLeft class="mr-2 h-4 w-4" />
 	Back to
-	<span class="ml-1 capitalize">{previousSectionDisplay}</span>
+	<span class="capitalize">{previousSectionDisplay}</span>
 </Button>
 
 <div class="py-4 md:container">

@@ -1,14 +1,17 @@
 import { api } from '$lib/api';
+import { onError } from '@/error';
 import type { Types } from 'backend';
 import { PersistedState } from 'runed';
 
-interface SystemModelWithParts extends Types.SystemModel {
+export interface SystemModelWithParts extends Types.SystemModel {
 	parts: Array<{
 		id: string;
 		name: string;
 		image: string | null;
 	}>;
 }
+
+type AssingParts = Parameters<typeof api.parts_to_system_models.overwrite.patch>['0'];
 
 export class SystemModelStore {
 	#systemModels = new PersistedState<SystemModelWithParts[]>('systemModels', [], {
@@ -32,6 +35,16 @@ export class SystemModelStore {
 		} catch (err) {
 			console.error('Error updating store:', err);
 		}
+	}
+
+	async assignParts(values: AssingParts) {
+		const { error } = await api.parts_to_system_models.overwrite.patch(values);
+
+		if (error) {
+			return onError(error);
+		}
+
+		await this.refresh();
 	}
 
 	get systemModels() {

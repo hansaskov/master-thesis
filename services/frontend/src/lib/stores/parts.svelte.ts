@@ -6,7 +6,7 @@ import { PersistedState } from 'runed';
 import { toast } from 'svelte-sonner';
 
 export class PartsStore {
-	public parts = new PersistedState<Types.Part[]>('parts', []);
+	#parts = new PersistedState<Types.Part[]>('parts', []);
 
 	async refresh() {
 		const { data, error } = await api.parts.index.get();
@@ -15,7 +15,7 @@ export class PartsStore {
 			return onError(error);
 		}
 
-		this.parts.current = data;
+		this.#parts.current = data;
 	}
 
 	async add(part: Types.PartNew) {
@@ -26,7 +26,7 @@ export class PartsStore {
 		}
 
 		toast.success(`Successfully created ${data.name}`);
-		this.parts.current.push(data);
+		this.#parts.current.push(data);
 	}
 
 	async remove({ id }: StrictPick<Types.Part, 'id'>) {
@@ -57,6 +57,10 @@ export class PartsStore {
 		}
 
 		console.log('Unreachable branch in Parts.edit');
+	}
+
+	get parts() {
+		return this.#parts.current;
 	}
 }
 
