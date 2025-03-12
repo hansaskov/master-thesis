@@ -15,15 +15,11 @@ class UserStore {
 	// Weird name to not mix it up with user by accident
 	public allUsers = new PersistedState<Types.User[]>('allUsers', []);
 
-	constructor() {
-		this.refresh();
-	}
-
 	public async refresh() {
 		const { data, error } = await api.status.refresh.get();
 
 		if (error) {
-			return;
+			return onError(error);
 		}
 
 		this.user = data.user;

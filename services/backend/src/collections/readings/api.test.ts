@@ -82,7 +82,7 @@ describe("Reading Post", async () => {
 			},
 		];
 
-		const { status, error } = await api.reading.post(testReadings, {
+		const { status, error } = await api.readings.post(testReadings, {
 			headers: {
 				private_key: seedData.key.private_key,
 			},
@@ -102,7 +102,7 @@ describe("Reading Post", async () => {
 			},
 		];
 
-		const { status, error } = await api.reading.post(testReadings, {
+		const { status, error } = await api.readings.post(testReadings, {
 			headers: {
 				private_key: "invalid-private-key",
 			},
@@ -122,7 +122,7 @@ describe("Reading Post", async () => {
 			},
 		];
 
-		const { status, error } = await api.reading.post(
+		const { status, error } = await api.readings.post(
 			// @ts-ignore - Intentionally testing with invalid types
 			invalidReading,
 			{
@@ -137,7 +137,7 @@ describe("Reading Post", async () => {
 	});
 
 	it("empty data", async () => {
-		const { status, error } = await api.reading.post([], {
+		const { status, error } = await api.readings.post([], {
 			headers: {
 				private_key: seedData.key.private_key,
 			},
@@ -146,25 +146,6 @@ describe("Reading Post", async () => {
 		expect(status).toBe(422);
 		expect(error).toBeDefined();
 	});
-
-	// TODO: Fix this test. It creates entry with name sensor{i} instead of cpu tempterature/cpu usage/disk usage
-	// it("100 readings", async () => {
-	// 	const manyReadings = Array.from({ length: 100 }, (_, i) => ({
-	// 		time: new Date().toISOString(),
-	// 		name: `sensor${i}`,
-	// 		value: Math.random() * 100,
-	// 		unit: "units",
-	// 	}));
-
-	// 	const { status, error } = await api.reading.post(manyReadings, {
-	// 		headers: {
-	// 			private_key: seedData.key.private_key,
-	// 		},
-	// 	});
-
-	// 	expect(status).toBe(200);
-	// 	expect(error).toBeNull();
-	// });
 });
 
 describe("Readings", async () => {

@@ -8,10 +8,6 @@ import { toast } from 'svelte-sonner';
 export class PartsStore {
 	public parts = new PersistedState<Types.Part[]>('parts', []);
 
-	constructor() {
-		this.refresh();
-	}
-
 	async refresh() {
 		const { data, error } = await api.parts.index.get();
 

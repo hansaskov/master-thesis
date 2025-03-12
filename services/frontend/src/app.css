@@ -10,46 +10,53 @@
 		--card-foreground: 240 10% 3.9%;
 		--popover: 0 0% 100%;
 		--popover-foreground: 240 10% 3.9%;
-		--primary: 142.1 76.2% 36.3%;
-		--primary-foreground: 355.7 100% 97.3%;
-		--secondary: 240 4.8% 95.9%;
-		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
-		--muted-foreground: 240 3.8% 46.1%;
-		--accent: 240 4.8% 95.9%;
-		--accent-foreground: 240 5.9% 10%;
+		--primary: 203 68.18% 17.25%; /* Dark blue primary */
+		--primary-foreground: 0 0% 100%; /* White text */
+		--secondary: 182.95 67.03% 82.16%; /* Teal secondary */
+		--secondary-foreground: 203 68.18% 17.25%; /* Dark blue text on secondary */
+		--muted: 186.67 60% 94.12%; /* Lightest teal for muted areas */
+		--muted-foreground: 240 3.8% 46.1%; /* Keeping original muted text color */
+		--accent: 5.73 75.85% 59.41%; /* Red accent */
+		--accent-foreground: 240 10% 98.9%; /* Dark text on accent for better contrast */
+		--healthy: 142.1 76.3% 30%; /* healthy (Vibrant Emerald Green) */
+		--healthy-foreground: 0 0% 100%; /* Warning (Golden Olive Green - less intense than standard yellow) */
+		--warning: 85 75% 40%;
+		--warning-foreground: 0 0% 100%;
 		--destructive: 0 72.22% 50.59%;
 		--destructive-foreground: 0 0% 98%;
-		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
-		--ring: 142.1 76.2% 36.3%;
+		--border: 240 5.9% 90%; /* Subtle gray border */
+		--input: 240 5.9% 90%; /* Matching input to border */
+		--ring: 203 68.18% 17.25%; /* Primary for focus rings */
 		--radius: 0.5rem;
 		--warning: 53 98% 77%;
-		--warning-foreground: 0 0% 98%;
+		--warning-foreground: 0 0% 5%;
 	}
 	.dark {
-		--background: 20 14.3% 4.1%;
-		--foreground: 0 0% 95%;
-		--card: 24 9.8% 10%;
-		--card-foreground: 0 0% 95%;
-		--popover: 0 0% 9%;
-		--popover-foreground: 0 0% 95%;
-		--primary: 142.1 70.6% 45.3%;
-		--primary-foreground: 144.9 80.4% 10%;
-		--secondary: 240 3.7% 15.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 0 0% 15%;
-		--muted-foreground: 240 5% 64.9%;
-		--accent: 12 6.5% 15.1%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 85.7% 97.3%;
-		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
-		--ring: 142.4 71.8% 29.2%;
+		--background: 0 0% 7%; /* Near black background */
+		--foreground: 0 0% 98%; /* Off-white text for better readability */
+		--card: 0 0% 10%; /* Slightly lighter than background */
+		--card-foreground: 0 0% 98%; /* Off-white text */
+		--popover: 0 0% 9%; /* Between background and card */
+		--popover-foreground: 0 0% 98%; /* Off-white text */
+		--primary: 182.95 67.03% 70%; /* Brightened teal for better visibility */
+		--primary-foreground: 0 0% 5%; /* Off-white text on primary */
+		--secondary: 203 68.18% 30%; /* Brightened blue */
+		--secondary-foreground: 0 0% 98%; /* Off-white text on secondary */
+		--muted: 0 0% 15%; /* Dark gray for muted areas */
+		--muted-foreground: 0 0% 75%; /* Light gray for muted text */
+		--accent: 5.73 75.85% 65%; /* Brightened red accent */
+		--accent-foreground: 0 0% 98%; /* Off-white text on accent */
+		--destructive: 0 70% 50%; /* Brighter destructive for dark theme */
+		--destructive-foreground: 0 0% 98%; /* Off-white text */
+		--healthy: 142.1 76.3% 65%; /* Success (Bright Seafoam Green) */
+		--healthy-foreground: 0 0% 5%;
+		--warning: 85 75% 60%; /* Warning (Soft Chartreuse) */
+		--warning-foreground: 0 0% 5%;
+		--border: 0 0% 20%; /* Dark gray border */
+		--input: 0 0% 20%; /* Matching input to border */
+		--ring: 182.95 67.03% 70%; /* Matching ring to primary */
 	}
 }
-
 @layer base {
 	* {
 		@apply border-border;

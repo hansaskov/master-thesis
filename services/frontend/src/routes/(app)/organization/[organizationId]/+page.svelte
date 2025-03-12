@@ -2,7 +2,6 @@
 	// import ArrowRight from 'lucide-svelte/icons/arrow-right';
 	import ArrowDownUp from 'lucide-svelte/icons/arrow-down-up';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import { goto } from '$app/navigation';
@@ -100,7 +99,7 @@
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
 									<!-- TODO: Make dynamic -->
-									<Badge variant="default">Healthy</Badge>
+									<Badge variant="healthy">Healthy</Badge>
 								</Table.Cell>
 								<Table.Cell>
 									<!-- TODO: Make dynamic -->
@@ -111,48 +110,9 @@
 								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
 							</Table.Row>
 						{/each}
-						<!-- {#each $sortedSystems as system (system.id)}
-							<Table.Row
-								onclick={() => goto(`./systems/${system.id}`)}
-								class="hover:bg-muted cursor-pointer"
-							>
-								<Table.Cell class="hidden md:table-cell">
-									<img
-										alt="{system.name} icon"
-										class="aspect-square rounded-md object-cover"
-										height="64"
-										src={system.image}
-										width="64"
-									/>
-								</Table.Cell>
-								<Table.Cell class="font-medium">{system.name}</Table.Cell>
-								<Table.Cell>
-									<Badge variant={getHealthVariant(system.health)}>
-										{system.health}
-									</Badge>
-								</Table.Cell>
-								<Table.Cell>
-									<Badge variant={getStatusVariant(system.status)}>
-										{system.status}
-									</Badge>
-								</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.type}</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.lastCheck}</Table.Cell>
-							</Table.Row>
-						{/each} -->
 					</Table.Body>
 				</Table.Root>
 			</div>
 		</Card.Content>
-		<!-- <Card.Footer class="flex justify-between">
-			<div class="text-muted-foreground text-xs">
-				Showing <strong>{systemStore.systems.length}</strong> of
-				<strong>{systemStore.systems.length}</strong> systems
-			</div>
-			<Button href="/systems" variant="outline" size="sm">
-				View All Systems
-				<ArrowRight class="ml-2 h-4 w-4" />
-			</Button>
-		</Card.Footer> -->
 	</Card.Root>
 </div>

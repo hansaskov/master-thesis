@@ -6,17 +6,15 @@ import Elysia, { error, t } from "elysia";
 export const readingsApi = new Elysia()
 	.use(authMiddleware)
 	.post(
-		"/reading",
+		"/readings",
 		async ({ headers, body }) => {
 			const key = await Queries.keys.select(headers);
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");
 			}
 			const values = body.map((reading) => ({
+				...reading,
 				time: new Date(reading.time),
-				name: reading.name,
-				value: reading.value,
-				unit: reading.unit,
 			}));
 
 			await Queries.readings.insertWithSystemId(values, {
@@ -33,9 +31,11 @@ export const readingsApi = new Elysia()
 					name: Schema.insert.readings.name,
 					value: Schema.insert.readings.value,
 					unit: Schema.insert.readings.unit,
+					category: Schema.insert.readings.category,
 				}),
 				{
 					minItems: 1,
+					maxItems: 10_000,
 				},
 			),
 		},
