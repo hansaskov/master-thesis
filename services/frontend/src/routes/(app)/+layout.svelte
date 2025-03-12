@@ -44,20 +44,11 @@
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
 			</button>
-			<Button
-				href="/newsfeed"
-				variant="ghost"
-				size="icon"
-				disabled={true}
-				>
+			<Button href="/newsfeed" variant="ghost" size="icon" disabled={true}>
 				<Newspaper />
 			</Button>
-			<Button
-				variant="ghost"
-				size="icon"
-				disabled={true}
-				>
-				<Search/>
+			<Button variant="ghost" size="icon" disabled={true}>
+				<Search />
 			</Button>
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
@@ -93,7 +84,7 @@
 			<nav class="flex items-center space-x-2 ml-auto">
 				<!-- TODO: Hide settings for user without permissions to change settings of the page-->
 				<Settings></Settings>
-				<Button variant="outline" size="icon" disabled> 
+				<Button variant="outline" size="icon" disabled>
 					<NotificationBell></NotificationBell>
 				</Button>
 				<DropdownMenu.Root>
@@ -149,13 +140,19 @@
 				<span class="sr-only">Home</span>
 			</button>
 
-			<a href="/newsfeed" class="flex flex-col items-center justify-center pointer-events-none opacity-50">
+			<a
+				href="/newsfeed"
+				class="flex flex-col items-center justify-center pointer-events-none opacity-50"
+			>
 				<Newspaper />
 				News
 				<span class="sr-only">News</span>
 			</a>
 
-			<a href="/newsfeed" class="flex flex-col items-center justify-center pointer-events-none opacity-50">
+			<a
+				href="/newsfeed"
+				class="flex flex-col items-center justify-center pointer-events-none opacity-50"
+			>
 				<Search />
 				Search
 				<span class="sr-only">Search</span>

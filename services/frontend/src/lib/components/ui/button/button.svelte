@@ -54,7 +54,12 @@
 </script>
 
 {#if href}
-	<a bind:this={ref} class={[baseClasses, className, restProps.disabled ? "pointer-events-none opacity-50" : ""]} {href} {...restProps}>
+	<a
+		bind:this={ref}
+		class={[baseClasses, className, restProps.disabled ? 'pointer-events-none opacity-50' : '']}
+		{href}
+		{...restProps}
+	>
 		{@render children?.()}
 	</a>
 {:else}

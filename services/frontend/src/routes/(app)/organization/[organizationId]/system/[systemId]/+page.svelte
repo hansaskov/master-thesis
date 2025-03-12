@@ -26,35 +26,35 @@
 			href: 'monitoring',
 			icon: Monitor,
 			description: 'Real-time system monitoring and alerts',
-			disabled: false,
+			disabled: false
 		},
 		{
 			label: 'Service Agreements',
 			href: 'service',
 			icon: Wrench,
 			description: 'Manage and view service contracts',
-			disabled: true,
+			disabled: true
 		},
 		{
 			label: 'Production Intelligence',
 			href: 'pi',
 			icon: BarChart,
 			description: 'Analytics and insights for system performance',
-			disabled: true,
+			disabled: true
 		},
 		{
 			label: 'Spare Parts',
 			href: 'parts',
 			icon: Package2,
 			description: 'Inventory and ordering of spare components',
-			disabled: true,
+			disabled: true
 		},
 		{
 			label: 'System Settings',
 			href: 'settings',
 			icon: Cog,
 			description: 'Alter settings such as OEE information, KPIs and more',
-			disabled: false,
+			disabled: false
 		}
 	];
 </script>
