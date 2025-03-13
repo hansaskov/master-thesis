@@ -63,7 +63,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "Authentication is required");
+					return error("Unauthorized", "You session has expired");
 				}
 
 				return { user, session };
@@ -78,7 +78,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "Authentication is required");
+					return error("Unauthorized", "You session has expired");
 				}
 
 				if (user.is_superadmin === false) {
@@ -95,8 +95,8 @@ export const authMiddleware = new Elysia()
 					organizationId: { value: organizationId },
 				},
 			}) {
-				if (sessionId.value === undefined) {
-					return error("Bad Request", "sessionId is required in your cookies");
+				if (!sessionId.value) {
+					return error("Bad Request", "You must pass a valid session id");
 				}
 
 				if (organizationId === undefined) {
@@ -145,8 +145,8 @@ export const authMiddleware = new Elysia()
 		},
 		isOrganization: {
 			async resolve({ cookie: { sessionId, organizationId } }) {
-				if (sessionId.value === undefined) {
-					return error("Bad Request", "sessionId is required in your cookies");
+				if (!sessionId.value) {
+					return error("Bad Request", "You must pass a valid session id");
 				}
 
 				if (organizationId.value === undefined) {

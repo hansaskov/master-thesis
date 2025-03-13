@@ -1,7 +1,7 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { parts } from "../parts/schema";
 import { partsToSystemModels } from "../parts_to_system_models/schema";

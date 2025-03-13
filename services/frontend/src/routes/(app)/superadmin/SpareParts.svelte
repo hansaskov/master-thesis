@@ -20,8 +20,8 @@
 	let currentPage = $state(0);
 	let startIndex = $derived(currentPage * pageSize);
 	let endIndex = $derived((currentPage + 1) * pageSize);
-	let visibleParts = $derived(partsStore.parts.current.slice(startIndex, endIndex));
-	let totalItems = $derived(partsStore.parts.current.length);
+	let visibleParts = $derived(partsStore.parts.slice(startIndex, endIndex));
+	let totalItems = $derived(partsStore.parts.length);
 	let totalPages = $derived(Math.ceil(totalItems / pageSize));
 
 	function prevPage() {
@@ -109,7 +109,9 @@
 				<Button variant="outline" onclick={() => prevPage()} disabled={currentPage === 0}>
 					<ChevronLeft class="w-2 h-2" />
 				</Button>
-				Showing {startIndex + 1}–{startIndex + visibleParts.length}
+				Showing {visibleParts.length ? startIndex + 1 : 0}–{visibleParts.length
+					? startIndex + visibleParts.length
+					: 0}
 				of {totalItems} results
 				<Button
 					variant="outline"
