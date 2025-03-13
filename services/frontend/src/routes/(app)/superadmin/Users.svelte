@@ -11,6 +11,7 @@
 
 	userStore.loadAllUser();
 
+	// search
 	let searchTerm = $state('');
 	let filteredUsers = $derived(
 		userStore.allUsers.current.filter(
@@ -20,6 +21,7 @@
 		)
 	);
 
+	// pagination
 	let pageSize = 10;
 	let currentPage = $state(0);
 	let totalItems = $derived(filteredUsers.length);
@@ -41,6 +43,7 @@
 		}
 	}
 
+	// change roles
 	async function handleRoleChange(id: string, newValue: boolean) {
 		await userStore.edit(id, newValue);
 	}

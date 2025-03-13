@@ -44,18 +44,12 @@
 				<House class="w-5 h-5" />
 				<span class="sr-only">Dashboard</span>
 			</button>
-			<a
-				href="/newsfeed"
-				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
-			>
-				<Newspaper class="w-5 h-5" />
-			</a>
-			<a
-				href="/"
-				class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
-			>
-				<Search class="w-5 h-5" />
-			</a>
+			<Button href="/newsfeed" variant="ghost" size="icon" disabled={true}>
+				<Newspaper />
+			</Button>
+			<Button variant="ghost" size="icon" disabled={true}>
+				<Search />
+			</Button>
 		</nav>
 		<div class="mt-auto flex flex-col items-center">
 			<nav class="flex flex-col items-center gap-4 px-2 py-4">
@@ -90,17 +84,19 @@
 			<nav class="flex items-center space-x-2 ml-auto">
 				<!-- TODO: Hide settings for user without permissions to change settings of the page-->
 				<Settings></Settings>
-				<NotificationBell></NotificationBell>
+				<Button variant="outline" size="icon" disabled>
+					<NotificationBell></NotificationBell>
+				</Button>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-						<Button variant="outline" size="icon" class="h-9 w-9 overflow-hidden rounded-full">
+						<Button variant="outline" size="icon" class="overflow-hidden rounded-full">
 							<User class="h-4 w-4 overflow-hidden rounded-full"></User>
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item>
+						<DropdownMenu.Item disabled={true}>
 							<a href="/settings" class="flex items-center gap-2">
 								<UserRoundCog class="h-4 w-4 mr-2" />
 								User Settings
@@ -144,17 +140,31 @@
 				<span class="sr-only">Home</span>
 			</button>
 
-			<a href="/newsfeed" class="flex flex-col items-center justify-center">
+			<a
+				href="/newsfeed"
+				class="flex flex-col items-center justify-center pointer-events-none opacity-50"
+			>
 				<Newspaper />
 				News
 				<span class="sr-only">News</span>
 			</a>
 
-			<a href="/newsfeed" class="flex flex-col items-center justify-center">
+			<a
+				href="/newsfeed"
+				class="flex flex-col items-center justify-center pointer-events-none opacity-50"
+			>
 				<Search />
 				Search
 				<span class="sr-only">Search</span>
 			</a>
+
+			{#if userStore.user?.is_superadmin}
+				<a href="/superadmin" class="flex flex-col items-center justify-center">
+					<UserRoundCog />
+					Admin
+					<span class="sr-only">News</span>
+				</a>
+			{/if}
 
 			<a href="/support" class="flex flex-col items-center justify-center">
 				<Wrench />

@@ -4,6 +4,7 @@
 	import KeysList from './KeysList.svelte';
 	import { dialogStore } from '@/stores/dialog.svelte';
 	import { userStore } from '@/stores/user.svelte';
+	import SystemSettings from './SystemSettings.svelte';
 </script>
 
 <div class="container mx-auto px-4 py-4">
@@ -27,6 +28,7 @@
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		{#if userStore.isAdmin}
+			<SystemSettings />
 			<KeysList />
 		{/if}
 	</div>
