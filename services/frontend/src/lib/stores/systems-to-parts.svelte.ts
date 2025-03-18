@@ -24,7 +24,7 @@ export class SystemsToPartsStore {
 			return onError(error);
 		}
 
-		toast.success('Successfully created relations between system and parts');
+		// toast.success('Successfully created relations between system and parts');
 	}
 }
 
