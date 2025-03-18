@@ -1,55 +1,55 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1742286117871,
-      "tag": "0000_unusual_romulus",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1742286167559,
-      "tag": "0001_wet_whistler",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1742286206922,
-      "tag": "0002_readings_hypertable",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1742306547268,
-      "tag": "0003_remarkable_exodus",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1742306658509,
-      "tag": "0004_cooing_christian_walker",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1742306870051,
-      "tag": "0005_readings_5min_agg_refresh",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1742307136543,
-      "tag": "0006_readings_5min_agg_policy",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1742286117871,
+			"tag": "0000_unusual_romulus",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1742286167559,
+			"tag": "0001_wet_whistler",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1742286206922,
+			"tag": "0002_readings_hypertable",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1742306547268,
+			"tag": "0003_remarkable_exodus",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1742306658509,
+			"tag": "0004_cooing_christian_walker",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1742306870051,
+			"tag": "0005_readings_5min_agg_refresh",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1742307136543,
+			"tag": "0006_readings_5min_agg_policy",
+			"breakpoints": true
+		}
+	]
 }
