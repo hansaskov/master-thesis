@@ -18,8 +18,12 @@ CREATE TABLE "invites" (
 );
 --> statement-breakpoint
 CREATE TABLE "keys" (
-	"public_key" text PRIMARY KEY NOT NULL,
-	"private_key" text NOT NULL
+	"id" text PRIMARY KEY NOT NULL,
+	"private_key" text NOT NULL,
+	"system_id" text NOT NULL,
+	"name" text NOT NULL,
+	"created_at" timestamp NOT NULL,
+	CONSTRAINT "keys_private_key_unique" UNIQUE("private_key")
 );
 --> statement-breakpoint
 CREATE TABLE "organizations" (
@@ -45,7 +49,8 @@ CREATE TABLE "readings" (
 	"name" text NOT NULL,
 	"value" real NOT NULL,
 	"unit" text NOT NULL,
-	CONSTRAINT "readings_time_system_id_name_pk" PRIMARY KEY("time","system_id","name")
+	"category" text,
+	CONSTRAINT "readings_system_id_name_time_pk" PRIMARY KEY("system_id","name","time")
 );
 --> statement-breakpoint
 CREATE TABLE "sessions" (
@@ -112,7 +117,7 @@ CREATE TABLE "users" (
 --> statement-breakpoint
 ALTER TABLE "factory_areas" ADD CONSTRAINT "factory_areas_organization_id_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."organizations"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "invites" ADD CONSTRAINT "invites_inviter_id_users_id_fk" FOREIGN KEY ("inviter_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "keys" ADD CONSTRAINT "keys_private_key_systems_id_fk" FOREIGN KEY ("private_key") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "keys" ADD CONSTRAINT "keys_system_id_systems_id_fk" FOREIGN KEY ("system_id") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "parts_to_system_models" ADD CONSTRAINT "parts_to_system_models_part_id_parts_id_fk" FOREIGN KEY ("part_id") REFERENCES "public"."parts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "parts_to_system_models" ADD CONSTRAINT "parts_to_system_models_system_model_id_system_models_id_fk" FOREIGN KEY ("system_model_id") REFERENCES "public"."system_models"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "readings" ADD CONSTRAINT "readings_system_id_systems_id_fk" FOREIGN KEY ("system_id") REFERENCES "public"."systems"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

@@ -1,6 +1,6 @@
 {
-	"id": "dce71609-889a-4476-8efa-987664f51886",
-	"prevId": "2b5428f4-5e52-4178-8045-ebdaeb1be245",
+	"id": "52936d6f-6c61-4d20-a1af-105fe0d3109a",
+	"prevId": "242b0639-8893-427b-bffa-9b73f29c206f",
 	"version": "7",
 	"dialect": "postgresql",
 	"tables": {
@@ -139,8 +139,8 @@
 			"name": "keys",
 			"schema": "",
 			"columns": {
-				"public_key": {
-					"name": "public_key",
+				"id": {
+					"name": "id",
 					"type": "text",
 					"primaryKey": true,
 					"notNull": true
@@ -150,14 +150,32 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
+				},
+				"system_id": {
+					"name": "system_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp",
+					"primaryKey": false,
+					"notNull": true
 				}
 			},
 			"indexes": {},
 			"foreignKeys": {
-				"keys_private_key_systems_id_fk": {
-					"name": "keys_private_key_systems_id_fk",
+				"keys_system_id_systems_id_fk": {
+					"name": "keys_system_id_systems_id_fk",
 					"tableFrom": "keys",
-					"columnsFrom": ["private_key"],
+					"columnsFrom": ["system_id"],
 					"tableTo": "systems",
 					"columnsTo": ["id"],
 					"onUpdate": "no action",
@@ -165,7 +183,13 @@
 				}
 			},
 			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
+			"uniqueConstraints": {
+				"keys_private_key_unique": {
+					"name": "keys_private_key_unique",
+					"columns": ["private_key"],
+					"nullsNotDistinct": false
+				}
+			},
 			"policies": {},
 			"checkConstraints": {},
 			"isRLSEnabled": false
@@ -308,6 +332,12 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
+				},
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},
@@ -323,9 +353,9 @@
 				}
 			},
 			"compositePrimaryKeys": {
-				"readings_time_system_id_name_pk": {
-					"name": "readings_time_system_id_name_pk",
-					"columns": ["time", "system_id", "name"]
+				"readings_system_id_name_time_pk": {
+					"name": "readings_system_id_name_time_pk",
+					"columns": ["system_id", "name", "time"]
 				}
 			},
 			"uniqueConstraints": {},

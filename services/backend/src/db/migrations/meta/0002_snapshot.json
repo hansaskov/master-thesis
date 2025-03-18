@@ -1,6 +1,6 @@
 {
-	"id": "3c5b8766-8033-4156-93ec-062b54f23dfe",
-	"prevId": "dce71609-889a-4476-8efa-987664f51886",
+	"id": "f913214f-d60c-405b-a91b-5e256b24e720",
+	"prevId": "52936d6f-6c61-4d20-a1af-105fe0d3109a",
 	"version": "7",
 	"dialect": "postgresql",
 	"tables": {
@@ -32,11 +32,11 @@
 				"factory_areas_organization_id_organizations_id_fk": {
 					"name": "factory_areas_organization_id_organizations_id_fk",
 					"tableFrom": "factory_areas",
-					"tableTo": "organizations",
 					"columnsFrom": ["organization_id"],
+					"tableTo": "organizations",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -113,20 +113,20 @@
 						}
 					],
 					"isUnique": false,
-					"concurrently": false,
+					"with": {},
 					"method": "btree",
-					"with": {}
+					"concurrently": false
 				}
 			},
 			"foreignKeys": {
 				"invites_inviter_id_users_id_fk": {
 					"name": "invites_inviter_id_users_id_fk",
 					"tableFrom": "invites",
-					"tableTo": "users",
 					"columnsFrom": ["inviter_id"],
+					"tableTo": "users",
 					"columnsTo": ["id"],
-					"onDelete": "no action",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "no action"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -139,10 +139,16 @@
 			"name": "keys",
 			"schema": "",
 			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true
+				},
 				"private_key": {
 					"name": "private_key",
 					"type": "text",
-					"primaryKey": true,
+					"primaryKey": false,
 					"notNull": true
 				},
 				"system_id": {
@@ -169,15 +175,21 @@
 				"keys_system_id_systems_id_fk": {
 					"name": "keys_system_id_systems_id_fk",
 					"tableFrom": "keys",
-					"tableTo": "systems",
 					"columnsFrom": ["system_id"],
+					"tableTo": "systems",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
+			"uniqueConstraints": {
+				"keys_private_key_unique": {
+					"name": "keys_private_key_unique",
+					"columns": ["private_key"],
+					"nullsNotDistinct": false
+				}
+			},
 			"policies": {},
 			"checkConstraints": {},
 			"isRLSEnabled": false
@@ -229,20 +241,20 @@
 				"parts_to_system_models_part_id_parts_id_fk": {
 					"name": "parts_to_system_models_part_id_parts_id_fk",
 					"tableFrom": "parts_to_system_models",
-					"tableTo": "parts",
 					"columnsFrom": ["part_id"],
+					"tableTo": "parts",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				},
 				"parts_to_system_models_system_model_id_system_models_id_fk": {
 					"name": "parts_to_system_models_system_model_id_system_models_id_fk",
 					"tableFrom": "parts_to_system_models",
-					"tableTo": "system_models",
 					"columnsFrom": ["system_model_id"],
+					"tableTo": "system_models",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -320,6 +332,12 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
+				},
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
 				}
 			},
 			"indexes": {},
@@ -327,17 +345,17 @@
 				"readings_system_id_systems_id_fk": {
 					"name": "readings_system_id_systems_id_fk",
 					"tableFrom": "readings",
-					"tableTo": "systems",
 					"columnsFrom": ["system_id"],
+					"tableTo": "systems",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
-				"readings_time_system_id_name_pk": {
-					"name": "readings_time_system_id_name_pk",
-					"columns": ["time", "system_id", "name"]
+				"readings_system_id_name_time_pk": {
+					"name": "readings_system_id_name_time_pk",
+					"columns": ["system_id", "name", "time"]
 				}
 			},
 			"uniqueConstraints": {},
@@ -373,11 +391,11 @@
 				"sessions_user_id_users_id_fk": {
 					"name": "sessions_user_id_users_id_fk",
 					"tableFrom": "sessions",
-					"tableTo": "users",
 					"columnsFrom": ["user_id"],
+					"tableTo": "users",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -410,8 +428,8 @@
 			"uniqueConstraints": {
 				"system_models_name_unique": {
 					"name": "system_models_name_unique",
-					"nullsNotDistinct": false,
-					"columns": ["name"]
+					"columns": ["name"],
+					"nullsNotDistinct": false
 				}
 			},
 			"policies": {},
@@ -440,20 +458,20 @@
 				"systems_to_factory_areas_system_id_systems_id_fk": {
 					"name": "systems_to_factory_areas_system_id_systems_id_fk",
 					"tableFrom": "systems_to_factory_areas",
-					"tableTo": "systems",
 					"columnsFrom": ["system_id"],
+					"tableTo": "systems",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				},
 				"systems_to_factory_areas_factory_area_id_factory_areas_id_fk": {
 					"name": "systems_to_factory_areas_factory_area_id_factory_areas_id_fk",
 					"tableFrom": "systems_to_factory_areas",
-					"tableTo": "factory_areas",
 					"columnsFrom": ["factory_area_id"],
+					"tableTo": "factory_areas",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -489,20 +507,20 @@
 				"systems_to_parts_parts_id_parts_id_fk": {
 					"name": "systems_to_parts_parts_id_parts_id_fk",
 					"tableFrom": "systems_to_parts",
-					"tableTo": "parts",
 					"columnsFrom": ["parts_id"],
+					"tableTo": "parts",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				},
 				"systems_to_parts_system_id_systems_id_fk": {
 					"name": "systems_to_parts_system_id_systems_id_fk",
 					"tableFrom": "systems_to_parts",
-					"tableTo": "systems",
 					"columnsFrom": ["system_id"],
+					"tableTo": "systems",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -551,11 +569,11 @@
 				"systems_organization_id_organizations_id_fk": {
 					"name": "systems_organization_id_organizations_id_fk",
 					"tableFrom": "systems",
-					"tableTo": "organizations",
 					"columnsFrom": ["organization_id"],
+					"tableTo": "organizations",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -598,11 +616,11 @@
 				"user_settings_user_id_users_id_fk": {
 					"name": "user_settings_user_id_users_id_fk",
 					"tableFrom": "user_settings",
-					"tableTo": "users",
 					"columnsFrom": ["user_id"],
+					"tableTo": "users",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {},
@@ -633,20 +651,20 @@
 				"users_to_factory_areas_user_id_users_id_fk": {
 					"name": "users_to_factory_areas_user_id_users_id_fk",
 					"tableFrom": "users_to_factory_areas",
-					"tableTo": "users",
 					"columnsFrom": ["user_id"],
+					"tableTo": "users",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				},
 				"users_to_factory_areas_factory_area_id_factory_areas_id_fk": {
 					"name": "users_to_factory_areas_factory_area_id_factory_areas_id_fk",
 					"tableFrom": "users_to_factory_areas",
-					"tableTo": "factory_areas",
 					"columnsFrom": ["factory_area_id"],
+					"tableTo": "factory_areas",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -689,20 +707,20 @@
 				"users_to_organizations_organization_id_organizations_id_fk": {
 					"name": "users_to_organizations_organization_id_organizations_id_fk",
 					"tableFrom": "users_to_organizations",
-					"tableTo": "organizations",
 					"columnsFrom": ["organization_id"],
+					"tableTo": "organizations",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				},
 				"users_to_organizations_user_id_users_id_fk": {
 					"name": "users_to_organizations_user_id_users_id_fk",
 					"tableFrom": "users_to_organizations",
-					"tableTo": "users",
 					"columnsFrom": ["user_id"],
+					"tableTo": "users",
 					"columnsTo": ["id"],
-					"onDelete": "cascade",
-					"onUpdate": "no action"
+					"onUpdate": "no action",
+					"onDelete": "cascade"
 				}
 			},
 			"compositePrimaryKeys": {
@@ -807,10 +825,10 @@
 		}
 	},
 	"schemas": {},
+	"views": {},
 	"sequences": {},
 	"roles": {},
 	"policies": {},
-	"views": {},
 	"_meta": {
 		"columns": {},
 		"schemas": {},

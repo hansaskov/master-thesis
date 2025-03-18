@@ -1,9 +1,6 @@
 name: validation
 
 on:
-  push:
-    branches:
-      - preview
   pull_request:
 
 jobs:
