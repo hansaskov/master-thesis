@@ -44,7 +44,7 @@
 			href: 'parts',
 			icon: Package2,
 			description: 'Inventory and ordering of spare components',
-			disabled: true
+			disabled: false
 		},
 		{
 			label: 'System Settings',

@@ -16,6 +16,19 @@ export const partsApi = new Elysia({ prefix: "parts" })
 			isSuperAdmin: true,
 		},
 	)
+	.get(
+		"/select_on_system",
+		async ({ user, query }) => {
+			const result = await Queries.part.getBySystem(query.system_id);
+			return result;
+		},
+		{
+			query: t.Object({
+				system_id: t.String(),
+			}),
+			isOrganization: true,
+		},
+	)
 	.patch(
 		"/",
 		async ({ user, body }) => {
@@ -40,8 +53,6 @@ export const partsApi = new Elysia({ prefix: "parts" })
 		async ({ user, body }) => {
 			const part = {
 				name: body.name,
-				//TODO: change this to environment.S3_ENDPOINT
-				//image: `http://localhost:9000/${environment.S3_BUCKET}/${body.image}`,
 				image: `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${body.image}`,
 			};
 			return await Queries.part.create(part);

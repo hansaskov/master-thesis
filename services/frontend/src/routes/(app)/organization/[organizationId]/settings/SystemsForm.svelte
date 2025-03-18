@@ -6,17 +6,11 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import type { Types } from 'backend';
 	import { systemStore } from '@/stores/systems.svelte';
+	import { systemModelStore } from '@/stores/system-models.svelte';
 	import { page } from '$app/state';
+	import { systemsToPartsStore } from '@/stores/systems-to-parts.svelte';
 
-	const systemModelsTypes: Types.SystemNew['system_model'][] = [
-		'VisioPointer',
-		'360 Inspector',
-		'IML-Inspector',
-		'SmartInspector',
-		'VisioCompact',
-		'VisioLine',
-		'VisioOne'
-	];
+	systemModelStore.refresh();
 
 	const defaultSystem: Types.SystemNew = {
 		name: '',
@@ -28,7 +22,23 @@
 
 	async function createVisionSystem(e: SubmitEvent) {
 		e.preventDefault();
-		systemStore.add(newSystem);
+
+		const createdSystem = await systemStore.add(newSystem);
+
+		if (createdSystem) {
+			let system_model = systemModelStore.systemModels.filter(
+				(system) => system.name === newSystem.system_model
+			)[0];
+			let parts: Types.Part[] = system_model.parts;
+
+			const relations = parts.map((part) => ({
+				system_id: createdSystem.id,
+				parts_id: part.id
+			}));
+
+			await systemsToPartsStore.addBatch(relations);
+		}
+
 		newSystem = defaultSystem;
 	}
 </script>
@@ -52,8 +62,8 @@
 							{newSystem.system_model}
 						</Select.Trigger>
 						<Select.Content>
-							{#each systemModelsTypes as systemModel}
-								<Select.Item value={systemModel} label={systemModel} />
+							{#each systemModelStore.systemModels as systemModel}
+								<Select.Item value={systemModel.name} label={systemModel.name} />
 							{/each}
 						</Select.Content>
 					</Select.Root>
