@@ -5,43 +5,22 @@
 		{
 			"idx": 0,
 			"version": "7",
-			"when": 1740052382635,
-			"tag": "0000_zippy_red_ghost",
+			"when": 1742286117871,
+			"tag": "0000_unusual_romulus",
 			"breakpoints": true
 		},
 		{
 			"idx": 1,
 			"version": "7",
-			"when": 1740052854272,
-			"tag": "0001_broken_stryfe",
+			"when": 1742286167559,
+			"tag": "0001_wet_whistler",
 			"breakpoints": true
 		},
 		{
 			"idx": 2,
 			"version": "7",
-			"when": 1740054039068,
-			"tag": "0002_young_calypso",
-			"breakpoints": true
-		},
-		{
-			"idx": 3,
-			"version": "7",
-			"when": 1740064731542,
-			"tag": "0003_brief_cable",
-			"breakpoints": true
-		},
-		{
-			"idx": 4,
-			"version": "7",
-			"when": 1740471467074,
-			"tag": "0004_readings-hypertable",
-			"breakpoints": true
-		},
-		{
-			"idx": 5,
-			"version": "7",
-			"when": 1741679605839,
-			"tag": "0005_slim_puff_adder",
+			"when": 1742286206922,
+			"tag": "0002_readings_hypertable",
 			"breakpoints": true
 		}
 	]
