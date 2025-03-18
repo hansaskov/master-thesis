@@ -20,6 +20,8 @@
 	import { goto } from '$app/navigation';
 	import BreadCrumb from './BreadCrumb.svelte';
 
+	userStore.refresh();
+
 	function navigateToSystems() {
 		if (organizationStore.currentOrganization) {
 			goto(`/organization/${organizationStore.currentOrganization.id}`);
