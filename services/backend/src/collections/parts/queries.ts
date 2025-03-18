@@ -1,7 +1,9 @@
+import { systems } from "$collections/systems/schema";
+import { systemsToParts } from "$collections/systems_to_parts/schema";
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { partsToSystemModels } from "../parts_to_system_models/schema";
 import { parts } from "./schema";
 
@@ -35,4 +37,10 @@ export const partQueries = {
 			.values({ part_id, system_model_id })
 			.returning()
 			.then((v) => v[0]),
+	getBySystem: async (id: string) =>
+		await db
+			.select()
+			.from(parts)
+			.innerJoin(systemsToParts, eq(parts.id, systemsToParts.parts_id))
+			.where(eq(systemsToParts.system_id, id)),
 };

@@ -4,44 +4,56 @@
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import { Input } from '$lib/components/ui/input';
-	import { faker } from '@faker-js/faker';
+	import { page } from '$app/state';
+	import { api } from '$lib/api';
+	import { onError } from '@/error';
+	import { onMount } from 'svelte';
+	import type { Types } from 'backend';
 
-	interface SparePart {
-		partNumber: string;
-		partName: string;
-		image: string;
-		quantity: number;
+	type PartWithQuantity = Types.Part & { quantity: number };
+
+	let systemParts: PartWithQuantity[] = $state([]);
+
+	async function getSystemParts() {
+		const systemId = page.params.systemId;
+
+		const { data, error } = await api.parts.select_on_system.get({
+			query: {
+				system_id: systemId
+			}
+		});
+
+		if (error) {
+			return onError(error);
+		}
+
+		systemParts = data.map((item) => {
+			return { ...item.parts, quantity: 0 };
+		});
 	}
 
-	function generateSparePart(): SparePart {
-		return {
-			partNumber: faker.string.alphanumeric({ length: 6, casing: 'upper' }),
-			partName: faker.commerce.productName(),
-			image: faker.image.urlPicsumPhotos({ width: 64, height: 64 }),
-			quantity: 0
-		};
-	}
-
-	let spareParts: SparePart[] = $state(Array.from({ length: 20 }, generateSparePart));
+	onMount(async () => {
+		getSystemParts();
+	});
 
 	let searchTerm = $state('');
 
 	let filteredParts = $derived(
-		spareParts.filter((part) => part.partName.toLowerCase().includes(searchTerm.toLowerCase()))
+		systemParts.filter((part) => part.name.toLowerCase().includes(searchTerm.toLowerCase()))
 	);
 
 	const orders = new Map<string, number>();
 
-	function increment(part: SparePart) {
+	function increment(part: PartWithQuantity) {
 		part.quantity += 1;
-		spareParts = [...spareParts];
-		orders.set(part.partName, part.quantity);
+		systemParts = [...systemParts];
+		orders.set(part.name, part.quantity);
 	}
 
-	function decrement(part: SparePart) {
+	function decrement(part: PartWithQuantity) {
 		if (part.quantity > 0) part.quantity -= 1;
-		spareParts = [...spareParts];
-		orders.set(part.partName, part.quantity);
+		systemParts = [...systemParts];
+		orders.set(part.name, part.quantity);
 	}
 
 	let mailBody: string = $state('');
@@ -74,18 +86,18 @@
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
-					{#each filteredParts as part (part.partNumber)}
+					{#each filteredParts as part}
 						<Table.Row class="hover:bg-muted cursor-pointer">
 							<Table.Cell>
 								<img
-									alt="{part.partName} image"
+									alt="{part.name} image"
 									class="aspect-square rounded-md object-cover"
 									height="64"
 									width="64"
 									src={part.image}
 								/>
 							</Table.Cell>
-							<Table.Cell>{part.partName}</Table.Cell>
+							<Table.Cell>{part.name}</Table.Cell>
 							<Table.Cell class="text-right">
 								<div class="flex max-w-[95px] items-center space-x-2 rounded-lg p-2 ml-auto">
 									<!-- Minus Button -->
@@ -99,7 +111,7 @@
 									</Button>
 									<!-- Quantity Display -->
 									<div class="text-center font-medium">
-										{part.quantity}
+										{part.quantity || 0}
 									</div>
 									<!-- Plus Button -->
 									<Button
@@ -134,7 +146,7 @@
 		<div class="text-muted-foreground text-sm">
 			Showing <strong>{filteredParts.length}</strong>
 			of
-			<strong>{spareParts.length}</strong>
+			<strong>{systemParts.length}</strong>
 			spare parts
 		</div>
 	</Card.Footer>

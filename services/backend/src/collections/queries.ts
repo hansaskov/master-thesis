@@ -7,6 +7,7 @@ import { readingsQueries } from "./readings/queries";
 import { sessionQueries } from "./sessions/queries";
 import { systemModelQueries } from "./system_models/queries";
 import { systemQueries } from "./systems/queries";
+import { systemsToPartsQueries } from "./systems_to_parts/queries";
 import { usersQueries } from "./users/queries";
 import { usersToOrganizationsQueries } from "./users_to_organizations/queries";
 
@@ -22,4 +23,5 @@ export const Queries = {
 	systemModels: systemModelQueries,
 	invites: invitesQueries,
 	partsToSystemModels: partsToSystemModelsQueries,
+	systemsToParts: systemsToPartsQueries,
 };
