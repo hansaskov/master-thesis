@@ -6,7 +6,6 @@ import {
 	max,
 	min,
 } from "$db/drizzle/customTypes";
-import { db } from "$db/postgres";
 import type { PartialExcept } from "$types/strict";
 import { count } from "drizzle-orm";
 import {
@@ -37,7 +36,6 @@ export const readings = pgTable(
 		primaryKey({
 			columns: [
 				table.system_id,
-				table.category,
 				table.unit,
 				table.name,
 				table.time,
@@ -72,8 +70,6 @@ export const readings_5min_agg = pgMaterializedView("readings_5min_agg")
 				bucket,
 			]);
 	});
-
-const test = await db.select().from(readings_5min_agg);
 
 export const insertReadingsSchema = createInsertSchema(readings, {
 	time: t.String({ format: "iso-date-time" }),
