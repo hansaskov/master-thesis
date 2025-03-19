@@ -1,4 +1,0 @@
-DROP MATERIALIZED VIEW "public"."readings_5min_agg";--> statement-breakpoint
-ALTER TABLE "readings" DROP CONSTRAINT "readings_system_id_category_unit_name_time_pk";--> statement-breakpoint
-ALTER TABLE "readings" ADD CONSTRAINT "readings_system_id_unit_name_time_pk" PRIMARY KEY("system_id","unit","name","time");--> statement-breakpoint
-CREATE MATERIALIZED VIEW "public"."readings_5min_agg" AS (select time_bucket('5 minutes', "time") as "bucket", "name", "unit", "category", "system_id", avg("value") as "avg", min("value") as "min", max("value") as "max", count(*) as "count", first("time", "time") as "first", last("time", "time") as "last" from "readings" group by "readings"."system_id", "readings"."category", "readings"."unit", "readings"."name", "bucket") WITH NO DATA;

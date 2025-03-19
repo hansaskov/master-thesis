@@ -30,16 +30,11 @@ export const readings = pgTable(
 		name: text().notNull(),
 		value: real().notNull(),
 		unit: text().notNull(),
-		category: text(),
+		category: text().notNull().default("Others"),
 	},
 	(table) => [
 		primaryKey({
-			columns: [
-				table.system_id,
-				table.unit,
-				table.name,
-				table.time,
-			],
+			columns: [table.system_id, table.category, table.unit, table.name, table.time],
 		}),
 	],
 );
