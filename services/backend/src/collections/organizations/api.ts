@@ -77,11 +77,11 @@ export const organizationsApi = new Elysia({ prefix: "organizations" })
 	)
 	.post(
 		"/cookie",
-		({ cookie, body: { organizationId }, session }) => {
+		({ cookie, body: { organizationId } }) => {
 			setSessionTokenCookie(
 				cookie.organizationId,
 				organizationId,
-				session.expires_at,
+				new Date(Date.now() + 86400000), // Tomorrows date
 			);
 		},
 		{

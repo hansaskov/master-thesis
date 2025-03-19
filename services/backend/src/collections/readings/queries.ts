@@ -1,7 +1,7 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import { and, between, desc, eq } from "drizzle-orm/sql";
+import { and, asc, between, desc, eq } from "drizzle-orm/sql";
 import { readings, readings_5min_agg } from "./schema";
 
 export const readingsQueries = {
@@ -39,6 +39,13 @@ export const readingsQueries = {
 					eq(readings.system_id, system_id),
 					between(readings.time, start, end),
 				),
+			)
+			.orderBy(
+				readings.system_id,
+				readings.category,
+				readings.unit,
+				readings.name,
+				asc(readings.time),
 			)
 			.limit(limit ?? 1000),
 	select5Min: async ({
