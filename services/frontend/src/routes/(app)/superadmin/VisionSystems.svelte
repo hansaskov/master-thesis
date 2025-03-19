@@ -4,10 +4,13 @@
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
 	import { systemModelStore } from '$lib/stores/system-models.svelte';
 	import { partsStore } from '$lib/stores/parts.svelte';
-
 	import VisionModelAccordian from './VisionModelAccordian.svelte';
 
 	systemModelStore.refresh();
+
+	async function deleteSystemModel(id: string) {
+		
+	}
 </script>
 
 <Card.Root class="col-span-1 md:col-span-2">

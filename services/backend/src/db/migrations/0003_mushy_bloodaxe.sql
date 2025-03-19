@@ -1,0 +1,1 @@
+ALTER TABLE "system_models" ADD COLUMN "image" text;

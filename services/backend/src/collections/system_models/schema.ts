@@ -10,6 +10,7 @@ export const systemModels = pgTable("system_models", {
 		.notNull()
 		.$default(() => generateRandomString(12)),
 	name: systemModelEnum().notNull().unique(),
+	image: text(),
 });
 
 export const insertSystemModelsSchema = createInsertSchema(systemModels, {

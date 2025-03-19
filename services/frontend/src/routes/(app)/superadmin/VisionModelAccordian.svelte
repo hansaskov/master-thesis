@@ -8,6 +8,14 @@
 	import type { Types } from 'backend';
 	import { combineArraysAndAddIsCheckedForDublicates } from '@/transformation';
 	import { systemModelStore } from '$lib/stores/system-models.svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { dialogStore } from '@/stores/dialog.svelte';
+	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
+	import Ellipsis from 'lucide-svelte/icons/ellipsis';
+
+	async function deleteSystemModel(id: string) {
+		
+	}
 
 	const { model, allParts }: { model: SystemModelWithParts; allParts: Types.Part[] } = $props();
 
@@ -41,7 +49,39 @@
 </script>
 
 <Accordion.Item value={model.name}>
-	<Accordion.Trigger>{model.name}</Accordion.Trigger>
+	<div class="flex items-center gap-2"> <!-- Add this container with flexbox -->
+		<Avatar.Root>
+		  <Avatar.Image src={model.image} alt={model.name} />
+		  <Avatar.Fallback class="uppercase">{model.name.slice(0, 2)}</Avatar.Fallback>
+		</Avatar.Root>
+		<Accordion.Trigger>{model.name}</Accordion.Trigger>
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger>
+				<Button variant="ghost" size="icon">
+					<Ellipsis class="h-4 w-4" />
+					<span class="sr-only">Open menu</span>
+				</Button>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content align="end">
+				<DropdownMenu.Label>Actions</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item
+					onclick={() => {
+						dialogStore.open({
+							title: `Are you absolutely sure? `,
+							description: `This action cannot be undone. This will permanently delete "${model.name}" and all of it's readings and settings`,
+							component: AlertDialogBody,
+							props: { onsubmit: () => deleteSystemModel(model.id) }
+						});
+					}}
+					class="text-red-600"
+				>
+					Delete
+				</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
+	</div>
+	
 	<Accordion.Content>
 		<Table.Root>
 			<Table.Header>

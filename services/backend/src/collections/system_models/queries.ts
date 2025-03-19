@@ -19,6 +19,7 @@ export const systemModelQueries = {
 			.select({
 				id: systemModels.id,
 				name: systemModels.name,
+				image: systemModels.image,
 				parts: sql<string>`COALESCE(json_agg(
 					CASE WHEN ${parts.id} IS NOT NULL THEN
 						json_build_object(
@@ -48,6 +49,7 @@ export const systemModelQueries = {
 				return {
 					id: result.id,
 					name: result.name,
+					image: result.image,
 					parts:
 						typeof result.parts === "string"
 							? JSON.parse(result.parts)
@@ -61,6 +63,7 @@ export const systemModelQueries = {
 			return results.map((result) => ({
 				id: result.id,
 				name: result.name,
+				image: result.image,
 				parts: [],
 			}));
 		}
