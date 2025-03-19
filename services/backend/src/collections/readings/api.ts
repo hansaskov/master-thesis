@@ -62,18 +62,4 @@ export const readingsApi = new Elysia()
 				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
 			}),
 		},
-	)
-	.get(
-		"/latest_reading",
-		async ({ query: { name, system_id } }) => {
-			const reading = await Queries.readings.selectLatest({ system_id, name });
-
-			return reading;
-		},
-		{
-			query: t.Object({
-				system_id: Schema.insert.readings.system_id,
-				name: Schema.insert.readings.name,
-			}),
-		},
 	);
