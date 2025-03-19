@@ -49,13 +49,10 @@ async function seedDatabase() {
 }
 
 describe("Readings Query", async () => {
-	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
-
-	beforeAll(async () => {
-		seedData = await seedDatabase();
-	});
-
 	it("Select All Unique Latest", async () => {
+		// Create localized data
+		const seedData = await seedDatabase();
+
 		// Get initial values
 		const initialValues = await Queries.readings.selectAllUniqueLatest({
 			system_id: seedData.system.id,
@@ -76,7 +73,6 @@ describe("Readings Query", async () => {
 				unit: "C",
 				value: 45, // Updated value
 				system_id: seedData.system.id,
-				category: "Hardware",
 			},
 			{
 				name: "cpu usage",
@@ -84,7 +80,6 @@ describe("Readings Query", async () => {
 				unit: "%",
 				value: 25, // Updated value
 				system_id: seedData.system.id,
-				category: "Performance",
 			},
 			{
 				name: "disk usage",
@@ -92,7 +87,6 @@ describe("Readings Query", async () => {
 				unit: "%",
 				value: 98, // Updated value
 				system_id: seedData.system.id,
-				category: "Storage",
 			},
 		]);
 
@@ -107,6 +101,9 @@ describe("Readings Query", async () => {
 	});
 
 	it("Filter Unique Latest by Category", async () => {
+		// Create localized data
+		const seedData = await seedDatabase();
+
 		// Add readings in different categories
 		await Queries.readings.createMany([
 			{

@@ -1,9 +1,6 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
-import type {
-	StrictOmit,
-	StrictPick,
-} from "$types/strict";
+import type { StrictOmit, StrictPick } from "$types/strict";
 import { and, between, desc, eq } from "drizzle-orm/sql";
 import { readings, readings_5min_agg } from "./schema";
 
@@ -94,7 +91,6 @@ export const readingsQueries = {
 				readings.unit,
 				readings.name,
 				desc(readings.time),
-			)
-			.then((v) => v.at(0));
+			);
 	},
 };
