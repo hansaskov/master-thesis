@@ -1,6 +1,6 @@
 {
-	"id": "3a51e8e4-3f65-48f3-acc4-b3416b1ad8af",
-	"prevId": "52936d6f-6c61-4d20-a1af-105fe0d3109a",
+	"id": "5133b204-41ab-4883-973f-dcf0c8e55569",
+	"prevId": "691ccc3c-8a8f-4201-adc8-1d410c0a837a",
 	"version": "7",
 	"dialect": "postgresql",
 	"tables": {
@@ -829,7 +829,43 @@
 	"sequences": {},
 	"roles": {},
 	"policies": {},
-	"views": {},
+	"views": {
+		"public.readings_5min_agg": {
+			"columns": {
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"unit": {
+					"name": "unit",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"category": {
+					"name": "category",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'Others'"
+				},
+				"system_id": {
+					"name": "system_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				}
+			},
+			"definition": "select time_bucket('5 minutes', \"time\") as \"bucket\", \"name\", \"unit\", \"category\", \"system_id\", avg(\"value\") as \"avg\", min(\"value\") as \"min\", max(\"value\") as \"max\", count(*) as \"count\", first(\"time\", \"time\") as \"first\", last(\"time\", \"time\") as \"last\" from \"readings\" group by \"readings\".\"system_id\", \"readings\".\"category\", \"readings\".\"unit\", \"readings\".\"name\", \"bucket\"",
+			"name": "readings_5min_agg",
+			"schema": "public",
+			"isExisting": false,
+			"withNoData": true,
+			"materialized": true
+		}
+	},
 	"_meta": {
 		"columns": {},
 		"schemas": {},
