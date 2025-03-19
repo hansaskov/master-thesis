@@ -24,8 +24,8 @@ class TimeRangeStore {
 	);
 
 	range: DateRange = $state({
-		start: now(getLocalTimeZone()),
-		end: now(getLocalTimeZone()).subtract({ minutes: 10 })
+		start: now(getLocalTimeZone()).subtract({ minutes: 10 }),
+		end: now(getLocalTimeZone())
 	});
 
 	rangeString = $derived.by(() => {

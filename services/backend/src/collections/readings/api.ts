@@ -59,7 +59,22 @@ export const readingsApi = new Elysia()
 				system_id: Schema.insert.readings.system_id,
 				start: t.String({ format: "date-time" }),
 				end: t.String({ format: "date-time" }),
-				limit: t.Optional(t.Number({ minimum: 1, maximum: 1000 })),
+				limit: t.Optional(t.Number({ minimum: 1, maximum: 3600 })),
+			}),
+		},
+	)
+	.get(
+		"/readings/latest",
+		async ({ query }) => {
+			return await Queries.readings.selectAllUniqueLatest(query);
+		},
+		{
+			isOrganization: true,
+			query: t.Object({
+				system_id: Schema.insert.readings.system_id,
+				category: t.Optional(Schema.insert.readings.category),
+				unit: t.Optional(Schema.insert.readings.unit),
+				name: t.Optional(Schema.insert.readings.name),
 			}),
 		},
 	);
