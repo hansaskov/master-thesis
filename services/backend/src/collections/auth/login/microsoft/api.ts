@@ -152,8 +152,7 @@ export const microsoftApi = new Elysia()
 				return redirect("/organization", 302);
 			}
 
-			const first_name =
-				userParsed.name || userParsed.givenname;
+			const first_name = userParsed.name || userParsed.givenname;
 			if (!first_name) {
 				const errorMessage = "No first name found for user";
 
@@ -161,7 +160,7 @@ export const microsoftApi = new Elysia()
 				return error(500, errorMessage);
 			}
 
-			const family_name = userParsed.familyname
+			const family_name = userParsed.familyname;
 			if (!family_name) {
 				const errorMessage = "No family name found for user";
 

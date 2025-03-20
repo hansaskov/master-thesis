@@ -7,15 +7,13 @@
 	import { goto } from '$app/navigation';
 
 	import { systemStore } from '$lib/stores/systems.svelte';
-	import { userStore } from '$lib/stores/user.svelte'
+	import { userStore } from '$lib/stores/user.svelte';
 
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '@/components/ui/button';
 
 	systemStore.refresh();
-
-	let name = 'User'; // Replace with actual user name
 
 	const headers: { label: string }[] = [
 		{ label: 'Image' },
