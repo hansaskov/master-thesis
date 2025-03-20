@@ -6,6 +6,7 @@ const df = new DateFormatter('en-US', { dateStyle: 'medium' });
 class TimeRangeStore {
 	selectorChoises = [
 		{ value: 0, label: 'Custom' },
+		{ value: 60 * 1, label: 'Last 1 minute' },
 		{ value: 60 * 10, label: 'Last 10 minutes' },
 		{ value: 60 * 60, label: 'Last hour' },
 		{ value: 60 * 60 * 8, label: 'Last 8 hours' },
@@ -15,7 +16,7 @@ class TimeRangeStore {
 		{ value: 60 * 60 * 24 * 30, label: 'Last 30 days' }
 	] as const;
 
-	value = $state<string>(this.selectorChoises[1].value.toString());
+	value = $state<string>(this.selectorChoises[2].value.toString());
 	startValue: DateValue | undefined = $state(undefined);
 
 	label = $derived(

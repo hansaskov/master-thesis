@@ -7,7 +7,7 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '@/utils';
 	import { RangeCalendar } from '@/components/ui/range-calendar';
-	import { timeRangeStore } from './TimeRangeStore.svelte';
+	import { timeRangeStore } from '@/stores/TimeRangeStore.svelte';
 
 	let { ...props } = $props();
 </script>
