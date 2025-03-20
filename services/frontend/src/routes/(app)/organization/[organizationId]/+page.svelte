@@ -7,6 +7,7 @@
 	import { goto } from '$app/navigation';
 
 	import { systemStore } from '$lib/stores/systems.svelte';
+	import { userStore } from '$lib/stores/user.svelte'
 
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
@@ -51,7 +52,7 @@
 	<Card.Root class="w-full">
 		<Card.Header class="flex gap-4 md:flex-row justify-between">
 			<div>
-				<Card.Title>Hello {name}</Card.Title>
+				<Card.Title>Hello {userStore.user?.first_name}</Card.Title>
 				<Card.Description>
 					Monitor and manage your vision systems across different factory areas.
 				</Card.Description>

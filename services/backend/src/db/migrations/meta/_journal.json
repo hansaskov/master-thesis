@@ -1,55 +1,62 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1742286117871,
-			"tag": "0000_unusual_romulus",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1742286167559,
-			"tag": "0001_wet_whistler",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
-			"when": 1742371367300,
-			"tag": "0002_careless_korvac",
-			"breakpoints": true
-		},
-		{
-			"idx": 3,
-			"version": "7",
-			"when": 1742371637600,
-			"tag": "0003_readings_hypertable",
-			"breakpoints": true
-		},
-		{
-			"idx": 4,
-			"version": "7",
-			"when": 1742371669469,
-			"tag": "0004_ambiguous_talos",
-			"breakpoints": true
-		},
-		{
-			"idx": 5,
-			"version": "7",
-			"when": 1742371777053,
-			"tag": "0005_readings_5min_agg",
-			"breakpoints": true
-		},
-		{
-			"idx": 6,
-			"version": "7",
-			"when": 1742371845303,
-			"tag": "0006_readings_5min_policy",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1742286117871,
+      "tag": "0000_unusual_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742286167559,
+      "tag": "0001_wet_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742371367300,
+      "tag": "0002_careless_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742371637600,
+      "tag": "0003_readings_hypertable",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742371669469,
+      "tag": "0004_ambiguous_talos",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742371777053,
+      "tag": "0005_readings_5min_agg",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1742371845303,
+      "tag": "0006_readings_5min_policy",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1742470718845,
+      "tag": "0007_chunky_wolfsbane",
+      "breakpoints": true
+    }
+  ]
 }

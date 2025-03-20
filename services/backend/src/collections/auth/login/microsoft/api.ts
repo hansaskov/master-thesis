@@ -152,10 +152,18 @@ export const microsoftApi = new Elysia()
 				return redirect("/organization", 302);
 			}
 
-			const name =
-				userParsed.name || userParsed.familyname || userParsed.givenname;
-			if (!name) {
-				const errorMessage = "No name found for user";
+			const first_name =
+				userParsed.name || userParsed.givenname;
+			if (!first_name) {
+				const errorMessage = "No first name found for user";
+
+				console.error(errorMessage);
+				return error(500, errorMessage);
+			}
+
+			const family_name = userParsed.familyname
+			if (!family_name) {
+				const errorMessage = "No family name found for user";
 
 				console.error(errorMessage);
 				return error(500, errorMessage);
@@ -164,7 +172,8 @@ export const microsoftApi = new Elysia()
 			const user = await Queries.users.create({
 				provider_name: "Microsoft",
 				provider_id: userParsed.sub,
-				name: name,
+				first_name: first_name,
+				family_name: family_name,
 				email: userParsed.email,
 				image: imageUrl || null,
 			});
