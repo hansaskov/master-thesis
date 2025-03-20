@@ -14,8 +14,6 @@
 
 	systemStore.refresh();
 
-	let name = 'User'; // Replace with actual user name
-
 	const headers: { label: string }[] = [
 		{ label: 'Name' },
 		{ label: 'Health' },
