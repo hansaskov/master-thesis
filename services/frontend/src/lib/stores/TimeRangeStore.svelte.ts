@@ -44,6 +44,8 @@ class TimeRangeStore {
 
 		return 'Pick a date';
 	});
+
+	setEndToNow = () => (this.range.end = now(getLocalTimeZone()));
 }
 
 export const timeRangeStore = new TimeRangeStore();

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
 	import { getLocalTimeZone } from '@internationalized/date';
 	import Metrics from './Metrics.svelte';
 	import { monitorStore } from '@/stores/monitor.svelte';
@@ -34,32 +33,13 @@
 			fetchReadings();
 		}
 	});
-
-
-	let timer = $state<Timer>()
-
-	// Initial fetch on mount
-	onMount(() => {
-		fetchReadings();
-
-		timer = setInterval(fetchReadings, 5000)
-
-		return () => {
-			clearInterval(timer)
-		}
-
-	});
-
-
-
-
 </script>
 
 <div class="mb-8">
 	<div class="mb-4 flex flex-col md:flex-row justify-between md:items-center">
 		<h2 class="text-2xl font-bold">Charts</h2>
 		<div class="flex flex-row">
-			<RefreshRateSelector  />
+			<RefreshRateSelector />
 			<TimeRangeSelector></TimeRangeSelector>
 		</div>
 	</div>
