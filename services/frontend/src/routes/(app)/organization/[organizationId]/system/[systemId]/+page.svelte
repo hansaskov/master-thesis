@@ -59,7 +59,7 @@
 <Card class="w-full max-w-4xl mx-auto border-0 shadow-none md:border md:shadow">
 	<CardHeader>
 		<CardTitle class="text-2xl">
-			Vision System: {systemStore.currentSystem?.name || ''}
+			{systemStore.currentSystem?.name || ''}
 		</CardTitle>
 		<CardDescription>
 			Select an option to view or manage different aspects of this system.

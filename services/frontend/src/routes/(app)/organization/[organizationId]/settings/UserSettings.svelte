@@ -132,13 +132,13 @@
 						<Table.Cell>
 							<div class="flex items-center space-x-4">
 								<Avatar.Root>
-									<Avatar.Image src={person.image ?? ''} alt={person.name} />
+									<Avatar.Image src={person.image ?? ''} alt={person.first_name} />
 									<Avatar.Fallback class="font-semibold uppercase">
-										{person.name.slice(0, 2)}
+										{person.first_name.slice(0, 2)}
 									</Avatar.Fallback>
 								</Avatar.Root>
 								<div>
-									<div class="font-bold">{person.name}</div>
+									<div class="font-bold">{person.first_name}</div>
 									<div class="text-sm text-muted-foreground">{person.email}</div>
 								</div>
 							</div>

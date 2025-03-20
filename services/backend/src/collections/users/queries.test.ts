@@ -9,14 +9,14 @@ describe("user-queries", async () => {
 		});
 
 		const user = await Queries.users.create({
-			name: "Test User",
+			first_name: "Test User",
 			provider_id: generateRandomString(10),
 			provider_name: "Microsoft",
 			is_superadmin: true,
 		});
 
 		const user2 = await Queries.users.create({
-			name: "Test User 2",
+			first_name: "Test User 2",
 			provider_id: generateRandomString(10),
 			provider_name: "Microsoft",
 			is_superadmin: false,

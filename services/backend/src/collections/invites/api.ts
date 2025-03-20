@@ -54,7 +54,7 @@ export const invitesApi = new Elysia({ prefix: "invites" })
 			});
 
 			const invitationLink = `${environment.INTERFACE_FQDN}/api/invites/accept/${newInvite.id}`;
-			const emailBody = `You have been invited to join ${organization.name} by ${user.name}. To accept this invitation, login with your account, then come back and click the link below \n ${invitationLink}`;
+			const emailBody = `You have been invited to join ${organization.name} by ${user.first_name}. To accept this invitation, login with your account, then come back and click the link below \n ${invitationLink}`;
 
 			const isSuccess = await emailClient.send({
 				from: "hans@hjemmet.net",

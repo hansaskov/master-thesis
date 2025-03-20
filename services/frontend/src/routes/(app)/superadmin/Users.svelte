@@ -16,7 +16,7 @@
 	let filteredUsers = $derived(
 		userStore.allUsers.current.filter(
 			(user) =>
-				user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				user.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				user.email?.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	);
@@ -92,12 +92,12 @@
 						<Avatar.Root>
 							<Avatar.Image src={user.image} alt="user-image" />
 							<Avatar.Fallback class="font-semibold uppercase"
-								>{user.name.slice(0, 2)}</Avatar.Fallback
+								>{user.first_name.slice(0, 2)}</Avatar.Fallback
 							>
 						</Avatar.Root>
 					</Table.Cell>
 					<Table.Cell>
-						{user.name}
+						{user.first_name}
 					</Table.Cell>
 					<Table.Cell class="hidden md:table-cell">
 						{user.email}
