@@ -1,7 +1,7 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import { and, asc, between, desc, eq } from "drizzle-orm/sql";
+import { and, asc, between, desc, eq, gt, lt, sql } from "drizzle-orm/sql";
 import { readings, readings_5min_agg } from "./schema";
 
 export const readingsQueries = {
@@ -60,12 +60,19 @@ export const readingsQueries = {
 		limit?: number;
 	}) =>
 		await db
-			.select()
+			.select({
+				time: readings_5min_agg.bucket,
+				system_id: readings_5min_agg.system_id,
+				name: readings_5min_agg.name,
+				value: readings_5min_agg.avg,
+				unit: readings_5min_agg.unit,
+				category: readings_5min_agg.category,
+			})
 			.from(readings_5min_agg)
 			.where(
 				and(
-					eq(readings.system_id, system_id),
-					between(readings.time, start, end),
+					eq(readings_5min_agg.system_id, system_id),
+					// between(readings.time, start, end), // Gives an error
 				),
 			)
 			.limit(limit ?? 1000),

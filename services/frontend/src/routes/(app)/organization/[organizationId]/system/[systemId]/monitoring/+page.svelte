@@ -15,11 +15,23 @@
 			return;
 		}
 
-		monitorStore.refresh({
-			start: start.toDate(getLocalTimeZone()).toISOString(),
-			end: end.toDate(getLocalTimeZone()).toISOString(),
-			limit: 3600
-		});
+		// Choose a larger interval for values above 10 minutes
+		if (timeRangeStore.valueInSeconds && timeRangeStore.valueInSeconds > 60 * 10) {
+			monitorStore.refresh({
+				resolution: '5 min',
+				start: start.toDate(getLocalTimeZone()).toISOString(),
+				end: end.toDate(getLocalTimeZone()).toISOString(),
+				limit: 3600
+			});
+			// Else just choose the full resolution.
+		} else {
+			monitorStore.refresh({
+				resolution: 'full',
+				start: start.toDate(getLocalTimeZone()).toISOString(),
+				end: end.toDate(getLocalTimeZone()).toISOString(),
+				limit: 3600
+			});
+		}
 	}
 
 	// Add a reactive statement to fetch readings when time range changes
