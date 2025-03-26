@@ -49,7 +49,7 @@ export class PartsStore {
 		const { data, error } = await api.parts.index.patch(part);
 
 		if (data) {
-			this.#parts.current = this.#parts.current.map(existingPart => 
+			this.#parts.current = this.#parts.current.map((existingPart) =>
 				existingPart.id === part.id ? { ...existingPart, ...data } : existingPart
 			);
 			toast.success(`Part has been updated to ${data.name}`);
