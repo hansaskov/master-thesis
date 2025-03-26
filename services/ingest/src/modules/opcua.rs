@@ -3,6 +3,7 @@ use crate::{
     module::{Module, ModuleCtx},
     reading::Reading,
 };
+use crate::module::EventSender;
 use anyhow::{Ok, Result};
 use opcua::{
     client::{Client, ClientBuilder, DataChangeCallback, IdentityToken, Session},
@@ -75,7 +76,10 @@ impl OPCUA {
                 DataChangeCallback::new(move |dv, item| {
                     let variant = match dv.value {
                         Some(value) => value,
-                        None => return,
+                        None => {
+                            sender.send_log(module_name.clone(), "dv.value not found".to_string());
+                            return
+                        },
                     };
 
                     let float = match variant {
@@ -87,24 +91,22 @@ impl OPCUA {
                         opcua::types::Variant::UInt64(i) => i as f32,
                         opcua::types::Variant::Float(f) => f,
                         opcua::types::Variant::Double(f) => f as f32,
-                        _ => return,
+                        _ => {
+                            sender.send_log(module_name.clone(), "could not convert variant to float".to_string());
+                            return
+                        },
                     };
 
-                    // Create and send the event directly
-                    let event = Event {
-                        module: module_name.clone(),
-                        inner: EventKind::Log(variant.to_string()),
-                    };
-
-                    if let Err(e) = sender.send(event) {
-                        eprintln!("Failed to send event: {}", e);
-                    }
+                    sender.send_log(module_name.clone(), variant.to_string());
 
                     let identifier = item.item_to_monitor().node_id.identifier.to_string();
 
                     let variable = match identifier.split_once('=') {
                         Some((_, identifier)) => identifier.to_string(),
-                        None => return,
+                        None => {
+                            sender.send_log(module_name.clone(), "could not split identifier by '='".to_string());
+                            return
+                        },
                     };
 
                     if let Some(new_node_id) = node_ids.iter().find(|v| v.variable == variable.to_string()) {
@@ -117,16 +119,9 @@ impl OPCUA {
                             time: SystemTime::now(),
                         };
     
-                        // Create and send the event directly
-                        let event = Event {
-                            module: module_name.clone(),
-                            inner: EventKind::Reading(reading),
-                        };
-    
-                        if let Err(e) = sender.send(event) {
-                            eprintln!("Failed to send readings: {}", e);
-                        }
-
+                        sender.send_reading(module_name.clone(), reading);
+                    } else {
+                        sender.send_log(module_name.clone(), "recieved nodeId not found in tee config".to_string());
                     }                                      
                 }),
             )
@@ -161,10 +156,10 @@ impl Module for OPCUA {
         let (session, event_loop) = self
             .client
             .connect_to_matching_endpoint(endpoint, IdentityToken::Anonymous)
-            .await
-            .unwrap();
+            .await?;
 
         let handle = event_loop.spawn();
+
         session.wait_for_connection().await;
 
         if let Err(result) = self.subscribe_to_variables(session.clone()).await {
@@ -184,7 +179,7 @@ impl Module for OPCUA {
             let _ = session_c.disconnect().await;
         });
 
-        handle.await.unwrap();
+        handle.await?;
 
         Ok(())
     }

@@ -8,6 +8,13 @@ pub trait Module {
     fn run(&mut self) -> impl Future<Output = Result<()>>;
 }
 
+// New trait for event sending capabilities
+pub trait EventSender {
+    fn send_event(&self, module_name: String, event_kind: EventKind);
+    fn send_log(&self, module_name: String, message: String);
+    fn send_reading(&self, module_name: String, reading: Reading);
+}
+
 #[derive(Debug)]
 pub struct ModuleCtx {
     pub name: String,
@@ -27,22 +34,38 @@ impl ModuleCtx {
         }
     }
 
+    // Keep the old interface
     pub fn send(&self, event_kind: EventKind) {
-        let event = Event {
-            module: self.name.clone(),
-            inner: event_kind,
-        };
-
-        if let Err(e) = self.sender.send(event) {
-            eprintln!("Failed to send event in module {}: {}", self.name, e);
-        }
+        self.sender.send_event(self.name.clone(), event_kind);
     }
 
     pub fn send_log(&self, message: String) {
-        self.send(EventKind::Log(message));
+        self.sender.send_log(self.name.clone(), message);
     }
 
     pub fn send_reading(&self, reading: Reading) {
-        self.send(EventKind::Reading(reading));
+        self.sender.send_reading(self.name.clone(), reading);
+    }
+}
+
+// Implement the trait for broadcast::Sender<Event>
+impl EventSender for broadcast::Sender<Event> {
+    fn send_event(&self, module_name: String, event_kind: EventKind) {
+        let event = Event {
+            module: module_name.clone(),
+            inner: event_kind,
+        };
+
+        if let Err(e) = self.send(event) {
+            eprintln!("Failed to send event in module {}: {}", module_name, e);
+        }
+    }
+
+    fn send_log(&self, module_name: String, message: String) {
+        self.send_event(module_name, EventKind::Log(message));
+    }
+
+    fn send_reading(&self, module_name: String, reading: Reading) {
+        self.send_event(module_name, EventKind::Reading(reading));
     }
 }
