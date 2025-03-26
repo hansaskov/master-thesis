@@ -7,17 +7,14 @@
 	import { goto } from '$app/navigation';
 
 	import { systemStore } from '$lib/stores/systems.svelte';
-
+	import { userStore } from '$lib/stores/user.svelte';
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '@/components/ui/button';
 
 	systemStore.refresh();
 
-	let name = 'User'; // Replace with actual user name
-
 	const headers: { label: string }[] = [
-		{ label: 'Image' },
 		{ label: 'Name' },
 		{ label: 'Health' },
 		{ label: 'Status' },
@@ -51,7 +48,7 @@
 	<Card.Root class="w-full">
 		<Card.Header class="flex gap-4 md:flex-row justify-between">
 			<div>
-				<Card.Title>Hello {name}</Card.Title>
+				<Card.Title>Hello {userStore.user?.name}</Card.Title>
 				<Card.Description>
 					Monitor and manage your vision systems across different factory areas.
 				</Card.Description>
@@ -96,7 +93,6 @@
 									goto(`./${organizationStore.currentOrganization?.id}/system/${system.id}`)}
 								class="hover:bg-muted cursor-pointer"
 							>
-								<Table.Cell>Placeholder Image</Table.Cell>
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
 									<!-- TODO: Make dynamic -->
@@ -106,7 +102,8 @@
 									<!-- TODO: Make dynamic -->
 									<Badge variant="outline">Running</Badge>
 								</Table.Cell>
-								<Table.Cell class="hidden md:table-cell">{system.system_model}</Table.Cell>
+								<!-- TODO: Update based on database zone -->
+								<Table.Cell class="hidden md:table-cell">Zone 1</Table.Cell>
 								<!-- TODO: Make dynamic -->
 								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
 							</Table.Row>

@@ -15,6 +15,8 @@
 	import { onError } from '@/error';
 	import * as Avatar from '$lib/components/ui/avatar';
 
+	partsStore.refresh();
+
 	// parts pagination
 	let pageSize = 10;
 	let currentPage = $state(0);

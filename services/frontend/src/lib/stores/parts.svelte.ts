@@ -34,6 +34,7 @@ export class PartsStore {
 
 		if (partData) {
 			toast.success(`Part ${partData.name} has been removed`);
+			this.#parts.current = this.#parts.current.filter((part) => part.id !== id);
 			return;
 		}
 
@@ -48,6 +49,9 @@ export class PartsStore {
 		const { data, error } = await api.parts.index.patch(part);
 
 		if (data) {
+			this.#parts.current = this.#parts.current.map((existingPart) =>
+				existingPart.id === part.id ? { ...existingPart, ...data } : existingPart
+			);
 			toast.success(`Part has been updated to ${data.name}`);
 			return;
 		}

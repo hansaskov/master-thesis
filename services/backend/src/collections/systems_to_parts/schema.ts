@@ -1,5 +1,6 @@
 import type { PartialExcept } from "$types/strict";
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-typebox";
 import { parts } from "../parts/schema";
 import { systems } from "../systems/schema";
 
@@ -15,6 +16,8 @@ export const systemsToParts = pgTable(
 	},
 	(table) => [primaryKey({ columns: [table.system_id, table.parts_id] })],
 );
+
+export const insertSystemsToPartsSchema = createInsertSchema(systemsToParts);
 
 export type SystemToParts = typeof systemsToParts.$inferSelect;
 export type SystemToPartsNew = typeof systemsToParts.$inferInsert;
