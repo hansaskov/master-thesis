@@ -1,103 +1,69 @@
+pub mod cli;
+pub mod event_bus;
+pub mod module;
+pub mod modules;
+pub mod reading;
+
 use anyhow::Result;
 use clap::Parser;
-use reader::Reader;
-
-use std::time::Duration;
-use tokio::{
-    signal,
-    sync::{mpsc, oneshot},
-    time::{interval, sleep},
-};
-
-mod local_queue;
-mod reader;
-use local_queue::{LocalQueue, SqliteQueue};
-mod hardware_monitor_reader;
-use hardware_monitor_reader::pc_reader;
-mod reading;
-use reading::Reading;
-mod config;
-use config::{Args, Mode};
-mod api;
-use api::{APIClient, ApiClientInterface};
-const BATCH_SIZE: usize = 10;
-const LOOP_DURATION: Duration = Duration::from_secs(1);
+use cli::{Cli, Config};
+use event_bus::EventBus;
+use module::{Module, ModuleCtx};
+use modules::logger::Logger;
+use modules::monitoring::Monitoring;
+use modules::opcua::OPCUA;
+use modules::uploader::Uploader;
+use std::thread;
+use tokio::task::JoinSet;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Args::parse();
-    println!("Running in {:?} mode", args.mode);
+    let cli = Cli::parse();
+    let config = Config::parse_file(cli.config)?;
 
-    // Initialize API client
-    let api_client = APIClient::new(args.url, args.key);
+    let event_bus = EventBus::new();
+    let opcua_ctx = ModuleCtx::new("opcua", &event_bus);
+    let logger_ctx = ModuleCtx::new("logger", &event_bus);
+    let uploader_ctx = ModuleCtx::new("uploader", &event_bus);
+    let monitoring_ctx = ModuleCtx::new("monitoring", &event_bus);
 
-    let mut pc_reader = pc_reader::PCReader::new()?;
-    let local_queue = SqliteQueue::new(&args.sqlite).await?;
-    let (sender, mut receiver) = mpsc::channel::<Reading>(100);
-    let (shutdown_send, mut shutdown_recv) = oneshot::channel();
-    let mut interval = interval(LOOP_DURATION);
+    // Used to store async tasks.
+    let mut set = JoinSet::new();
 
-    tokio::spawn(async move {
-        signal::ctrl_c().await.expect("Failed to listen for Ctrl+C");
-        shutdown_send
-            .send(())
-            .expect("Failed to send shutdown signal");
-    });
-
-    match args.mode {
-        Mode::Send => {
-            while let Ok(length) = local_queue.len().await {
-                if length == 0 {
-                    println!("No files to send, closing");
-                    break;
-                }
-                sleep(Duration::from_millis(100)).await;
-                let _ = send_readings(&api_client, &local_queue, BATCH_SIZE)
-                    .await
-                    .map_err(|e| eprintln!("Failed to send readings: {}", e));
-            }
+    // OPCUA
+    match config.opcua {
+        Some(opcua_config) => {
+            set.spawn(async move { OPCUA::new(opcua_ctx, opcua_config).run().await });
         }
-        _ => loop {
-            tokio::select! {
-                _ = interval.tick() => {
-                    if let Err(e) = pc_reader.read(&sender).await {
-                        eprintln!("Failed to collect and send readings: {}", e);
-                    }
-                }
-
-                Some(reading) = receiver.recv() => {
-                    let _ = local_queue.push(reading.clone()).await
-                        .map_err(|e| eprintln!("Failed to push to queue: {:?}", e));
-
-                    match local_queue.len().await {
-                        Ok(length) if args.mode == Mode::Full && length >= BATCH_SIZE => {
-                            let _ = send_readings(&api_client, &local_queue, BATCH_SIZE).await
-                                .map_err(|e| eprintln!("Failed to send readings: {}", e));
-                        }
-                        Ok(length) => println!("Added reading to queue: {reading:?}. Size {length:?}"),
-                        Err(e) => eprintln!("Failed to get queue length: {:?}", e)
-                    }
-                }
-
-                _ = &mut shutdown_recv => {
-                    println!("Shutting down gracefully.");
-                    break;
-                }
-            }
-        },
+        None => println!("Warn: Skipping OPCUA"),
     }
 
-    Ok(())
-}
+    // Logger
+    set.spawn(async move { Logger::new(logger_ctx).run().await });
 
-async fn send_readings(api_client: &APIClient, queue: &SqliteQueue, length: usize) -> Result<()> {
-    let readings = queue.peek(length).await?;
+    // Uploader
+    if let Some(arguments) = config.upload {
+        set.spawn(async move { Uploader::new(uploader_ctx, arguments).run().await });
+    }
 
-    api_client.send(readings).await?;
-    println!("Successfully sent values");
+    // Monitoring
+    // Create a dedicated thread for monitoring (WMI must stay on one thread)
+    if let Some(sensors_config) = config.monitoring {
+        thread::spawn(move || {
+            let mut monitoring = Monitoring::new(monitoring_ctx, sensors_config);
+            if let Err(e) = tokio::runtime::Builder::new_current_thread()
+                .enable_all()
+                .build()
+                .unwrap()
+                .block_on(monitoring.run())
+            {
+                eprintln!("Monitoring error: {}", e);
+            }
+        });
+    }
 
-    queue.pop(length).await?;
-    println!("Popped values from queue");
+    // Wait for all tasks to complete
+    set.join_all().await;
 
     Ok(())
 }
