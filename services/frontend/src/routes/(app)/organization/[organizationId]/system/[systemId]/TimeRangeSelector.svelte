@@ -7,9 +7,27 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '@/utils';
 	import { RangeCalendar } from '@/components/ui/range-calendar';
-	import { timeRangeStore } from './TimeRangeStore.svelte';
+	import { timeRangeStore } from '@/stores/TimeRangeStore.svelte';
+	import { refreshRateStore } from './monitoring/RefreshRateStore.svelte';
+	import { watch } from 'runed';
 
 	let { ...props } = $props();
+
+	// Will refresh the timerange according to the interval
+	watch(
+		() => refreshRateStore.inerval,
+		() => {
+			const id = setInterval(() => {
+				if (timeRangeStore.value !== '0') {
+					timeRangeStore.setEndToNow();
+				}
+			}, refreshRateStore.inerval ?? 5000);
+
+			return () => {
+				clearInterval(id);
+			};
+		}
+	);
 </script>
 
 <div {...props}>

@@ -13,6 +13,7 @@ import { insertReadingsSchema, selectReadingsSchema } from "./readings/schema";
 import { insertSessionsSchema } from "./sessions/schema";
 import { insertSystemModelsSchema } from "./system_models/schema";
 import { insertSystemsSchema, selectSystemsSchema } from "./systems/schema";
+import { insertSystemsToPartsSchema } from "./systems_to_parts/schema";
 import { insertUserSettingsSchema } from "./user_settings/schema";
 import { insertUserSchema, selectUserSchema } from "./users/schema";
 import { insertUserToOrganizationSchema } from "./users_to_organizations/schema";
@@ -33,6 +34,7 @@ export const Schema = {
 			usersToOrganizations: insertUserToOrganizationSchema,
 			invites: insertInvitesSchema,
 			partsToSystemModels: insertPartsToSystemModelsSchema,
+			systemsToParts: insertSystemsToPartsSchema,
 		},
 		"insert",
 	),

@@ -54,6 +54,8 @@ export class SystemStore {
 		toast.success(`Successfully created ${data.name}`);
 
 		this.systems.push(data);
+
+		return data;
 	}
 
 	async delete({ id }: StrictPick<Types.System, 'id'>) {
