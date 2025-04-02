@@ -12,7 +12,6 @@ anyhow = "1.0.97"
 wmi = "0.15.1"
 chrono = "0.4.40"
 toml = "0.8.20"
-pico-args = "0.5"
 async-opcua = { version = "0.14", features = ["client", "console-logging"] }
 openssl = { version = "0.10", features = ["vendored"] }
 
