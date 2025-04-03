@@ -36,8 +36,8 @@ export function TsTimeBucket(
 	);
 }
 
-export function avg(expression: SQLWrapper): SQL<string> {
-	return sql`avg(${expression})`.mapWith(String);
+export function avg(expression: SQLWrapper) {
+	return sql`avg(${expression})`.mapWith(Number);
 }
 
 export function first<T extends SQLWrapper>(valueExpr: T, groupByExpr?: T) {

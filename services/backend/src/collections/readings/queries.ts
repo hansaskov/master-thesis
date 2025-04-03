@@ -1,8 +1,8 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import { and, asc, between, desc, eq } from "drizzle-orm/sql";
-import { readings, readings_5min_agg } from "./schema";
+import { and, asc, between, desc, eq, gt, lt, sql } from "drizzle-orm/sql";
+import { readings } from "./schema";
 
 export const readingsQueries = {
 	createMany: async (values: Types.ReadingNew[]) =>
@@ -46,27 +46,6 @@ export const readingsQueries = {
 				readings.unit,
 				readings.name,
 				asc(readings.time),
-			)
-			.limit(limit ?? 1000),
-	select5Min: async ({
-		system_id,
-		start,
-		end,
-		limit,
-	}: {
-		system_id: string;
-		start: Date;
-		end: Date;
-		limit?: number;
-	}) =>
-		await db
-			.select()
-			.from(readings_5min_agg)
-			.where(
-				and(
-					eq(readings.system_id, system_id),
-					between(readings.time, start, end),
-				),
 			)
 			.limit(limit ?? 1000),
 	selectAllUniqueLatest: async ({
