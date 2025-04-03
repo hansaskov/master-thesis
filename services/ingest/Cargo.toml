@@ -1,20 +1,28 @@
 [package]
 name = "ingest"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-tokio = { version = "1.0", features = ["full"] }
-anyhow = "1.0.86"
-reqwest = { version = "0.12.9", features = ["json"] }
-serde = "1.0.204"
-wmi = "0.13.3"
+tokio = { version = "1.44.1", features = ["full"] }
+reqwest = {version = "0.12.15", features = ["json"]}
+clap = { version = "4.5.32", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+anyhow = "1.0.97"
+wmi = "0.15.1"
+chrono = "0.4.40"
+toml = "0.8.20"
+async-opcua = { version = "0.14", features = ["client", "console-logging"] }
+openssl = { version = "0.10", features = ["vendored"] }
 
-sqlx = { version = "0.7", features = [ "runtime-tokio", "sqlite" ] }
-clap = {version = "4.5.9", features = ["derive", "env"]}
-chrono = "0.4.38"
+[lints.rust]
+unsafe_code = "forbid"
 
-
+[lints.clippy]
+enum_glob_use = "deny"
+#pedantic = "deny"
+#nursery = "deny"
+unwrap_used = "deny"
 
 [profile.release]
 opt-level = "z"     # Optimize for size.
