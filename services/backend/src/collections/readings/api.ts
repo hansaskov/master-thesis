@@ -47,7 +47,7 @@ export const readingsApi = new Elysia()
 			const end = new Date(query.end);
 
 			if (query.resolution === "5 min") {
-				return await Queries.readings.select5Min({
+				return await Queries.readings_5min_agg.select({
 					start,
 					end,
 					system_id: query.system_id,
