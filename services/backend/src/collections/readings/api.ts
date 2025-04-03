@@ -76,7 +76,7 @@ export const readingsApi = new Elysia()
 	.get(
 		"/readings/latest",
 		async ({ query }) => {
-			return await Queries.readings.selectAllUniqueLatest(query);
+			return await Queries.readings.selectAllUnique(query);
 		},
 		{
 			isOrganization: true,

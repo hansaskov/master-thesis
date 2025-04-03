@@ -1,7 +1,18 @@
+import { threshold } from "$collections/threshold/schema";
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import { and, asc, between, desc, eq, gt, lt, sql } from "drizzle-orm/sql";
+import {
+	and,
+	asc,
+	between,
+	desc,
+	eq,
+	gt,
+	isNull,
+	lt,
+	sql,
+} from "drizzle-orm/sql";
 import { readings } from "./schema";
 
 export const readingsQueries = {
@@ -48,7 +59,7 @@ export const readingsQueries = {
 				asc(readings.time),
 			)
 			.limit(limit ?? 1000),
-	selectAllUniqueLatest: async ({
+	selectAllUnique: async ({
 		system_id,
 		category,
 		unit,
