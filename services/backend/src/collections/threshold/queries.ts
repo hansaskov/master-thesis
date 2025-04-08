@@ -43,7 +43,9 @@ export const thresholdQueries = {
 					eq(threshold.name, values.name),
 					eq(threshold.unit, values.unit),
 				),
-			),
+			)
+			.returning()
+			.then((v) => v[0]),
 	selectAllUniqueWithoutThreshold: async ({
 		system_id,
 	}: StrictPick<Types.Reading, "system_id">) => {
