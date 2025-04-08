@@ -1,5 +1,5 @@
 import { systems } from "$collections/systems/schema";
-import { StrictPick } from "$types/strict";
+import type { StrictPick } from "$types/strict";
 import { boolean, pgTable, primaryKey, real, text } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
 import { t } from "elysia";

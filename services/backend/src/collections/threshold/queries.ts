@@ -14,7 +14,7 @@ import {
 	not,
 	sql,
 } from "drizzle-orm/sql";
-import { type ThresholdNew, ThresholdUnique, threshold } from "./schema";
+import { type ThresholdNew, type ThresholdUnique, threshold } from "./schema";
 
 export const thresholdQueries = {
 	insert: (values: ThresholdNew) =>

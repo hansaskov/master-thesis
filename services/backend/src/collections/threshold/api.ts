@@ -1,3 +1,4 @@
+import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import Elysia, { t } from "elysia";
 import {
@@ -5,7 +6,6 @@ import {
 	selectThresholdSchema,
 	uniqueThresholdSchema,
 } from "./schema";
-import { authMiddleware } from "$auth/middleware";
 
 export const thresholdApi = new Elysia({ prefix: "threshold" })
 	.use(authMiddleware)
