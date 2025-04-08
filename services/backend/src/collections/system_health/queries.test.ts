@@ -157,7 +157,10 @@ describe("System health", async () => {
 		// Expect one value
 		expect(systemHealth).toBeArrayOfSize(1);
 
-		// Expect value to be healthy
+		// Expect value to be unhealthy
+		expect(systemHealth[0].avg).toBeGreaterThan(80);
+
+        		// Expect value to be unhealthy
 		expect(systemHealth[0].healthy).toBeFalse();
 	});
 });
