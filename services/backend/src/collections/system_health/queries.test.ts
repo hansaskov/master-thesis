@@ -1,7 +1,5 @@
-import { beforeAll, describe, expect, it } from "bun:test";
+import { describe, expect, it } from "bun:test";
 import { Queries } from "$collections/queries";
-import { db } from "$db/postgres";
-import { sql } from "drizzle-orm";
 
 async function seedDatabase(startDate: Date) {
 	// Insert organization
@@ -28,21 +26,21 @@ async function seedDatabase(startDate: Date) {
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 1000), // +1 second
 			unit: "%",
-			value: 10,
+			value: 50,
 			system_id: system.id,
 		},
 		{
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 2000), // +2 seconds
 			unit: "%",
-			value: 20,
+			value: 60,
 			system_id: system.id,
 		},
 		{
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 3000), // +3 seconds
 			unit: "%",
-			value: 30,
+			value: 70,
 			system_id: system.id,
 		},
 	]);
