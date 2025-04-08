@@ -60,8 +60,7 @@ describe("System health", async () => {
 	const startDate = new Date(1999, 9, 27); // October is month 9 (0-indexed)
 
 	it("healthy", async () => {
-
-        const seedData = await seedDatabase(startDate);
+		const seedData = await seedDatabase(startDate);
 
 		// Insert readings over a 5 minutes interval, but all values are below 80
 		const readings = await Queries.readings.createMany([
@@ -101,7 +100,7 @@ describe("System health", async () => {
 	});
 
 	it("unhealthy", async () => {
-        const seedData = await seedDatabase(startDate);
+		const seedData = await seedDatabase(startDate);
 
 		// Insert readings over a 5 minutes interval, the values are above 80% on average.
 		const readings = await Queries.readings.createMany([
@@ -160,7 +159,7 @@ describe("System health", async () => {
 		// Expect value to be unhealthy
 		expect(systemHealth[0].avg).toBeGreaterThan(80);
 
-        		// Expect value to be unhealthy
+		// Expect value to be unhealthy
 		expect(systemHealth[0].healthy).toBeFalse();
 	});
 });
