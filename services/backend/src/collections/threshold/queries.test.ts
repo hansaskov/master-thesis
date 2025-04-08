@@ -124,3 +124,69 @@ describe("Threshold", async () => {
 		expect(uniqueWithoutThreshold).toHaveLength(1);
 	});
 });
+
+it("Toggle a threshold flips enabled status", async () => {
+	const seedData = await seedDatabase();
+	const seedReading = seedData.readings[0];
+
+	// Insert threshold with enabled: true
+	const inserted = await Queries.threshold.insert({
+		threshold: 10,
+		enabled: true,
+		...seedReading,
+	});
+
+	// Toggle the threshold
+	const toggled = await Queries.threshold.toggle({
+		system_id: inserted.system_id,
+		category: inserted.category, // Assumes code uses values.category (may need adjustment if code has typo)
+		name: inserted.name,
+		unit: inserted.unit,
+	});
+
+	expect(toggled.enabled).toBe(false);
+
+	// Verify persistence by fetching thresholds
+	const thresholds = await Queries.threshold.select({
+		system_id: seedData.system.id,
+	});
+	const updated = thresholds.find((t) => t.name === inserted.name);
+	expect(updated?.enabled).toBe(false);
+});
+
+it("Toggling twice reverts to original state", async () => {
+	const seedData = await seedDatabase();
+	const seedReading = seedData.readings[0];
+
+	// Insert threshold with enabled: true
+	const inserted = await Queries.threshold.insert({
+		threshold: 10,
+		enabled: true,
+		...seedReading,
+	});
+
+	// First toggle (true -> false)
+	await Queries.threshold.toggle({
+		system_id: inserted.system_id,
+		category: inserted.category,
+		name: inserted.name,
+		unit: inserted.unit,
+	});
+
+	// Second toggle (false -> true)
+	const toggledAgain = await Queries.threshold.toggle({
+		system_id: inserted.system_id,
+		category: inserted.category,
+		name: inserted.name,
+		unit: inserted.unit,
+	});
+
+	expect(toggledAgain.enabled).toBe(true);
+
+	// Verify persistence
+	const thresholds = await Queries.threshold.select({
+		system_id: seedData.system.id,
+	});
+	const updated = thresholds.find((t) => t.name === inserted.name);
+	expect(updated?.enabled).toBe(true);
+});
