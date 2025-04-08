@@ -9,10 +9,32 @@ import {
 
 export const thresholdApi = new Elysia({ prefix: "threshold" })
 	.use(authMiddleware)
+	.get(
+		"/",
+		async ({ query }) => {
+			return await Queries.threshold.select(query);
+		},
+		{
+			isOrganization: true,
+			query: t.Object({
+				system_id: t.String(),
+			}),
+		},
+	)
 	.post(
 		"/",
 		async ({ body }) => {
-			await Queries.threshold.insertMany(body);
+			return await Queries.threshold.insertMany(body);
+		},
+		{
+			isOrganizationAdmin: true,
+			body: t.Array(insertThresholdSchema),
+		},
+	)
+	.put(
+		"/",
+		async ({ body }) => {
+			return await Queries.threshold.upsertMany(body);
 		},
 		{
 			isOrganizationAdmin: true,
@@ -20,25 +42,13 @@ export const thresholdApi = new Elysia({ prefix: "threshold" })
 		},
 	)
 	.get(
-		"/",
-		async ({ params }) => {
-			await Queries.threshold.select(params);
-		},
-		{
-			isOrganization: true,
-			params: t.Object({
-				system_id: t.String(),
-			}),
-		},
-	)
-	.get(
 		"/available",
-		async ({ params }) => {
-			await Queries.threshold.selectAllUniqueWithoutThreshold(params);
+		async ({ query }) => {
+			return await Queries.threshold.selectAllUniqueWithoutThreshold(query);
 		},
 		{
 			isOrganizationAdmin: true,
-			params: t.Object({
+			query: t.Object({
 				system_id: t.String(),
 			}),
 		},
@@ -46,7 +56,7 @@ export const thresholdApi = new Elysia({ prefix: "threshold" })
 	.put(
 		"/toggle",
 		async ({ body }) => {
-			await Queries.threshold.toggle(body);
+			return await Queries.threshold.toggle(body);
 		},
 		{
 			isOrganizationAdmin: true,

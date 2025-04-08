@@ -1,19 +1,9 @@
 import { readings } from "$collections/readings/schema";
+import { buildConflictUpdateColumns } from "$db/drizzle/upsert";
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictPick } from "$types/strict";
-import {
-	and,
-	asc,
-	between,
-	desc,
-	eq,
-	gt,
-	isNull,
-	lt,
-	not,
-	sql,
-} from "drizzle-orm/sql";
+import { and, asc, between, desc, eq, gt, isNull, not } from "drizzle-orm/sql";
 import { type ThresholdNew, type ThresholdUnique, threshold } from "./schema";
 
 export const thresholdQueries = {
@@ -28,7 +18,30 @@ export const thresholdQueries = {
 		db.insert(threshold).values(values).returning(),
 
 	select: ({ system_id }: StrictPick<Types.Reading, "system_id">) =>
-		db.select().from(threshold).where(eq(threshold.system_id, system_id)),
+		db
+			.select()
+			.from(threshold)
+			.where(eq(threshold.system_id, system_id))
+			.orderBy(
+				desc(threshold.enabled),
+				desc(threshold.category),
+				desc(threshold.name),
+			),
+
+	upsertMany: (values: ThresholdNew[]) =>
+		db
+			.insert(threshold)
+			.values(values)
+			.onConflictDoUpdate({
+				target: [
+					threshold.system_id,
+					threshold.category,
+					threshold.name,
+					threshold.unit,
+				],
+				set: buildConflictUpdateColumns(threshold, ["threshold", "enabled"]),
+			})
+			.returning(),
 
 	toggle: (values: ThresholdUnique) =>
 		db

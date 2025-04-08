@@ -12,6 +12,7 @@ import { readingsApi } from "./readings/api";
 import { systemModelsApi } from "./system_models/api";
 import { systemsApi } from "./systems/api";
 import { systemsToPartsApi } from "./systems_to_parts/api";
+import { thresholdApi } from "./threshold/api";
 import { usersApi } from "./users/api";
 import { usersToOrganizationsApi } from "./users_to_organizations/api";
 
@@ -30,4 +31,5 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(invitesApi)
 	.use(partsToSystemModelApi)
 	.use(fileApi)
-	.use(systemsToPartsApi);
+	.use(systemsToPartsApi)
+	.use(thresholdApi);
