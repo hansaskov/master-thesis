@@ -66,23 +66,16 @@ describe("System health", async () => {
 		const readings = await Queries.readings.createMany([
 			{
 				name: "cpu usage",
-				time: new Date(startDate.getTime() + 4000), // +1 second
-				unit: "%",
-				value: 40,
-				system_id: seedData.system.id,
-			},
-			{
-				name: "cpu usage",
 				time: new Date(startDate.getTime() + 5000), // +2 seconds
 				unit: "%",
-				value: 50,
+				value: 60,
 				system_id: seedData.system.id,
 			},
 			{
 				name: "cpu usage",
 				time: new Date(startDate.getTime() + 6000), // +3 seconds
 				unit: "%",
-				value: 60,
+				value: 70,
 				system_id: seedData.system.id,
 			},
 		]);
@@ -157,7 +150,7 @@ describe("System health", async () => {
 		expect(systemHealth).toBeArrayOfSize(1);
 
 		// Expect value to be unhealthy
-		expect(systemHealth[0].avg).toBeGreaterThan(80);
+		expect(systemHealth[0].avg).toBeGreaterThan(seedData.threshold.threshold);
 
 		// Expect value to be unhealthy
 		expect(systemHealth[0].healthy).toBeFalse();
