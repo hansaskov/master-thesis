@@ -39,7 +39,7 @@ export const thresholdQueries = {
 			.where(
 				and(
 					eq(threshold.system_id, values.system_id),
-					eq(threshold.category, values.system_id),
+					eq(threshold.category, values.category),
 					eq(threshold.name, values.name),
 					eq(threshold.unit, values.unit),
 				),
