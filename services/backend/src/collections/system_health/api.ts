@@ -8,13 +8,13 @@ export const systemHealthApi = new Elysia({ prefix: "system/health" })
 		isOrganization: true,
 	})
 	.get(
-		"/",
+		"/latest",
 		async ({ query }) => {
-			return await Queries.systemHealth.selectLatest(query);
+			return await Queries.systemHealth.selectLatest(query.system_ids);
 		},
 		{
 			query: t.Object({
-				system_id: t.String(),
+				system_ids: t.Array(t.String()),
 			}),
 		},
 	);

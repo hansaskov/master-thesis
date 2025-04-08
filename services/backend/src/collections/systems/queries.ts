@@ -17,6 +17,13 @@ export const systemQueries = {
 			.select()
 			.from(systems)
 			.where(eq(systems.organization_id, organization.id)),
+	selectAllOnOrgIdWithHealth: async (
+		organization: StrictPick<Types.System, "id">,
+	) =>
+		await db
+			.select()
+			.from(systems)
+			.where(eq(systems.organization_id, organization.id)),
 	delete: async ({ id }: StrictPick<Types.System, "id">) =>
 		await db
 			.delete(systems)

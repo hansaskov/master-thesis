@@ -79,9 +79,9 @@ describe("System health", async () => {
 		]);
 
 		// Query the latest value on system id
-		const systemHealth = await Queries.systemHealth.selectLatest({
-			system_id: seedData.system.id,
-		});
+		const systemHealth = await Queries.systemHealth.selectLatest([
+			seedData.system.id,
+		]);
 
 		// Expect one value
 		expect(systemHealth).toBeArrayOfSize(1);
@@ -140,9 +140,9 @@ describe("System health", async () => {
 		]);
 
 		// Query the latest value on system id
-		const systemHealth = await Queries.systemHealth.selectLatest({
-			system_id: seedData.system.id,
-		});
+		const systemHealth = await Queries.systemHealth.selectLatest([
+			seedData.system.id,
+		]);
 
 		// Expect one value
 		expect(systemHealth).toBeArrayOfSize(1);
