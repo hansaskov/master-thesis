@@ -11,9 +11,10 @@ import {
 	gt,
 	isNull,
 	lt,
+	not,
 	sql,
 } from "drizzle-orm/sql";
-import { type ThresholdNew, threshold } from "./schema";
+import { type ThresholdNew, ThresholdUnique, threshold } from "./schema";
 
 export const thresholdQueries = {
 	insert: (values: ThresholdNew) =>
@@ -26,9 +27,23 @@ export const thresholdQueries = {
 	insertMany: (values: ThresholdNew[]) =>
 		db.insert(threshold).values(values).returning(),
 
-	select: (systemId: string) =>
-		db.select().from(threshold).where(eq(threshold.system_id, systemId)),
+	select: ({ system_id }: StrictPick<Types.Reading, "system_id">) =>
+		db.select().from(threshold).where(eq(threshold.system_id, system_id)),
 
+	toggle: (values: ThresholdUnique) =>
+		db
+			.update(threshold)
+			.set({
+				enabled: not(threshold.enabled),
+			})
+			.where(
+				and(
+					eq(threshold.system_id, values.system_id),
+					eq(threshold.category, values.system_id),
+					eq(threshold.name, values.name),
+					eq(threshold.unit, values.unit),
+				),
+			),
 	selectAllUniqueWithoutThreshold: async ({
 		system_id,
 	}: StrictPick<Types.Reading, "system_id">) => {

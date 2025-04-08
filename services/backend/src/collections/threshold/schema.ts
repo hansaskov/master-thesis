@@ -1,5 +1,8 @@
 import { systems } from "$collections/systems/schema";
+import { StrictPick } from "$types/strict";
 import { boolean, pgTable, primaryKey, real, text } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
+import { t } from "elysia";
 
 export const threshold = pgTable(
 	"threshold",
@@ -20,5 +23,15 @@ export const threshold = pgTable(
 	],
 );
 
+const uniqueKeys = ["system_id", "category", "name", "unit"] as const;
+
+export const selectThresholdSchema = createSelectSchema(threshold);
+export const insertThresholdSchema = createInsertSchema(threshold);
+export const uniqueThresholdSchema = t.Pick(selectThresholdSchema, uniqueKeys);
+
 export type Threshold = typeof threshold.$inferSelect;
 export type ThresholdNew = typeof threshold.$inferInsert;
+export type ThresholdUnique = StrictPick<
+	Threshold,
+	(typeof uniqueKeys)[number]
+>;
