@@ -56,20 +56,13 @@ async function seedDatabase(startDate: Date) {
 	return { organization, system, key, readings, threshold };
 }
 
-describe("5 minutes agg readings", async () => {
-	let seedData: Awaited<ReturnType<typeof seedDatabase>>;
+describe("System health", async () => {
 	const startDate = new Date(1999, 9, 27); // October is month 9 (0-indexed)
-	const endDate = new Date(startDate.getTime() + 3000);
-
-	beforeAll(async () => {
-		seedData = await seedDatabase(startDate);
-		// Refresh policy to ensure we have the latest aggregated data
-		await db.execute(
-			sql`CALL refresh_continuous_aggregate('"public"."system_health"', NULL, NULL)`,
-		);
-	});
 
 	it("healthy", async () => {
+
+        const seedData = await seedDatabase(startDate);
+
 		// Insert readings over a 5 minutes interval, but all values are below 80
 		const readings = await Queries.readings.createMany([
 			{
@@ -108,6 +101,8 @@ describe("5 minutes agg readings", async () => {
 	});
 
 	it("unhealthy", async () => {
+        const seedData = await seedDatabase(startDate);
+
 		// Insert readings over a 5 minutes interval, the values are above 80% on average.
 		const readings = await Queries.readings.createMany([
 			{
