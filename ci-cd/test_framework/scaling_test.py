@@ -3,6 +3,11 @@ from __future__ import annotations
 import os
 import time
 import subprocess
+import json
+import threading
+import requests
+from datetime import datetime, timezone
+
 from hcloud import Client
 from hcloud.images import Image
 from hcloud.server_types import ServerType
@@ -14,16 +19,110 @@ token = os.environ["HCLOUD_TOKEN"]
 
 client = Client(token=token)
 
+user_data = """
+#cloud-config
+package_update: true
+package_upgrade: true
+
+groups:
+    - docker
+
+packages:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+runcmd:
+    - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - apt-get update -y
+    - apt-get install -y docker-ce docker-ce-cli containerd.io
+    - curl -L "https://github.com/docker/compose/releases/download/1.28.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    - chmod +x /usr/local/bin/docker-compose
+    - systemctl enable docker
+    - systemctl enable containerd
+    - systemctl start docker
+    - systemctl start containerd
+    - systemctl status docker
+    - systemctl status containerd
+
+final_message: "Docker host should be up and running, this took me $UPTIME seconds"
+"""
+
 servers = client.servers.get_all()
 for server in servers:
     print(f"{server.id=} {server.name=} {server.status=}")
+    
+def parse_percentage(percentage_str):
+    # Remove the '%' and convert to float
+    value = float(percentage_str.replace('%', ''))
+    return value
+
+def parse_and_normalise_percentage(percentage_str):
+    cpu_cores = 2
+    value = float(percentage_str.replace('%', ''))
+    normalised_value = value / cpu_cores
+    return normalised_value
+
+def parse_memory(memory_str):
+    # Convert memory string (e.g., "100MiB / 1.944GiB") to percentage
+    used, total = memory_str.split(' / ')
+    return float(used.split('MiB')[0])
+
+def add_server_to_known_hosts(server_ip):
+    # Create a temporary file for the keyscan output
+    temp_file = "temp_keyscan.txt"
+    
+    # Run keyscan and save output to a temporary file
+    subprocess.run(["ssh-keyscan", "-H", server_ip], stdout=open(temp_file, "w"))
+    
+    # Get the path to the known_hosts file
+    known_hosts_path = os.path.expanduser("~/.ssh/known_hosts")
+    
+    # Ensure the .ssh directory exists
+    os.makedirs(os.path.dirname(known_hosts_path), exist_ok=True)
+    
+    # Append the contents to known_hosts
+    with open(temp_file, "r") as temp, open(known_hosts_path, "a+") as known_hosts:
+        keyscan_output = temp.read()
+        known_hosts.write(keyscan_output)
+    
+    # Clean up
+    os.remove(temp_file)
+    
+    print(f"Added {server_ip} to known hosts")
+
+def test_ssh_connection(server_ip, user="admin"):
+    print(f"Testing SSH connection to {server_ip}... as user role {user}")
+    
+    try:
+        result = subprocess.run([
+            "ssh", 
+            "-o", "StrictHostKeyChecking=no",
+            "-i", os.path.expanduser("~/.ssh/id_ed25519"),
+            f"{user}@{server_ip}",
+            "echo 'SSH connection successful'"
+        ], capture_output=True, text=True, timeout=30)
+        
+        if result.returncode == 0:
+            print("SSH connection test successful")
+            return True
+        else:
+            print(f"SSH connection failed: {result.stderr}")
+            return False
+    except Exception as e:
+        print(f"SSH connection error: {e}")
+        return False
     
 def setup_test_environment():
     ssh_key = None
     try:
         # Try to get existing key first
         ssh_keys = client.ssh_keys.get_all()
+        print(f'all ssh keys: {ssh_keys}')
         for key in ssh_keys:
+            print(f'key name: {key.name}')
             if key.name == "test-key":
                 ssh_key = key
                 break
@@ -32,28 +131,28 @@ def setup_test_environment():
         if ssh_key is None:
             ssh_key_response = client.ssh_keys.create(
                 name="test-key",
-                public_key=open(os.path.expanduser("~/.ssh/id_rsa_sechr17.pub")).read()
+                public_key=open(os.path.expanduser("~/.ssh/id_ed25519.pub")).read()
             )
             ssh_key = ssh_key_response
+            print(f'new ssh key: {ssh_key}')
     except Exception as e:
         print(f"Error with SSH key: {e}")
         return
     
+    for server in servers:
+        if server.name == "bun-performance-test":
+            print("Found existing server")
+            return server
+        
+    print("Creating new server...") 
     # Create server for backend and database
     server_response = client.servers.create(
         name="bun-performance-test",
-        server_type=ServerType(name="cx52"),  # 16 vCPUs, 32 GB RAM
+        #server_type=ServerType(name="cx52"),  # 16 vCPUs, 32 GB RAM
+        server_type=ServerType(name="cx22"),
         image=Image(name="ubuntu-22.04"),
-        ssh_keys=[ssh_key] if ssh_key else None,
-        user_data="""
-        #cloud-config
-        packages:
-          - docker.io
-          - docker-compose
-        runcmd:
-          - systemctl enable docker
-          - systemctl start docker
-        """
+        ssh_keys=[ssh_key],
+        user_data=user_data
     )
     
     server = server_response.server
@@ -63,117 +162,149 @@ def setup_test_environment():
     print("Waiting for server to initialize...")
     time.sleep(60)  # Give some time for cloud-init to complete
     
+    cmd = "docker --version"
+    output = subprocess.check_output(cmd, shell=True).decode()
+    print(f'Docker version: {output}')
+        
     return server
 
+def get_container_stats():
+    try:
+        # Schedule next execution
+        threading.Timer(5.0, get_container_stats).start()
+        
+        # Get docker stats
+        cmd = "docker stats --no-stream --format json"
+        output = subprocess.check_output(cmd, shell=True).decode()
+        
+        # Parse each line
+        for line in output.splitlines():
+            try:
+                if line.strip():  # Check if line is not empty
+                    container = json.loads(line)
+                    
+                    time = datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
+                    headers = {
+                        'Content-Type': 'application/json',
+                        'private_key': 'P2ReMnGz1JPPYhwuW1FB3h'
+                    }
+                    
+                    if container['Name'] == "thesis-backend-1":
+                        readings = [
+                            {
+                                'name': 'cpu usage backend',
+                                'time': time,
+                                'unit': '%',
+                                'value': parse_and_normalise_percentage(container['CPUPerc']),
+                                'category': 'backend'
+                            },
+                            {
+                                'name': 'memory usage backend',
+                                'time': time,
+                                'unit': '%',
+                                'value': parse_percentage(container['MemPerc']),
+                                'category': 'backend'
+                            }
+                        ]
+                        
+                        payload = json.dumps(readings)
+                        
+                        response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
+                        print(response.status_code)
+                        print(response.headers)
+                        print(response.text)
+                    if container['Name'] == "thesis-timescaledb-1":
+                        readings = [
+                            {
+                                'name': 'cpu usage database',
+                                'time': time,
+                                'unit': '%',
+                                'value': parse_and_normalise_percentage(container['CPUPerc']),
+                                'category': 'database'
+                            },
+                            {
+                                'name': 'memory usage database',
+                                'time': time,
+                                'unit': '%',
+                                'value': parse_percentage(container['MemPerc']),
+                                'category': 'database'
+                            }
+                        ]
+                        
+                        payload = json.dumps(readings)
+                        
+                        response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
+                        print(response.status_code)
+                        print(response.headers)
+                        print(response.text)
+                        
+                        # print(f"Name: {container['Name']}")
+                        # print(f"CPU: {container['CPUPerc']}")
+                        # print(f"Memory: {container['MemUsage']}")
+            except json.JSONDecodeError as e:
+                print(f"Error parsing container data: {e}")
+                print(f"Raw line: {line}")
+                
+    except subprocess.CalledProcessError as e:
+        print(f"Error running docker stats: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+
 def deploy_application(server):
-    # Copy your application files to the server
-    subprocess.run([
-        "scp", "-r", 
-        "./services", 
-        f"root@{server.public_net.ipv4.ip}:/root/"
-    ])
+    server_ip = server.public_net.ipv4.ip
+    add_server_to_known_hosts(server_ip)
+    print(f'server ip: {server_ip}')
+    user = "root"
     
-    # Copy docker-compose files
-    subprocess.run([
-        "scp",
-        "docker-compose.yml",
-        f"root@{server.public_net.ipv4.ip}:/root/"
-    ])
+    os.environ["DOCKER_HOST"] = f"ssh://{user}@{server_ip}"
+    # os.environ["DOCKER_SSH_AUTH_SOCK"] = ""
+    # os.environ["DOCKER_SSH_IDENTITY"] = os.path.expanduser("~/.ssh/id_ed25519")
     
-    # SSH into the server and start the application
-    subprocess.run([
-        "ssh", f"root@{server.public_net.ipv4.ip}",
-        "cd /root && docker-compose up -d timescaledb && sleep 10 && docker-compose up -d backend"
-    ])
+    current_dir = os.getcwd()
     
-    print("Application deployed and started")
+    try:
+        os.chdir("../../")
+        print(f'changed directory {os.getcwd()}')
+        subprocess.run(["docker", "compose", "-f", "compose.yaml", "up", "backend", "timescaledb", "migrate", "--build", "--wait"], check=True)
+        print("Application deployed and started")
+    except subprocess.CalledProcessError as e:
+        print(f"Docker command failed: {e}")
+    finally:
+        print("returning to original dir...")
+        os.chdir(current_dir)
     
-    # Allow some time for the application to initialize
-    time.sleep(30)
+    time.sleep(10)
     
     return server.public_net.ipv4.ip
+    # return "localhost"
 
-def run_load_test(server_ip, test_script="load_test.js"):
-    # Create k6 test script locally
-    with open(test_script, "w") as f:
-        f.write("""
-        import http from 'k6/http';
-        import { check, sleep } from 'k6';
-        import { Rate, Trend } from 'k6/metrics';
-
-        // Custom metrics
-        const errorRate = new Rate('error_rate');
-        const throughputKB = new Trend('throughput_kb');
-
-        // Configuration variables
-        const BASE_URL = 'http://%s:3000';
-        const ENDPOINT = '/api/health';
-        const TEST_DURATION = '5m';
-        const INITIAL_RPS = 10000;
-        const RPS_INCREMENT = 1000;
-        const CURRENT_RPS = __ENV.RPS ? parseInt(__ENV.RPS) : INITIAL_RPS;
-
-        export const options = {
-          scenarios: {
-            constant_request_rate: {
-              executor: 'constant-arrival-rate',
-              rate: CURRENT_RPS,
-              timeUnit: '1s',
-              duration: TEST_DURATION,
-              preAllocatedVUs: Math.ceil(CURRENT_RPS / 100),
-              maxVUs: Math.ceil(CURRENT_RPS / 50),
-            },
-          },
-          thresholds: {
-            'http_req_duration{p(95)}': ['threshold: 250ms'],
-            'http_req_duration{p(99)}': ['threshold: 500ms'],
-            'error_rate': ['threshold: 0.01'], // 1%% error rate
-          },
-        };
-
-        export default function() {
-          const response = http.get(`${BASE_URL}${ENDPOINT}`);
-          
-          const responseSize = (JSON.stringify(response.body).length / 1024);
-          throughputKB.add(responseSize);
-          
-          const success = check(response, {
-            'status is 200': (r) => r.status === 200,
-          });
-          
-          errorRate.add(!success);
-        }
-        """ % server_ip)
-    
+def run_load_test(server_ip):    
     # Run the progressive load test
-    rps = 10000
-    max_rps = 30000
-    increment = 1000
+    rps = 500
+    max_rps = 2000
+    increment = 100
+    
+    get_container_stats()
     
     while rps <= max_rps:
         print(f"Testing with {rps} requests per second...")
         
         result = subprocess.run([
-            "k6", "run", 
-            "--env", f"RPS={rps}",
-            test_script
+            "k6", "run",
+            "--env", f"RPS={rps}", "--env", f"SERVER_IP={server_ip}",
+            #"./ci-cd/test_framework/load_test_local.js"
+            "load_test_local.js"
         ])
         
         if result.returncode != 0:
             print(f"Breaking point reached at {rps} RPS")
             
             # Test at 500 RPS lower to find stable maximum
-            stable_rps = rps - 500
-            print(f"Testing stable maximum at {stable_rps} RPS for 30 minutes...")
+            stable_rps = rps - increment
             
-            subprocess.run([
-                "k6", "run",
-                "--env", f"RPS={stable_rps}",
-                "--duration", "30m",
-                test_script
-            ])
+            return stable_rps
             
-            break
+            # break
         
         rps += increment
     
@@ -184,22 +315,22 @@ def cleanup(server):
     client.servers.delete(server)
 
 def main():
-    try:
+    #try:
         # Setup the test environment
         server = setup_test_environment()
         
         # Deploy the application
-        # server_ip = deploy_application(server)
+        server_ip = deploy_application(server)
         
         # Run the load test
-        # max_rps = run_load_test(server_ip)
+        stable_rps = run_load_test(server_ip)
         
-        # print(f"Test completed. Maximum stable RPS: {max_rps - 500}")
+        print(f"Test completed. Maximum stable RPS: {stable_rps}")
         
-    finally:
-        # Cleanup resources to avoid unnecessary costs
-        if 'server' in locals():
-            cleanup(server)
+    # finally:
+    #     # Cleanup resources to avoid unnecessary costs
+    #     if 'server' in locals():
+    #         cleanup(server)
 
 if __name__ == "__main__":
     main()

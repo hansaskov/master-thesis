@@ -69,7 +69,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "Your session has expired as a noob");
+					return error("Unauthorized", "Your session has expired as auth");
 				}
 
 				return { user, session };
