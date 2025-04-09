@@ -3,6 +3,7 @@ import { threshold } from "$collections/threshold/schema";
 import { TsIntervalTimeBucket, avg, last } from "$db/drizzle/customTypes";
 import { and, eq, lt } from "drizzle-orm";
 import { pgMaterializedView } from "drizzle-orm/pg-core";
+import type { Prettify } from "elysia/types";
 
 export const system_health = pgMaterializedView("system_health")
 	.withNoData()
@@ -44,3 +45,8 @@ export const system_health = pgMaterializedView("system_health")
 	});
 
 export type SystemHealth = typeof system_health.$inferSelect;
+export type SystemHealthWithStatus = Prettify<
+	SystemHealth & {
+		running: boolean;
+	}
+>;
