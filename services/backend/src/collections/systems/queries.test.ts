@@ -63,7 +63,7 @@ describe("Systems", async () => {
 		);
 
 		// Print the actual SQL
-		console.log(drizzleQuery.getSQL());
+		console.log(drizzleQuery.toSQL());
 
 		// Query systems with health
 		const systems = await drizzleQuery;
