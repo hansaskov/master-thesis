@@ -121,7 +121,11 @@
 									{#if !system.latest_readings}
 										unknown
 									{:else}
-										{getRelativeTimeString(system.latest_readings.map((v) => v.bucket).sort()[0])}
+										{getRelativeTimeString(
+											system.latest_readings
+												.map((v) => v.bucket)
+												.sort((a, b) => a.getTime() - b.getTime())[0]
+										)}
 									{/if}
 								</Table.Cell>
 							</Table.Row>
