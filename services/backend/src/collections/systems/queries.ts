@@ -72,7 +72,7 @@ export const systemQueries = {
 						'healthy', ${subquery.healthy},
 						'running', ${subquery.bucket} > localtimestamp - INTERVAL '5 minutes'
 					  )
-					)`,
+					)`.as("latest_readings"),
 			})
 			.from(systems)
 			.leftJoin(subquery, eq(systems.id, subquery.system_id))
