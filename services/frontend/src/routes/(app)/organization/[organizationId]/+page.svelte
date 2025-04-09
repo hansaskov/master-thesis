@@ -11,6 +11,7 @@
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '@/components/ui/button';
+	import { getRelativeTimeString } from '@/dates';
 
 	systemStore.refresh();
 
@@ -115,7 +116,14 @@
 								<!-- TODO: Update based on database zone -->
 								<Table.Cell class="hidden md:table-cell">Zone 1</Table.Cell>
 								<!-- TODO: Make dynamic -->
-								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
+
+								<Table.Cell class="hidden md:table-cell">
+									{#if !system.latest_readings}
+										unknown
+									{:else}
+										{getRelativeTimeString(system.latest_readings.map((v) => v.bucket).sort()[0])}
+									{/if}
+								</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>

@@ -10,7 +10,7 @@ import { systems } from "./schema";
 
 export type SystemHealthSimple = StrictPick<
 	SystemHealthWithStatus,
-	"system_id" | "category" | "name" | "unit" | "healthy" | "running"
+	"system_id" | "category" | "name" | "unit" | "healthy" | "running" | "bucket"
 >;
 
 export const systemQueries = {
@@ -69,6 +69,7 @@ export const systemQueries = {
 						'category', ${subquery.category},
 						'name', ${subquery.name},
 						'unit', ${subquery.unit},
+						'bucket', ${subquery.bucket},
 						'healthy', ${subquery.healthy},
 						'running', ${subquery.bucket} > localtimestamp - INTERVAL '5 minutes'
 					  )
