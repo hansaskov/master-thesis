@@ -26,9 +26,7 @@ export const systemQueries = {
 			.select()
 			.from(systems)
 			.where(eq(systems.organization_id, organization.id)),
-	selectSystemsWithHealth: async (
-		organization: StrictPick<Types.System, "id">,
-	) => {
+	selectSystemsWithHealth: (organization: StrictPick<Types.System, "id">) => {
 		const subquery = db
 			.selectDistinctOn(
 				[
@@ -57,7 +55,7 @@ export const systemQueries = {
 			.as("sh");
 
 		// Main query
-		return await db
+		return db
 			.select({
 				// Include all systems columns
 				id: systems.id,
@@ -65,7 +63,7 @@ export const systemQueries = {
 				organization_id: systems.organization_id,
 				system_model: systems.system_model,
 				// Add the JSON aggregation
-				latest_readings: sql<SystemHealthSimple[]>`json_agg(
+				latest_readings: sql<SystemHealthSimple>`json_agg(
 					  json_build_object(
 						'system_id', ${subquery.system_id},
 						'category', ${subquery.category},
