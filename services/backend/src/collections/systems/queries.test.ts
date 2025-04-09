@@ -93,6 +93,6 @@ describe("Systems", async () => {
 		expect(systems).toBeArrayOfSize(1);
 
 		// Expect 0 readings
-		expect(systems[0].latest_readings).toBeArrayOfSize(1);
+		expect(systems[0].latest_readings).toBeArrayOfSize(0);
 	});
 });
