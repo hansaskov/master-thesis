@@ -58,7 +58,7 @@ describe("Systems", async () => {
 		});
 
 		// Create query we wish to perform.
-		const drizzleQuery = Queries.systems.selectSystemsWithHealth(
+		const drizzleQuery = Queries.systems.selectAllWithHealth(
 			seedData.organization,
 		);
 
@@ -90,7 +90,7 @@ describe("Systems", async () => {
 		// Insert no threshold
 
 		// Query systems with health
-		const systems = await Queries.systems.selectSystemsWithHealth(
+		const systems = await Queries.systems.selectAllWithHealth(
 			seedData.organization,
 		);
 

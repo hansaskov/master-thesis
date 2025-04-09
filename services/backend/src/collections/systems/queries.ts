@@ -26,7 +26,7 @@ export const systemQueries = {
 			.select()
 			.from(systems)
 			.where(eq(systems.organization_id, organization.id)),
-	selectSystemsWithHealth: (organization: StrictPick<Types.System, "id">) => {
+	selectAllWithHealth: (organization?: StrictPick<Types.System, "id">) => {
 		const subquery = db
 			.selectDistinctOn(
 				[
@@ -78,7 +78,9 @@ export const systemQueries = {
 			})
 			.from(systems)
 			.leftJoin(subquery, eq(systems.id, subquery.system_id))
-			.where(eq(systems.organization_id, organization.id))
+			.where(
+				organization ? eq(systems.organization_id, organization.id) : undefined,
+			)
 			.groupBy(
 				systems.id,
 				systems.name,

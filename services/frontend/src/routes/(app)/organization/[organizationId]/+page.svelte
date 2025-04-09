@@ -95,12 +95,22 @@
 							>
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
-									<!-- TODO: Make dynamic -->
-									<Badge variant="healthy">Healthy</Badge>
+									{#if !system.latest_readings}
+										<Badge variant="warning">unknown</Badge>
+									{:else if system.latest_readings.every((v) => v.healthy)}
+										<Badge variant="healthy">healthy</Badge>
+									{:else}
+										<Badge variant="destructive">critical</Badge>
+									{/if}
 								</Table.Cell>
 								<Table.Cell>
-									<!-- TODO: Make dynamic -->
-									<Badge variant="outline">Running</Badge>
+									{#if !system.latest_readings}
+										<Badge variant="warning">unknown</Badge>
+									{:else if system.latest_readings.some((v) => v.running)}
+										<Badge variant="secondary">online</Badge>
+									{:else}
+										<Badge variant="outline">offline</Badge>
+									{/if}
 								</Table.Cell>
 								<!-- TODO: Update based on database zone -->
 								<Table.Cell class="hidden md:table-cell">Zone 1</Table.Cell>
