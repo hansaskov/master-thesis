@@ -60,7 +60,7 @@ def parse_percentage(percentage_str):
     return value
 
 def parse_and_normalise_percentage(percentage_str):
-    cpu_cores = 2
+    cpu_cores = 16
     value = float(percentage_str.replace('%', ''))
     normalised_value = value / cpu_cores
     return normalised_value
