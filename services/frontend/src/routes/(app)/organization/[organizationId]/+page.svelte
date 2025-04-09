@@ -123,7 +123,7 @@
 									{:else}
 										{getRelativeTimeString(
 											system.latest_readings
-												.map((v) => v.bucket)
+												.map((v) => new Date(v.bucket))
 												.sort((a, b) => a.getTime() - b.getTime())[0]
 										)}
 									{/if}
