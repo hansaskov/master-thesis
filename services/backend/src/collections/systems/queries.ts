@@ -63,7 +63,7 @@ export const systemQueries = {
 				organization_id: systems.organization_id,
 				system_model: systems.system_model,
 				// Add the JSON aggregation
-				latest_readings: sql<SystemHealthSimple[]>`json_agg(
+				latest_readings: sql<SystemHealthSimple[] | null>`json_agg(
 					  json_build_object(
 						'system_id', ${subquery.system_id},
 						'category', ${subquery.category},

@@ -72,7 +72,12 @@ describe("Systems", async () => {
 		expect(systems).toBeArrayOfSize(1);
 
 		// Expect 1 reading
+		expect(systems[0].latest_readings).not.toBeNull();
 		expect(systems[0].latest_readings).toBeArrayOfSize(1);
+
+		if (!systems[0].latest_readings) {
+			throw Error;
+		}
 
 		// Expect reading to be healthy
 		expect(systems[0].latest_readings[0].healthy).toBeTrue();
@@ -93,6 +98,6 @@ describe("Systems", async () => {
 		expect(systems).toBeArrayOfSize(1);
 
 		// Expect 0 readings
-		expect(systems[0].latest_readings).toBeArrayOfSize(0);
+		expect(systems[0].latest_readings).toBeNull();
 	});
 });
