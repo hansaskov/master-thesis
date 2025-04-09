@@ -42,14 +42,7 @@ async function seedDatabase() {
 		},
 	]);
 
-	// Insert threshold
-	const threshold = await Queries.threshold.insert({
-		enabled: true,
-		threshold: 80,
-		...readings[0],
-	});
-
-	return { organization, system, readings, threshold };
+	return { organization, system, readings };
 }
 
 describe("Systems", async () => {
@@ -57,25 +50,49 @@ describe("Systems", async () => {
 		// Seed test wit data
 		const seedData = await seedDatabase();
 
+		// Insert threshold
+		await Queries.threshold.insert({
+			enabled: true,
+			threshold: 80,
+			...seedData.readings[0],
+		});
+
 		// Create query we wish to perform.
 		const drizzleQuery = Queries.systems.selectSystemsWithHealth(
 			seedData.organization,
 		);
 
 		// Print the actual SQL
-		console.log(drizzleQuery.toSQL());
+		// console.log(drizzleQuery.toSQL());
 
 		// Query systems with health
 		const systems = await drizzleQuery;
 
 		// Expect 1 system
 		expect(systems).toBeArrayOfSize(1);
-		expect(systems[0]).toBeDefined();
 
 		// Expect 1 reading
 		expect(systems[0].latest_readings).toBeArrayOfSize(1);
 
 		// Expect reading to be healthy
-		expect(systems[0].latest_readings[0].healthy).toBeArrayOfSize(1);
+		expect(systems[0].latest_readings[0].healthy).toBeTrue();
+	});
+
+	it("select with no thresholds", async () => {
+		// Seed test wit data
+		const seedData = await seedDatabase();
+
+		// Insert no threshold
+
+		// Query systems with health
+		const systems = await Queries.systems.selectSystemsWithHealth(
+			seedData.organization,
+		);
+
+		// Expect 1 system
+		expect(systems).toBeArrayOfSize(1);
+
+		// Expect 0 readings
+		expect(systems[0].latest_readings).toBeArrayOfSize(1);
 	});
 });
