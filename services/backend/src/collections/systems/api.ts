@@ -6,12 +6,12 @@ import Elysia, { error, t } from "elysia";
 export const systemsApi = new Elysia({ prefix: "systems" })
 	.use(authMiddleware)
 	.get("/", async () => {
-		return await Queries.systems.selectAll();
+		return await Queries.systems.selectAllWithHealth();
 	})
 	.get(
 		"/get_on_org_id",
 		async ({ user, body, relation }) => {
-			return await Queries.systems.selectAllOnOrgId({
+			return await Queries.systems.selectAllWithHealth({
 				id: relation.organization_id,
 			});
 		},

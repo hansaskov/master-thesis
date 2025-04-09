@@ -6,6 +6,7 @@ import { partsToSystemModelsQueries } from "./parts_to_system_models/queries";
 import { readingsQueries } from "./readings/queries";
 import { readings5minAggQueries } from "./readings_5min_agg/queries";
 import { sessionQueries } from "./sessions/queries";
+import { SystemHealthQueries } from "./system_health/queries";
 import { systemModelQueries } from "./system_models/queries";
 import { systemQueries } from "./systems/queries";
 import { systemsToPartsQueries } from "./systems_to_parts/queries";
@@ -28,4 +29,5 @@ export const Queries = {
 	partsToSystemModels: partsToSystemModelsQueries,
 	systemsToParts: systemsToPartsQueries,
 	threshold: thresholdQueries,
+	systemHealth: SystemHealthQueries,
 };

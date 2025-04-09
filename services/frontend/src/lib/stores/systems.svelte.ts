@@ -6,20 +6,24 @@ import { PersistedState } from 'runed';
 import type { StrictPick } from 'backend/src/types/strict';
 import { page } from '$app/state';
 
+type SystemWithHealth = NonNullable<
+	Awaited<ReturnType<typeof api.systems.get_on_org_id.get>>['data']
+>[number];
+
 export class SystemStore {
-	#systems = new PersistedState<Types.System[]>('systems', [], {
+	#systems = new PersistedState<SystemWithHealth[]>('systems', [], {
 		storage: 'session',
 		syncTabs: false
 	});
 
 	currentSystem = $derived(this.systems.find((system) => system.id === page.params.systemId));
 
-	#add(system: Types.System) {
+	#add(system: SystemWithHealth) {
 		this.#systems.current.push(system);
 		return system;
 	}
 
-	#remove(system: StrictPick<Types.System, 'id'>) {
+	#remove(system: StrictPick<SystemWithHealth, 'id'>) {
 		const index = this.#systems.current.findIndex((sys) => sys.id === system.id);
 		return index !== -1 ? this.#systems.current.splice(index, 1)[0] : undefined;
 	}
@@ -53,7 +57,7 @@ export class SystemStore {
 
 		toast.success(`Successfully created ${data.name}`);
 
-		this.systems.push(data);
+		this.systems.push({ ...data, latest_readings: null });
 
 		return data;
 	}
@@ -72,16 +76,6 @@ export class SystemStore {
 			this.#add(removedSystem);
 			return onError(error);
 		}
-
-		// const { data, error } = await api.systems.index.delete({ id });
-
-		// if (error) {
-		// 	return onError(error);
-		// }
-
-		// toast.success(`Successfully deleted ${data.name}`);
-
-		// this.#systems = this.#systems.#filter((v) => v.id !== id);
 	}
 
 	async update(system: Types.SystemUpdate) {

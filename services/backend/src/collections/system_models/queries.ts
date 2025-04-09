@@ -38,13 +38,9 @@ export const systemModelQueries = {
 			.leftJoin(parts, eq(parts.id, partsToSystemModels.part_id))
 			.groupBy(systemModels.id, systemModels.name);
 
-		console.log("Raw query results:", results);
-
 		try {
 			// Map and parse with error handling
 			return results.map((result) => {
-				console.log("Processing result:", result);
-				console.log("Parts before parsing:", result.parts);
 				return {
 					id: result.id,
 					name: result.name,
