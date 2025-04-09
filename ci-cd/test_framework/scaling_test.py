@@ -280,7 +280,7 @@ def deploy_application(server):
 
 def run_load_test(server_ip):    
     # Run the progressive load test
-    rps = 500
+    rps = 100
     max_rps = 2000
     increment = 100
     

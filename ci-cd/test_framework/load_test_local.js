@@ -12,7 +12,7 @@ const BASE_URL = 'http://' + __ENV.SERVER_IP + ':3000'
 console.log(`base url: ${BASE_URL}`);
 const ENDPOINT = '/api/readings';
 const TEST_DURATION = '5m';
-const INITIAL_RPS = 1000;
+const INITIAL_RPS = 100;
 const RPS_INCREMENT = 100;
 const CURRENT_RPS = __ENV.RPS ? parseInt(__ENV.RPS) : INITIAL_RPS;
 
@@ -70,8 +70,8 @@ export const options = {
             rate: CURRENT_RPS,
             timeUnit: '1s',
             duration: TEST_DURATION,
-            preAllocatedVUs: Math.ceil(CURRENT_RPS / 100),
-            maxVUs: Math.ceil(CURRENT_RPS / 50),
+            preAllocatedVUs: 300,
+            maxVUs: 500,
         },
     },
     thresholds: {
