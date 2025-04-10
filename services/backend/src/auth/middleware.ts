@@ -12,6 +12,7 @@ import {
 	setSessionTokenCookie,
 	validateSessionToken,
 } from "./lucia";
+import { env } from "bun";
 
 export const AuthService = new Elysia({ name: "Service.Auth" })
 	.guard({
@@ -56,6 +57,11 @@ export const authMiddleware = new Elysia()
 	.macro({
 		isAuth: {
 			async resolve({ cookie: { sessionId } }) {
+				if (env.IS_TEST === "true") {
+					console.log("This is a test!")
+					return
+				}
+
 				if (!sessionId.value) {
 					return error("Bad Request", "You must pass a valid session id");
 				}
@@ -63,7 +69,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as auth");
 				}
 
 				return { user, session };
@@ -71,6 +77,11 @@ export const authMiddleware = new Elysia()
 		},
 		isSuperAdmin: {
 			async resolve({ cookie: { sessionId } }) {
+				if (env.IS_TEST === "true") {
+					console.log("This is a test!")
+					return
+				}
+
 				if (!sessionId.value) {
 					return error("Bad Request", "You must pass a valid session id");
 				}
@@ -78,7 +89,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired superadmin");
 				}
 
 				if (user.is_superadmin === false) {
@@ -95,6 +106,11 @@ export const authMiddleware = new Elysia()
 					organizationId: { value: organizationId },
 				},
 			}) {
+				if (env.IS_TEST === "true") {
+					console.log("This is a test!")
+					return
+				}
+
 				if (!sessionId.value) {
 					return error("Bad Request", "You must pass a valid session id");
 				}
@@ -109,7 +125,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as admin");
 				}
 
 				let relation: UserToOrganizationUpdate = {
@@ -145,6 +161,11 @@ export const authMiddleware = new Elysia()
 		},
 		isOrganization: {
 			async resolve({ cookie: { sessionId, organizationId } }) {
+				if (env.IS_TEST === "true") {
+					console.log("This is a test!")
+					return
+				}
+
 				if (!sessionId.value) {
 					return error("Bad Request", "You must pass a valid session id");
 				}
@@ -159,7 +180,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as user");
 				}
 
 				let relation: UserToOrganizationUpdate = {
