@@ -40,7 +40,7 @@ jobs:
         run: pip install hcloud requests
 
       - name: Install k6
-        run: winget install -e --id k6.k6
+        run: choco install k6 -y
 
       - name: Run code
         working-directory: ci-cd/test_framework
