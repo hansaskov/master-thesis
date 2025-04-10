@@ -36,11 +36,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: |
-          cd ci-cd/test_framework
-          pip install hcloud requests
+        run: pip install hcloud requests
 
       - name: Run code
+        working-directory: ci-cd/test_framework
         run: python scaling_test.py
           
           
