@@ -153,7 +153,6 @@ def setup_test_environment():
     server_response = client.servers.create(
         name="bun-performance-test",
         server_type=ServerType(name="cx52"),  # 16 vCPUs, 32 GB RAM
-        #server_type=ServerType(name="cx22"),
         image=Image(name="ubuntu-22.04"),
         ssh_keys=[ssh_key],
         user_data=user_data
