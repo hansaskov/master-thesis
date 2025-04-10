@@ -36,8 +36,17 @@ export function TsTimeBucket(
 	);
 }
 
-export function avg(expression: SQLWrapper): SQL<string> {
-	return sql`avg(${expression})`.mapWith(String);
+export function TsIntervalTimeBucket(
+	interval: IntervalString,
+	expression: SQLWrapper,
+): SQL<Date> {
+	return sql`time_bucket(INTERVAL ${interval}, ${expression})`.mapWith(
+		(v) => new Date(v),
+	);
+}
+
+export function avg(expression: SQLWrapper) {
+	return sql`avg(${expression})`.mapWith(Number);
 }
 
 export function first<T extends SQLWrapper>(valueExpr: T, groupByExpr?: T) {
@@ -46,7 +55,10 @@ export function first<T extends SQLWrapper>(valueExpr: T, groupByExpr?: T) {
 	);
 }
 
-export function last<T extends SQLWrapper>(valueExpr: T, groupByExpr?: T) {
+export function last<T1 extends SQLWrapper, T2 extends SQLWrapper>(
+	valueExpr: T1,
+	groupByExpr?: T2,
+) {
 	return sql`last(${valueExpr}, ${groupByExpr ?? valueExpr})`.mapWith(
 		is(valueExpr, Column) ? valueExpr : String,
 	);

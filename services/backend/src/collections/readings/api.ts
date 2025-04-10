@@ -46,6 +46,15 @@ export const readingsApi = new Elysia()
 			const start = new Date(query.start);
 			const end = new Date(query.end);
 
+			if (query.resolution === "5 min") {
+				return await Queries.readings_5min_agg.select({
+					start,
+					end,
+					system_id: query.system_id,
+					limit: query.limit,
+				});
+			}
+
 			return await Queries.readings.select({
 				start,
 				end,
@@ -56,6 +65,7 @@ export const readingsApi = new Elysia()
 		{
 			isOrganization: true,
 			query: t.Object({
+				resolution: t.Union([t.Literal("full"), t.Literal("5 min")]),
 				system_id: Schema.insert.readings.system_id,
 				start: t.String({ format: "date-time" }),
 				end: t.String({ format: "date-time" }),
@@ -66,7 +76,7 @@ export const readingsApi = new Elysia()
 	.get(
 		"/readings/latest",
 		async ({ query }) => {
-			return await Queries.readings.selectAllUniqueLatest(query);
+			return await Queries.readings.selectAllUnique(query);
 		},
 		{
 			isOrganization: true,

@@ -5,6 +5,7 @@
 	import { dialogStore } from '@/stores/dialog.svelte';
 	import { userStore } from '@/stores/user.svelte';
 	import SystemSettings from './SystemSettings.svelte';
+	import Thresholds from './Thresholds.svelte';
 </script>
 
 <div class="container mx-auto px-4 py-4">
@@ -30,6 +31,7 @@
 		{#if userStore.isAdmin}
 			<SystemSettings />
 			<KeysList />
+			<Thresholds />
 		{/if}
 	</div>
 </div>

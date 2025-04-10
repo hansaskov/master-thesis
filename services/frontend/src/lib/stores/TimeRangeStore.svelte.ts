@@ -19,6 +19,11 @@ class TimeRangeStore {
 	value = $state<string>(this.selectorChoises[2].value.toString());
 	startValue: DateValue | undefined = $state(undefined);
 
+	valueInSeconds = $derived.by(() => {
+		const seconds = parseInt(this.value, 10);
+		return isNaN(seconds) ? null : seconds;
+	});
+
 	label = $derived(
 		this.selectorChoises.find((v) => v.value === Number.parseInt(this.value))?.label ??
 			'Choose A Time Frame'

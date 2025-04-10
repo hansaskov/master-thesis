@@ -11,6 +11,7 @@
 	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from '@/components/ui/button';
+	import { getRelativeTimeString } from '@/dates';
 
 	systemStore.refresh();
 
@@ -95,17 +96,38 @@
 							>
 								<Table.Cell class="font-medium">{system.name}</Table.Cell>
 								<Table.Cell>
-									<!-- TODO: Make dynamic -->
-									<Badge variant="healthy">Healthy</Badge>
+									{#if !system.latest_readings}
+										<Badge variant="warning">unknown</Badge>
+									{:else if system.latest_readings.every((v) => v.healthy)}
+										<Badge variant="healthy">healthy</Badge>
+									{:else}
+										<Badge variant="destructive">critical</Badge>
+									{/if}
 								</Table.Cell>
 								<Table.Cell>
-									<!-- TODO: Make dynamic -->
-									<Badge variant="outline">Running</Badge>
+									{#if !system.latest_readings}
+										<Badge variant="warning">unknown</Badge>
+									{:else if system.latest_readings.some((v) => v.running)}
+										<Badge variant="secondary">online</Badge>
+									{:else}
+										<Badge variant="outline">offline</Badge>
+									{/if}
 								</Table.Cell>
 								<!-- TODO: Update based on database zone -->
 								<Table.Cell class="hidden md:table-cell">Zone 1</Table.Cell>
 								<!-- TODO: Make dynamic -->
-								<Table.Cell class="hidden md:table-cell">5 minutes</Table.Cell>
+
+								<Table.Cell class="hidden md:table-cell">
+									{#if !system.latest_readings}
+										unknown
+									{:else}
+										{getRelativeTimeString(
+											system.latest_readings
+												.map((v) => new Date(v.bucket))
+												.sort((a, b) => a.getTime() - b.getTime())[0]
+										)}
+									{/if}
+								</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>

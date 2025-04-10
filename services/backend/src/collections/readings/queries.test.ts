@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from "bun:test";
+import { describe, expect, it } from "bun:test";
 import { Queries } from "$collections/queries";
 
 async function seedDatabase() {
@@ -54,7 +54,7 @@ describe("Readings Query", async () => {
 		const seedData = await seedDatabase();
 
 		// Get initial values
-		const initialValues = await Queries.readings.selectAllUniqueLatest({
+		const initialValues = await Queries.readings.selectAllUnique({
 			system_id: seedData.system.id,
 		});
 
@@ -91,7 +91,7 @@ describe("Readings Query", async () => {
 		]);
 
 		// Get updated values
-		const updatedValues = await Queries.readings.selectAllUniqueLatest({
+		const updatedValues = await Queries.readings.selectAllUnique({
 			system_id: seedData.system.id,
 		});
 
@@ -125,7 +125,7 @@ describe("Readings Query", async () => {
 		]);
 
 		// Filter by Performance category
-		const performanceReadings = await Queries.readings.selectAllUniqueLatest({
+		const performanceReadings = await Queries.readings.selectAllUnique({
 			system_id: seedData.system.id,
 			category: "Performance",
 		});
