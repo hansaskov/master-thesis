@@ -1,5 +1,8 @@
 name: load-test
 
+on:
+  workflow-dispatch:
+
 jobs:
   deploy:
     runs-on: windows-latest
