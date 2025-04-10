@@ -10,7 +10,7 @@ export type * as Types from "$collections/types";
 
 // Only run clustering logic in the main process
 if (cluster.isPrimary) {
-  const numCPUs = 2;
+  const numCPUs = 1;
   console.log(`🔄 Starting ${numCPUs} workers...`);
   
   const workers = new Array(numCPUs);
