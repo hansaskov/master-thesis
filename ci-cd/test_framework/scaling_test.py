@@ -83,8 +83,12 @@ def add_server_to_known_hosts(server_ip):
     # Ensure the .ssh directory exists
     os.makedirs(os.path.dirname(known_hosts_path), exist_ok=True)
     
+    if os.path.exists(known_hosts_path):
+        print("deleted known hosts file")
+        os.remove(known_hosts_path)
+    
     # Append the contents to known_hosts
-    with open(temp_file, "r") as temp, open(known_hosts_path, "a+") as known_hosts:
+    with open(temp_file, "r") as temp, open(known_hosts_path, "w") as known_hosts:
         keyscan_output = temp.read()
         known_hosts.write(keyscan_output)
     
@@ -160,7 +164,7 @@ def setup_test_environment():
     
     # Wait for server to be ready
     print("Waiting for server to initialize...")
-    time.sleep(60)  # Give some time for cloud-init to complete
+    time.sleep(300)  # Give some time for cloud-init to complete
     
     cmd = "docker --version"
     output = subprocess.check_output(cmd, shell=True).decode()
@@ -168,87 +172,104 @@ def setup_test_environment():
         
     return server
 
-def get_container_stats():
-    try:
-        # Schedule next execution
-        threading.Timer(5.0, get_container_stats).start()
+def start_container_stats_monitoring():
+    # Create and start a daemon thread
+    stop_flag = threading.Event()
+    stats_thread = threading.Thread(target=get_container_stats, args=(stop_flag,), daemon=True)
+    stats_thread.start()
+    return stats_thread, stop_flag
+
+def get_container_stats(stop_flag):
+    while not stop_flag.is_set():
+        start_time = time.time()  # Track when we start each iteration
+        print(f"Starting stats collection at {datetime.now()}")
         
-        # Get docker stats
-        cmd = "docker stats --no-stream --format json"
-        output = subprocess.check_output(cmd, shell=True).decode()
+        try:
+            # Get docker stats
+            cmd = "docker stats --no-stream --format json"
+            output = subprocess.check_output(cmd, shell=True).decode()
+            
+            # Parse each line
+            for line in output.splitlines():
+                try:
+                    if line.strip():  # Check if line is not empty
+                        container = json.loads(line)
+                        
+                        date_time = datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
+                        headers = {
+                            'Content-Type': 'application/json',
+                            'private_key': 'P2ReMnGz1JPPYhwuW1FB3h'
+                        }
+                        
+                        if container['Name'] == "thesis-backend-1":
+                            readings = [
+                                {
+                                    'name': 'cpu usage backend',
+                                    'time': date_time,
+                                    'unit': '%',
+                                    'value': parse_and_normalise_percentage(container['CPUPerc']),
+                                    'category': 'backend'
+                                },
+                                {
+                                    'name': 'memory usage backend',
+                                    'time': date_time,
+                                    'unit': '%',
+                                    'value': parse_percentage(container['MemPerc']),
+                                    'category': 'backend'
+                                }
+                            ]
+                            
+                            payload = json.dumps(readings)
+                            
+                            response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
+                            print(response.status_code)
+                            print(response.headers)
+                            print(response.text)
+                        if container['Name'] == "thesis-timescaledb-1":
+                            readings = [
+                                {
+                                    'name': 'cpu usage database',
+                                    'time': date_time,
+                                    'unit': '%',
+                                    'value': parse_and_normalise_percentage(container['CPUPerc']),
+                                    'category': 'database'
+                                },
+                                {
+                                    'name': 'memory usage database',
+                                    'time': date_time,
+                                    'unit': '%',
+                                    'value': parse_percentage(container['MemPerc']),
+                                    'category': 'database'
+                                }
+                            ]
+                            
+                            payload = json.dumps(readings)
+                            
+                            response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
+                            print(response.status_code)
+                            print(response.headers)
+                            print(response.text)
+                            
+                            # print(f"Name: {container['Name']}")
+                            # print(f"CPU: {container['CPUPerc']}")
+                            # print(f"Memory: {container['MemUsage']}")
+                except json.JSONDecodeError as e:
+                    print(f"Error parsing container data: {e}")
+                    print(f"Raw line: {line}")
+                    
+        except subprocess.CalledProcessError as e:
+            print(f"Error running docker stats: {e}")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
         
-        # Parse each line
-        for line in output.splitlines():
-            try:
-                if line.strip():  # Check if line is not empty
-                    container = json.loads(line)
-                    
-                    time = datetime.now(timezone.utc).isoformat(timespec='milliseconds').replace('+00:00', 'Z')
-                    headers = {
-                        'Content-Type': 'application/json',
-                        'private_key': 'P2ReMnGz1JPPYhwuW1FB3h'
-                    }
-                    
-                    if container['Name'] == "thesis-backend-1":
-                        readings = [
-                            {
-                                'name': 'cpu usage backend',
-                                'time': time,
-                                'unit': '%',
-                                'value': parse_and_normalise_percentage(container['CPUPerc']),
-                                'category': 'backend'
-                            },
-                            {
-                                'name': 'memory usage backend',
-                                'time': time,
-                                'unit': '%',
-                                'value': parse_percentage(container['MemPerc']),
-                                'category': 'backend'
-                            }
-                        ]
-                        
-                        payload = json.dumps(readings)
-                        
-                        response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
-                        print(response.status_code)
-                        print(response.headers)
-                        print(response.text)
-                    if container['Name'] == "thesis-timescaledb-1":
-                        readings = [
-                            {
-                                'name': 'cpu usage database',
-                                'time': time,
-                                'unit': '%',
-                                'value': parse_and_normalise_percentage(container['CPUPerc']),
-                                'category': 'database'
-                            },
-                            {
-                                'name': 'memory usage database',
-                                'time': time,
-                                'unit': '%',
-                                'value': parse_percentage(container['MemPerc']),
-                                'category': 'database'
-                            }
-                        ]
-                        
-                        payload = json.dumps(readings)
-                        
-                        response = requests.post('https://preview.master-thesis.hjemmet.net/api/readings', headers=headers, data=payload)
-                        print(response.status_code)
-                        print(response.headers)
-                        print(response.text)
-                        
-                        # print(f"Name: {container['Name']}")
-                        # print(f"CPU: {container['CPUPerc']}")
-                        # print(f"Memory: {container['MemUsage']}")
-            except json.JSONDecodeError as e:
-                print(f"Error parsing container data: {e}")
-                print(f"Raw line: {line}")
-                
-    except subprocess.CalledProcessError as e:
-        print(f"Error running docker stats: {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+        # Calculate how long this iteration took
+        elapsed_time = time.time() - start_time
+        print(f"Stats collection took {elapsed_time:.2f} seconds")
+        
+        # Adjust sleep time to maintain 5-second intervals
+        sleep_time = max(0, 5 - elapsed_time)
+        print(f"Sleeping for {sleep_time:.2f} seconds")
+        time.sleep(sleep_time)
 
 def deploy_application(server):
     server_ip = server.public_net.ipv4.ip
@@ -257,15 +278,29 @@ def deploy_application(server):
     user = "root"
     
     os.environ["DOCKER_HOST"] = f"ssh://{user}@{server_ip}"
-    # os.environ["DOCKER_SSH_AUTH_SOCK"] = ""
-    # os.environ["DOCKER_SSH_IDENTITY"] = os.path.expanduser("~/.ssh/id_ed25519")
+    os.environ["DOCKER_DEFAULT_PLATFORM"] = "linux/amd64"
+    
+    os.environ["DOCKER_BUILDKIT"] = "1"
+    os.environ["COMPOSE_DOCKER_CLI_BUILD"] = "1"
+    os.environ["DOCKER_CLI_EXPERIMENTAL"] = "enabled"
+    
+    ssh_config = (
+        f"Host {server_ip}\n"
+        "  StrictHostKeyChecking no\n"
+        "  UserKnownHostsFile /dev/null\n"
+    )
+    
+    ssh_config_path = os.path.expanduser("~/.ssh/config")
+    os.makedirs(os.path.dirname(ssh_config_path), exist_ok=True)
+    with open(ssh_config_path, "w") as f:
+        f.write(ssh_config)
     
     current_dir = os.getcwd()
     
     try:
         os.chdir("../../")
         print(f'changed directory {os.getcwd()}')
-        subprocess.run(["docker", "compose", "-f", "compose.yaml", "up", "backend", "timescaledb", "migrate", "--build", "--wait"], check=True)
+        subprocess.run(["docker", "compose", "-f", "compose.yaml", "up", "backend", "timescaledb", "migrate", "--build", "--wait"], check=True, env=dict(os.environ))
         print("Application deployed and started")
     except subprocess.CalledProcessError as e:
         print(f"Docker command failed: {e}")
@@ -284,7 +319,7 @@ def run_load_test(server_ip):
     max_rps = 2000
     increment = 100
     
-    get_container_stats()
+    stats_thread, stop_flag = start_container_stats_monitoring()
     
     while rps <= max_rps:
         print(f"Testing with {rps} requests per second...")
@@ -292,21 +327,21 @@ def run_load_test(server_ip):
         result = subprocess.run([
             "k6", "run",
             "--env", f"RPS={rps}", "--env", f"SERVER_IP={server_ip}",
-            #"./ci-cd/test_framework/load_test_local.js"
             "load_test_local.js"
         ])
         
         if result.returncode != 0:
             print(f"Breaking point reached at {rps} RPS")
             
-            # Test at 500 RPS lower to find stable maximum
+            # Find stable maximum
             stable_rps = rps - increment
             
             return stable_rps
-            
-            # break
         
         rps += increment
+    
+    stop_flag.set()
+    stats_thread.join()
     
     return rps
 
