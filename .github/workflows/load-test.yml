@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: pip install hcloud requests
 
+      - name: Install k6
+        run: winget install -e --id k6.k6
+
       - name: Run code
         working-directory: ci-cd/test_framework
         run: python scaling_test.py
