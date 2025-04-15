@@ -69,7 +69,7 @@ echo "✅ Server created! IP: $SERVER_IP"
 echo "⏳ NixOS installation in progress (~5 minutes)"
 
 # Wait for NixOS with 5 min timeout
-end=$((SECONDS + 300))
+end=$((SECONDS + 450))
 while [ $SECONDS -lt $end ]; do
     if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "root@${SERVER_IP}" "systemctl is-system-running" >/dev/null 2>&1; then
         echo "🔄 Updating NixOS configuration..."
