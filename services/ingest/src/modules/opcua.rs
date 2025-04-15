@@ -1,5 +1,4 @@
 use crate::{
-    event_bus::{Event, EventKind},
     module::{Module, ModuleCtx},
     reading::Reading,
 };
