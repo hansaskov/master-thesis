@@ -5,6 +5,11 @@ use crate::{module::{Module, ModuleCtx}, reading::Reading};
 use serde::{Deserialize, Serialize};
 use std::process::Command;
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Config {
+    pub todo: Option<String>,
+}
+
 // Docker stats structure from JSON output
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DockerStats {
@@ -61,7 +66,7 @@ impl Docker {
         let cpu_value = self.parse_percentage(&stat.cpu_perc)?;
         Ok(Reading {
             category: "Docker".into(),
-            name: format!("{} CPU", stat.name),
+            name: format!("CPU {}", stat.name),
             unit: "%".into(),
             time,
             value: cpu_value
@@ -73,7 +78,7 @@ impl Docker {
         let mem_value = self.parse_percentage(&stat.mem_perc)?;
         Ok(Reading {
             category: "Docker".into(),
-            name: format!("{} Memory", stat.name),  // Fixed: was incorrectly named "CPU"
+            name: format!("Memory {}", stat.name),
             unit: "%".into(),
             time,
             value: mem_value

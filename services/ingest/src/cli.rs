@@ -4,7 +4,7 @@ use anyhow::{Context, Result};
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
-use crate::modules::{monitoring, opcua, uploader};
+use crate::modules::{monitoring, opcua, uploader, docker};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -18,6 +18,7 @@ pub struct Config {
     pub upload: Option<uploader::Config>,
     pub monitoring: Option<Vec<monitoring::SensorConfig>>,
     pub opcua: Option<opcua::Config>,
+    pub docker: Option<docker::Config>,
 }
 
 impl Config {
