@@ -15,10 +15,13 @@ on:
 jobs:
   provision:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: devops/nixos
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+      
     - name: Setup Hetzner Cloud CLI
       uses: hetznercloud/setup-hcloud@v1
       env:
@@ -28,5 +31,4 @@ jobs:
       env:
         PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
       run: |
-        cd ci-cd/nixos/
         ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}"
