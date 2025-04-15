@@ -1,4 +1,4 @@
-name: start server
+name: create server
 
 on:
   workflow_dispatch:
@@ -13,8 +13,10 @@ on:
         default: 'deploy-key'
 
 jobs:
-  provision:
+  create:
     runs-on: ubuntu-latest
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
     defaults:
       run:
         working-directory: devops/nixos
@@ -25,7 +27,14 @@ jobs:
     - name: Setup Hetzner Cloud CLI
       uses: hetznercloud/setup-hcloud@v1
 
-    - name: Run NixOS Server Provisioner
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
+    - name: Run NixOS Server
       env:
         PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
         HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
