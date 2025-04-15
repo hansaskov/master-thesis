@@ -27,10 +27,17 @@ if [ -z "${PASSWORD_HASH}" ] ; then
   exit 1
 fi
 
-
 # Configuration
 SERVER_NAME=${1:-"nixos"}
 SSH_KEY=${2:-"deploy-key"}
+export SSH_PUBLIC_KEYS=${3:-$(hcloud ssh-key describe $SSH_KEY -o format='{{.PublicKey}}')}
+
+# Display settings information
+echo "🔧 Configuration settings:"
+echo "  • Server Name: $SERVER_NAME"
+echo "  • SSH Key: $SSH_KEY"
+echo "  • SSH Public Key: ${SSH_PUBLIC_KEYS:0:40}... (truncated)"
+echo ""
 
 echo "🚀 Creating NixOS server: $SERVER_NAME"
 
@@ -55,7 +62,7 @@ hcloud server create \
     --start-after-create
 
 # Get IP and cleanup
-SERVER_IP=$(hcloud server describe "$SERVER_NAME" -o format='{{.PublicNet.IPv4.IP}}')
+export SERVER_IP=$(hcloud server describe "$SERVER_NAME" -o format='{{.PublicNet.IPv4.IP}}')
 rm cloud-init.yaml
 
 echo "✅ Server created! IP: $SERVER_IP"
@@ -64,9 +71,8 @@ echo "⏳ NixOS installation in progress (~5 minutes)"
 # Wait for NixOS with 5 min timeout
 end=$((SECONDS + 300))
 while [ $SECONDS -lt $end ]; do
-    if ssh -o StrictHostKeyChecking=no "root@${SERVER_IP}" "systemctl is-system-running" >/dev/null 2>&1; then
+    if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "root@${SERVER_IP}" "systemctl is-system-running" >/dev/null 2>&1; then
         echo "🔄 Updating NixOS configuration..."
-        export SSH_PUBLIC_KEYS=$(hcloud ssh-key describe deploy-key -o format='{{.PublicKey}}')
         bash ./remote-update.sh
         echo "🎉 NixOS ready! Connect with: ssh root@$SERVER_IP or admin@$SERVER_IP" 
         exit 0
