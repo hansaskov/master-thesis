@@ -1,39 +1,39 @@
 
 [upload]
 url = "http://localhost:3000/api/readings"
-key = "jiogioajiosa"
+key = "Ge9PhRM6w9dMnhniVCJYB4"
 
+[docker]
 
-[opcua]
-url = "opc.tcp://127.0.0.1:4855"
-namespace = 2
+#[opcua]
+#url = "opc.tcp://127.0.0.1:4855"
+#namespace = 2
 
-[[opcua.node_ids]]
-namespace = 2
-variable = "v1"
+#[[opcua.node_ids]]
+#namespace = 2
+#variable = "v1"
 
 # [[opcua.node_ids]]
 # namespace = 3
 # variable = "Pressure"
 
+#[[monitoring]]
+#category = "computer"
+#name = "CPU Temperature"
+#unit = "°C"
+#sensor_type = "Temperature"
+#query_name = "Core"
 
-[[monitoring]]
-category = "computer"
-name = "CPU Temperature"
-unit = "°C"
-sensor_type = "Temperature"
-query_name = "Core"
+#[[monitoring]]
+#category = "computer"
+#name = "CPU Usage"
+#unit = "%"
+#sensor_type = "Load"
+#query_name = "CPU Total"
 
-[[monitoring]]
-category = "computer"
-name = "CPU Usage"
-unit = "%"
-sensor_type = "Load"
-query_name = "CPU Total"
-
-[[monitoring]]
-category = "computer"
-name = "Memory Usage"
-unit = "%"
-sensor_type = "Load"
-query_name = "Memory"
+#[[monitoring]]
+#category = "computer"
+#name = "Memory Usage"
+#unit = "%"
+#sensor_type = "Load"
+#query_name = "Memory"

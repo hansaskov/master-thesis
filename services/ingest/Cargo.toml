@@ -14,6 +14,7 @@ chrono = "0.4.40"
 toml = "0.8.20"
 async-opcua = { version = "0.14", features = ["client", "console-logging"] }
 openssl = { version = "0.10", features = ["vendored"] }
+serde_json = "1.0.140"
 
 [lints.rust]
 unsafe_code = "forbid"
