@@ -9,6 +9,7 @@ use clap::Parser;
 use cli::{Cli, Config};
 use event_bus::EventBus;
 use module::{Module, ModuleCtx};
+use modules::docker::Docker;
 use modules::logger::Logger;
 use modules::monitoring::Monitoring;
 use modules::opcua::OPCUA;
@@ -24,6 +25,7 @@ async fn main() -> Result<()> {
     let event_bus = EventBus::new();
     let opcua_ctx = ModuleCtx::new("opcua", &event_bus);
     let logger_ctx = ModuleCtx::new("logger", &event_bus);
+    let docker_ctx = ModuleCtx::new("docker", &event_bus);
     let uploader_ctx = ModuleCtx::new("uploader", &event_bus);
     let monitoring_ctx = ModuleCtx::new("monitoring", &event_bus);
 
@@ -40,6 +42,11 @@ async fn main() -> Result<()> {
 
     // Logger
     set.spawn(async move { Logger::new(logger_ctx).run().await });
+
+    // Docker
+    if let Some(_) = config.docker {
+        set.spawn(async move { Docker::new(docker_ctx).run().await });
+    }
 
     // Uploader
     if let Some(arguments) = config.upload {
