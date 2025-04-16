@@ -11,6 +11,14 @@ on:
         description: 'Name of the SSH key registered in Hetzner Cloud'
         required: false
         default: 'deploy-key'
+      location:
+        description: 'The hetzner location of choise, choose between "fsn1", "nbg1" or "hel1"'
+        required: false
+        default: 'hel1'
+      type:
+        description: 'The type of instance you would like for example "cx22" or "cx52"'
+        required: false
+        default: 'cx22'
 
 jobs:
   create:
@@ -39,4 +47,4 @@ jobs:
         PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
         HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
       run: |
-        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}"
+        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ github.event.inputs.location }}" "${{ github.event.inputs.type }}"
