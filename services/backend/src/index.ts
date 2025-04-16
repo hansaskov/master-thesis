@@ -2,11 +2,11 @@ import cluster from "node:cluster";
 import { availableParallelism } from "node:os";
 import process from "node:process";
 import { environment } from "$config/environment";
- import { app } from "./server";
 import { spawn } from "bun";
 import { env } from "elysia";
+import type { app } from "./server";
 
- export type App = typeof app;
+export type App = typeof app;
 export type * as Types from "$collections/types";
 
 // Only run clustering logic in the main process
