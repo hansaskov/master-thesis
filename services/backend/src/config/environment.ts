@@ -7,6 +7,7 @@ const optionalEnvironmentSchema = t.Object({
 	MICROSOFT_TENANT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_SECRET: t.String({ minLength: 1 }),
+	IS_TEST: t.Boolean({ default: false }),
 });
 
 const requiredEnvironmentSchema = t.Object({
