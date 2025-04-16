@@ -8,7 +8,6 @@ curl -X POST https://api.example.com/users \
      -d '{"name": "John Doe", "email": "john@example.com"}'
 
 */
-
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Rate } from 'k6/metrics';
@@ -18,8 +17,6 @@ const BASE_URL =  `http://${SERVER_IP}:3000`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
 const INITIAL_RPS = 100
-
-
 
 
 function createKey() {
