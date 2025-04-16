@@ -46,8 +46,8 @@ function parseEnvironment(
 	return Value.Encode(schema, cleanedEnv);
 }
 
-// @svelte-ignore
-const input = String(env.PROD) === "true" ? environmentSchema : requiredEnvironmentSchema;
+const input =
+	String(env.PROD) === "true" ? environmentSchema : requiredEnvironmentSchema;
 
 export const environment = parseEnvironment(
 	input,
