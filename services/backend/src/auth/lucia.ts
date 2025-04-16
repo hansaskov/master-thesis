@@ -7,10 +7,11 @@ import {
 } from "@oslojs/encoding";
 import type { Cookie } from "elysia/cookies";
 import { environment } from "../config/environment";
+import { getRandomValues } from "node:crypto";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
-	crypto.getRandomValues(bytes);
+	getRandomValues(bytes);
 	const token = encodeBase32LowerCaseNoPadding(bytes);
 	return token;
 }
