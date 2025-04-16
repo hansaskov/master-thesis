@@ -7,6 +7,7 @@ const optionalEnvironmentSchema = t.Object({
 	MICROSOFT_TENANT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_SECRET: t.String({ minLength: 1 }),
+	IS_TEST: t.Boolean({ default: false }),
 });
 
 const requiredEnvironmentSchema = t.Object({
@@ -46,7 +47,7 @@ function parseEnvironment(
 }
 
 const input =
-	env.PROD === "true" ? environmentSchema : requiredEnvironmentSchema;
+	String(env.PROD) === "true" ? environmentSchema : requiredEnvironmentSchema;
 
 export const environment = parseEnvironment(
 	input,

@@ -30,6 +30,9 @@ fi
 # Configuration
 SERVER_NAME=${1:-"nixos"}
 SSH_KEY=${2:-"deploy-key"}
+LOCATION=${3:-"fsn1"}
+TYPE=${4:-"cx22"}
+
 export SSH_PUBLIC_KEYS=${3:-$(hcloud ssh-key describe $SSH_KEY -o format='{{.PublicKey}}')}
 
 # Display settings information
@@ -54,9 +57,9 @@ EOF
 echo "🛠️ Provisioning server..."
 hcloud server create \
     --name "$SERVER_NAME" \
-    --type "cx22" \
+    --type "$TYPE" \
     --image "ubuntu-22.04" \
-    --location "fsn1" \
+    --location "$LOCATION" \
     --ssh-key "$SSH_KEY" \
     --user-data-from-file cloud-init.yaml \
     --start-after-create

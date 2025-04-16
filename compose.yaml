@@ -20,6 +20,8 @@ services:
   backend:
     profiles: [stateless]
     restart: unless-stopped
+    ports:
+      - "3000:3000"
     build: 
       context: .
       dockerfile: ./services/backend/Dockerfile
@@ -27,6 +29,7 @@ services:
       - default
       - proxy-network
     environment:
+      - IS_TEST
       - INTERFACE_FQDN=${INTERFACE_FQDN}
       - DATABASE_URL=${DATABASE_URL}
       - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
