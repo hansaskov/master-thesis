@@ -30,6 +30,7 @@ services:
       - proxy-network
     environment:
       - IS_TEST
+      - NUM_CLUSTER
       - INTERFACE_FQDN=${INTERFACE_FQDN}
       - DATABASE_URL=${DATABASE_URL}
       - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
