@@ -1,0 +1,15 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "backend": "workspace:*",
+    "elysia": "^1.2.10",
+    "k6": "^0.0.0",
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@elysiajs/eden": "^1.2.0"
+  }
+}

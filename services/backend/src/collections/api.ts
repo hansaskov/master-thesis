@@ -9,6 +9,7 @@ import { organizationsApi } from "./organizations/api";
 import { partsApi } from "./parts/api";
 import { partsToSystemModelApi } from "./parts_to_system_models/api";
 import { readingsApi } from "./readings/api";
+import { seedApi } from "./seed/api";
 import { systemHealthApi } from "./system_health/api";
 import { systemModelsApi } from "./system_models/api";
 import { systemsApi } from "./systems/api";
@@ -34,4 +35,5 @@ export const api = new Elysia({ prefix: "/api" })
 	.use(fileApi)
 	.use(systemsToPartsApi)
 	.use(thresholdApi)
-	.use(systemHealthApi);
+	.use(systemHealthApi)
+	.use(seedApi);
