@@ -19,7 +19,7 @@ in
     domain = ""; # It can be left empty if it is auto-detected through DHCP.
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 80 443 ]; # SSH, HTTP, HTTPS
+      allowedTCPPorts = [ 22 80 443 3000 ]; # SSH, HTTP, HTTPS, BACKEND
     };
   };
   

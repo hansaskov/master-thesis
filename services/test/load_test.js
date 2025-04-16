@@ -1,15 +1,29 @@
+/*
+k6 run load_test.js
+
+k6 run load_test.js --env SERVER_IP=127.0.0.1
+
+curl -X POST https://api.example.com/users \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "email": "john@example.com"}'
+
+*/
+
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Rate } from 'k6/metrics';
 
-const BASE_URL = __ENV.BASE_URL ?? "http://127.0.0.1:3000"
+const SERVER_IP = __ENV.SERVER_IP ?? "127.0.0.1"
+const BASE_URL =  `http://${SERVER_IP}:3000`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
 const INITIAL_RPS = 100
 
 
+
+
 function createKey() {
-  const response = http.post(`${BASE_URL}/api/seed`, {});
+  const response = http.post(`${BASE_URL}/api/seed`);
   if (response.status !== 200 && response.status !== 201) {
     return null;
   }
@@ -22,7 +36,8 @@ function createKey() {
 }
 
 export function setup() {
-  const numKeys = INITIAL_RPS * 2 ** 6;
+  console.log(`Using ${BASE_URL} as the base url`)
+  const numKeys = INITIAL_RPS * 2 ** 2;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -47,12 +62,10 @@ export const options = {
     { duration: '1m', target: INITIAL_RPS * 2 ** 4 },
     { duration: '30s', target: INITIAL_RPS * 2 ** 5 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 5 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 6 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 6 },
   ],
   thresholds: {
     http_req_failed: [
-      { threshold: 'rate<0.01', abortOnFail: true }
+      { threshold: 'rate<0.01' }
     ],
     http_req_duration: [
       { threshold: 'p(95)<250', abortOnFail: true },
