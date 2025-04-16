@@ -1,12 +1,15 @@
 {
   "name": "test",
-  "module": "index.ts",
+  "version": "0.0.1",
   "type": "module",
-  "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
+    "@types/bun": "latest",
+    "backend": "workspace:*",
+    "elysia": "^1.2.10",
+    "k6": "^0.0.0",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@elysiajs/eden": "^1.2.0"
   }
 }

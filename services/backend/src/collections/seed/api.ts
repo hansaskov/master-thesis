@@ -2,7 +2,6 @@ import { Queries } from "$collections/queries";
 import { environment } from "$config/environment";
 import Elysia, { error, t } from "elysia";
 
-
 export const seedApi = new Elysia({ prefix: "seed" }).post("/", async () => {
 	if (!environment.IS_TEST) {
 		return error(
@@ -29,5 +28,5 @@ export const seedApi = new Elysia({ prefix: "seed" }).post("/", async () => {
 		name: "Key from seed api",
 	});
 
-	return { key };
+	return key;
 });
