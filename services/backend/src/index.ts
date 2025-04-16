@@ -1,30 +1,32 @@
 import cluster from "node:cluster";
 import { availableParallelism } from "node:os";
 import process from "node:process";
+import { environment } from "$config/environment";
+// import { app } from "./server";
+import { spawn } from "bun";
 import { env } from "elysia";
-import { app } from "./server";
 
-export type App = typeof app;
+// export type App = typeof app;
 export type * as Types from "$collections/types";
 
-const signals = ["SIGINT", "SIGTERM"];
+// Only run clustering logic in the main process
+if (cluster.isPrimary) {
+	const numCPUs = environment.NUM_CLUSTER;
+	console.log(`🔄 Starting ${numCPUs} workers...`);
 
-for (const signal of signals) {
-	process.on(signal, async () => {
-		console.log(`Received ${signal}. Initiating graceful shutdown...`);
-		await app.stop();
-		process.exit(0);
+	const workers = new Array(numCPUs);
+
+	// Spawn worker processes
+	for (let i = 0; i < numCPUs; i++) {
+		cluster.fork();
+	}
+
+	// Handle graceful shutdown for the main process
+	cluster.on("exit", (worker) => {
+		console.log(`worker ${worker.process.pid} died`);
+		process.exit(1);
 	});
+} else {
+	await import("./server");
+	console.log(`Worker with id ${process.pid} started`);
 }
-
-process.on("uncaughtException", (error) => {
-	console.error(error);
-});
-
-process.on("unhandledRejection", (error) => {
-	console.error(error);
-});
-
-app.listen(env.PORT ?? 3000, () =>
-	console.info("🚀 Server started at http://127.0.0.1:3000/"),
-);
