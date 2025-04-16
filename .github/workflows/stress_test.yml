@@ -49,6 +49,9 @@ jobs:
           SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
           echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
           echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
+      - name: Wait
+        run: |
+          sleep 10
       - name: Deploy backend
         run: |
           docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d --wait
