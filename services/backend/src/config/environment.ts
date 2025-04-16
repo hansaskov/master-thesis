@@ -46,10 +46,7 @@ function parseEnvironment(
 	return Value.Encode(schema, cleanedEnv);
 }
 
-const input =
-	env.PROD
-		? environmentSchema
-		: requiredEnvironmentSchema;
+const input = env.PROD ? environmentSchema : requiredEnvironmentSchema;
 
 export const environment = parseEnvironment(
 	input,

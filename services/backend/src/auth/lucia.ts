@@ -1,3 +1,4 @@
+import { getRandomValues } from "node:crypto";
 import { Queries } from "$collections/queries";
 import type { Session, User } from "$collections/types";
 import { sha256 } from "@oslojs/crypto/sha2";
@@ -7,7 +8,6 @@ import {
 } from "@oslojs/encoding";
 import type { Cookie } from "elysia/cookies";
 import { environment } from "../config/environment";
-import { getRandomValues } from "node:crypto";
 
 export function generateSessionToken(): string {
 	const bytes = new Uint8Array(20);
