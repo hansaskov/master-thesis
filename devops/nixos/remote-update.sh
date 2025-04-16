@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+
+# export SSH_PUBLIC_KEYS="$(cat ~/.ssh/id_rsa.pub)"
+
 # Set the destination IP and user to use with ssh
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEST_DIR="/etc/nixos"
