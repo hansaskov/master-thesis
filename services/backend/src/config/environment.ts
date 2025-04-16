@@ -47,7 +47,7 @@ function parseEnvironment(
 }
 
 const input =
-	env.PROD && env.PROD === "true"
+	env.PROD
 		? environmentSchema
 		: requiredEnvironmentSchema;
 
