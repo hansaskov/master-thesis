@@ -1,4 +1,4 @@
-name: create server
+name: stress test
 on:
   workflow_dispatch:
     inputs:
@@ -44,7 +44,11 @@ jobs:
         working-directory: devops/nixos
         run: |
           ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ github.event.inputs.location }}" "${{ github.event.inputs.type }}"
-
+      - name: Set SERVER_IP environment variable
+        run: |
+          SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
+          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
+          echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
       - name: Deploy backend
         run: |
           docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d --wait
@@ -52,4 +56,4 @@ jobs:
       - name: Start stress test
         working-directory: services/test
         run: |
-          k6 run load_test.js --env SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
+          k6 run load_test.js --env SERVER_IP=${{ env.SERVER_IP }}
