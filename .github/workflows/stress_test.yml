@@ -93,6 +93,6 @@ jobs:
         working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
-          wait 10
+          sleep 10
           ./run_ingest.sh
-          k6 run load_test.js --env SERVER_IP=${{ env.SERVER_IP }}
+          k6 run load_test.js --env SERVER_IP=$SERVER_IP
