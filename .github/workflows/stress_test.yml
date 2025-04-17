@@ -35,7 +35,8 @@ jobs:
       MICROSOFT_TENANT_ID: common
       MICROSOFT_CLIENT_ID: "d03453634..."
       MICROSOFT_CLIENT_SECRET: "jcmads...."
-      RESEND_CLIENT_SECRET: RESEND_CLIENT_SECRET="ADD YOUR KEY"
+      RESEND_CLIENT_SECRET: "ADD YOUR KEY"
+      PROD: true
 
       PORTAINER_FQDN: http://portainer.localhost
 
@@ -44,9 +45,8 @@ jobs:
       S3_BUCKET: "Your key here"
       S3_ENDPOINT: "Your key here"
 
-      PROD: false
       IS_TEST: true
-      NUM_CLUSTER: ${{vars.NUM_CLUSTER}}
+      NUM_CLUSTER: 1
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }} 
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
     steps:
@@ -84,7 +84,7 @@ jobs:
         run: docker info
 
       - name: Deploy all services
-        run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
+        run: docker compose -f compose.yaml -f compose.test.yaml --env-file .env.test up backend timescaledb migrate -d --wait
           
       - name: Check containers
         run:  docker compose ps
