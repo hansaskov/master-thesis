@@ -9,16 +9,19 @@ on:
       ssh_key:
         description: 'Name of the SSH key registered in Hetzner Cloud'
         required: false
-        default: 'deploy-key'
+        default: 'hans@ubuntu'
       type:
         description: 'The type of instance you would like for example "cx22" or "cx52"'
         required: false
-        default: 'cx22'
+        default: 'cpx21'
       location:
         description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
         required: false
-        default: 'hel1'
-
+        default: 'hil'
+      num_cluster:
+        description: 'Number of clusters to deploy'
+        required: false
+        default: '1'
 jobs:
   create-deploy-test:
     runs-on: ubuntu-latest
@@ -46,55 +49,55 @@ jobs:
       S3_ENDPOINT: "Your key here"
 
       IS_TEST: true
-      NUM_CLUSTER: 1
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }} 
+      NUM_CLUSTER: ${{ github.event.inputs.num_cluster }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
         
-      - name: Setup Hetzner Cloud CLI
-        uses: hetznercloud/setup-hcloud@v1
+    - name: Setup Hetzner Cloud CLI
+      uses: hetznercloud/setup-hcloud@v1
         
-      - name: Setup k6 runtime
-        uses: grafana/setup-k6-action@v1
+    - name: Setup k6 runtime
+      uses: grafana/setup-k6-action@v1
         
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
           
-      # Step 1: Create the server
-      - name: Create NixOS Server
-        working-directory: devops/nixos
-        run: |
-          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
+    # Step 1: Create the server
+    - name: Create NixOS Server
+      working-directory: devops/nixos
+      run: |
+        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
           
-      # Step 2: Set the server IP for later use
-      - name: Set SERVER_IP environment variable
-        run: |
-          SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
-          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
-          echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
-          echo "Server created with IP: $SERVER_IP"
+    # Step 2: Set the server IP for later use
+    - name: Set SERVER_IP environment variable
+      run: |
+        SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
+        echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
+        echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
+        echo "Server created with IP: $SERVER_IP"
         
-      - name: Docker info
-        run: docker info
+    - name: Docker info
+      run: docker info
 
-      - name: Deploy all services
-        run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
+    - name: Deploy all services
+      run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
           
-      - name: Wait
-        run:  sleep 15
+    - name: Wait
+      run:  sleep 15
 
-      - name: Check containers
-        run:  docker compose ps
+    - name: Check containers
+      run:  docker compose ps
           
-      - name: Run stress tests
-        working-directory: services/test
-        run: |
-          echo "Starting stress test against $SERVER_IP..."
-          ./run_ingest.sh
-          k6 run load_test.js --env SERVER_IP=$SERVER_IP
+    - name: Run stress tests
+      working-directory: services/test
+      run: |
+        echo "Starting stress test against $SERVER_IP..."
+        ./run_ingest.sh
+        k6 run load_test.js --env SERVER_IP=$SERVER_IP
