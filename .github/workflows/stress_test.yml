@@ -55,34 +55,16 @@ jobs:
           echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
           echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
           echo "Server created with IP: $SERVER_IP"
-          
-      - name: Deploy all services
-        run: |
-          # Verify Docker connection
-          docker info
-          
-          # Start database
-          echo "Starting database..."
-          docker compose -f compose.yaml --env-file .env.test up timescaledb -d --wait
-          docker compose ps  # Verify status
-          sleep 5
+        
+      - name: Docker info
+        run: docker info
 
-          # Run migrations
-          echo "Running migrations..."
-          docker compose -f compose.yaml --env-file .env.test run --rm migrate
-          sleep 5
+      - name: Deploy all services
+        run: docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate -d
           
-          # Start backend
-          echo "Starting backend..."
-          docker compose -f compose.yaml --env-file .env.test up backend -d --wait
-          docker compose ps  # Verify status
-          sleep 5
+      - name: Check containers
+        run:  docker compose ps
           
-          # Optional: Verify services are responding
-          echo "Verifying services..."
-          docker compose ps
-          
-      # Step 6: Run stress tests
       - name: Run stress tests
         working-directory: services/test
         run: |
