@@ -22,29 +22,32 @@ on:
 jobs:
   create-deploy-test:
     runs-on: ubuntu-latest
-    environment: 'preview'
     env:
-      PROD: false
-      IS_TEST: false
-      COMPOSE_PROJECT_NAME: ${{ github.ref_name }}
+      COMPOSE_PROJECT_NAME: test
       COMPOSE_PROFILES: stateless, stateful, migrate
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
+
+      POSTGRES_DB: database
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      DATABASE_URL: postgres://username:password@timescaledb:5432/database
+
+      INTERFACE_FQDN: http://localhost
+      MICROSOFT_TENANT_ID: common
+      MICROSOFT_CLIENT_ID: "d03453634..."
+      MICROSOFT_CLIENT_SECRET: "jcmads...."
+      RESEND_CLIENT_SECRET: RESEND_CLIENT_SECRET="ADD YOUR KEY"
+
+      PORTAINER_FQDN: http://portainer.localhost
+
+      S3_ACCESS_KEY_ID: "Your key here"
+      S3_SECRET_ACCESS_KEY: "Your key here"
+      S3_BUCKET: "Your key here"
+      S3_ENDPOINT: "Your key here"
+
+      IS_TEST: true
       NUM_CLUSTER: ${{vars.NUM_CLUSTER}}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }} 
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
-      INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
-      MICROSOFT_TENANT_ID: ${{ vars.MICROSOFT_TENANT_ID }}
-      MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
-      MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
-      POSTGRES_DB: ${{ vars.POSTGRES_DB }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
-      RESEND_CLIENT_SECRET: ${{ secrets.RESEND_CLIENT_SECRET }} 
-      PORTAINER_FQDN: ${{ vars.PORTAINER_FQDN }}
-      S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
-      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
-      S3_BUCKET: ${{ vars.S3_BUCKET }}
-      S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
