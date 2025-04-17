@@ -1,5 +1,4 @@
 name: create server
-
 on:
   workflow_dispatch:
     inputs:
@@ -11,15 +10,14 @@ on:
         description: 'Name of the SSH key registered in Hetzner Cloud'
         required: false
         default: 'deploy-key'
-      location:
-        description: 'The hetzner location of choise, choose between "fsn1", "nbg1" or "hel1"'
-        required: false
-        default: 'hel1'
       type:
         description: 'The type of instance you would like for example "cx22" or "cx52"'
         required: false
         default: 'cx22'
-
+      location:
+        description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
+        required: false
+        default: 'hel1'
 jobs:
   create:
     runs-on: ubuntu-latest
@@ -29,22 +27,21 @@ jobs:
       run:
         working-directory: devops/nixos
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      
-    - name: Setup Hetzner Cloud CLI
-      uses: hetznercloud/setup-hcloud@v1
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      - name: Setup Hetzner Cloud CLI
+        uses: hetznercloud/setup-hcloud@v1
 
-    - name: Run NixOS Server
-      env:
-        PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
-        HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
-      run: |
-        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ github.event.inputs.location }}" "${{ github.event.inputs.type }}"
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
+      - name: Run NixOS Server
+        env:
+          HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+        run: |
+          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
