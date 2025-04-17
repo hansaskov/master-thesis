@@ -1,0 +1,40 @@
+name: Deploy Backend
+
+on:
+  workflow_call:
+    inputs:
+      server_name:
+        description: 'Name of the server to deploy to'
+        required: true
+        type: string
+    secrets:
+      SSH_PRIVATE_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Hetzner Cloud CLI
+        uses: hetznercloud/setup-hcloud@v1
+        
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+          
+      - name: Set SERVER_IP environment variable
+        run: |
+          SERVER_IP=$(hcloud server ip "${{ inputs.server_name }}")
+          echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
+                    
+      - name: Deploy backend
+        run: |
+          docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d --wait
