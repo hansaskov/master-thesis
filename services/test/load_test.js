@@ -63,6 +63,10 @@ export const options = {
     { duration: '5m', target: INITIAL_RPS * 2 ** 6 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 7 },
     { duration: '5m', target: INITIAL_RPS * 2 ** 7 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 8 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 8 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 9 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 9 },
   ],
   thresholds: {
     http_req_failed: [
