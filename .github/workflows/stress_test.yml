@@ -65,12 +65,12 @@ jobs:
       - name: Deploy backend
         run: |
           echo "Deploying backend to $SERVER_IP..."
-          docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d --wait
+          docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d
           
       # Wait for backend to be fully operational
       - name: Wait for backend to be ready
         run: |
-          sleep 10
+          sleep 30
           
       # Step 4: Run stress tests
       - name: Run stress tests
