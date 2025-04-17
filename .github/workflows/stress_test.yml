@@ -56,36 +56,31 @@ jobs:
           echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
           echo "Server created with IP: $SERVER_IP"
           
-      # Wait for the server to be fully ready
-      - name: Wait for server to be fully ready
+      - name: Deploy all services
         run: |
-          echo "Waiting for server to be fully ready..."
-          sleep 30
+          # Verify Docker connection
+          docker info
           
-      # Step 3: Deploy the backend database first
-      - name: Deploy database
-        run: |
-          echo "Starting database on $SERVER_IP..."
+          # Start database
+          echo "Starting database..."
           docker compose -f compose.yaml --env-file .env.test up timescaledb -d --wait
-          
-      # Step 4: Run migrations separately
-      - name: Run database migrations
-        continue-on-error: true  # Migration container is expected to exit
-        run: |
-          echo "Running database migrations..."
+          docker compose ps  # Verify status
+          sleep 5
+
+          # Run migrations
+          echo "Running migrations..."
           docker compose -f compose.yaml --env-file .env.test run --rm migrate
+          sleep 5
           
-      # Step 5: Deploy the backend service
-      - name: Deploy backend service
-        run: |
-          echo "Deploying backend service to $SERVER_IP..."
+          # Start backend
+          echo "Starting backend..."
           docker compose -f compose.yaml --env-file .env.test up backend -d --wait
+          docker compose ps  # Verify status
+          sleep 5
           
-      # Wait for backend to be fully operational
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend services to be fully ready..."
-          sleep 10
+          # Optional: Verify services are responding
+          echo "Verifying services..."
+          docker compose ps
           
       # Step 6: Run stress tests
       - name: Run stress tests
