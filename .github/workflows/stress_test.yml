@@ -83,7 +83,7 @@ jobs:
         run: docker info
 
       - name: Deploy all services
-        run: docker compose up backend timescaledb migrate -d
+        run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
           
       - name: Check containers
         run:  docker compose ps
