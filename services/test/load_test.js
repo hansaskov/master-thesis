@@ -34,7 +34,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 2;
+  const numKeys = INITIAL_RPS * 2 ** 1;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())

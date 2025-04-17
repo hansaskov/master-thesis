@@ -20,8 +20,6 @@ services:
   backend:
     profiles: [stateless]
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     build: 
       context: .
       dockerfile: ./services/backend/Dockerfile

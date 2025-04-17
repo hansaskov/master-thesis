@@ -15,6 +15,8 @@ jobs:
       COMPOSE_PROFILES: stateless, stateful, migrate
       DOCKER_HOST: ssh://admin@${{ secrets.SERVER_IP }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      NUM_CLUSTER: ${{vars.NUM_CLUSTER}}
+      IS_TEST: ${{vars.IS_TEST}}
       INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
       MICROSOFT_TENANT_ID: ${{ vars.MICROSOFT_TENANT_ID }}
       MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}

@@ -1,0 +1,5 @@
+
+services:
+  backend:
+    ports:
+    - "3000:3000"
