@@ -1,27 +1,49 @@
 #!/bin/bash
+# remote-update.sh - Updates NixOS configuration on a remote server
+#
+# Usage: ./remote-update.sh SERVER_IP SSH_PUBLIC_KEYS PASSWORD_HASH
+#
+# Arguments:
+#   SERVER_IP: IP address of the NixOS server
+#   SSH_PUBLIC_KEYS: Public SSH key(s) to install on the server
+#   PASSWORD_HASH: Hashed password for the admin user
+#
 set -e
 
-# export SSH_PUBLIC_KEYS="$(cat ~/.ssh/id_rsa.pub)"
-
-# Set the destination IP and user to use with ssh
+# Set the destination IP and user from arguments
+SERVER_IP="${1}"
+SSH_PUBLIC_KEYS="${2}"
+PASSWORD_HASH="${3}"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEST_DIR="/etc/nixos"
 USER="root"
 FILE="configuration.nix"
 
-# Check each environment variable individually
-if [ -z "${SSH_PUBLIC_KEYS}" ]; then
-  echo "❌ Error: SSH_PUBLIC_KEYS environment variable not defined"
-  exit 1
-fi
-if [ -z "${PASSWORD_HASH}" ]; then
-  echo "❌ Error: PASSWORD_HASH environment variable not defined"
-  exit 1
-fi
+# Check if all required parameters are provided
 if [ -z "${SERVER_IP}" ]; then
-  echo "❌ Error: SERVER_IP environment variable not defined"
+  echo "❌ Error: SERVER_IP argument not provided"
+  echo "Usage: $0 SERVER_IP SSH_PUBLIC_KEYS PASSWORD_HASH"
   exit 1
 fi
+
+if [ -z "${SSH_PUBLIC_KEYS}" ]; then
+  echo "❌ Error: SSH_PUBLIC_KEYS argument not provided"
+  echo "Usage: $0 SERVER_IP SSH_PUBLIC_KEYS PASSWORD_HASH"
+  exit 1
+fi
+
+if [ -z "${PASSWORD_HASH}" ]; then
+  echo "❌ Error: PASSWORD_HASH argument not provided"
+  echo "Usage: $0 SERVER_IP SSH_PUBLIC_KEYS PASSWORD_HASH"
+  exit 1
+fi
+
+# Display settings information
+echo "🔧 Configuration settings:"
+echo " • Server IP: $SERVER_IP"
+echo " • Password Hash: ${PASSWORD_HASH:0:20}... (truncated)"
+echo " • SSH Public Key: ${SSH_PUBLIC_KEYS:0:40}... (truncated)"
+echo ""
 
 echo "🔍 Checking connection to ${SERVER_IP}..."
 
