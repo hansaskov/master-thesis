@@ -44,6 +44,7 @@ jobs:
       S3_BUCKET: "Your key here"
       S3_ENDPOINT: "Your key here"
 
+      PROD: false
       IS_TEST: true
       NUM_CLUSTER: ${{vars.NUM_CLUSTER}}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }} 
