@@ -84,15 +84,17 @@ jobs:
         run: docker info
 
       - name: Deploy all services
-        run: docker compose -f compose.yaml -f compose.test.yaml --env-file .env.test up backend timescaledb migrate -d --wait
+        run: docker compose -f compose.yaml -f compose.test.yaml --env-file .env.test up backend timescaledb migrate -d
           
       - name: Check containers
         run:  docker compose ps
+
+      - name: Wait
+        run:  sleep 15
           
       - name: Run stress tests
         working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
-          sleep 10
           ./run_ingest.sh
           k6 run load_test.js --env SERVER_IP=$SERVER_IP
