@@ -22,9 +22,29 @@ on:
 jobs:
   create-deploy-test:
     runs-on: ubuntu-latest
+    environment: 'preview'
     env:
+      PROD: false
+      IS_TEST: false
+      COMPOSE_PROJECT_NAME: ${{ github.ref_name }}
+      COMPOSE_PROFILES: stateless, stateful, migrate
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
+      NUM_CLUSTER: ${{vars.NUM_CLUSTER}}
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+      INTERFACE_FQDN: ${{ vars.INTERFACE_FQDN }}
+      MICROSOFT_TENANT_ID: ${{ vars.MICROSOFT_TENANT_ID }}
+      MICROSOFT_CLIENT_ID: ${{ secrets.MICROSOFT_CLIENT_ID }}
+      MICROSOFT_CLIENT_SECRET: ${{ secrets.MICROSOFT_CLIENT_SECRET }}
+      POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      DATABASE_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@timescaledb:5432/${{ vars.POSTGRES_DB }}
+      RESEND_CLIENT_SECRET: ${{ secrets.RESEND_CLIENT_SECRET }} 
+      PORTAINER_FQDN: ${{ vars.PORTAINER_FQDN }}
+      S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      S3_ENDPOINT: ${{ vars.S3_ENDPOINT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -60,7 +80,7 @@ jobs:
         run: docker info
 
       - name: Deploy all services
-        run: docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate -d
+        run: docker compose up backend timescaledb migrate -d
           
       - name: Check containers
         run:  docker compose ps
@@ -69,4 +89,5 @@ jobs:
         working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
+          ./run_ingest.sh
           k6 run load_test.js --env SERVER_IP=${{ env.SERVER_IP }}
