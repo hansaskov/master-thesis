@@ -34,7 +34,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 1;
+  const numKeys = INITIAL_RPS * 2 ** 2;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -47,18 +47,20 @@ export function setup() {
 
 export const options = {
   stages: [
-    { duration: '30s', target: INITIAL_RPS * 2 ** 0 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 0 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 1 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 0 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 1 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 2 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 1 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 2 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 3 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 2 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 3 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 4 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 3 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 4 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 4 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 6 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 6 },
   ],
   thresholds: {
     http_req_failed: [

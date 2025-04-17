@@ -84,13 +84,13 @@ jobs:
         run: docker info
 
       - name: Deploy all services
-        run: docker compose -f compose.yaml -f compose.test.yaml --env-file .env.test up backend timescaledb migrate -d
+        run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
           
-      - name: Check containers
-        run:  docker compose ps
-
       - name: Wait
         run:  sleep 15
+
+      - name: Check containers
+        run:  docker compose ps
           
       - name: Run stress tests
         working-directory: services/test
