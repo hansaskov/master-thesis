@@ -1,4 +1,4 @@
-name: stress test
+name: Create Server, Deploy and Test
 on:
   workflow_dispatch:
     inputs:
@@ -10,26 +10,28 @@ on:
         description: 'Name of the SSH key registered in Hetzner Cloud'
         required: false
         default: 'deploy-key'
-      location:
-        description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
-        required: false
-        default: 'hel1'
       type:
         description: 'The type of instance you would like for example "cx22" or "cx52"'
         required: false
         default: 'cx22'
+      location:
+        description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
+        required: false
+        default: 'hel1'
+
 jobs:
-  create:
+  create-deploy-test:
     runs-on: ubuntu-latest
     env:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
-      PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Setup Hetzner Cloud CLI
         uses: hetznercloud/setup-hcloud@v1
+        
       - name: Setup k6 runtime
         uses: grafana/setup-k6-action@v1
         
@@ -39,24 +41,40 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-
-      - name: Run NixOS Server
+          
+      # Step 1: Create the server
+      - name: Create NixOS Server
         working-directory: devops/nixos
         run: |
-          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ github.event.inputs.location }}" "${{ github.event.inputs.type }}"
+          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
+          
+      # Step 2: Set the server IP for later use
       - name: Set SERVER_IP environment variable
         run: |
           SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
           echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
           echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
-      - name: Wait
+          echo "Server created with IP: $SERVER_IP"
+          
+      # Wait for the server to be fully ready
+      - name: Wait for server to be fully ready
         run: |
           sleep 10
+          
+      # Step 3: Deploy the backend
       - name: Deploy backend
         run: |
+          echo "Deploying backend to $SERVER_IP..."
           docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d --wait
           
-      - name: Start stress test
+      # Wait for backend to be fully operational
+      - name: Wait for backend to be ready
+        run: |
+          sleep 10
+          
+      # Step 4: Run stress tests
+      - name: Run stress tests
         working-directory: services/test
         run: |
+          echo "Starting stress test against $SERVER_IP..."
           k6 run load_test.js --env SERVER_IP=${{ env.SERVER_IP }}

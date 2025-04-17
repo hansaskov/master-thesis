@@ -1,5 +1,40 @@
-name: create server
+
+name: Create Server
 on:
+  workflow_call:
+    inputs:
+      server_name:
+        description: 'Name for the server'
+        required: false
+        default: 'nixos'
+        type: string
+      ssh_key:
+        description: 'Name of the SSH key registered in Hetzner Cloud'
+        required: false
+        default: 'deploy-key'
+        type: string
+      type:
+        description: 'The type of instance you would like for example "cx22" or "cx52"'
+        required: false
+        default: 'cx22'
+        type: string
+      location:
+        description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
+        required: false
+        default: 'hel1'
+        type: string
+    secrets:
+      SSH_PRIVATE_KEY_2:
+        required: true
+      HCLOUD_TOKEN:
+        required: true
+      PASSWORD_HASH:
+        required: true
+    outputs:
+      server_ip:
+        description: "IP address of the created server"
+        value: ${{ jobs.create.outputs.server_ip }}
+        
   workflow_dispatch:
     inputs:
       server_name:
@@ -18,9 +53,12 @@ on:
         description: 'The hetzner location of choice, choose between "fsn1", "nbg1" or "hel1"'
         required: false
         default: 'hel1'
+
 jobs:
   create:
     runs-on: ubuntu-latest
+    outputs:
+      server_ip: ${{ steps.set_ip.outputs.ip_address }}
     env:
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
     defaults:
@@ -28,20 +66,26 @@ jobs:
         working-directory: devops/nixos
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v4
+        
       - name: Setup Hetzner Cloud CLI
         uses: hetznercloud/setup-hcloud@v1
-
+        
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-
+          
       - name: Run NixOS Server
         env:
           HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
         run: |
-          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
+          ./create-server.sh "${{ inputs.server_name || github.event.inputs.server_name }}" "${{ inputs.ssh_key || github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ inputs.type || github.event.inputs.type }}" "${{ inputs.location || github.event.inputs.location }}"
+          
+      - name: Set Server IP
+        id: set_ip
+        run: |
+          SERVER_IP=$(hcloud server ip "${{ inputs.server_name || github.event.inputs.server_name }}")
+          echo "ip_address=$SERVER_IP" >> $GITHUB_OUTPUT
