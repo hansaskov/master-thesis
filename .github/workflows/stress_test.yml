@@ -22,6 +22,10 @@ on:
         description: 'Number of clusters to deploy'
         required: false
         default: '1'
+      upload_key:
+        description: 'The key to send CPU and memory usage to'
+        required: false
+        default: 'gfpoasp....'
 jobs:
   create-deploy-test:
     runs-on: ubuntu-latest
@@ -52,52 +56,53 @@ jobs:
       NUM_CLUSTER: ${{ github.event.inputs.num_cluster }}
       SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_2 }}
       HCLOUD_TOKEN: ${{ secrets.HCLOUD_TOKEN }}
+      UPLOAD_KEY: ${{ github.event.inputs.upload_key }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         
-    - name: Setup Hetzner Cloud CLI
-      uses: hetznercloud/setup-hcloud@v1
+      - name: Setup Hetzner Cloud CLI
+        uses: hetznercloud/setup-hcloud@v1
         
-    - name: Setup k6 runtime
-      uses: grafana/setup-k6-action@v1
+      - name: Setup k6 runtime
+        uses: grafana/setup-k6-action@v1
         
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
           
-    # Step 1: Create the server
-    - name: Create NixOS Server
-      working-directory: devops/nixos
-      run: |
-        ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
+      # Step 1: Create the server
+      - name: Create NixOS Server
+        working-directory: devops/nixos
+        run: |
+          ./create-server.sh "${{ github.event.inputs.server_name }}" "${{ github.event.inputs.ssh_key }}" "${{ secrets.PASSWORD_HASH }}" "${{ github.event.inputs.type }}" "${{ github.event.inputs.location }}"
           
-    # Step 2: Set the server IP for later use
-    - name: Set SERVER_IP environment variable
-      run: |
-        SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
-        echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
-        echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
-        echo "Server created with IP: $SERVER_IP"
+      # Step 2: Set the server IP for later use
+      - name: Set SERVER_IP environment variable
+        run: |
+          SERVER_IP=$(hcloud server ip "${{ github.event.inputs.server_name }}")
+          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
+          echo "DOCKER_HOST=ssh://admin@$SERVER_IP" >> $GITHUB_ENV
+          echo "Server created with IP: $SERVER_IP"
         
-    - name: Docker info
-      run: docker info
+      - name: Docker info
+        run: docker info
 
-    - name: Deploy all services
-      run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
+      - name: Deploy all services
+        run: docker compose -f compose.yaml -f compose.test.yaml up backend timescaledb migrate -d
           
-    - name: Wait
-      run:  sleep 15
+      - name: Wait
+        run:  sleep 15
 
-    - name: Check containers
-      run:  docker compose ps
+      - name: Check containers
+        run:  docker compose ps
           
-    - name: Run stress tests
-      working-directory: services/test
-      run: |
-        echo "Starting stress test against $SERVER_IP..."
-        ./run_ingest.sh
-        k6 run load_test.js --env SERVER_IP=$SERVER_IP
+      - name: Run stress tests
+        working-directory: services/test
+        run: |
+          echo "Starting stress test against $SERVER_IP..."
+          ./run_ingest.sh "$UPLOAD_KEY"  # Pass the upload key to the script
+          k6 run load_test.js --env SERVER_IP=$SERVER_IP
