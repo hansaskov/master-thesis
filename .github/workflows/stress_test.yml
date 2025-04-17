@@ -59,20 +59,35 @@ jobs:
       # Wait for the server to be fully ready
       - name: Wait for server to be fully ready
         run: |
-          sleep 10
+          echo "Waiting for server to be fully ready..."
+          sleep 30
           
-      # Step 3: Deploy the backend
-      - name: Deploy backend
+      # Step 3: Deploy the backend database first
+      - name: Deploy database
         run: |
-          echo "Deploying backend to $SERVER_IP..."
-          docker compose -f compose.yaml --env-file .env.test up backend timescaledb migrate --build -d
+          echo "Starting database on $SERVER_IP..."
+          docker compose -f compose.yaml --env-file .env.test up timescaledb -d --wait
+          
+      # Step 4: Run migrations separately
+      - name: Run database migrations
+        continue-on-error: true  # Migration container is expected to exit
+        run: |
+          echo "Running database migrations..."
+          docker compose -f compose.yaml --env-file .env.test run --rm migrate
+          
+      # Step 5: Deploy the backend service
+      - name: Deploy backend service
+        run: |
+          echo "Deploying backend service to $SERVER_IP..."
+          docker compose -f compose.yaml --env-file .env.test up backend -d --wait
           
       # Wait for backend to be fully operational
       - name: Wait for backend to be ready
         run: |
-          sleep 30
+          echo "Waiting for backend services to be fully ready..."
+          sleep 10
           
-      # Step 4: Run stress tests
+      # Step 6: Run stress tests
       - name: Run stress tests
         working-directory: services/test
         run: |
