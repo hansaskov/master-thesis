@@ -107,12 +107,12 @@ jobs:
           # Make sure script is executable
           chmod +x run_ingest.sh
           # Copy the script to the server
-          scp run_ingest.sh admin@$SERVER_IP:/run_ingest.sh
+          scp run_ingest.sh admin@$SERVER_IP:~/run_ingest.sh
       
       - name: Execute ingest script on server
         run: |
           # Execute the script on the server with the upload key
-          ssh admin@$SERVER_IP "/run_ingest.sh \"$UPLOAD_KEY\""
+          ssh admin@$SERVER_IP "~/run_ingest.sh \"$UPLOAD_KEY\""
           echo "Ingest script started on server $SERVER_IP"
          
       - name: Run stress tests
