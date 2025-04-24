@@ -99,11 +99,25 @@ jobs:
 
       - name: Check containers
         run:  docker compose ps
-          
+      
+      # New steps to copy and run the ingest script on the server
+      - name: Copy run_ingest script to server
+        working-directory: services/test
+        run: |
+          # Make sure script is executable
+          chmod +x run_ingest.sh
+          # Copy the script to the server
+          scp run_ingest.sh admin@$SERVER_IP:/tmp/run_ingest.sh
+      
+      - name: Execute ingest script on server
+        run: |
+          # Execute the script on the server with the upload key
+          ssh admin@$SERVER_IP "cd /tmp && ./run_ingest.sh \"$UPLOAD_KEY\""
+          echo "Ingest script started on server $SERVER_IP"
+         
       - name: Run stress tests
         working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
           echo "DOCKER_HOST=" >> $GITHUB_ENV
-          ./run_ingest.sh "$UPLOAD_KEY"  # Pass the upload key to the script
           docker compose -f compose.yaml -f compose.test.yaml run k6

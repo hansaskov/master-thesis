@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the upload key from the command line argument, or use a default
-UPLOAD_KEY="${1:-kPRUmomfMDZUkMjtH2D69N}"
+UPLOAD_KEY="${1}"
 
 # Create config.toml with the upload key
 cat > config.toml << EOL
