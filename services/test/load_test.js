@@ -46,6 +46,7 @@ export function setup() {
 }
 
 export const options = {
+  summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
     { duration: '1m', target: INITIAL_RPS * 2 ** 0 },
     { duration: '5m', target: INITIAL_RPS * 2 ** 0 },
