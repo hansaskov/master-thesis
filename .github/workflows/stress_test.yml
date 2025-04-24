@@ -116,7 +116,6 @@ jobs:
           echo "Ingest script started in the background on server $SERVER_IP"
          
       - name: Run stress tests
-        working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
           echo "DOCKER_HOST=" >> $GITHUB_ENV
