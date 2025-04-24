@@ -115,6 +115,6 @@ jobs:
       - name: Run stress tests
         run: |
           echo "Starting stress test against $SERVER_IP..."
-          echo "DOCKER_HOST=" >> $GITHUB_ENV
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
           ls ./services/test/scripts
           docker compose -f compose.yaml -f compose.test.yaml run k6
