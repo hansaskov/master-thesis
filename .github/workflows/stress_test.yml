@@ -9,7 +9,7 @@ on:
       ssh_key:
         description: 'Name of the SSH key registered in Hetzner Cloud'
         required: false
-        default: 'hans@ubuntu'
+        default: 'hans@trivision'
       type:
         description: 'The type of instance you would like for example "cx22" or "cx52"'
         required: false
@@ -102,12 +102,9 @@ jobs:
       
       # New steps to copy and run the ingest script on the server
       - name: Copy run_ingest script to server
-        working-directory: services/test
         run: |
-          # Make sure script is executable
-          chmod +x run_ingest.sh
           # Copy the script to the server
-          scp run_ingest.sh root@$SERVER_IP:/home/admin/run_ingest.sh
+          scp services/test/run_ingest.sh root@$SERVER_IP:/home/admin/run_ingest.sh
       
       - name: Execute ingest script on server
         run: |
@@ -119,4 +116,8 @@ jobs:
         run: |
           echo "Starting stress test against $SERVER_IP..."
           echo "DOCKER_HOST=" >> $GITHUB_ENV
+          ls 
+          ls ./services
+          ls ./services/test
+          ls ./services/test/scripts
           docker compose -f compose.yaml -f compose.test.yaml run k6

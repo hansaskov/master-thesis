@@ -8,7 +8,7 @@ services:
     image: grafana/k6:latest
     entrypoint: k6 run /scripts/load_test.js
     environment:
-      - SERVER_IP=backend
+      - SERVER_IP
     volumes:
       - ./services/test/scripts:/scripts
 
