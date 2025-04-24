@@ -53,8 +53,20 @@ in
   # Software Packages
   environment.systemPackages = with pkgs; [
     docker
+    bash
+    wget
   ];
   
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Add libraries the binary might need
+    stdenv.cc.cc.lib
+    zlib
+    glib
+    openssl
+    # Add others as needed
+  ];
+
   # Docker Configuration
   virtualisation.docker.enable = true;
   
