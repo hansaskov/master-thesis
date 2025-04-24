@@ -112,7 +112,7 @@ jobs:
       - name: Execute ingest script on server
         run: |
           # Execute the script on the server with the upload key in the background
-          ssh root@$SERVER_IP "bash /home/admin/run_ingest.sh \"$UPLOAD_KEY\" &"
+          ssh root@$SERVER_IP "bash /home/admin/run_ingest.sh \"$UPLOAD_KEY\"" &
           echo "Ingest script started in the background on server $SERVER_IP"
          
       - name: Run stress tests
