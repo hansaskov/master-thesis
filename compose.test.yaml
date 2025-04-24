@@ -1,14 +1,11 @@
-
 services:
   backend:
     ports:
-    - "3000:3000"
-
-  k6: 
+      - "3000:3000"
+  k6:
     image: grafana/k6:latest
     entrypoint: k6 run /scripts/load_test.js
     environment:
       - SERVER_IP
     volumes:
-      - ./services/test/scripts:/scripts
-
+      - ./services/test/scripts/load_test.js:/scripts/load_test.js
