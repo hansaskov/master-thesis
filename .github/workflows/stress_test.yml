@@ -104,5 +104,6 @@ jobs:
         working-directory: services/test
         run: |
           echo "Starting stress test against $SERVER_IP..."
+          echo "DOCKER_HOST=" >> $GITHUB_ENV
           ./run_ingest.sh "$UPLOAD_KEY"  # Pass the upload key to the script
-          k6 run load_test.js --env SERVER_IP=$SERVER_IP
+          docker compose -f compose.yaml -f compose.test.yaml run k6
