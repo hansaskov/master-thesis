@@ -29,9 +29,7 @@ export const invites = pgTable(
 			.$default(() => generateRandomString(20)),
 		email: text().notNull(),
 		organization_id: text().notNull(),
-		inviter_id: text()
-			.notNull()
-			.references(() => users.id),
+		inviter_id: text().references(() => users.id, { onDelete: "set null" }),
 		is_accepted: boolean().notNull().default(false),
 		expires_at: timestamp({ mode: "date" })
 			.notNull()

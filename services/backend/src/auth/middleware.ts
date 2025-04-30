@@ -63,7 +63,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as auth");
 				}
 
 				return { user, session };
@@ -78,7 +78,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired superadmin");
 				}
 
 				if (user.is_superadmin === false) {
@@ -109,7 +109,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as admin");
 				}
 
 				let relation: UserToOrganizationUpdate = {
@@ -159,7 +159,7 @@ export const authMiddleware = new Elysia()
 				const { user, session } = await Authenticate(sessionId);
 
 				if (!session) {
-					return error("Unauthorized", "You session has expired");
+					return error("Unauthorized", "Your session has expired as user");
 				}
 
 				let relation: UserToOrganizationUpdate = {

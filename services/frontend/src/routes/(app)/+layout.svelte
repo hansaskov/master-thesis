@@ -61,6 +61,7 @@
 						class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
 					>
 						<UserRoundCog class="w-5 h-5" />
+						<span class="sr-only">Superadmin</span>
 					</a>
 				{/if}
 
@@ -69,6 +70,7 @@
 					class="flex w-9 h-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-accent-foreground"
 				>
 					<Wrench class="w-5 h-5" />
+					<span class="sr-only">Support</span>
 				</a>
 			</nav>
 		</div>
@@ -139,7 +141,7 @@
 			<button onclick={navigateToSystems} class="flex flex-col items-center justify-center">
 				<House class="w-6 h-6" />
 				Home
-				<span class="sr-only">Home</span>
+				<span class="sr-only">Dashboard</span>
 			</button>
 
 			<a
@@ -164,7 +166,7 @@
 				<a href="/superadmin" class="flex flex-col items-center justify-center">
 					<UserRoundCog />
 					Admin
-					<span class="sr-only">News</span>
+					<span class="sr-only">Superadmin</span>
 				</a>
 			{/if}
 
