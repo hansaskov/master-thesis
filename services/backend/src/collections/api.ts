@@ -14,10 +14,10 @@ import { systemHealthApi } from "./system_health/api";
 import { systemModelsApi } from "./system_models/api";
 import { systemsApi } from "./systems/api";
 import { systemsToPartsApi } from "./systems_to_parts/api";
+import { testApi } from "./test/api";
 import { thresholdApi } from "./threshold/api";
 import { usersApi } from "./users/api";
 import { usersToOrganizationsApi } from "./users_to_organizations/api";
-import { testApi } from "./test/api";
 
 export const api = new Elysia({ prefix: "/api" })
 	.use(authApi)

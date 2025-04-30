@@ -31,5 +31,5 @@ export const Queries = {
 	systemsToParts: systemsToPartsQueries,
 	threshold: thresholdQueries,
 	systemHealth: SystemHealthQueries,
-	test: testQueries
+	test: testQueries,
 };

@@ -99,6 +99,6 @@ export const usersApi = new Elysia({ prefix: "users" })
 				image: Schema.insert.users.image,
 				provider_name: Schema.insert.users.provider_name,
 				provider_id: Schema.insert.users.provider_id,
-			})
-		}
-	)
+			}),
+		},
+	);

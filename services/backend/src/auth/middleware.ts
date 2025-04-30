@@ -52,7 +52,7 @@ export const SuperAdminService = new Elysia({ name: "Service.SuperAdmin" })
 
 	.as("plugin");
 
-	export const authMiddleware = new Elysia()
+export const authMiddleware = new Elysia()
 	.macro({
 		isAuth: {
 			async resolve({ cookie: { sessionId } }) {
