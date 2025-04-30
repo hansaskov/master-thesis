@@ -10,6 +10,7 @@
     "check": "tsc --noEmit",
     "preview": "NODE_ENV=production bun dist/index.js",
     "format": "bun x @biomejs/biome format --write src",
+    "seed": "bun src/seed/index.ts",
     "lint": "bun x @biomejs/biome check src",
     "lint:fix": "bun x @biomejs/biome check src --write",
     "db:generate": "drizzle-kit generate",

@@ -11,7 +11,7 @@ export type * as Types from "$collections/types";
 
 // Only run clustering logic in the main process
 if (cluster.isPrimary) {
-	const numCPUs = environment.NUM_CLUSTER;
+	const numCPUs = parseInt(environment.NUM_CLUSTER);
 	console.log(`🔄 Starting ${numCPUs} workers...`);
 
 	const workers = new Array(numCPUs);

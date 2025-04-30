@@ -7,14 +7,14 @@ const optionalEnvironmentSchema = t.Object({
 	MICROSOFT_TENANT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_ID: t.String({ minLength: 1 }),
 	MICROSOFT_CLIENT_SECRET: t.String({ minLength: 1 }),
-	IS_TEST: t.Boolean({ default: false }),
-	NUM_CLUSTER: t.Number({ default: 1 }),
+	IS_TEST: t.String({ minLength: 1 }),
+	NUM_CLUSTER: t.String({ default: 1 }),
 });
 
 const requiredEnvironmentSchema = t.Object({
 	INTERFACE_FQDN: t.String({ minLength: 1 }),
 	DATABASE_URL: t.String({ minLength: 1 }),
-	PROD: t.Boolean(),
+	PROD: t.String({ minLength: 1}),
 	S3_ACCESS_KEY_ID: t.String({ minLength: 1 }),
 	S3_SECRET_ACCESS_KEY: t.String({ minLength: 1 }),
 	S3_BUCKET: t.String({ minLength: 1 }),
