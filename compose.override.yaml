@@ -1,7 +1,5 @@
 services:
 
-  caddy:
-
   ## Frontend development dockerfile and sync the files automatically
   frontend:
     build: 
