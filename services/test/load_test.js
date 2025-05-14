@@ -17,7 +17,7 @@ const BASE_URL =  `http://${SERVER_IP}:3000`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
 const INITIAL_RPS = 100
-
+const numKeys = INITIAL_RPS * 2 ** 4;
 
 function createKey() {
   const response = http.post(`${BASE_URL}/api/seed`);
@@ -34,7 +34,6 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 4;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -46,6 +45,7 @@ export function setup() {
 }
 
 export const options = {
+  setupTimeout: `${numKeys}s`,
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
     { duration: '1m', target: INITIAL_RPS * 2 ** 0 },
