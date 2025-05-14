@@ -51,7 +51,7 @@ export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
     { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '5m', target: INITIAL_RPS * 1 },
+    { duration: '30s', target: INITIAL_RPS * 1 },
     // { duration: '30m', target: INITIAL_RPS * 2 },
     // { duration: '1m', target: INITIAL_RPS * 2 },
     // { duration: '30s', target: INITIAL_RPS * 3 },
@@ -75,8 +75,8 @@ export const options = {
 };
 
 export default function (data) {
-  const vuIndex = (__VU - 1) % keyArray.length;
-  const privateKey = keyArray[vuIndex];
+  const vuIndex = (__VU - 1) % data.keys.length;
+  const privateKey = data.keys[vuIndex];
 
   const timestamp = new Date().toISOString();
   const category = "computer";
