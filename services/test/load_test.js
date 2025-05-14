@@ -34,7 +34,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 2;
+  const numKeys = INITIAL_RPS * 2 ** 4;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -92,21 +92,21 @@ export default function (data) {
       name: "cpu temperature",
       time: timestamp,
       unit: "C",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "cpu usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "disk usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     }
   ];
