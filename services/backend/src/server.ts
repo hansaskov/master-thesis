@@ -14,7 +14,7 @@ export const app = new Elysia({
 		".well-known/microsoft-identity-association.json",
 		Bun.file("public/.well-known/microsoft-identity-association.json"),
 	)
-	//.use(logger())
+	.use(logger({level: "error"}))
 	.use(swagger({ path: "/api/swagger" }))
 	.use(api)
 	.listen(env.port ?? 3000);
