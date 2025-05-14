@@ -3,13 +3,6 @@ import { environment } from "$config/environment";
 import Elysia, { error, t } from "elysia";
 
 export const seedApi = new Elysia({ prefix: "seed" }).post("/", async () => {
-	if (!environment.IS_TEST) {
-		return error(
-			"Unauthorized",
-			"IS_TEST variable is disabled and this endpoint is not accessable",
-		);
-	}
-
 	// Insert Org
 	const organization = await Queries.organizations.create({
 		name: "Trivision",

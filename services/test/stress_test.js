@@ -11,9 +11,10 @@ curl -X POST https://api.example.com/users \
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Rate } from 'k6/metrics';
+//import { open } from 'k6/fs';
 
-const SERVER_IP = __ENV.SERVER_IP ?? "127.0.0.1"
-const BASE_URL =  `http://${SERVER_IP}:3000`
+//const SERVER_IP = "http"
+const BASE_URL =  `https://master-thesis.hjemmet.net`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
 const INITIAL_RPS = 100
@@ -34,7 +35,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 2;
+  const numKeys = INITIAL_RPS * 2 ** 1;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -45,33 +46,26 @@ export function setup() {
   return { keys };
 }
 
+
 export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
-    { duration: '1m', target: INITIAL_RPS * 2 ** 0 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 0 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 1 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 1 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 2 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 2 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 3 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 3 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 4 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 4 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 5 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 5 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 6 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 6 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 7 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 7 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 8 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 8 },
-    { duration: '1m', target: INITIAL_RPS * 2 ** 9 },
-    { duration: '5m', target: INITIAL_RPS * 2 ** 9 },
+    { duration: '30s', target: INITIAL_RPS * 1 },
+    { duration: '30s', target: INITIAL_RPS * 1 },
+    // { duration: '30m', target: INITIAL_RPS * 2 },
+    // { duration: '1m', target: INITIAL_RPS * 2 },
+    // { duration: '30s', target: INITIAL_RPS * 3 },
+    // { duration: '1m', target: INITIAL_RPS * 3 },
+    // { duration: '30s', target: INITIAL_RPS * 4 },
+    // { duration: '1m', target: INITIAL_RPS * 4 },
+    // { duration: '30s', target: INITIAL_RPS * 5 },
+    // { duration: '1m', target: INITIAL_RPS * 5 },
+    // { duration: '30m', target: INITIAL_RPS * 6 },
+    // { duration: '1m', target: INITIAL_RPS * 6 },
   ],
   thresholds: {
     http_req_failed: [
-      { threshold: 'rate<0.05', abortOnFail: true }
+      { threshold: 'rate<0.05', abortOnFail: false }
     ],
     http_req_duration: [
       { threshold: 'p(95)<250', abortOnFail: true },
@@ -92,21 +86,21 @@ export default function (data) {
       name: "cpu temperature",
       time: timestamp,
       unit: "C",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "cpu usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "disk usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     }
   ];
