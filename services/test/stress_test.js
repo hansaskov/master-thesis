@@ -14,26 +14,44 @@ import { Rate } from 'k6/metrics';
 //import { open } from 'k6/fs';
 
 //const SERVER_IP = "http"
-const BASE_URL =  `http://localhost`
+const BASE_URL =  `https://master-thesis.hjemmet.net`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
-const INITIAL_RPS = 40
+const INITIAL_RPS = 100
 
 
-const file = open('./test_keys_local.txt');
-const arrayOfKeys = file.toString().split('\n');
+function createKey() {
+  const response = http.post(`${BASE_URL}/api/seed`);
+  if (response.status !== 200 && response.status !== 201) {
+    return null;
+  }
 
-const keyArray = arrayOfKeys
-    .map(line => line.trim())
-    .filter(line => line.length > 0);
+  try {
+    return JSON.parse(response.body);
+  } catch (e) {
+    return null;
+  }
+}
 
-console.log(keyArray)
+export function setup() {
+  console.log(`Using ${BASE_URL} as the base url`)
+  const numKeys = INITIAL_RPS * 2 ** 1;
+  const keys = Array(numKeys)
+    .fill()
+    .map(() => createKey())
+    .filter(key => key !== null)
+    .map(v => v.private_key)
+
+  console.log(`Created ${keys.length} keys`);
+  return { keys };
+}
+
 
 export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
     { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '30s', target: INITIAL_RPS * 1 },
+    { duration: '5m', target: INITIAL_RPS * 1 },
     // { duration: '30m', target: INITIAL_RPS * 2 },
     // { duration: '1m', target: INITIAL_RPS * 2 },
     // { duration: '30s', target: INITIAL_RPS * 3 },
@@ -68,21 +86,21 @@ export default function (data) {
       name: "cpu temperature",
       time: timestamp,
       unit: "C",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "cpu usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     },
     {
       name: "disk usage",
       time: timestamp,
       unit: "%",
-      value: 209764381 % vuIndex,
+      value: 209764381 % (vuIndex + 1),
       category: category,
     }
   ];

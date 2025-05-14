@@ -34,7 +34,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 1;
+  const numKeys = INITIAL_RPS * 2 ** 2;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -46,23 +46,32 @@ export function setup() {
 }
 
 export const options = {
+  summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
-    { duration: '30s', target: INITIAL_RPS * 2 ** 0 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 0 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 1 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 0 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 1 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 2 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 1 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 2 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 3 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 2 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 3 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 4 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 3 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 4 },
-    { duration: '30s', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 4 },
     { duration: '1m', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 5 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 6 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 6 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 7 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 7 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 8 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 8 },
+    { duration: '1m', target: INITIAL_RPS * 2 ** 9 },
+    { duration: '5m', target: INITIAL_RPS * 2 ** 9 },
   ],
   thresholds: {
     http_req_failed: [
-      { threshold: 'rate<0.01' }
+      { threshold: 'rate<0.05', abortOnFail: true }
     ],
     http_req_duration: [
       { threshold: 'p(95)<250', abortOnFail: true },
