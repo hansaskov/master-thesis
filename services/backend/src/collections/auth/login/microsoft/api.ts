@@ -75,11 +75,7 @@ export const microsoftApi = new Elysia()
 				},
 			).then((r) => r.json());
 
-			console.log(userResponse);
-
 			const parsedUserResponse = convertKeys(userResponse);
-
-			console.log(parsedUserResponse);
 
 			if (!validateUser.Check(parsedUserResponse)) {
 				const errorMessage = `Server Failed to parse response when getting user info from microsoft. Expected schema: ${UserSchema.description}, Actual schema: ${parsedUserResponse}`;
