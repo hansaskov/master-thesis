@@ -37,8 +37,6 @@ export const invitesApi = new Elysia({ prefix: "invites" })
 				);
 			}
 
-			console.log("Sending Invitation to user");
-
 			const organization = await Queries.organizations.selectUnique(
 				relation.organization_id,
 			);
