@@ -83,22 +83,4 @@ export const usersApi = new Elysia({ prefix: "users" })
 			}),
 			isSuperAdmin: true,
 		},
-	)
-	.post(
-		"/createUser",
-		async ({ body }) => {
-			return await Queries.users.create(body);
-		},
-		{
-			body: t.Object({
-				id: Schema.insert.users.id,
-				is_superadmin: Schema.insert.users.is_superadmin,
-				name: Schema.insert.users.name,
-				email: Schema.insert.users.email,
-				email_verified: Schema.insert.users.email_verified,
-				image: Schema.insert.users.image,
-				provider_name: Schema.insert.users.provider_name,
-				provider_id: Schema.insert.users.provider_id,
-			}),
-		},
 	);
