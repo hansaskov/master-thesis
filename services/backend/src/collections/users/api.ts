@@ -43,7 +43,7 @@ export const usersApi = new Elysia({ prefix: "users" })
 				}
 			}
 
-			const result = await Queries.users.delete({ id: body.id });
+			const result = await Queries.usersToOrganizations.delete({ user_id: body.id, organization_id: relation.organization_id });
 
 			if (result === undefined) {
 				return error("Not Found", "Deletion failed. User not found");
