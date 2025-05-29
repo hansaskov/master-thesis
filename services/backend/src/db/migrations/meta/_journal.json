@@ -1,97 +1,104 @@
 {
-	"version": "7",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1742286117871,
-			"tag": "0000_unusual_romulus",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "7",
-			"when": 1742286167559,
-			"tag": "0001_wet_whistler",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "7",
-			"when": 1742371367300,
-			"tag": "0002_careless_korvac",
-			"breakpoints": true
-		},
-		{
-			"idx": 3,
-			"version": "7",
-			"when": 1742371637600,
-			"tag": "0003_readings_hypertable",
-			"breakpoints": true
-		},
-		{
-			"idx": 4,
-			"version": "7",
-			"when": 1742371669469,
-			"tag": "0004_ambiguous_talos",
-			"breakpoints": true
-		},
-		{
-			"idx": 5,
-			"version": "7",
-			"when": 1742371777053,
-			"tag": "0005_readings_5min_agg",
-			"breakpoints": true
-		},
-		{
-			"idx": 6,
-			"version": "7",
-			"when": 1742371845303,
-			"tag": "0006_readings_5min_policy",
-			"breakpoints": true
-		},
-		{
-			"idx": 7,
-			"version": "7",
-			"when": 1743688212216,
-			"tag": "0007_tearful_quasar",
-			"breakpoints": true
-		},
-		{
-			"idx": 8,
-			"version": "7",
-			"when": 1744114753882,
-			"tag": "0008_redundant_romulus",
-			"breakpoints": true
-		},
-		{
-			"idx": 9,
-			"version": "7",
-			"when": 1744115053130,
-			"tag": "0009_system_health_policy",
-			"breakpoints": true
-		},
-		{
-			"idx": 10,
-			"version": "7",
-			"when": 1744115123593,
-			"tag": "0010_system_health_policy2",
-			"breakpoints": true
-		},
-		{
-			"idx": 11,
-			"version": "7",
-			"when": 1744115196297,
-			"tag": "0011_system_health_live_agg",
-			"breakpoints": true
-		},
-		{
-			"idx": 12,
-			"version": "7",
-			"when": 1746007097541,
-			"tag": "0012_hesitant_squirrel_girl",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1742286117871,
+      "tag": "0000_unusual_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742286167559,
+      "tag": "0001_wet_whistler",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742371367300,
+      "tag": "0002_careless_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742371637600,
+      "tag": "0003_readings_hypertable",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1742371669469,
+      "tag": "0004_ambiguous_talos",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742371777053,
+      "tag": "0005_readings_5min_agg",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1742371845303,
+      "tag": "0006_readings_5min_policy",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1743688212216,
+      "tag": "0007_tearful_quasar",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1744114753882,
+      "tag": "0008_redundant_romulus",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1744115053130,
+      "tag": "0009_system_health_policy",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1744115123593,
+      "tag": "0010_system_health_policy2",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1744115196297,
+      "tag": "0011_system_health_live_agg",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1746007097541,
+      "tag": "0012_hesitant_squirrel_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1748557268739,
+      "tag": "0013_misty_gladiator",
+      "breakpoints": true
+    }
+  ]
 }

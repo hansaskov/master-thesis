@@ -1,27 +1,27 @@
 import { describe, expect, it } from "bun:test";
-import { Queries } from "$collections/queries";
+import { c } from "..";
 
 async function seedDatabase(startDate: Date) {
 	// Insert organization
-	const organization = await Queries.organizations.create({
+	const organization = await c.organizations.insertOne({
 		name: "Trivision",
 	});
 
 	// Insert system
-	const system = await Queries.systems.create({
+	const system = await c.systems.insertOne({
 		name: "VisioPointer",
 		organization_id: organization.id,
 		system_model: "VisioPointer",
 	});
 
 	// Insert key
-	const key = await Queries.keys.create({
+	const key = await c.keys.insertOne({
 		system_id: system.id,
 		name: "Test key 1",
 	});
 
 	// Insert readings.
-	const readings = await Queries.readings.createMany([
+	const readings = await c.readings.insertMany([
 		{
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 1000), // +1 second
@@ -45,7 +45,7 @@ async function seedDatabase(startDate: Date) {
 		},
 	]);
 
-	const threshold = await Queries.threshold.insert({
+	const threshold = await c.thresholds.insertOne({
 		enabled: true,
 		threshold: 80,
 		...readings[0],
@@ -61,7 +61,7 @@ describe("System health", async () => {
 		const seedData = await seedDatabase(startDate);
 
 		// Insert readings over a 5 minutes interval, but all values are below 80
-		const readings = await Queries.readings.createMany([
+		const readings = await c.readings.insertMany([
 			{
 				name: "cpu usage",
 				time: new Date(startDate.getTime() + 5000), // +2 seconds
@@ -79,7 +79,7 @@ describe("System health", async () => {
 		]);
 
 		// Query the latest value on system id
-		const systemHealth = await Queries.systemHealth.selectLatest([
+		const systemHealth = await c.systemHealth.selectLatest([
 			seedData.system.id,
 		]);
 
@@ -94,7 +94,7 @@ describe("System health", async () => {
 		const seedData = await seedDatabase(startDate);
 
 		// Insert readings over a 5 minutes interval, the values are above 80% on average.
-		const readings = await Queries.readings.createMany([
+		const readings = await c.readings.insertMany([
 			{
 				name: "cpu usage",
 				time: new Date(startDate.getTime() + 4000), // +4 second
@@ -140,7 +140,7 @@ describe("System health", async () => {
 		]);
 
 		// Query the latest value on system id
-		const systemHealth = await Queries.systemHealth.selectLatest([
+		const systemHealth = await c.systemHealth.selectLatest([
 			seedData.system.id,
 		]);
 

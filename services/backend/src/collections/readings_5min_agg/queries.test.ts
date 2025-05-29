@@ -1,30 +1,30 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { Queries } from "$collections/queries";
 import { db } from "$db/postgres";
 import { sql } from "drizzle-orm";
-import type { Reading5MinAgg } from "./schema";
+import { c } from "..";
+import { Readings5minAgg } from ".";
 
 async function seedDatabase(startDate: Date) {
 	// Insert organization
-	const organization = await Queries.organizations.create({
+	const organization = await c.organizations.insertOne({
 		name: "Trivision",
 	});
 
 	// Insert system
-	const system = await Queries.systems.create({
+	const system = await c.systems.insertOne({
 		name: "VisioPointer",
 		organization_id: organization.id,
 		system_model: "VisioPointer",
 	});
 
 	// Insert key
-	const key = await Queries.keys.create({
+	const key = await c.keys.insertOne({
 		system_id: system.id,
 		name: "Test key 1",
 	});
 
 	// Insert readings.
-	const readings = await Queries.readings.createMany([
+	const readings = await c.readings.insertMany([
 		{
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 1000), // +1 second
@@ -68,7 +68,7 @@ describe("5 minutes agg readings", async () => {
 		const firstSeedReading = seedData.readings[0];
 
 		// Expected result
-		const expectedReading: Reading5MinAgg = {
+		const expectedReading: Readings5minAgg.Select = {
 			bucket: startDate,
 			first: startDate,
 			last: endDate,
@@ -88,7 +88,7 @@ describe("5 minutes agg readings", async () => {
 		};
 
 		// Query data
-		const data = await Queries.readings_5min_agg.select({
+		const data = await c.readings5minAgg.select({
 			start: startDate,
 			end: endDate,
 			system_id: seedData.system.id,
@@ -117,7 +117,7 @@ describe("5 minutes agg readings", async () => {
 		const beforeStartDate1 = new Date(startDate.getTime() - 200000);
 		const beforeStartDate2 = new Date(startDate.getTime() - 300000);
 
-		const data = await Queries.readings_5min_agg.select({
+		const data = await c.readings5minAgg.select({
 			start: beforeStartDate1,
 			end: beforeStartDate2,
 			system_id: seedData.system.id,
@@ -130,7 +130,7 @@ describe("5 minutes agg readings", async () => {
 		const afterEndDate1 = new Date(endDate.getTime() + 100000);
 		const afterEndDate2 = new Date(endDate.getTime() + 200000);
 
-		const data = await Queries.readings_5min_agg.select({
+		const data = await c.readings5minAgg.select({
 			start: afterEndDate1,
 			end: afterEndDate2,
 			system_id: seedData.system.id,
@@ -144,7 +144,7 @@ describe("5 minutes agg readings", async () => {
 		const tenMinutesLater = new Date(startDate.getTime() + 10 * 60 * 1000); // 10 minutes later
 
 		// Insert new readings
-		const laterReadings = await Queries.readings.createMany([
+		const laterReadings = await c.readings.insertMany([
 			{
 				name: "cpu usage",
 				time: new Date(tenMinutesLater.getTime() + 1000), // +1 second
@@ -178,7 +178,7 @@ describe("5 minutes agg readings", async () => {
 		);
 
 		// Expected result for the new readings
-		const expectedReading: Reading5MinAgg = {
+		const expectedReading: Readings5minAgg.Select = {
 			bucket: laterStartDate,
 			first: laterStartDate,
 			last: laterEndDate,
@@ -198,7 +198,7 @@ describe("5 minutes agg readings", async () => {
 		};
 
 		// Query only the new data
-		const data = await Queries.readings_5min_agg.select({
+		const data = await c.readings5minAgg.select({
 			start: laterStartDate,
 			end: laterEndDate,
 			system_id: seedData.system.id,

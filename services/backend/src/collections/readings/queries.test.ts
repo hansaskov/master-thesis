@@ -1,27 +1,27 @@
 import { describe, expect, it } from "bun:test";
-import { Queries } from "$collections/queries";
+import { c } from "..";
 
 async function seedDatabase() {
 	// Insert organization
-	const organization = await Queries.organizations.create({
+	const organization = await c.organizations.insertOne({
 		name: "Trivision",
 	});
 
 	// Insert system
-	const system = await Queries.systems.create({
+	const system = await c.systems.insertOne({
 		name: "VisioPointer",
 		organization_id: organization.id,
 		system_model: "VisioPointer",
 	});
 
 	// Insert key
-	const key = await Queries.keys.create({
+	const key = await c.keys.insertOne({
 		system_id: system.id,
 		name: "Test key 1",
 	});
 
 	// Insert readings.
-	const readings = await Queries.readings.createMany([
+	const readings = await c.readings.insertMany([
 		{
 			name: "cpu temperature",
 			time: new Date(),
@@ -54,7 +54,7 @@ describe("Readings Query", async () => {
 		const seedData = await seedDatabase();
 
 		// Get initial values
-		const initialValues = await Queries.readings.selectAllUnique({
+		const initialValues = await c.readings.selectAllUnique({
 			system_id: seedData.system.id,
 		});
 
@@ -66,7 +66,7 @@ describe("Readings Query", async () => {
 		await new Promise((resolve) => setTimeout(resolve, 1));
 
 		// Add new readings with updated values
-		await Queries.readings.createMany([
+		await c.readings.insertMany([
 			{
 				name: "cpu temperature",
 				time: new Date(),
@@ -91,7 +91,7 @@ describe("Readings Query", async () => {
 		]);
 
 		// Get updated values
-		const updatedValues = await Queries.readings.selectAllUnique({
+		const updatedValues = await c.readings.selectAllUnique({
 			system_id: seedData.system.id,
 		});
 
@@ -105,7 +105,7 @@ describe("Readings Query", async () => {
 		const seedData = await seedDatabase();
 
 		// Add readings in different categories
-		await Queries.readings.createMany([
+		await c.readings.insertMany([
 			{
 				name: "memory usage",
 				time: new Date(),
@@ -125,7 +125,7 @@ describe("Readings Query", async () => {
 		]);
 
 		// Filter by Performance category
-		const performanceReadings = await Queries.readings.selectAllUnique({
+		const performanceReadings = await c.readings.selectAllUnique({
 			system_id: seedData.system.id,
 			category: "Performance",
 		});

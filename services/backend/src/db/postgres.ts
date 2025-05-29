@@ -1,5 +1,5 @@
 import { exit } from "node:process";
-import { systems } from "$collections/systems/schema";
+import { systems } from "$collections/systems/table";
 import { environment } from "$config/environment";
 import { exponentialBackoff } from "$utils/exponentialBackoff";
 import { drizzle } from "drizzle-orm/postgres-js";
