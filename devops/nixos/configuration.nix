@@ -19,7 +19,7 @@ in
     domain = ""; # It can be left empty if it is auto-detected through DHCP.
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 80 443 3000 ]; # SSH, HTTP, HTTPS, BACKEND
+      allowedTCPPorts = [ 22 80 443 ]; # SSH, HTTP, HTTPS, BACKEND
     };
   };
   
@@ -28,7 +28,7 @@ in
     enable = true;
     settings = {
       PasswordAuthentication = false;       # Disable password authentication
-      AllowUsers = [ "root" "admin" ];      # Allow only root and admin users to log in via SSH
+      AllowUsers = [ "admin" ];      # Allow only root and admin users to log in via SSH
     };
   };
  
@@ -37,7 +37,7 @@ in
 
   # Root user configuration 
   # WARING: REMOVE THIS CODE TO HARDEN SECURITY
-  users.users.root.openssh.authorizedKeys.keyFiles = [ sshKeysPath ];  # Use the external file for root's SSH keys
+  # users.users.root.openssh.authorizedKeys.keyFiles = [ sshKeysPath ];  # Use the external file for root's SSH keys
   
   # Admin user configuration
   users.users.admin = {

@@ -1,5 +1,6 @@
 import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
+import { Schema } from "$collections/schema";
 import Elysia, { error, t } from "elysia";
 
 export const usersApi = new Elysia({ prefix: "users" })
@@ -42,7 +43,10 @@ export const usersApi = new Elysia({ prefix: "users" })
 				}
 			}
 
-			const result = await Queries.users.delete({ id: body.id });
+			const result = await Queries.usersToOrganizations.delete({
+				user_id: body.id,
+				organization_id: relation.organization_id,
+			});
 
 			if (result === undefined) {
 				return error("Not Found", "Deletion failed. User not found");
@@ -81,5 +85,23 @@ export const usersApi = new Elysia({ prefix: "users" })
 				newValue: t.Boolean(),
 			}),
 			isSuperAdmin: true,
+		},
+	)
+	.post(
+		"/createUser",
+		async ({ body }) => {
+			return await Queries.users.create(body);
+		},
+		{
+			body: t.Object({
+				id: Schema.insert.users.id,
+				is_superadmin: Schema.insert.users.is_superadmin,
+				name: Schema.insert.users.name,
+				email: Schema.insert.users.email,
+				email_verified: Schema.insert.users.email_verified,
+				image: Schema.insert.users.image,
+				provider_name: Schema.insert.users.provider_name,
+				provider_id: Schema.insert.users.provider_id,
+			}),
 		},
 	);
