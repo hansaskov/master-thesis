@@ -1,24 +1,24 @@
 import { describe, expect, it } from "bun:test";
-import { Queries } from "$collections/queries";
+import { c } from "..";
 
 async function seedDatabase() {
 	// Date used throughout
 	const startDate = new Date(1999, 9, 27);
 
 	// Insert organization
-	const organization = await Queries.organizations.create({
+	const organization = await c.organizations.insertOne({
 		name: "Trivision",
 	});
 
 	// Insert system
-	const system = await Queries.systems.create({
+	const system = await c.systems.insertOne({
 		name: "VisioPointer",
 		organization_id: organization.id,
 		system_model: "VisioPointer",
 	});
 
 	// Insert readings.
-	const readings = await Queries.readings.createMany([
+	const readings = await c.readings.insertMany([
 		{
 			name: "cpu usage",
 			time: new Date(startDate.getTime() + 1000), // +1 second
@@ -51,16 +51,14 @@ describe("Systems", async () => {
 		const seedData = await seedDatabase();
 
 		// Insert threshold
-		await Queries.threshold.insert({
+		await c.thresholds.insertOne({
 			enabled: true,
 			threshold: 80,
 			...seedData.readings[0],
 		});
 
 		// Create query we wish to perform.
-		const drizzleQuery = Queries.systems.selectAllWithHealth(
-			seedData.organization,
-		);
+		const drizzleQuery = c.systems.selectAllWithHealth(seedData.organization);
 
 		// Print the actual SQL
 		// console.log(drizzleQuery.toSQL());
@@ -90,9 +88,7 @@ describe("Systems", async () => {
 		// Insert no threshold
 
 		// Query systems with health
-		const systems = await Queries.systems.selectAllWithHealth(
-			seedData.organization,
-		);
+		const systems = await c.systems.selectAllWithHealth(seedData.organization);
 
 		// Expect 1 system
 		expect(systems).toBeArrayOfSize(1);
