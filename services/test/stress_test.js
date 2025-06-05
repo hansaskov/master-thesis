@@ -37,8 +37,8 @@ export function setup() {
 
   console.log(`Created ${keys.length} keys`);
 
-  console.log("Pausing 10 seconds")
-  sleep(10)
+  console.log("Pausing 20 seconds")
+  sleep(20)
   return { keys };
 }
 
