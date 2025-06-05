@@ -37,7 +37,7 @@ export const AuthService = new Elysia({ name: "Service.Auth" })
 
 		return { user, session };
 	})
-	.as("plugin");
+	.as("scoped");
 
 export const SuperAdminService = new Elysia({ name: "Service.SuperAdmin" })
 	.use(AuthService)
@@ -50,7 +50,7 @@ export const SuperAdminService = new Elysia({ name: "Service.SuperAdmin" })
 		}
 	})
 
-	.as("plugin");
+	.as("scoped");
 
 export const authMiddleware = new Elysia()
 	.macro({
@@ -187,4 +187,4 @@ export const authMiddleware = new Elysia()
 			},
 		},
 	})
-	.as("plugin");
+	.as("scoped");
