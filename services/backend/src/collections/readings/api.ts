@@ -1,7 +1,9 @@
 import { authMiddleware } from "$auth/middleware";
 import { Queries } from "$collections/queries";
 import { Schema } from "$collections/schema";
+import type { Types } from "$types/collection";
 import Elysia, { error, t } from "elysia";
+import queue from "./queue";
 
 export const readingsApi = new Elysia()
 	.use(authMiddleware)
@@ -12,14 +14,16 @@ export const readingsApi = new Elysia()
 			if (!key) {
 				return error("Unauthorized", "The provided key does not exists");
 			}
+
+			// Transform readings and add to pending list
 			const values = body.map((reading) => ({
 				...reading,
 				time: new Date(reading.time),
+				system_id: key.system_id,
 			}));
 
-			await Queries.readings.insertWithSystemIdUnnest(values, {
-				system_id: key.system_id,
-			});
+			// Add to pending readings list instead of immediate insert
+			queue.push(...values);
 		},
 		{
 			headers: t.Object({
