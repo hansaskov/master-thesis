@@ -1,24 +1,13 @@
-import { threshold } from "$collections/threshold/schema";
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import {
-	and,
-	asc,
-	between,
-	desc,
-	eq,
-	gt,
-	isNull,
-	lt,
-	sql,
-} from "drizzle-orm/sql";
+import { Param, and, asc, between, desc, eq, sql } from "drizzle-orm/sql";
 import { readings } from "./schema";
 
 export const readingsQueries = {
 	createMany: async (values: Types.ReadingNew[]) =>
 		await db.insert(readings).values(values).returning(),
-	insert: async (values: Types.Reading[]) =>
+	insert: async (values: Types.ReadingNew[]) =>
 		await db.insert(readings).values(values),
 	insertWithSystemId: async (
 		values: StrictOmit<Types.ReadingNew, "system_id">[],
