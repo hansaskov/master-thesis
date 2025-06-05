@@ -33,7 +33,12 @@ export function setup() {
     .filter(key => key !== null)
     .map(v => v.private_key)
 
+
+
   console.log(`Created ${keys.length} keys`);
+
+  console.log("Pausing 10 seconds")
+  sleep(10)
   return { keys };
 }
 
@@ -41,16 +46,7 @@ export function setup() {
 export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
-    { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '30s', target: INITIAL_RPS * 1.5 },
-    { duration: '30s', target: INITIAL_RPS * 1.5 },
-    { duration: '30s', target: INITIAL_RPS * 2 },
-    { duration: '30s', target: INITIAL_RPS * 2 },
-    { duration: '30s', target: INITIAL_RPS * 2.5 },
-    { duration: '30s', target: INITIAL_RPS * 2.5 },
-    { duration: '30s', target: INITIAL_RPS * 3 },
-    { duration: '30s', target: INITIAL_RPS * 3 },
+    { duration: '5m', target: INITIAL_RPS * 3 },
   ],
   thresholds: {
     http_req_failed: [

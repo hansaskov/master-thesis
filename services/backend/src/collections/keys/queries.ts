@@ -15,13 +15,11 @@ export const keysQueries = {
 	select: async (values: Types.KeysUnique) => {
 	
 		const cachedKey = await cache.get(values)
-
 		if (cachedKey) {
 			return cachedKey
 		}
 
 		const key = await PreparedselectUnique.execute(values).then((v) => v.at(0))
-
 		if (key) {
 			await cache.set(key)
 		}
