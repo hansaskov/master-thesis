@@ -7,7 +7,7 @@ import { readings } from "./schema";
 export const readingsQueries = {
 	createMany: async (values: Types.ReadingNew[]) =>
 		await db.insert(readings).values(values).returning(),
-	insert: async (values: Types.Reading[]) =>
+	insert: async (values: Types.ReadingNew[]) =>
 		await db.insert(readings).values(values),
 	insertWithSystemId: async (
 		values: StrictOmit<Types.ReadingNew, "system_id">[],
@@ -20,10 +20,7 @@ export const readingsQueries = {
 
 		await db.insert(readings).values(newValues);
 	},
-	insertWithSystemIdUnnest: async (
-		readings: StrictOmit<Types.ReadingNew, "system_id">[],
-		{ system_id }: StrictPick<Types.ReadingNew, "system_id">,
-	) => {
+	insertUnnest: async (readings: Types.ReadingNew[]) => {
 		const len = readings.length;
 
 		// Pre-allocate arrays with known size for better memory efficiency
@@ -37,7 +34,7 @@ export const readingsQueries = {
 		// Populate column arrays in a single loop
 		for (let i = 0; i < len; i++) {
 			times[i] = readings[i].time.toISOString();
-			systemIds[i] = system_id;
+			systemIds[i] = readings[i].system_id;
 			names[i] = readings[i].name;
 			values[i] = readings[i].value;
 			units[i] = readings[i].unit;

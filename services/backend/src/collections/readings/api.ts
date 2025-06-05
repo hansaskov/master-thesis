@@ -15,11 +15,10 @@ export const readingsApi = new Elysia()
 			const values = body.map((reading) => ({
 				...reading,
 				time: new Date(reading.time),
+				system_id: key.system_id
 			}));
 
-			await Queries.readings.insertWithSystemIdUnnest(values, {
-				system_id: key.system_id,
-			});
+			await Queries.readings.insertUnnest(values);
 		},
 		{
 			headers: t.Object({
