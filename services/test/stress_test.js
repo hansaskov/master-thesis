@@ -9,7 +9,7 @@ import { sleep } from 'k6';
 const BASE_URL =  `http://localhost:3000`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
-const INITIAL_RPS = 1000 
+const INITIAL_RPS = 12000 
 
 function createKey() {
   const response = http.post(`${BASE_URL}/api/seed`);
@@ -26,7 +26,7 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 3;
+  const numKeys = INITIAL_RPS;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
@@ -44,9 +44,10 @@ export function setup() {
 
 
 export const options = {
+  setupTimeout: "4m",
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
-    { duration: '5m', target: INITIAL_RPS * 3 },
+    { duration: '20m', target: INITIAL_RPS },
   ],
   thresholds: {
     http_req_failed: [
