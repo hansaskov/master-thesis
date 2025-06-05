@@ -2,23 +2,14 @@
 k6 run load_test.js
 
 k6 run load_test.js --env SERVER_IP=127.0.0.1
-
-curl -X POST https://api.example.com/users \
-     -H "Content-Type: application/json" \
-     -d '{"name": "John Doe", "email": "john@example.com"}'
-
 */
 import http from 'k6/http';
-import { check, sleep } from 'k6';
-import { Rate } from 'k6/metrics';
-//import { open } from 'k6/fs';
+import { sleep } from 'k6';
 
-//const SERVER_IP = "http"
-const BASE_URL =  `https://master-thesis.hjemmet.net`
+const BASE_URL =  `http://localhost:3000`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
-const INITIAL_RPS = 100
-
+const INITIAL_RPS = 10000 
 
 function createKey() {
   const response = http.post(`${BASE_URL}/api/seed`);
@@ -35,33 +26,28 @@ function createKey() {
 
 export function setup() {
   console.log(`Using ${BASE_URL} as the base url`)
-  const numKeys = INITIAL_RPS * 2 ** 1;
+  const numKeys = INITIAL_RPS;
   const keys = Array(numKeys)
     .fill()
     .map(() => createKey())
     .filter(key => key !== null)
     .map(v => v.private_key)
 
+
+
   console.log(`Created ${keys.length} keys`);
+
+  console.log("Pausing 20 seconds")
+  sleep(20)
   return { keys };
 }
 
 
 export const options = {
+  setupTimeout: "4m",
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
-    { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '30s', target: INITIAL_RPS * 1 },
-    // { duration: '30m', target: INITIAL_RPS * 2 },
-    // { duration: '1m', target: INITIAL_RPS * 2 },
-    // { duration: '30s', target: INITIAL_RPS * 3 },
-    // { duration: '1m', target: INITIAL_RPS * 3 },
-    // { duration: '30s', target: INITIAL_RPS * 4 },
-    // { duration: '1m', target: INITIAL_RPS * 4 },
-    // { duration: '30s', target: INITIAL_RPS * 5 },
-    // { duration: '1m', target: INITIAL_RPS * 5 },
-    // { duration: '30m', target: INITIAL_RPS * 6 },
-    // { duration: '1m', target: INITIAL_RPS * 6 },
+    { duration: '15m', target: INITIAL_RPS },
   ],
   thresholds: {
     http_req_failed: [
