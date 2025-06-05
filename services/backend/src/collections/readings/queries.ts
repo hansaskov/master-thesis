@@ -1,18 +1,7 @@
-import { threshold } from "$collections/threshold/schema";
-import { db } from "$db/postgres";
+import { db, pgClient } from "$db/postgres";
 import type { Types } from "$types/collection";
 import type { StrictOmit, StrictPick } from "$types/strict";
-import {
-	and,
-	asc,
-	between,
-	desc,
-	eq,
-	gt,
-	isNull,
-	lt,
-	sql,
-} from "drizzle-orm/sql";
+import { Param, and, asc, between, desc, eq, sql } from "drizzle-orm/sql";
 import { readings } from "./schema";
 
 export const readingsQueries = {
@@ -30,6 +19,41 @@ export const readingsQueries = {
 		}));
 
 		await db.insert(readings).values(newValues);
+	},
+	insertWithSystemIdUnnest: async (
+		readings: StrictOmit<Types.ReadingNew, "system_id">[],
+		{ system_id }: StrictPick<Types.ReadingNew, "system_id">,
+	) => {
+		const len = readings.length;
+
+		// Pre-allocate arrays with known size for better memory efficiency
+		const times = new Array<string>(len);
+		const systemIds = new Array<string>(len);
+		const names = new Array<string>(len);
+		const values = new Array<number>(len);
+		const units = new Array<string>(len);
+		const categories = new Array<string>(len);
+
+		// Populate column arrays in a single loop
+		for (let i = 0; i < len; i++) {
+			times[i] = readings[i].time.toISOString();
+			systemIds[i] = system_id;
+			names[i] = readings[i].name;
+			values[i] = readings[i].value;
+			units[i] = readings[i].unit;
+			categories[i] = readings[i].category || "Other";
+		}
+
+		await pgClient`
+			INSERT INTO readings (time, system_id, name, value, unit, category)
+			SELECT
+				UNNEST(${times}::timestamptz[]),
+				UNNEST(${systemIds}::text[]),
+				UNNEST(${names}::text[]),
+				UNNEST(${values}::real[]),
+				UNNEST(${units}::text[]),
+				UNNEST(${categories}::text[])
+			`;
 	},
 	select: async ({
 		system_id,

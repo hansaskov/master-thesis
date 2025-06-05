@@ -17,7 +17,7 @@ export const readingsApi = new Elysia()
 				time: new Date(reading.time),
 			}));
 
-			await Queries.readings.insertWithSystemId(values, {
+			await Queries.readings.insertWithSystemIdUnnest(values, {
 				system_id: key.system_id,
 			});
 		},

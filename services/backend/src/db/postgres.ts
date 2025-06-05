@@ -3,8 +3,11 @@ import { systems } from "$collections/systems/schema";
 import { environment } from "$config/environment";
 import { exponentialBackoff } from "$utils/exponentialBackoff";
 import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-export const db = drizzle(environment.DATABASE_URL, { casing: "snake_case" });
+export const pgClient = postgres(environment.DATABASE_URL);
+
+export const db = drizzle(pgClient, { casing: "snake_case" });
 
 const testDbConnection = () =>
 	db

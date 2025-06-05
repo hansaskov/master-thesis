@@ -1,8 +1,8 @@
 import { db } from "$db/postgres";
 import type { Types } from "$types/collection";
 import { and, eq, sql } from "drizzle-orm";
-import { keys } from "./schema";
 import cache from "./cache";
+import { keys } from "./schema";
 
 const PreparedselectUnique = db
 	.select()
@@ -13,18 +13,17 @@ const PreparedselectUnique = db
 
 export const keysQueries = {
 	select: async (values: Types.KeysUnique) => {
-	
-		const cachedKey = await cache.get(values)
+		const cachedKey = await cache.get(values);
 		if (cachedKey) {
-			return cachedKey
+			return cachedKey;
 		}
 
-		const key = await PreparedselectUnique.execute(values).then((v) => v.at(0))
+		const key = await PreparedselectUnique.execute(values).then((v) => v.at(0));
 		if (key) {
-			await cache.set(key)
+			await cache.set(key);
 		}
-		
-		return key
+
+		return key;
 	},
 	selectAllOnSystem: async (system: Types.SystemUnique) =>
 		await db
@@ -37,19 +36,16 @@ export const keysQueries = {
 			.from(keys)
 			.where(eq(keys.system_id, system.id)),
 	create: async (values: Types.KeysNew) => {
-	
-		 const key = await db
+		const key = await db
 			.insert(keys)
 			.values(values)
 			.returning()
-			.then((v) => v[0])
+			.then((v) => v[0]);
 
+		await cache.set(key);
 
-		await cache.set(key)
-
-		return key
-
-		},
+		return key;
+	},
 
 	createMany: async (values: Types.KeysNew[]) =>
 		await db.insert(keys).values(values).returning(),
