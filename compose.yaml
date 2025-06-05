@@ -31,6 +31,7 @@ services:
       - NUM_CLUSTER
       - INTERFACE_FQDN=${INTERFACE_FQDN}
       - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL
       - MICROSOFT_TENANT_ID=${MICROSOFT_TENANT_ID}
       - MICROSOFT_CLIENT_ID=${MICROSOFT_CLIENT_ID}
       - MICROSOFT_CLIENT_SECRET=${MICROSOFT_CLIENT_SECRET}
@@ -62,3 +63,14 @@ services:
     depends_on:
       timescaledb: 
         condition: service_healthy
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    environment:
+      - REDIS_PORT=6379
+    volumes:
+      - redis_data:/data
+      
+volumes:
+  redis_data:

@@ -1,5 +1,22 @@
-
 services:
   backend:
     ports:
     - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'          # Maximum 2 CPU cores
+          memory: 1024M        # Maximum 1GB RAM
+        reservations:
+          cpus: '1.0'          # Reserve 1 CPU core
+          memory: 512M         # Reserve 512MB RAM (must be ≤ limit)
+  
+  timescaledb:
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'          # Maximum 2 CPU cores
+          memory: 1024M        # Maximum 1GB RAM
+        reservations:
+          cpus: '1.0'          # Reserve 1 CPU core
+          memory: 256M         # Reserve 256MB RAM
