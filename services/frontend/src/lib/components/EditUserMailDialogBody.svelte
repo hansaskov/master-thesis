@@ -11,7 +11,6 @@
 	let mail = $state(props.email);
 
 	function onsubmit(e: SubmitEvent) {
-		console.log("made it here")
 		e.preventDefault();
 
 		userStore.editMail({

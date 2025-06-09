@@ -2,13 +2,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
 	import * as Card from '$lib/components/ui/card';
-	import * as Switch from '$lib/components/ui/switch';
-	import * as Select from '$lib/components/ui/select';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import AlertDialogBody from '$lib/components/AlertDialogBody.svelte';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
-	import { userStore } from '$lib/stores/user.svelte'
-	import { organizationStore } from '$lib/stores/organization.svelte'
+	import { userStore } from '$lib/stores/user.svelte';
+	import { organizationStore } from '$lib/stores/organization.svelte';
 	import { dialogStore } from '$lib/stores/dialog.svelte';
 	import { goto } from '$app/navigation';
 	import Pen from 'lucide-svelte/icons/pen';
@@ -50,10 +48,10 @@
 		if (!allData) {
 			return;
 		}
-		
+
 		const csvRows: string[] = [];
 		csvRows.push('section,field,value');
-		
+
 		if (allData.user) {
 			for (const [field, value] of Object.entries(allData.user)) {
 				// Convert `null` → empty string, booleans → string, etc.
@@ -69,12 +67,12 @@
 
 		// === 2) “sessions” section ===
 		if (allData.sessions.length > 0) {
-				csvRows.push('session_id,user_id,expires_at');
+			csvRows.push('session_id,user_id,expires_at');
 			for (const sess of allData.sessions) {
 				const expires = sess.expires_at == null ? '' : String(sess.expires_at);
 				csvRows.push(`${sess.id},${sess.user_id},${expires}`);
 			}
-				csvRows.push('');
+			csvRows.push('');
 		} else {
 			csvRows.push('sessions,INFO,No sessions found');
 			csvRows.push('');
@@ -98,9 +96,7 @@
 
 		// === 4) “invites” section ===
 		if (allData.invites.length > 0) {
-			csvRows.push(
-				'invite_id,organization_id,inviter_id,email,is_accepted,expires_at,role'
-			);
+			csvRows.push('invite_id,organization_id,inviter_id,email,is_accepted,expires_at,role');
 			for (const inv of allData.invites) {
 				const expires = inv.expires_at == null ? '' : String(inv.expires_at);
 				csvRows.push(
@@ -115,30 +111,30 @@
 		const csvString = csvRows.join('\n');
 		const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
 		triggerDownload(blob, 'my_user_data.csv');
-	};
+	}
 
 	// User preferences
-	let preferences = $state({
-		emailNotifications: {
-			updates: true,
-			newsletters: false,
-			promotions: false
-		},
-		theme: 'system'
-	});
+	// let preferences = $state({
+	// 	emailNotifications: {
+	// 		updates: true,
+	// 		newsletters: false,
+	// 		promotions: false
+	// 	},
+	// 	theme: 'system'
+	// });
 
 	// Available themes
-	const themes = [
-		{ value: 'light', label: 'Light' },
-		{ value: 'dark', label: 'Dark' },
-		{ value: 'system', label: 'System' }
-	];
+	// const themes = [
+	// 	{ value: 'light', label: 'Light' },
+	// 	{ value: 'dark', label: 'Dark' },
+	// 	{ value: 'system', label: 'System' }
+	// ];
 
-	function updatePreferences() {
-		// In a real app, this would send the updated preferences to an API
-		console.log('Preferences updated:', preferences);
-		alert('Preferences updated successfully!');
-	}
+	// function updatePreferences() {
+	// 	// In a real app, this would send the updated preferences to an API
+	// 	console.log('Preferences updated:', preferences);
+	// 	alert('Preferences updated successfully!');
+	// }
 
 	async function deleteUser() {
 		await userStore.deleteUser();
@@ -146,30 +142,30 @@
 	}
 
 	function editName() {
-		if (!userStore.user) return
+		if (!userStore.user) return;
 		dialogStore.open({
 			title: `Update ${userStore.user?.name}`,
 			description: 'This action will update your displayed name',
 			component: EditUserDialogBody,
 			props: userStore.user
-		})
+		});
 	}
 
 	function editMail() {
-		if (!userStore.user) return
+		if (!userStore.user) return;
 		dialogStore.open({
 			title: `Update ${userStore.user?.email}`,
 			description: 'This action will update your email',
 			component: EditUserMailDialogBody,
 			props: userStore.user
-		})
+		});
 	}
 
 	let fileInput: HTMLInputElement;
 
-	function openFilePicker() {
-		fileInput.click();
-	}
+	// function openFilePicker() {
+	// 	fileInput.click();
+	// }
 
 	async function handleFileChange() {
 		console.log(fileInput.files);
@@ -198,13 +194,12 @@
 		if (error) {
 			onError(error);
 		}
-		
+
 		let id: string | undefined = userStore.user?.id;
 		if (id) {
 			userStore.editImage(id, uniqueFileName);
 		}
 	}
-
 </script>
 
 <div class="container mx-auto px-4 py-8">
@@ -214,9 +209,7 @@
 		<Card.Root class="md:col-span-1">
 			<Card.Header>
 				<Card.Title>Personal Information</Card.Title>
-				<Card.Description>
-					Manage your personal information
-				</Card.Description>
+				<Card.Description>Manage your personal information</Card.Description>
 			</Card.Header>
 			<Card.Content>
 				<div class="flex gap-4 flex-col md:flex-row md:items-center md:space-x-8">
@@ -235,36 +228,31 @@
 							/>
 						</Avatar.Root>
 						<div>
-							<p class="text-xl font-semibold">{userStore.user?.name}
-								<Button
-									onclick={() => editName()}
-									aria-label="Edit name"
-								>
-									<Pen/>
+							<p class="text-xl font-semibold">
+								{userStore.user?.name}
+								<Button onclick={() => editName()} aria-label="Edit name">
+									<Pen />
 								</Button>
 							</p>
-							
+
 							<p class="text-muted-foreground text-lg">Software Engineer</p>
 						</div>
 					</div>
 					<div>
 						<Label for="email" class="text-base font-medium">
 							Email Address
-							<Button
-								onclick={() => editMail()}
-								aria-label="Edit mail"
-							>
-								<Pen/>
+							<Button onclick={() => editMail()} aria-label="Edit mail">
+								<Pen />
 							</Button>
 						</Label>
 						<p id="email" class="mt-1 text-sm">{userStore.user?.email}</p>
 					</div>
-						<div>
-							{#if organizationStore.organizations.length > 0}
-								<Label for="company" class="text-base font-medium">Company</Label>
-								<p id="company" class="mt-1 text-sm">{organizationStore.organizations[0].name}</p>
-							{/if}
-						</div>
+					<div>
+						{#if organizationStore.organizations.length > 0}
+							<Label for="company" class="text-base font-medium">Company</Label>
+							<p id="company" class="mt-1 text-sm">{organizationStore.organizations[0].name}</p>
+						{/if}
+					</div>
 				</div>
 			</Card.Content>
 		</Card.Root>
@@ -367,8 +355,7 @@
 									description: 'This action cannot be undone',
 									component: AlertDialogBody,
 									props: { onsubmit: () => deleteUser() }
-								})
-							}
+								})}
 						>
 							Delete Your Account
 							<ExternalLink class="h-4 w-4" />

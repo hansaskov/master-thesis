@@ -92,25 +92,25 @@ export const usersQueries = {
 				is_superadmin: newValue,
 			})
 			.where(eq(Table.users.id, id)),
-	updateName: async(id: string, newName: string) =>
+	updateName: async (id: string, newName: string) =>
 		await db
 			.update(Table.users)
 			.set({
-				name: newName
+				name: newName,
 			})
 			.where(eq(Table.users.id, id)),
-	updateMail: async(id: string, newMail: string) =>
+	updateMail: async (id: string, newMail: string) =>
 		await db
 			.update(Table.users)
 			.set({
-				email: newMail
+				email: newMail,
 			})
 			.where(eq(Table.users.id, id)),
-	updateImage: async(id: string, newImage: string) =>
+	updateImage: async (id: string, newImage: string) =>
 		await db
 			.update(Table.users)
 			.set({
-				image: newImage
+				image: newImage,
 			})
 			.where(eq(Table.users.id, id)),
 	selectAllRelated: async (userId: string) => {
@@ -120,13 +120,13 @@ export const usersQueries = {
 			.from(Table.users)
 			.where(eq(Table.users.id, userId))
 			.then((rows) => rows.at(0));
-	
+
 		// 2) All sessions (session.user_id = userId)
 		const userSessions = await db
 			.select()
 			.from(Table.sessions)
 			.where(eq(Table.sessions.user_id, userId));
-	
+
 		// 3) All “users_to_organizations” plus the joined organization record
 		//    We alias the columns so it’s easier to consume on the frontend.
 		const memberships = await db
@@ -140,30 +140,27 @@ export const usersQueries = {
 			.from(Table.usersToOrganizations)
 			.leftJoin(
 				Table.organizations,
-				eq(
-					Table.usersToOrganizations.organization_id,
-					Table.organizations.id
-				)
+				eq(Table.usersToOrganizations.organization_id, Table.organizations.id),
 			)
 			.where(eq(Table.usersToOrganizations.user_id, userId));
-	
+
 		// 4) All invites where this user is the “inviter”
 		const sentInvites = await db
 			.select()
 			.from(Table.invites)
 			.where(eq(Table.invites.inviter_id, userId));
-	
+
 		return {
 			user: userRow,
 			sessions: userSessions,
 			memberships: memberships.map((m) => ({
-			id: m.membershipId,
-			organization: {
-				id: m.organizationId,
-				name: m.orgName,
-				...m.orgRow, // contains all organization columns
-			},
-			role: m.role,
+				id: m.membershipId,
+				organization: {
+					id: m.organizationId,
+					name: m.orgName,
+					...m.orgRow, // contains all organization columns
+				},
+				role: m.role,
 			})),
 			invites: sentInvites,
 		};

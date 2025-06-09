@@ -28,7 +28,6 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.get(
 		"/allUserData",
 		async ({ user }) => {
-			console.log('Made it to the endpoint');
 			return await Queries.users.selectAllRelated(user.id);
 		},
 		{
@@ -74,7 +73,7 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.delete(
 		"/self",
 		async ({ user, body }) => {
-			const result = await Queries.users.delete({ id: user.id })
+			const result = await Queries.users.delete({ id: user.id });
 
 			if (result === undefined) {
 				return error("Not Found", "Deletion failed. User not found");
@@ -115,10 +114,7 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.patch(
 		"/updateName",
 		async ({ user, body }) => {
-			await Queries.users.updateName(
-				body.id,
-				body.newName,
-			);
+			await Queries.users.updateName(body.id, body.newName);
 		},
 		{
 			body: t.Object({
@@ -131,10 +127,7 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.patch(
 		"/updateMail",
 		async ({ user, body }) => {
-			await Queries.users.updateMail(
-				body.id,
-				body.newMail,
-			);
+			await Queries.users.updateMail(body.id, body.newMail);
 		},
 		{
 			body: t.Object({
@@ -147,10 +140,7 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.patch(
 		"/updateImage",
 		async ({ user, body }) => {
-			await Queries.users.updateImage(
-				body.id,
-				body.newImage,
-			);
+			await Queries.users.updateImage(body.id, body.newImage);
 		},
 		{
 			body: t.Object({
