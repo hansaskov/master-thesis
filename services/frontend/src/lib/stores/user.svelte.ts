@@ -69,6 +69,60 @@ class UserStore {
 		}
 	}
 
+	public async editName(user: Types.UserUpdate) {
+		let id = user.id
+		let newName = user.name
+		if (newName)
+		{
+			const { error } = await api.users.updateName.patch({ id, newName });
+
+			if (error) {
+				onError(error);
+				return;
+			}
+
+			this.refresh();
+
+			toast.success('Successfully updated name');
+		}
+	}
+
+	public async editMail(user: Types.UserUpdate) {
+		let id = user.id
+		let newMail = user.email
+		if (newMail)
+		{
+			const { error } = await api.users.updateMail.patch({ id, newMail });
+
+			if (error) {
+				onError(error);
+				return;
+			}
+
+			this.refresh();
+
+			toast.success('Successfully updated email');
+		}
+	}
+
+	// Placeholder minio version
+	public async editImage(id:string, newImage: string) {
+		let imageURL = `http://localhost:9000/user-images/${newImage}`
+		if (imageURL)
+		{
+			const { error } = await api.users.updateImage.patch({ id, newImage: imageURL });
+
+			if (error) {
+				onError(error);
+				return;
+			}
+
+			this.refresh();
+
+			toast.success('Successfully updated image');
+		}
+	}
+
 	public async edit(id: string, newValue: boolean) {
 		// logic for upgrading a user
 		if (newValue) {
@@ -114,6 +168,29 @@ class UserStore {
 
 		console.log('Unreachable branch in User.edit');
 	}
+
+	public async deleteUser() {
+		const { data, error } = await api.users.self.delete();
+
+		if (error) {
+			onError(error);
+			return null;
+		}
+
+		toast.success('Your account has been deleted. Rerouting to login page');
+	}
+
+	public async getAllUserData() {
+		const { data, error } = await api.users.allUserData.get();
+
+		if (error) {
+			onError(error);
+			return null;
+		}
+
+		return data;
+	}
+
 }
 
 export const userStore = new UserStore();

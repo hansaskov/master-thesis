@@ -122,7 +122,9 @@ export const microsoftApi = new Elysia()
 					const metadata = s3.file(fileName);
 					await write(metadata, buffer);
 					// Construct the URL to save in database
-					imageUrl = `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${fileName}`;
+					//imageUrl = `${environment.S3_ENDPOINT}/${environment.S3_BUCKET}/${fileName}`;
+					imageUrl = `http://localhost:9000/${environment.S3_BUCKET}/${fileName}`;
+					console.log(`saving image url ${imageUrl}`)
 				} catch (e) {
 					console.log("failed to write to S3 bucket", e);
 				}
@@ -156,7 +158,7 @@ export const microsoftApi = new Elysia()
 				console.error(errorMessage);
 				return error(500, errorMessage);
 			}
-
+			
 			const user = await Queries.users.create({
 				provider_name: "Microsoft",
 				provider_id: userParsed.sub,

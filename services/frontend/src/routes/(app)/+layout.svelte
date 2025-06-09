@@ -100,7 +100,7 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator></DropdownMenu.Separator>
-						<DropdownMenu.Item disabled={true}>
+						<DropdownMenu.Item>
 							<a href="/settings" class="flex items-center gap-2">
 								<UserRoundCog class="h-4 w-4 mr-2" />
 								User Settings

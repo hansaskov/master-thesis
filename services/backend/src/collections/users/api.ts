@@ -25,6 +25,16 @@ export const usersApi = new Elysia({ prefix: "users" })
 			isOrganization: true,
 		},
 	)
+	.get(
+		"/allUserData",
+		async ({ user }) => {
+			console.log('Made it to the endpoint');
+			return await Queries.users.selectAllRelated(user.id);
+		},
+		{
+			isAuth: true,
+		},
+	)
 	.delete(
 		"/",
 		async ({ user, body, relation }) => {
@@ -61,6 +71,21 @@ export const usersApi = new Elysia({ prefix: "users" })
 			isOrganizationAdmin: true,
 		},
 	)
+	.delete(
+		"/self",
+		async ({ user, body }) => {
+			const result = await Queries.users.delete({ id: user.id })
+
+			if (result === undefined) {
+				return error("Not Found", "Deletion failed. User not found");
+			}
+
+			return result;
+		},
+		{
+			isAuth: true,
+		},
+	)
 	.get(
 		"/superAdmins",
 		async ({ user }) => {
@@ -85,6 +110,54 @@ export const usersApi = new Elysia({ prefix: "users" })
 				newValue: t.Boolean(),
 			}),
 			isSuperAdmin: true,
+		},
+	)
+	.patch(
+		"/updateName",
+		async ({ user, body }) => {
+			await Queries.users.updateName(
+				body.id,
+				body.newName,
+			);
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				newName: t.String(),
+			}),
+			isAuth: true,
+		},
+	)
+	.patch(
+		"/updateMail",
+		async ({ user, body }) => {
+			await Queries.users.updateMail(
+				body.id,
+				body.newMail,
+			);
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				newMail: t.String(),
+			}),
+			isAuth: true,
+		},
+	)
+	.patch(
+		"/updateImage",
+		async ({ user, body }) => {
+			await Queries.users.updateImage(
+				body.id,
+				body.newImage,
+			);
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				newImage: t.String(),
+			}),
+			isAuth: true,
 		},
 	)
 	.post(
