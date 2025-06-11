@@ -14,7 +14,7 @@ import { Rate } from 'k6/metrics';
 //import { open } from 'k6/fs';
 
 //const SERVER_IP = "http"
-const BASE_URL =  `https://master-thesis.hjemmet.net`
+const BASE_URL =  `https://preview.master-thesis.hjemmet.net`
 const ENDPOINT = '/api/readings';
 const FULL_URL = `${BASE_URL}${ENDPOINT}`;
 const INITIAL_RPS = 100
@@ -51,7 +51,7 @@ export const options = {
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(95)', 'p(99)'],
   stages: [
     { duration: '30s', target: INITIAL_RPS * 1 },
-    { duration: '30s', target: INITIAL_RPS * 1 },
+    { duration: '5m', target: INITIAL_RPS * 1 },
     // { duration: '30m', target: INITIAL_RPS * 2 },
     // { duration: '1m', target: INITIAL_RPS * 2 },
     // { duration: '30s', target: INITIAL_RPS * 3 },
@@ -68,8 +68,8 @@ export const options = {
       { threshold: 'rate<0.05', abortOnFail: false }
     ],
     http_req_duration: [
-      { threshold: 'p(95)<250', abortOnFail: true },
-      { threshold: 'p(99)<500', abortOnFail: true },
+      { threshold: 'p(95)<250', abortOnFail: false },
+      { threshold: 'p(99)<500', abortOnFail: false },
     ],
   },
 };

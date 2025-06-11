@@ -1,39 +1,23 @@
 
 [upload]
-url = "http://localhost:3000/api/readings"
-key = "Ge9PhRM6w9dMnhniVCJYB4"
+url = "https://master-thesis.hjemmet.net/api/readings"
+key = "6m84ML5JngJgb7xuZrLajN"
 
 [docker]
 
-#[opcua]
-#url = "opc.tcp://127.0.0.1:4855"
-#namespace = 2
+[opcua]
+url = "opc.tcp://192.168.200.11:4840"
 
-#[[opcua.node_ids]]
-#namespace = 2
-#variable = "v1"
+[[opcua.node_ids]]
+namespace = 6
+variable = "::Program:l_status.encodersPhysical[0].value"
+name = "position"
+category = "plc"
+unit = "mm"
 
-# [[opcua.node_ids]]
-# namespace = 3
-# variable = "Pressure"
-
-#[[monitoring]]
-#category = "computer"
-#name = "CPU Temperature"
-#unit = "°C"
-#sensor_type = "Temperature"
-#query_name = "Core"
-
-#[[monitoring]]
-#category = "computer"
-#name = "CPU Usage"
-#unit = "%"
-#sensor_type = "Load"
-#query_name = "CPU Total"
-
-#[[monitoring]]
-#category = "computer"
-#name = "Memory Usage"
-#unit = "%"
-#sensor_type = "Load"
-#query_name = "Memory"
+[[opcua.node_ids]]
+namespace = 6
+variable = "::Program:l_status.encodersPhysical[0].speed"
+name = "speed"
+category = "plc"
+unit = "mm/s"
