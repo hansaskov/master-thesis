@@ -45,7 +45,7 @@
 
 	// change roles
 	async function handleRoleChange(id: string, newValue: boolean) {
-		await userStore.edit(id, newValue);
+		await userStore.editSuperadmin(id, newValue);
 	}
 </script>
 

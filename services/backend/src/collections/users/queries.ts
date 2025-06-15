@@ -85,6 +85,13 @@ export const usersQueries = {
 				),
 			),
 	selectAll: async () => db.select().from(users),
+	updateUserFields: async (updates: Types.UserUpdate) =>
+		await db
+			.update(Table.users)
+			.set(updates)
+			.where(eq(Table.users.id, updates.id))
+			.returning()
+			.then((v) => v.at(0)),
 	updateSuperadminField: async (id: string, newValue: boolean) =>
 		await db
 			.update(Table.users)

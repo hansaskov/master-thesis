@@ -98,6 +98,29 @@ export const usersApi = new Elysia({ prefix: "users" })
 	.patch(
 		"/",
 		async ({ user, body }) => {
+			if ("is_superadmin" in body && !user.is_superadmin) {
+				return error(403, "Forbidden");
+			}
+
+			return await Queries.users.updateUserFields(body);
+		},
+		{
+			body: t.Object({
+				id: t.String(),
+				is_superadmin: t.Optional(Schema.insert.users.is_superadmin),
+				name: t.Optional(Schema.insert.users.name),
+				email: t.Optional(Schema.insert.users.email),
+				email_verified: t.Optional(Schema.insert.users.email_verified),
+				image: t.Optional(Schema.insert.users.image),
+				provider_name: t.Optional(Schema.insert.users.provider_name),
+				provider_id: t.Optional(Schema.insert.users.provider_id),
+			}),
+			isAuth: true,
+		},
+	)
+	.patch(
+		"/superAdmin",
+		async ({ user, body }) => {
 			const result = await Queries.users.updateSuperadminField(
 				body.id,
 				body.newValue,

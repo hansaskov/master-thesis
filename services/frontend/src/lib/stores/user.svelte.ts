@@ -120,10 +120,27 @@ class UserStore {
 		}
 	}
 
-	public async edit(id: string, newValue: boolean) {
+	public async edit(updates: Types.UserUpdate) {
+		const { data, error } = await api.users.index.patch(updates);
+		console.log('returned fata', data);
+		if (error) {
+			onError(error);
+			return;
+		}
+
+		this.allUsers.current = this.allUsers.current.map((user) => {
+			if (user.id === this.user?.id) {
+				return { ...user };
+			}
+			return user;
+		});
+		toast.success(`User data has been updated`);
+	}
+
+	public async editSuperadmin(id: string, newValue: boolean) {
 		// logic for upgrading a user
 		if (newValue) {
-			const { error } = await api.users.index.patch({ id, newValue });
+			const { error } = await api.users.superAdmin.patch({ id, newValue });
 
 			if (error) {
 				onError(error);
@@ -146,7 +163,7 @@ class UserStore {
 			if (this.superAdminUsers.current.length <= 1) {
 				toast.success('User cannot be downgraded as there is only 1 superadmin');
 			} else {
-				const { error } = await api.users.index.patch({ id, newValue });
+				const { error } = await api.users.superAdmin.patch({ id, newValue });
 
 				if (error) {
 					onError(error);
